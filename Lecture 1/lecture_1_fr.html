@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lecture 0: Refresher</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Florentine Oliveira" />
+    <meta name="date" content="2024-07-15" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/countdown/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Lecture 0: <code>R</code>efresher
+]
+.subtitle[
+## Pratiques de la Recherche en Économie
+]
+.author[
+### Florentine Oliveira
+]
+.date[
+### 2024-07-15
+]
+
+---
+
+
+
+
+layout: true
+
+
+---
+# Contact
+
+&amp;nbsp;
+
+&amp;nbsp;
+
+&amp;nbsp;
+
+
+.center[
+
+florentine.oliveira@psemail.eu
+
+
+Campus Jourdan : Bureau R4-54 
+]
+
+---
+# Objectifs du cours
+
+- Se familiariser avec les techniques **économétriques** de base
+
+- Apprendre le language de programmation `R`
+
+
+`\(\implies\)` pour pouvoir réaliser votre **mémoire** (et découvrir la **recherche en économie appliquée**)!
+
+
+
+---
+# Roadmap
+
+
+&amp;nbsp;
+
+
+### Semestre 1
+
+1. Séance 1 (aujourd'hui): Prise en main de `R`
+2. Séance 2 (): Nettoyer une base de données
+3. Séance 3 (): Statistiques Descriptives
+
+### Semestre 2
+4. Séance 4 (): Régressions linéaires simples et multiples
+5. Séance 5 (): Méthode des variables instrumentales
+6. Séance 6 (): Doubles-Différences (DiD)
+7. Séance 7 (): Regression Discontinuity Design
+8. Séance 8 ():
+
+
+
+---
+# Qu'est-ce que la recherche en économie appliquée?
+
+- Répondre à des questions de recherche pour apprendre sur le monde...
+
+  - Grande diversité des champs de recherche: 
+    - éducation, travail, famille, environnement, macroéconomie, politique, migration, genre, urbaine
+  
+  
+- ... en utilisant des techniques statistiques rigoureuses (= économétrie) ...
+
+
+- ... et des données!
+
+
+- `R` est un logiciel qui permet de réaliser ces analyses descriptives et empiriques.
+
+---
+# Quelques exemples de questions de recherche 
+
+- Quel est l'effet des bourses sur la réussite scolaire? ( papier de gabrielle)
+
+- Quel est l'effet d'un allongement de la durée du congé parental?
+
+- Quelle est l'ampleur de la discrimination dans le processus de recrutement?
+
+- Quel est l'effet d'un assouplissement des conditions d'éligibilité à l'assurance chômage sur l'emploi ?
+
+- exemple climat 
+
+- exemple political ?
+
+
+---
+layout: false
+class: center, middle, inverse
+
+# R
+
+---
+### Définition
+
+- D'après le site internet de `R` : *R is a free software environment for statistical computing and graphics.*
+
+  - un logiciel (interface R studio)
+  
+  - un language de programmation
+  
+--
+
+### Pourquoi `R` plutôt qu'un autre logiciel/language de programmation?
+
+- `R` est **gratuit** et en **open source**
+
+  - donc utilisé par beaucoup de monde dans les milieux académique insitutionnel
+
+- Logiciel très **polyvalent**
+
+  - statistiques decriptives, analyses économétriques, analyse de données spaciales, ML, Rmarkdown
+
+- Compétence valorisable et de plus en plus appréciée (public &amp; privé)   
+
+---
+
+&lt;img src="imgs/popularity.jpeg" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+### `R`ecap
+
+&lt;img src="imgs/interface.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+name: bestfriend
+# Vos 4 meilleurs amis
+
+
+1. La **commande** `help(.)` ou `?.`
+
+--
+
+2. Les ***cheatsheets***
+  - [Exemple](#cheatR)
+
+--
+
+3. **Internet** (stackoverflow): 
+
+  - vous ne serez jamais la première personne à rencontrer les problèmes auxquels vous faites face
+  - copier/coller le message d'erreur peut suffire, mais essayez de comprendre par vous même d'abord
+  
+--
+
+4. **ChatGPT**: devient de plus en plus performant pour résoudre les problèmes de codes. 
+  - ⚠️ souvent les packages ne sont pas à jour, les fonctions proposées inventées
+
+--
+
+🤝️ Soyez autonomes: ne demander de l'aide à vos camarades (ou à moi) uniquement après avoir demandé à vos 4 meilleurs amis!
+
+
+
+
+---
+# Bonnes pratiques
+
+### Organisation du travail
+
+- Un dossier pour chaque projet de recherche
+
+  - Scripts
+    - un scripts par tâche: cleaning, statistiques descriptives, anlayse empirique
+  
+  - Data
+    - `.rds`
+  
+  - Figures
+  
+  - (Admin)
+  
+
+
+---
+### Commenter son code pour vous-même...&lt;sup&gt;1&lt;/sup&gt;
+
+&lt;img src="imgs/meme_comment_code.jpeg" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+### ... et vos collègues&lt;sup&gt;1&lt;/sup&gt;
+
+&lt;img src="imgs/headache.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+### **Essayer** de ne pas s'énerver&lt;sup&gt;1&lt;/sup&gt;
+
+.pull-left[
+&lt;img src="imgs/parenthesis.jpeg" width="70%" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+L'apprentissage de `R` est long et fastidieux, mais les rendements sont croissants!
+.footnote[
+[1]: R Memes For Statistical Fiends
+]
+]
+
+
+---
+# Cheatsheets
+
+- [test1](https://rstudio.github.io/cheatsheets/rstudio-ide.pdf)
+- [test](https://posit.co/resources/cheatsheets/)
+
+---
+name: cheatR
+class: center, middle
+&lt;img src="imgs/cheatsheetR.png" width="110%" style="display: block; margin: auto;" /&gt;
+[Back](#bestfriend)
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
