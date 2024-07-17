@@ -4,7 +4,7 @@
     <title>Lecture 0: Refresher</title>
     <meta charset="utf-8" />
     <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2024-07-15" />
+    <meta name="date" content="2024-07-17" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/countdown/countdown.css" rel="stylesheet" />
     <script src="libs/countdown/countdown.js"></script>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### Florentine Oliveira
 ]
 .date[
-### 2024-07-15
+### 2024-07-17
 ]
 
 ---
@@ -36,32 +36,42 @@ layout: true
 
 
 ---
-# Contact
+# About me
+
+&amp;nbsp;
+
+
+Doctorante en Économie à PSE en 3ème année
+
+Champs de recherche: économie de la famille, de l'éducation, du travail
+
 
 &amp;nbsp;
 
 &amp;nbsp;
-
-&amp;nbsp;
-
 
 .center[
+**Me contacter**: florentine.oliveira@psemail.eu
 
-florentine.oliveira@psemail.eu
-
-
-Campus Jourdan : Bureau R4-54 
+**Si vous avez des questions ou envie/besoin de parler**: Campus Jourdan, Bureau R4-54 
 ]
 
 ---
 # Objectifs du cours
 
-- Se familiariser avec les techniques **économétriques** de base
+&amp;nbsp;
+
+&amp;nbsp;
+
+- Se familiariser avec 
+  - les techniques **économétriques** de base
+  - la **recherche** en **économie appliquée**
 
 - Apprendre le language de programmation `R`
 
+&amp;nbsp;
 
-`\(\implies\)` pour pouvoir réaliser votre **mémoire** (et découvrir la **recherche en économie appliquée**)!
+`\(\implies\)` pour pouvoir réaliser votre **mémoire** !
 
 
 
@@ -74,8 +84,8 @@ Campus Jourdan : Bureau R4-54
 
 ### Semestre 1
 
-1. Séance 1 (aujourd'hui): Prise en main de `R`
-2. Séance 2 (): Nettoyer une base de données
+1. Séance 1 (aujourd'hui): Rappels de `R` 
+2. Séance 2 (): Rédiger en `\(\LaTeX\)`
 3. Séance 3 (): Statistiques Descriptives
 
 ### Semestre 2
@@ -86,17 +96,42 @@ Campus Jourdan : Bureau R4-54
 8. Séance 8 ():
 
 
+---
+# Validation du cours
+
+## DM
+
+
+## Mémoire
+
 
 ---
-# Qu'est-ce que la recherche en économie appliquée?
+# Cette séance
 
-- Répondre à des questions de recherche pour apprendre sur le monde...
+&amp;nbsp;
 
-  - Grande diversité des champs de recherche: 
-    - éducation, travail, famille, environnement, macroéconomie, politique, migration, genre, urbaine
+1. La recherche en économie appliquée
+
+2. `R`: rappels et **trouver mot**
+
+  2.1. Définition, usages, interface  
+  2.2. Projet `R`   
+  2.3. Importer des données   
+  2.4. Manipulation des données avec `dplyr`   
+  2.5. Visualisation des données avec `ggplot`   
+  2.6. Maps
+  
+---
+# 1. La recherche en économie appliquée
+
+###  Qu'est-ce que la recherche en économie appliquée?
+
+- Répondre à des **questions de recherche** pour apprendre sur les comportements humains, l'efficacité des poliques publiques, ...
+
+  - Grande diversité des champs de recherche: éducation, travail, famille, environnement, macroéconomie, politique, migration, genre, urban, crime, économie historique, ...
   
   
-- ... en utilisant des techniques statistiques rigoureuses (= économétrie) ...
+- ... en utilisant des techniques statistiques rigoureuses (= **économétrie**) ...
 
 
 - ... et des données!
@@ -105,19 +140,30 @@ Campus Jourdan : Bureau R4-54
 - `R` est un logiciel qui permet de réaliser ces analyses descriptives et empiriques.
 
 ---
-# Quelques exemples de questions de recherche 
+# 1. La recherche en économie appliquée
 
-- Quel est l'effet des bourses sur la réussite scolaire? ( papier de gabrielle)
+### Quelques exemples de questions de recherche 
 
-- Quel est l'effet d'un allongement de la durée du congé parental?
+- Quel est l'effet des bourses de scolarité **sur** la réussite scolaire? 
+
+- Quel est l'effet d'un allongement de la durée du congé parental **sur** la participation au marché du travail des mères?
 
 - Quelle est l'ampleur de la discrimination dans le processus de recrutement?
 
-- Quel est l'effet d'un assouplissement des conditions d'éligibilité à l'assurance chômage sur l'emploi ?
+- Quel est l'effet d'un assouplissement des conditions d'éligibilité à l'assurance chômage **sur** l'emploi?
 
-- exemple climat 
+- Quel est l'effet de la pollution atmosphérique **sur** la productivité?  
 
-- exemple political ?
+- Quel est le rôle des médias **sur** le comportement de vote?
+
+- Quel est l'effet de la densité de population **sur** les salaires?
+
+---
+# 1. La recherche en économie appliquée
+
+.center[
+## 🚨 Corrélation `\(\neq\)` causalité 
+]
 
 
 ---
@@ -127,7 +173,10 @@ class: center, middle, inverse
 # R
 
 ---
-### Définition
+# 2. `R`: rappels et **trouver mot** 
+
+
+## 2.1. `R`ecap : Définition, usages, interface
 
 - D'après le site internet de `R` : *R is a free software environment for statistical computing and graphics.*
 
@@ -135,10 +184,6 @@ class: center, middle, inverse
   
   - un language de programmation
   
---
-
-### Pourquoi `R` plutôt qu'un autre logiciel/language de programmation?
-
 - `R` est **gratuit** et en **open source**
 
   - donc utilisé par beaucoup de monde dans les milieux académique insitutionnel
@@ -149,14 +194,340 @@ class: center, middle, inverse
 
 - Compétence valorisable et de plus en plus appréciée (public &amp; privé)   
 
----
-
-&lt;img src="imgs/popularity.jpeg" width="80%" style="display: block; margin: auto;" /&gt;
 
 ---
-### `R`ecap
+### Popularité de `R`&lt;sup&gt;1&lt;/sup&gt;
+
+.pull-left[
+&lt;img src="imgs/popularity_datascientist.jpg" width="150%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="imgs/popularity_scholar.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+
+.footnote[
+[1]: [The Popularity of Data Science Software](https://r4stats.com/articles/popularity/)
+]
+
+---
+## 2.1. `R`ecap : Définition, usages, interface
 
 &lt;img src="imgs/interface.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## 2.2. `R`ecap : Projet `R`
+
+Les projets `R` permettent une meilleure organisation de votre travail.
+.pull-left[
+&lt;img src="imgs/rproj.jpeg" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+**Création d'un projet `R`:** 
+- Dans R-Studio  
+
+  - Fichier `\(\rightarrow\)` Nouveau projet  
+
+]
+
+
+---
+class: inverse
+# Application: créer votre projet `R`
+
+<div class="countdown" id="timer_231ff9ea" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+.pull-left[
+&lt;img src="imgs/rproj_sans_fond.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+Créer un projet R pour la Lecture 1 en respectant cette structure
+]
+
+
+
+---
+## 2.3. `R`ecap: Importer des données
+
+**Format .csv:**
+
+- `read.csv()` ou `read.cvs2()` avec l'argument `sep = ';'`
+
+&amp;nbsp;
+
+**Formats .dta (stata), .sas7bdat (sas): ** package `haven` (nb: `haven` est inclus dans `tidyverse`)
+
+  - `.dta` : `read_dta()`
+  
+  - `.sas7dbat` : `read_sas()`
+  
+&amp;nbsp;
+
+**Format .xls ou .xlsx (Excel): ** package `readxl`
+
+  - `read_excel()`  
+  
+---
+## 2.3. `R`ecap: Importer des données
+
+&amp;nbsp;
+
+**Format .rds:** format de données le moins lourd et optimal pour travailler sur R, surtout quand les bases de données sont très volumineuses
+
+- `readRDS()`
+
+**Conseil**: à la fin du script de cleaning, enregistrer le ou les data.frames nettoyés en format `.RDS` avec la fonction `saveRDS()` et importer ces données nettoyées dans le script sur lequel vous ferez toutes vos analyses.
+  
+  
+---
+## `R`ecap: Manipulation et visualisation des données
+
+Principal package pour la manipulation et visualitation des données : `dplyr`
+
+`$$\text{data.frame} \;\; \underbrace{\text{%&gt;%}}_{\text{pipe}} \;\; \text{function}(\text{your action})$$`
+
+[Cheatsheet Dplyr](#)
+
+--
+### Principales fonctions 
+
+- `mutate()`: créer ou modifier des variables
+- `summarise()`: résume les données par des statistiques descriptives 
+- `filter()`: conserve ou supprime les lignes 
+- `group_by()`: permet de grouper des observations entre elles 
+- `select()`: consevre ou supprime des colonnes
+- `arrange()`: ordonne les observations par rapport aux valeurs d'une colonne
+
+---
+class: inverse
+# Application : Titanic
+
+Ce jeu de données fournit des informations sur le sort des passagers du paquebot « Titanic », résumées en fonction du statut économique (class), du sexe, de l'âge et de la survie.
+
+
+``` r
+titanic = as.data.frame(Titanic)
+
+head(titanic)
+```
+
+```
+##   Class    Sex   Age Survived Freq
+## 1   1st   Male Child       No    0
+## 2   2nd   Male Child       No    0
+## 3   3rd   Male Child       No   35
+## 4  Crew   Male Child       No    0
+## 5   1st Female Child       No    0
+## 6   2nd Female Child       No    0
+```
+
+---
+class: inverse
+# Application : Titanic
+
+<div class="countdown" id="timer_99ed89ae" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+&amp;nbsp;
+
+
+1. Calculer le taux de survie par classe, par sexe, et par âge
+
+2. Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
+
+3. Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
+
+---
+background-color: #fbe6ec
+# Solution : Titanic
+
+1. Calculer le taux de survie par classe, par sexe, et par âge
+
+
+``` r
+titanic %&gt;% 
+* group_by(Class) %&gt;%
+  summarise(tx_survie = sum(Freq[Survived == "Yes"])/sum(Freq)) %&gt;% 
+  ungroup()
+```
+
+```
+## # A tibble: 4 × 2
+##   Class tx_survie
+##   &lt;fct&gt;     &lt;dbl&gt;
+## 1 1st       0.625
+## 2 2nd       0.414
+## 3 3rd       0.252
+## 4 Crew      0.240
+```
+
+---
+background-color: #fbe6ec
+count: false
+# Solution : Titanic
+
+1. Calculer le taux de survie par classe, par sexe, et par âge
+
+
+``` r
+titanic %&gt;% 
+  group_by(Class) %&gt;% 
+* summarise(tx_survie = sum(Freq[Survived == "Yes"])/sum(Freq)) %&gt;%
+  ungroup()
+```
+
+```
+## # A tibble: 4 × 2
+##   Class tx_survie
+##   &lt;fct&gt;     &lt;dbl&gt;
+## 1 1st       0.625
+## 2 2nd       0.414
+## 3 3rd       0.252
+## 4 Crew      0.240
+```
+
+---
+background-color: #fbe6ec
+# Solution : Titanic
+
+1. Calculer le taux de survie par classe, par sexe, et par âge
+
+
+``` r
+titanic %&gt;% 
+  group_by(Sex) %&gt;% 
+  summarise(tx_survie = sum(Freq[Survived == "Yes"])/sum(Freq)) %&gt;% 
+  ungroup()
+```
+
+```
+## # A tibble: 2 × 2
+##   Sex    tx_survie
+##   &lt;fct&gt;      &lt;dbl&gt;
+## 1 Male       0.212
+## 2 Female     0.732
+```
+
+
+---
+background-color: #fbe6ec
+# Solution : Titanic
+
+1. Calculer le taux de survie par classe, par sexe, et par âge
+
+
+``` r
+titanic %&gt;% 
+  group_by(Age) %&gt;% 
+  summarise(tx_survie = sum(Freq[Survived == "Yes"])/sum(Freq)) %&gt;% 
+  ungroup()
+```
+
+```
+## # A tibble: 2 × 2
+##   Age   tx_survie
+##   &lt;fct&gt;     &lt;dbl&gt;
+## 1 Child     0.523
+## 2 Adult     0.313
+```
+
+
+---
+background-color: #fbe6ec
+# Solution : Titanic
+
+2. Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
+
+
+``` r
+# Solution 1
+titanic %&gt;% 
+  mutate(passenger = ifelse(Class != "Crew", 1, 0))
+
+# Solution 2
+titanic %&gt;% 
+  mutate(passenger = case_when(Class != "Crew" ~ 1,
+                               Class == "Crew" ~ 0))
+```
+
+**Conseil**: utiliser `case_when` quand il y a plus d'une condition.
+
+---
+background-color: #fbe6ec
+# Solution : Titanic
+
+3. Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
+
+
+``` r
+titanic %&gt;%
+  filter(Age == "Adult") %&gt;%
+  group_by(Class, Sex) %&gt;%
+  summarise(tx_survie = sum(Freq[Survived == "Yes"]) / sum(Freq)) %&gt;%
+  arrange(desc(tx_survie))
+```
+
+
+
+
+---
+### Left-right-full-anti joints
+
+
+
+---
+### Formats wide et long
+
+---
+class: inverse
+## Application : Élections législatives de 2024 en France 
+
+<div class="countdown" id="timer_e7056cce" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+1. Importer les données
+
+2. Calculer le taux d'absention moyen par département
+
+3. Calculer le taux de participation moyen des villes dont le code postal termine par un 7
+
+
+---
+background-color: #fbe6ec
+# Solution
+
+
+
+
+
+
+
+
+
+---
+class: inverse
+## Application: Carte des résultats du 2nd tour des législatives 2024
+
+<div class="countdown" id="timer_0937f884" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+
+
+
+
+
 
 
 

@@ -31,9 +31,11 @@ library(tidyverse)
 library(pander)
 library(ggthemes)
 library(gapminder)
+library(emo)
 library(countdown)
 library(xaringanthemer)
 library(xaringanExtra)
+library(sf)
 
 # countdown style
 countdown(
@@ -43,7 +45,8 @@ countdown(
   color_running_text        = "white",
   color_finished_background = "white",
   color_finished_text       = "#dd0747",
-  color_finished_border     = "#dd0747"
+  color_finished_border     = "#dd0747",
+  font_size = "2em" 
 )
 
 
@@ -53,7 +56,7 @@ style_xaringan(
   text_color = "black",
   header_color = "#dd0747",
   text_bold_color = "#dd0747",
-  text_slide_number_color = "#dd0747",
+  text_slide_number_color = "black",
   code_inline_background_color = "#e0e1df",
   base_font_size = "24px",
   text_font_family = "Palatino",
@@ -61,19 +64,44 @@ style_xaringan(
   header_h1_font_size = "45px",
   header_h2_font_size = "35px",
   header_h3_font_size = "28px",
-  inverse_background_color = "#dd0747",
-  inverse_text_color = "white")
+  inverse_background_color = "#f8cdda",
+  inverse_text_color = "black",
+  inverse_header_color = "#dd0747")
 
+# Theme with only x and y axis ans names
+theme_minimum = theme_bw() + 
+  theme(
+  text = element_text(family = "Palatino"),
+  line = element_blank(),  # Masquer toutes les lignes par défaut
+  rect = element_blank(),  # Masquer tous les rectangles par défaut
+  axis.line = element_line(color = "black"),  # Afficher les lignes des axes
+  axis.ticks = element_blank(),  # Masquer les ticks des axes
+  plot.title = element_blank(),  # Masquer le titre du graphique
+  panel.background = element_blank(),  # Masquer le fond du panneau
+  panel.grid.major = element_blank(),  # Masquer la grille principale
+  panel.grid.minor = element_blank(),  # Masquer la grille secondaire
+  plot.background = element_blank(),  # Masquer le fond du graphique
+  legend.position = "none"  # Masquer la légende
+)
 
+# A blank theme for ggplot
+theme_empty = theme_bw() + 
+  theme(
+  text = element_text(family = "Palatino"),
+  line = element_blank(),  # Masquer toutes les lignes par défaut
+  rect = element_blank(),  # Masquer tous les rectangles par défaut
+  axis.line = element_line(color = "black"),  # Afficher les lignes des axes
+  axis.ticks = element_blank(),  # Masquer les ticks des axes
+  axis.text = element_blank(),  # Masquer les étiquettes des axes
+  axis.title = element_text(size = 12),  # Afficher les titres des axes
+  plot.title = element_blank(),  # Masquer le titre du graphique
+  panel.background = element_blank(),  # Masquer le fond du panneau
+  panel.grid.major = element_blank(),  # Masquer la grille principale
+  panel.grid.minor = element_blank(),  # Masquer la grille secondaire
+  plot.background = element_blank(),  # Masquer le fond du graphique
+  legend.position = "none"  # Masquer la légende
+)
 
-
-
-# style_mono_accent(
-#   base_color = "#dd0747",
-#   header_font_google = google_font("Palatino"),
-#   text_font_google   = google_font("Palatino", "300", "300i"),
-#   code_font_google   = google_font("Palatino")
-# )
 
 ```
 
@@ -81,32 +109,42 @@ layout: true
 
 
 ---
-# Contact
+# About me
+
+&nbsp;
+
+
+Doctorante en Économie à PSE en 3ème année
+
+Champs de recherche: économie de la famille, de l'éducation, du travail
+
 
 &nbsp;
 
 &nbsp;
-
-&nbsp;
-
 
 .center[
+**Me contacter**: florentine.oliveira@psemail.eu
 
-florentine.oliveira@psemail.eu
-
-
-Campus Jourdan : Bureau R4-54 
+**Si vous avez des questions ou envie/besoin de parler**: Campus Jourdan, Bureau R4-54 
 ]
 
 ---
 # Objectifs du cours
 
-- Se familiariser avec les techniques **économétriques** de base
+&nbsp;
+
+&nbsp;
+
+- Se familiariser avec 
+  - les techniques **économétriques** de base
+  - la **recherche** en **économie appliquée**
 
 - Apprendre le language de programmation `R`
 
+&nbsp;
 
-$\implies$ pour pouvoir réaliser votre **mémoire** (et découvrir la **recherche en économie appliquée**)!
+$\implies$ pour pouvoir réaliser votre **mémoire** !
 
 
 
@@ -119,8 +157,8 @@ $\implies$ pour pouvoir réaliser votre **mémoire** (et découvrir la **recherc
 
 ### Semestre 1
 
-1. Séance 1 (aujourd'hui): Prise en main de `R`
-2. Séance 2 (): Nettoyer une base de données
+1. Séance 1 (aujourd'hui): Rappels de `R` 
+2. Séance 2 (): Rédiger en $\LaTeX$
 3. Séance 3 (): Statistiques Descriptives
 
 ### Semestre 2
@@ -131,17 +169,42 @@ $\implies$ pour pouvoir réaliser votre **mémoire** (et découvrir la **recherc
 8. Séance 8 ():
 
 
+---
+# Validation du cours
+
+## DM
+
+
+## Mémoire
+
 
 ---
-# Qu'est-ce que la recherche en économie appliquée?
+# Cette séance
 
-- Répondre à des questions de recherche pour apprendre sur le monde...
+&nbsp;
 
-  - Grande diversité des champs de recherche: 
-    - éducation, travail, famille, environnement, macroéconomie, politique, migration, genre, urbaine
+1. La recherche en économie appliquée
+
+2. `R`: rappels et **trouver mot**
+
+  2.1. Définition, usages, interface  
+  2.2. Projet `R`   
+  2.3. Importer des données   
+  2.4. Manipulation des données avec `dplyr`   
+  2.5. Visualisation des données avec `ggplot`   
+  2.6. Maps
+  
+---
+# 1. La recherche en économie appliquée
+
+###  Qu'est-ce que la recherche en économie appliquée?
+
+- Répondre à des **questions de recherche** pour apprendre sur les comportements humains, l'efficacité des poliques publiques, ...
+
+  - Grande diversité des champs de recherche: éducation, travail, famille, environnement, macroéconomie, politique, migration, genre, urban, crime, économie historique, ...
   
   
-- ... en utilisant des techniques statistiques rigoureuses (= économétrie) ...
+- ... en utilisant des techniques statistiques rigoureuses (= **économétrie**) ...
 
 
 - ... et des données!
@@ -150,19 +213,30 @@ $\implies$ pour pouvoir réaliser votre **mémoire** (et découvrir la **recherc
 - `R` est un logiciel qui permet de réaliser ces analyses descriptives et empiriques.
 
 ---
-# Quelques exemples de questions de recherche 
+# 1. La recherche en économie appliquée
 
-- Quel est l'effet des bourses sur la réussite scolaire? ( papier de gabrielle)
+### Quelques exemples de questions de recherche 
 
-- Quel est l'effet d'un allongement de la durée du congé parental?
+- Quel est l'effet des bourses de scolarité **sur** la réussite scolaire? 
+
+- Quel est l'effet d'un allongement de la durée du congé parental **sur** la participation au marché du travail des mères?
 
 - Quelle est l'ampleur de la discrimination dans le processus de recrutement?
 
-- Quel est l'effet d'un assouplissement des conditions d'éligibilité à l'assurance chômage sur l'emploi ?
+- Quel est l'effet d'un assouplissement des conditions d'éligibilité à l'assurance chômage **sur** l'emploi?
 
-- exemple climat 
+- Quel est l'effet de la pollution atmosphérique **sur** la productivité?  
 
-- exemple political ?
+- Quel est le rôle des médias **sur** le comportement de vote?
+
+- Quel est l'effet de la densité de population **sur** les salaires?
+
+---
+# 1. La recherche en économie appliquée
+
+.center[
+## `r emo::ji("rotating_light")` Corrélation $\neq$ causalité 
+]
 
 
 ---
@@ -172,7 +246,10 @@ class: center, middle, inverse
 # R
 
 ---
-### Définition
+# 2. `R`: rappels et **trouver mot** 
+
+
+## 2.1. `R`ecap : Définition, usages, interface
 
 - D'après le site internet de `R` : *R is a free software environment for statistical computing and graphics.*
 
@@ -180,10 +257,6 @@ class: center, middle, inverse
   
   - un language de programmation
   
---
-
-### Pourquoi `R` plutôt qu'un autre logiciel/language de programmation?
-
 - `R` est **gratuit** et en **open source**
 
   - donc utilisé par beaucoup de monde dans les milieux académique insitutionnel
@@ -194,18 +267,357 @@ class: center, middle, inverse
 
 - Compétence valorisable et de plus en plus appréciée (public & privé)   
 
----
 
-```{r popularity, echo=FALSE, out.width="80%"}
-knitr::include_graphics("imgs/popularity.jpeg")
+---
+### Popularité de `R`<sup>1</sup>
+
+.pull-left[
+```{r popularity scholar, echo=FALSE, out.width="150%"}
+knitr::include_graphics("imgs/popularity_datascientist.jpg")
 ```
+]
+
+.pull-right[
+```{r popularity data, echo=FALSE, out.width="80%"}
+knitr::include_graphics("imgs/popularity_scholar.png")
+```
+]
+
+.footnote[
+[1]: [The Popularity of Data Science Software](https://r4stats.com/articles/popularity/)
+]
 
 ---
-### `R`ecap
+## 2.1. `R`ecap : Définition, usages, interface
 
 ```{r interface, echo=FALSE, out.width="80%"}
 knitr::include_graphics("imgs/interface.png")
 ```
+
+
+---
+## 2.2. `R`ecap : Projet `R`
+
+Les projets `R` permettent une meilleure organisation de votre travail.
+.pull-left[
+```{r rproj, echo=FALSE, out.width="60%"}
+knitr::include_graphics("imgs/rproj.jpeg")
+```
+]
+
+.pull-right[
+**Création d'un projet `R`:** 
+- Dans R-Studio  
+
+  - Fichier $\rightarrow$ Nouveau projet  
+
+]
+
+
+---
+class: inverse
+# Application: créer votre projet `R`
+
+`r countdown(minutes = 3, top = 0)`
+
+.pull-left[
+```{r application rproj , echo=FALSE, out.width="70%"}
+knitr::include_graphics("imgs/rproj_sans_fond.png")
+```
+]
+
+.pull-right[
+Créer un projet R pour la Lecture 1 en respectant cette structure
+]
+
+
+
+---
+## 2.3. `R`ecap: Importer des données
+
+**Format .csv:**
+
+- `read.csv()` ou `read.cvs2()` avec l'argument `sep = ';'`
+
+&nbsp;
+
+**Formats .dta (stata), .sas7bdat (sas): ** package `haven` (nb: `haven` est inclus dans `tidyverse`)
+
+  - `.dta` : `read_dta()`
+  
+  - `.sas7dbat` : `read_sas()`
+  
+&nbsp;
+
+**Format .xls ou .xlsx (Excel): ** package `readxl`
+
+  - `read_excel()`  
+  
+---
+## 2.3. `R`ecap: Importer des données
+
+&nbsp;
+
+**Format .rds:** format de données le moins lourd et optimal pour travailler sur R, surtout quand les bases de données sont très volumineuses
+
+- `readRDS()`
+
+**Conseil**: à la fin du script de cleaning, enregistrer le ou les data.frames nettoyés en format `.RDS` avec la fonction `saveRDS()` et importer ces données nettoyées dans le script sur lequel vous ferez toutes vos analyses.
+  
+  
+---
+## `R`ecap: Manipulation et visualisation des données
+
+Principal package pour la manipulation et visualitation des données : `dplyr`
+
+$$\text{data.frame} \;\; \underbrace{\text{%>%}}_{\text{pipe}} \;\; \text{function}(\text{your action})$$
+
+[Cheatsheet Dplyr](#)
+
+--
+### Principales fonctions 
+
+- `mutate()`: créer ou modifier des variables
+- `summarise()`: résume les données par des statistiques descriptives 
+- `filter()`: conserve ou supprime les lignes 
+- `group_by()`: permet de grouper des observations entre elles 
+- `select()`: consevre ou supprime des colonnes
+- `arrange()`: ordonne les observations par rapport aux valeurs d'une colonne
+
+---
+class: inverse
+# Application : Titanic
+
+Ce jeu de données fournit des informations sur le sort des passagers du paquebot « Titanic », résumées en fonction du statut économique (class), du sexe, de l'âge et de la survie.
+
+```{r, echo = T}
+
+titanic = as.data.frame(Titanic)
+
+head(titanic)
+
+```
+
+---
+class: inverse
+# Application : Titanic
+
+`r countdown(minutes = 5, top = 0)`
+
+&nbsp;
+
+
+1. Calculer le taux de survie par classe, par sexe, et par âge
+
+2. Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
+
+3. Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
+
+---
+background-color: #fbe6ec
+# Solution : Titanic
+
+1. Calculer le taux de survie par classe, par sexe, et par âge
+
+```{r, echo = T}
+
+titanic %>% 
+  group_by(Class) %>% #<< 
+  summarise(tx_survie = sum(Freq[Survived == "Yes"])/sum(Freq)) %>% 
+  ungroup()
+
+```
+
+---
+background-color: #fbe6ec
+count: false
+# Solution : Titanic
+
+1. Calculer le taux de survie par classe, par sexe, et par âge
+
+```{r, echo = T}
+
+titanic %>% 
+  group_by(Class) %>% 
+  summarise(tx_survie = sum(Freq[Survived == "Yes"])/sum(Freq)) %>% #<< 
+  ungroup()
+
+```
+
+---
+background-color: #fbe6ec
+# Solution : Titanic
+
+1. Calculer le taux de survie par classe, par sexe, et par âge
+
+```{r, echo = T}
+
+titanic %>% 
+  group_by(Sex) %>% 
+  summarise(tx_survie = sum(Freq[Survived == "Yes"])/sum(Freq)) %>% 
+  ungroup()
+
+```
+
+
+---
+background-color: #fbe6ec
+# Solution : Titanic
+
+1. Calculer le taux de survie par classe, par sexe, et par âge
+
+```{r, echo = T}
+
+titanic %>% 
+  group_by(Age) %>% 
+  summarise(tx_survie = sum(Freq[Survived == "Yes"])/sum(Freq)) %>% 
+  ungroup()
+
+```
+
+
+---
+background-color: #fbe6ec
+# Solution : Titanic
+
+2. Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
+
+```{r, results = 'hide'}
+
+# Solution 1
+titanic %>% 
+  mutate(passenger = ifelse(Class != "Crew", 1, 0))
+
+# Solution 2
+titanic %>% 
+  mutate(passenger = case_when(Class != "Crew" ~ 1,
+                               Class == "Crew" ~ 0))
+
+```
+
+**Conseil**: utiliser `case_when` quand il y a plus d'une condition.
+
+---
+background-color: #fbe6ec
+# Solution : Titanic
+
+3. Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
+
+```{r, echo = T, results = 'hide'}
+
+titanic %>%
+  filter(Age == "Adult") %>%
+  group_by(Class, Sex) %>%
+  summarise(tx_survie = sum(Freq[Survived == "Yes"]) / sum(Freq)) %>%
+  arrange(desc(tx_survie))
+
+```
+
+
+
+
+---
+### Left-right-full-anti joints
+
+
+
+---
+### Formats wide et long
+
+---
+class: inverse
+## Application : Élections législatives de 2024 en France 
+
+`r countdown(minutes = 5, top = 0)`
+
+1. Importer les données
+
+2. Calculer le taux d'absention moyen par département
+
+3. Calculer le taux de participation moyen des villes dont le code postal termine par un 7
+
+
+---
+background-color: #fbe6ec
+# Solution
+
+
+```{r , echo = F, message = F, warning = F, include = F}
+
+# 1. Import data 
+
+resultats_t1 = read.csv("data/resultats-definitifs-par-circonscription-t1.csv", sep = ";", na.strings=c("","NA")) 
+resultats_t2 = read.csv("data/resultats-definitifs-par-circonscription-t2.csv", sep = ";", na.strings=c("","NA")) 
+
+ 
+# 1. Pivorter les deux dataframe en format long et ajouter pour chacun une colonne 'tour' qui vaut 1 pour le premier tour et 2 pour le second tour
+
+resultats_t1_long <- resultats_t1 %>%
+  pivot_longer(
+    cols = matches(".*\\.[1-9]$|.*\\.[1][0-9]$"),  # Sélectionne les variables avec suffixes .1 à .19
+    names_to = c(".value", "candidate_number"),
+    names_pattern = "(.*)\\.(\\d+)"
+  ) %>%
+  mutate(tour = 1) %>% 
+  filter(!is.na(Nom.candidat))
+
+
+resultats_t2_long = resultats_t2 %>%
+  pivot_longer(
+    cols = matches(".*\\.[1-4]$"),  # Sélectionne les variables avec suffixes .1 à .4
+    names_to = c(".value", "candidate_number"),
+    names_pattern = "(.*)\\.(\\d+)"
+  ) %>%
+  mutate(tour = 2) %>% 
+  filter(!is.na(Nom.candidat))
+
+
+# 2. Fusionner les deux dataframe par les lignes et ne conserver que les observations des candidats élus
+resultats = rbind(resultats_t1_long, resultats_t2_long) %>% 
+  filter(Elu == "élu")
+
+```
+
+
+
+
+
+
+---
+class: inverse
+## Application: Carte des résultats du 2nd tour des législatives 2024
+
+`r countdown(minutes = 10, top = 0)`
+
+
+
+```{r carte résultats, echo = F, message = F, warning = F, include = F}
+
+# Import data 
+
+map = st_read("data/france-circonscriptions-legislatives-2012.shp") %>% 
+  rename(CODDPT = code_dpt,
+         CODCIRLG = num_circ)
+
+results = read.csv("data/legislatives-2024-candidats-elus-france-entiere-tour-1-2-2024.csv", sep = ";") %>% 
+  mutate(CODCIRLG = as.character(CODCIRLG),
+         CODDPT = ifelse(nchar(CODDPT) == 1, paste0("0", CODDPT), CODDPT)) %>% 
+  left_join(map , by = c("CODDPT", "CODCIRLG"))
+
+ggplot(results %>% filter(! (CODDPT %in% c("971", "972", "973", "974", "975", "976", "986", "987", "988", "ZX", "ZZ")))) +
+  geom_sf(aes(fill = CODE_NUA, geometry = geometry)) +
+  theme_minimal() +
+  labs(title = "Résultats des élections législatives par circonscription",
+       fill = "Parti") +
+  theme(legend.position = "bottom", 
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank())
+
+
+```
+
+
 
 
 
