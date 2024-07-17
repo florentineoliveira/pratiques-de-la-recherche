@@ -362,6 +362,8 @@ Créer un projet R pour la Lecture 1 en respectant cette structure
 
 - `readRDS()`
 
+&nbsp;
+
 **Conseil**: à la fin du script de cleaning, enregistrer le ou les data.frames nettoyés en format `.RDS` avec la fonction `saveRDS()` et importer ces données nettoyées dans le script sur lequel vous ferez toutes vos analyses.
   
   
