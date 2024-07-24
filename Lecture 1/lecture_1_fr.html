@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Lecture 0: Refresher</title>
+    <title>Lecture 1: Refresher</title>
     <meta charset="utf-8" />
     <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2024-07-17" />
+    <meta name="date" content="2024-07-24" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/countdown/countdown.css" rel="stylesheet" />
     <script src="libs/countdown/countdown.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
 .title[
-# Lecture 0: <code>R</code>efresher
+# Lecture 1: <code>R</code>efresher
 ]
 .subtitle[
 ## Pratiques de la Recherche en Économie
@@ -24,7 +25,7 @@ class: center, middle, inverse, title-slide
 ### Florentine Oliveira
 ]
 .date[
-### 2024-07-17
+### 2024-07-24
 ]
 
 ---
@@ -85,8 +86,8 @@ Champs de recherche: économie de la famille, de l'éducation, du travail
 ### Semestre 1
 
 1. Séance 1 (aujourd'hui): Rappels de `R` 
-2. Séance 2 (): Rédiger en `\(\LaTeX\)`
-3. Séance 3 (): Statistiques Descriptives
+2. Séance 2 (12/11/2024): Rédiger en `\(\LaTeX\)`
+3. Séance 3 (19/12/2024): Statistiques Descriptives
 
 ### Semestre 2
 4. Séance 4 (): Régressions linéaires simples et multiples
@@ -124,7 +125,30 @@ Champs de recherche: économie de la famille, de l'éducation, du travail
 ---
 # 1. La recherche en économie appliquée
 
-###  Qu'est-ce que la recherche en économie appliquée?
+### Qu'est-ce que la recherche en économie appliquée?
+
+- Répondre à des **questions de recherche** pour apprendre sur les comportements humains, l'efficacité des poliques publiques, ...   
+
+--
+
+  - Quel est l'effet des bourses de scolarité **sur** la réussite scolaire? 
+
+  - Quel est l'effet d'un allongement de la durée du congé parental **sur** la participation au marché du travail des mères?
+
+  - Quelle est l'ampleur de la discrimination dans le processus de recrutement?
+
+  - Quel est l'effet d'un assouplissement des conditions d'éligibilité à l'assurance chômage **sur** l'emploi?
+
+  - Quel est l'effet de la pollution atmosphérique **sur** la productivité?  
+
+  - Quel est le rôle des médias **sur** le comportement de vote?
+
+  - Quel est l'effet de la densité de population **sur** les salaires?
+
+---
+# 1. La recherche en économie appliquée
+
+### Qu'est-ce que la recherche en économie appliquée?
 
 - Répondre à des **questions de recherche** pour apprendre sur les comportements humains, l'efficacité des poliques publiques, ...
 
@@ -133,38 +157,12 @@ Champs de recherche: économie de la famille, de l'éducation, du travail
   
 - ... en utilisant des techniques statistiques rigoureuses (= **économétrie**) ...
 
+- ... une stratégie/un cadre qui nous permet d'identifier un **effet causal**...
 
 - ... et des données!
 
 
 - `R` est un logiciel qui permet de réaliser ces analyses descriptives et empiriques.
-
----
-# 1. La recherche en économie appliquée
-
-### Quelques exemples de questions de recherche 
-
-- Quel est l'effet des bourses de scolarité **sur** la réussite scolaire? 
-
-- Quel est l'effet d'un allongement de la durée du congé parental **sur** la participation au marché du travail des mères?
-
-- Quelle est l'ampleur de la discrimination dans le processus de recrutement?
-
-- Quel est l'effet d'un assouplissement des conditions d'éligibilité à l'assurance chômage **sur** l'emploi?
-
-- Quel est l'effet de la pollution atmosphérique **sur** la productivité?  
-
-- Quel est le rôle des médias **sur** le comportement de vote?
-
-- Quel est l'effet de la densité de population **sur** les salaires?
-
----
-# 1. La recherche en économie appliquée
-
-.center[
-## 🚨 Corrélation `\(\neq\)` causalité 
-]
-
 
 ---
 layout: false
@@ -237,7 +235,7 @@ Les projets `R` permettent une meilleure organisation de votre travail.
 class: inverse
 # Application: créer votre projet `R`
 
-<div class="countdown" id="timer_231ff9ea" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_4c84d685" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -247,7 +245,9 @@ class: inverse
 ]
 
 .pull-right[
-Créer un projet R pour la Lecture 1 en respectant cette structure
+- Créer un projet R pour la Lecture 1 en respectant cette structure
+
+- Créer un nouveau script R, enregistré dans le dossier lecture_1
 ]
 
 
@@ -282,17 +282,22 @@ Créer un projet R pour la Lecture 1 en respectant cette structure
 
 - `readRDS()`
 
+&amp;nbsp;
+
 **Conseil**: à la fin du script de cleaning, enregistrer le ou les data.frames nettoyés en format `.RDS` avec la fonction `saveRDS()` et importer ces données nettoyées dans le script sur lequel vous ferez toutes vos analyses.
   
   
 ---
-## `R`ecap: Manipulation et visualisation des données
+background-image: url(imgs/dplyr_logo.png)
+background-position: 90% 10%
+background-size: 15%
 
-Principal package pour la manipulation et visualitation des données : `dplyr`
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+
+Principal package pour la manipulation de données : `dplyr`
 
 `$$\text{data.frame} \;\; \underbrace{\text{%&gt;%}}_{\text{pipe}} \;\; \text{function}(\text{your action})$$`
-
-[Cheatsheet Dplyr](#)
 
 --
 ### Principales fonctions 
@@ -303,6 +308,34 @@ Principal package pour la manipulation et visualitation des données : `dplyr`
 - `group_by()`: permet de grouper des observations entre elles 
 - `select()`: consevre ou supprime des colonnes
 - `arrange()`: ordonne les observations par rapport aux valeurs d'une colonne
+
+
+[Cheatsheet Dplyr]()
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Opérateurs 
+
+.pull-left[
+| Opérateur **arithmétiques**  | Description               |
+|------------------------------|---------------------------|
+| `+` / `-`                    | Addition / Soustraction   |
+| `*` / `/`                    | Multiplication / Division |
+| `^`                          | Exposant                  |
+]
+
+.pull-right[
+| Opérateur **logiques**  | Description                          |
+|-------------------------|--------------------------------------|
+| `&lt;` / `&gt;`               | Strictement inférieur / supérieur à  |
+| `&lt;=` / `&gt;=`             | Supérieur / inférieur ou égal à      |
+| `==`                    | Égal à                               |
+| `!=`                    | Différent de                         |
+| `x %in% c(1,6)`         | `\(x\)` dans `\(\{1,6\}\)`                   |
+| `x &amp; y`                 | `\(x\)` *et* `\(y\)`                         |
+| &lt;code&gt;x &amp;#124; y&lt;/code&gt; | `\(x\)` *ou* `\(y\)`                         |
+]
 
 ---
 class: inverse
@@ -331,7 +364,7 @@ head(titanic)
 class: inverse
 # Application : Titanic
 
-<div class="countdown" id="timer_99ed89ae" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_f9a37cbd" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -339,17 +372,17 @@ class: inverse
 &amp;nbsp;
 
 
-1. Calculer le taux de survie par classe, par sexe, et par âge
+1) Calculer le taux de survie par classe, par sexe, et par âge
 
-2. Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
+2) Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
 
-3. Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
+3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
 
 ---
 background-color: #fbe6ec
 # Solution : Titanic
 
-1. Calculer le taux de survie par classe, par sexe, et par âge
+1) Calculer le taux de survie par classe, par sexe, et par âge
 
 
 ``` r
@@ -374,7 +407,7 @@ background-color: #fbe6ec
 count: false
 # Solution : Titanic
 
-1. Calculer le taux de survie par classe, par sexe, et par âge
+1) Calculer le taux de survie par classe, par sexe, et par âge
 
 
 ``` r
@@ -398,7 +431,7 @@ titanic %&gt;%
 background-color: #fbe6ec
 # Solution : Titanic
 
-1. Calculer le taux de survie par classe, par sexe, et par âge
+1) Calculer le taux de survie par classe, par sexe, et par âge
 
 
 ``` r
@@ -421,7 +454,7 @@ titanic %&gt;%
 background-color: #fbe6ec
 # Solution : Titanic
 
-1. Calculer le taux de survie par classe, par sexe, et par âge
+1) Calculer le taux de survie par classe, par sexe, et par âge
 
 
 ``` r
@@ -444,7 +477,7 @@ titanic %&gt;%
 background-color: #fbe6ec
 # Solution : Titanic
 
-2. Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
+2) Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
 
 
 ``` r
@@ -464,7 +497,7 @@ titanic %&gt;%
 background-color: #fbe6ec
 # Solution : Titanic
 
-3. Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
+3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
 
 
 ``` r
@@ -476,39 +509,528 @@ titanic %&gt;%
 ```
 
 
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+.center[
+&lt;img src="imgs/datasets.jpeg" width="50%" style="display: block; margin: auto;" /&gt;
+]
+
+- Très souvent, les données relatives à une analyse sont réparties dans plusieurs tables différentes
+
+- Joindre deux tables de données peut permettre d'ajouter 
+  - des variables supplémentaires
+  - des observations supplémentaires
+  
+- L'ajout de variables peut se faire sur la base:
+  - de la position des observations dans les deux jeux de données: **binding joints**
+  - relativement aux valeurs d'une ou plusieurs autres colonnes, les *clés*: **mutating joints**
 
 
 ---
-### Left-right-full-anti joints
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Binding joints 
+
+.center[
+**Binding Rows**
+
+&lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
+]
+
+
+.left-column[
+&lt;img src="imgs/bindrows.jpeg" width="150%" style="display: block; margin: auto;" /&gt;
+]
+.right-column[
+`bind_rows(a, b)`: dans une jointure de lignes, les colonnes sont associées à leur nom et toute colonne manquante est remplacée par NA.
+]
+
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Binding joints 
+
+.center[
+**Binding Columns**
+
+&lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
+]
+
+
+.left-column[
+&lt;img src="imgs/bindcols.jpeg" width="150%" style="display: block; margin: auto;" /&gt;
+]
+.right-column[
+`bind_cols(a, b)`: dans une jointure de colonnes, les lignes sont mises en correspondance en fonction de leur **position**
+]
+
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Mutating joints 
+
+
+.center[
+**Left-joint**
+
+&lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
+]
+
+
+.left-column[
+&lt;img src="imgs/left_joint.jpeg" width="200%" style="display: block; margin: auto;" /&gt;
+]
+.right-column[
+`left_join(a, b, by = "x1")`: pour chaque ligne de **a** on a ajouté les colonnes de **b** pour lesquelles la valeur de la *clé* **x1** est la même
+]
 
 
 
 ---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Mutating joints 
+
+.center[
+**Right-joint**
+
+&lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
+]
+
+
+.left-column[
+&lt;img src="imgs/right_joint.jpeg" width="200%" style="display: block; margin: auto;" /&gt;
+]
+.right-column[
+`right_join(a, b, by = "x1")`: pour chaque ligne de **b** on a ajouté les colonnes de **a** pour lesquelles la valeur de la *clé* **x1** est la même
+]
+
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Mutating joints 
+
+.center[
+**Inner-joint**
+
+&lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
+]
+
+
+.left-column[
+&lt;img src="imgs/inner_joint.jpeg" width="200%" style="display: block; margin: auto;" /&gt;
+]
+.right-column[
+`inner_join(a, b, by = "x1")`: seules les lignes présentes à la fois dans **a** et **b** sont jointes
+]
+
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Mutating joints 
+
+.center[
+**Full-joint**
+
+&lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
+]
+
+
+.left-column[
+&lt;img src="imgs/full_joint.jpeg" width="200%" style="display: block; margin: auto;" /&gt;
+]
+.right-column[
+`full_join(a, b, by = "x1")`: toutes les lignes de **a** et toutes les lignes de **b** sont jointes (avec des NA ajoutés si nécessaire) même si elles sont absentes de l’autre table
+]
+
+
+
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
 ### Formats wide et long
+
+Un jeu de données est dit ***tidy*** (i.e. "bien rangé") si:
+
+1. Chaque ligne correspond à une observation  
+2. Chaque colonne correspond à une variable  
+3. Chaque valeur est présente dans une unique case de la table  
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Formats wide et long
+
+Pour **rassembler des colonnes** et passer en format **long**: `pivot_longer`
+
+.center[
+&lt;img src="imgs/longer.jpeg" width="50%" style="display: block; margin: auto;" /&gt;
+]
+
+&amp;nbsp;
+
+`b = pivot_longer(a, cols = 2:3,  names_to = "grade", values_to = "mean")`
+       
+       
+ 
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Formats wide et long
+
+Pour **disperser des lignes** et obtenir un format **wide**: `pivot_wider`
+
+.center[
+&lt;img src="imgs/wider.jpeg" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+&amp;nbsp;
+
+`b = pivot_wider(a,  names_from = subject, values_from = mean)`      
+
 
 ---
 class: inverse
 ## Application : Élections législatives de 2024 en France 
 
-<div class="countdown" id="timer_e7056cce" data-update-every="1" tabindex="0" style="top:0;right:0;">
+&amp;nbsp;
+
+Utilisation de 3 bases de données:
+- résultats au premier tour: `resultats-definitifs-par-circonscription-t1.csv`
+- résultats au second tour: `resultats-definitifs-par-circonscription-t2.csv`
+- population par circoncsription en 2019: `population_2019.csv`
+
+
+---
+class: inverse
+## Application : Élections législatives de 2024 en France 
+
+🚨 **Encodage du libellé des circonscriptions**
+
+
+
+
+``` r
+head(resultats_t1[1:4,c(2,4)])
+```
+
+```
+##   Libellé.département Libellé.circonscription.législative
+## 1                 Ain                1ère circonscription
+## 2                 Ain                2ème circonscription
+## 3                 Ain                3ème circonscription
+## 4                 Ain                4ème circonscription
+```
+
+``` r
+head(pop_2019)[1:4,]
+```
+
+```
+##   X. Circonscriptions Population.20191...hab..
+## 1  1         Ain, 1re                  122 750
+## 2  2          Ain, 2e                  137 975
+## 3  3          Ain, 3e                  146 110
+## 4  4          Ain, 4e                  128 896
+```
+ 
+
+---
+class: inverse
+## Application : Élections législatives de 2024 en France 
+
+🚨 **Encodage du libellé des circonscriptions**
+
+
+
+``` r
+resultats_t1 = resultats_t1 %&gt;% 
+  mutate(Libellé.circonscription.législative = gsub("\\D", "", Libellé.circonscription.législative))
+
+unique(resultats_t1$Libellé.circonscription.législative)  
+```
+
+```
+##  [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10" "11" "12" "13" "14" "15"
+## [16] "16" "17" "18" "19" "20" "21"
+```
+
+
+
+&amp;nbsp;
+
+
+`$$\underbrace{ \text{gsub}}_{\text{remplace}}( \underbrace{ \text{"\\\D"}}_{\substack{\text{tout ce qui n'est} \\  \text{pas numérique}}}  , \underbrace{\text{""}}_{\substack{\text{par une chaîne} \\ \text{de caractères vide}}},  \underbrace{\text{Libellé.circonscription.législative}}_{\substack{\text{dans la variable} \\ \text{Libellé.circonscription.législative}}})$$`
+
+
+---
+class: inverse
+## Application : Élections législatives de 2024 en France 
+
+🚨 **Encodage du libellé des circonscriptions**
+
+
+
+``` r
+pop_2019 = pop_2019 %&gt;% 
+  separate(Circonscriptions, into = c("Libellé.département", "Libellé.circonscription.législative"), sep = ", ") %&gt;% 
+  mutate(Libellé.circonscription.législative = gsub("\\D", "", Libellé.circonscription.législative))
+
+unique(pop_2019$Libellé.circonscription.législative)  
+```
+
+```
+##  [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10" "11" "12" "13" "14" "15"
+## [16] "16" NA   "17" "18" "19" "20" "21"
+```
+
+&amp;nbsp;
+
+
+`$$\underbrace{ \text{separate}}_{\text{sépare}}( \underbrace{ \text{"Circonscriptions"}}_{\substack{\text{les caractères de la} \\ \text{variable Circonscriptions}}}  , \underbrace{\text{into = c("A", "B")}}_{ \substack{ \text{en deux chaînes de caractères} \\ \text{qui définissent ces deux variables}}},  \underbrace{\text{ sep = ", "}}_{\substack{\text{la séparation étant} \\ \text{faite à l'endroit de} \\ \text{la virgule}}})$$`
+
+---
+class: inverse
+## Application : Élections législatives de 2024 en France 
+
+<div class="countdown" id="timer_1b3d7320" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
-<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
-1. Importer les données
+1) Importer les données
 
-2. Calculer le taux d'absention moyen par département
+2) Effectuer sur chaque jeu de données les opérations nécessaires pour harmoniser l'encodage du libellé de circonscription   
+  - **pop-19**: `separate(Circonscriptions, into = c("Libellé.département", "Libellé.circonscription.législative"), sep = ", ")`    
+  - **resultats_t1** et **resultats_t2** et **pop_2019**: `gsub("\\D", "", Libellé.circonscription.législative)`
 
-3. Calculer le taux de participation moyen des villes dont le code postal termine par un 7
+3) Reformatter `resultats_t1` et `resultats_t2`  en format long
+
+4) Ajouter une variable `tour` qui vaut 1 dans `resultats_t1` et 2 dans `resultats_t2`
+
+5) Concaténer `resultats_t1` et `resultats_t2` et stocker dans `resultats`
+
+6) Ne conserver que les observations des candidats élus
+
+7) Joindre `pop_2019` à `resultats` et renommer `Population.20191...hab..` en `pop`
+
 
 
 ---
 background-color: #fbe6ec
 # Solution
 
+1) Importer les données
+
+
+``` r
+resultats_t1 = read.csv("data/resultats-definitifs-par-circonscription-t1.csv", sep = ";", na.strings=c("","NA")) 
+resultats_t2 = read.csv("data/resultats-definitifs-par-circonscription-t2.csv", sep = ";", na.strings=c("","NA")) 
+pop_2019 = read.csv("data/population_2019.csv", sep = ";")
+```
+
+
+2) Effectuer sur chaque jeu de données les opérations nécessaires pour harmoniser l'encodage du libellé de circonscription   
+
+
+``` r
+resultats_t1 = resultats_t1 %&gt;% 
+  mutate(Libellé.circonscription.législative = gsub("\\D", "", Libellé.circonscription.législative))
+
+resultats_t2 = resultats_t2 %&gt;% 
+  mutate(Libellé.circonscription.législative = gsub("\\D", "", Libellé.circonscription.législative))
+
+pop_2019 = pop_2019 %&gt;% 
+  separate(Circonscriptions, into = c("Libellé.département", "Libellé.circonscription.législative"), sep = ", ") %&gt;% 
+  mutate(Libellé.circonscription.législative = gsub("\\D", "", Libellé.circonscription.législative))
+```
+
+---
+background-color: #fbe6ec
+# Solution
+
+3) Reformatter `resultats_t1` et `resultats_t2`  en format long
+
+4) Ajouter une variable `tour` qui vaut 1 dans `resultats_t1` et 2 dans `resultats_t2`
 
 
 
+``` r
+resultats_t1_long = resultats_t1 %&gt;%
+  pivot_longer(
+    cols = matches(".*\\.[1-9]$|.*\\.[1][0-9]$"),  # Sélectionne les variables avec suffixes .1 à .19
+    names_to = c(".value", "candidate_number"),
+    names_pattern = "(.*)\\.(\\d+)"
+  ) %&gt;%
+  mutate(tour = 1) 
+
+
+resultats_t2_long = resultats_t2 %&gt;%
+  pivot_longer(
+    cols = matches(".*\\.[1-4]$"),  # Sélectionne les variables avec suffixes .1 à .4
+    names_to = c(".value", "candidate_number"),
+    names_pattern = "(.*)\\.(\\d+)"
+  ) %&gt;%
+  mutate(tour = 2) 
+```
+
+
+---
+background-color: #fbe6ec
+# Solution
+
+5) Concaténer `resultats_t1` et `resultats_t2` et stocker dans `resultats`
+
+6) Ne conserver que les observations des candidats élus
+
+7) Joindre `pop_2019` à `resultats` et renommer `Population.20191...hab..` en `pop`
+
+
+
+``` r
+resultats = bind_rows(resultats_t1_long, resultats_t2_long) %&gt;% 
+  filter(Elu == "élu") %&gt;% 
+  left_join(pop_2019 %&gt;% rename(pop = Population.20191...hab..), by = c("Libellé.département", "Libellé.circonscription.législative"))
+```
+
+
+
+---
+background-image: url(imgs/ggplot2_logo.png)
+background-position: 90% 10%
+background-size: 15%
+
+## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+
+
+Principal package pour la visualitation de données : `ggplot`
+
+**Template pour n'importe quel graphique**
+
+.center[
+ggplot(**data = **)
+]
+
+--
+### Principales fonctions 
+
+[Cheatsheet Dplyr]()
+
+---
+## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+
+### Une variable _discrète_
+
+.pull-left[
+
+``` r
+ggplot(resultats, 
+       aes(x = Nuance.candidat)) + 
+  geom_bar() +
+  labs(
+    title = "Number of Votes by Candidate",
+    x = "Candidate",
+    y = "Number") +
+  theme_minimal()
+```
+]
+
+.pull-right[
+&lt;img src="lecture_1_fr_files/figure-html/unnamed-chunk-18-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+---
+count: false
+## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+
+### Une variable _discrète_
+
+.pull-left[
+
+``` r
+resultats %&gt;%
+* count(Nuance.candidat) %&gt;%
+* mutate(percentage = n/sum(n)*100) %&gt;%
+  ggplot(aes(x = Nuance.candidat, 
+*            y = percentage)) +
+* geom_bar(stat = "identity") +
+  labs(
+    title = "Percentage of Votes by Candidate",
+    x = "Candidate",
+    y = "Percentage") +
+  theme_minimal() 
+```
+]
+
+.pull-right[
+&lt;img src="lecture_1_fr_files/figure-html/unnamed-chunk-20-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+
+
+---
+## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+
+### Une variable _continue_
+
+.pull-left[
+
+``` r
+resultats %&gt;% 
+  mutate(pop = as.numeric(pop)) %&gt;% 
+  ggplot(aes(x = pop)) + 
+  geom_density() +
+  labs(
+    title = "Distribution of population",
+    x = "Population",
+    y = "Frequency") +
+  theme_minimal() 
+```
+]
+
+.pull-right[
+&lt;img src="lecture_1_fr_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+
+### `facet_wrap`
+
+.pull-left[
+
+``` r
+resultats %&gt;%
+* group_by(Nuance.candidat) %&gt;%
+  count(Sexe.candidat) %&gt;% 
+  mutate(percentage = n/sum(n)*100) %&gt;% 
+  ggplot(aes(x = Sexe.candidat, 
+             y = percentage)) + 
+  geom_bar(stat = "identity") + 
+  labs(
+    title = "Percentage of Votes by Candidate",
+    x = "Candidate",
+    y = "Percentage") +
+* facet_wrap( ~ Nuance.candidat) +
+  theme_minimal() 
+```
+]
+
+.pull-right[
+&lt;img src="lecture_1_fr_files/figure-html/unnamed-chunk-24-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+
+
+---
+## 2.6. `R`ecap: Maps
 
 
 
@@ -516,16 +1038,27 @@ background-color: #fbe6ec
 
 ---
 class: inverse
-## Application: Carte des résultats du 2nd tour des législatives 2024
+## Application: carte résultats législatives
 
-<div class="countdown" id="timer_0937f884" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_d4a0f6d9" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
 
 
+```
+## Reading layer `france-circonscriptions-legislatives-2012' from data source 
+##   `/Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Lecture 1/data/france-circonscriptions-legislatives-2012.shp' 
+##   using driver `ESRI Shapefile'
+## Simple feature collection with 566 features and 6 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -178.1818 ymin: -28.09902 xmax: 168.1362 ymax: 51.0894
+## Geodetic CRS:  WGS 84
+```
 
+&lt;img src="lecture_1_fr_files/figure-html/carte résultats-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -605,6 +1138,16 @@ L'apprentissage de `R` est long et fastidieux, mais les rendements sont croissan
 ]
 ]
 
+
+---
+# References
+
+[Introduction à l’analyse d’enquêtes avec R et RStudio](https://larmarange.github.io/analyse-R/)
+[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/01-introduction)
+
+
+---
+# Appendix
 
 ---
 # Cheatsheets

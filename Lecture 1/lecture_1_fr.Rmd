@@ -1,12 +1,14 @@
 ---
-title: "Lecture 0: `R`efresher"
+title: "Lecture 1: `R`efresher"
 subtitle: "Pratiques de la Recherche en Économie"
 author: "Florentine Oliveira"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     lib_dir: libs
-    css: xaringan-themer.css
+    css: 
+    - xaringan-themer.css
+    - custom.css
     nature:
       highlightStyle: github
       highlightLines: true
@@ -158,8 +160,8 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
 ### Semestre 1
 
 1. Séance 1 (aujourd'hui): Rappels de `R` 
-2. Séance 2 (): Rédiger en $\LaTeX$
-3. Séance 3 (): Statistiques Descriptives
+2. Séance 2 (12/11/2024): Rédiger en $\LaTeX$
+3. Séance 3 (19/12/2024): Statistiques Descriptives
 
 ### Semestre 2
 4. Séance 4 (): Régressions linéaires simples et multiples
@@ -197,7 +199,30 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
 ---
 # 1. La recherche en économie appliquée
 
-###  Qu'est-ce que la recherche en économie appliquée?
+### Qu'est-ce que la recherche en économie appliquée?
+
+- Répondre à des **questions de recherche** pour apprendre sur les comportements humains, l'efficacité des poliques publiques, ...   
+
+--
+
+  - Quel est l'effet des bourses de scolarité **sur** la réussite scolaire? 
+
+  - Quel est l'effet d'un allongement de la durée du congé parental **sur** la participation au marché du travail des mères?
+
+  - Quelle est l'ampleur de la discrimination dans le processus de recrutement?
+
+  - Quel est l'effet d'un assouplissement des conditions d'éligibilité à l'assurance chômage **sur** l'emploi?
+
+  - Quel est l'effet de la pollution atmosphérique **sur** la productivité?  
+
+  - Quel est le rôle des médias **sur** le comportement de vote?
+
+  - Quel est l'effet de la densité de population **sur** les salaires?
+
+---
+# 1. La recherche en économie appliquée
+
+### Qu'est-ce que la recherche en économie appliquée?
 
 - Répondre à des **questions de recherche** pour apprendre sur les comportements humains, l'efficacité des poliques publiques, ...
 
@@ -206,38 +231,12 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
   
 - ... en utilisant des techniques statistiques rigoureuses (= **économétrie**) ...
 
+- ... une stratégie/un cadre qui nous permet d'identifier un **effet causal**...
 
 - ... et des données!
 
 
 - `R` est un logiciel qui permet de réaliser ces analyses descriptives et empiriques.
-
----
-# 1. La recherche en économie appliquée
-
-### Quelques exemples de questions de recherche 
-
-- Quel est l'effet des bourses de scolarité **sur** la réussite scolaire? 
-
-- Quel est l'effet d'un allongement de la durée du congé parental **sur** la participation au marché du travail des mères?
-
-- Quelle est l'ampleur de la discrimination dans le processus de recrutement?
-
-- Quel est l'effet d'un assouplissement des conditions d'éligibilité à l'assurance chômage **sur** l'emploi?
-
-- Quel est l'effet de la pollution atmosphérique **sur** la productivité?  
-
-- Quel est le rôle des médias **sur** le comportement de vote?
-
-- Quel est l'effet de la densité de population **sur** les salaires?
-
----
-# 1. La recherche en économie appliquée
-
-.center[
-## `r emo::ji("rotating_light")` Corrélation $\neq$ causalité 
-]
-
 
 ---
 layout: false
@@ -327,7 +326,9 @@ knitr::include_graphics("imgs/rproj_sans_fond.png")
 ]
 
 .pull-right[
-Créer un projet R pour la Lecture 1 en respectant cette structure
+- Créer un projet R pour la Lecture 1 en respectant cette structure
+
+- Créer un nouveau script R, enregistré dans le dossier lecture_1
 ]
 
 
@@ -368,13 +369,16 @@ Créer un projet R pour la Lecture 1 en respectant cette structure
   
   
 ---
-## `R`ecap: Manipulation et visualisation des données
+background-image: url(imgs/dplyr_logo.png)
+background-position: 90% 10%
+background-size: 15%
 
-Principal package pour la manipulation et visualitation des données : `dplyr`
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+
+Principal package pour la manipulation de données : `dplyr`
 
 $$\text{data.frame} \;\; \underbrace{\text{%>%}}_{\text{pipe}} \;\; \text{function}(\text{your action})$$
-
-[Cheatsheet Dplyr](#)
 
 --
 ### Principales fonctions 
@@ -385,6 +389,34 @@ $$\text{data.frame} \;\; \underbrace{\text{%>%}}_{\text{pipe}} \;\; \text{functi
 - `group_by()`: permet de grouper des observations entre elles 
 - `select()`: consevre ou supprime des colonnes
 - `arrange()`: ordonne les observations par rapport aux valeurs d'une colonne
+
+
+[Cheatsheet Dplyr]()
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Opérateurs 
+
+.pull-left[
+| Opérateur **arithmétiques**  | Description               |
+|------------------------------|---------------------------|
+| `+` / `-`                    | Addition / Soustraction   |
+| `*` / `/`                    | Multiplication / Division |
+| `^`                          | Exposant                  |
+]
+
+.pull-right[
+| Opérateur **logiques**  | Description                          |
+|-------------------------|--------------------------------------|
+| `<` / `>`               | Strictement inférieur / supérieur à  |
+| `<=` / `>=`             | Supérieur / inférieur ou égal à      |
+| `==`                    | Égal à                               |
+| `!=`                    | Différent de                         |
+| `x %in% c(1,6)`         | $x$ dans $\{1,6\}$                   |
+| `x & y`                 | $x$ *et* $y$                         |
+| <code>x &#124; y</code> | $x$ *ou* $y$                         |
+]
 
 ---
 class: inverse
@@ -409,17 +441,17 @@ class: inverse
 &nbsp;
 
 
-1. Calculer le taux de survie par classe, par sexe, et par âge
+1) Calculer le taux de survie par classe, par sexe, et par âge
 
-2. Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
+2) Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
 
-3. Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
+3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
 
 ---
 background-color: #fbe6ec
 # Solution : Titanic
 
-1. Calculer le taux de survie par classe, par sexe, et par âge
+1) Calculer le taux de survie par classe, par sexe, et par âge
 
 ```{r, echo = T}
 
@@ -435,7 +467,7 @@ background-color: #fbe6ec
 count: false
 # Solution : Titanic
 
-1. Calculer le taux de survie par classe, par sexe, et par âge
+1) Calculer le taux de survie par classe, par sexe, et par âge
 
 ```{r, echo = T}
 
@@ -450,7 +482,7 @@ titanic %>%
 background-color: #fbe6ec
 # Solution : Titanic
 
-1. Calculer le taux de survie par classe, par sexe, et par âge
+1) Calculer le taux de survie par classe, par sexe, et par âge
 
 ```{r, echo = T}
 
@@ -466,7 +498,7 @@ titanic %>%
 background-color: #fbe6ec
 # Solution : Titanic
 
-1. Calculer le taux de survie par classe, par sexe, et par âge
+1) Calculer le taux de survie par classe, par sexe, et par âge
 
 ```{r, echo = T}
 
@@ -482,7 +514,7 @@ titanic %>%
 background-color: #fbe6ec
 # Solution : Titanic
 
-2. Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
+2) Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
 
 ```{r, results = 'hide'}
 
@@ -503,7 +535,7 @@ titanic %>%
 background-color: #fbe6ec
 # Solution : Titanic
 
-3. Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
+3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
 
 ```{r, echo = T, results = 'hide'}
 
@@ -516,52 +548,372 @@ titanic %>%
 ```
 
 
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+.center[
+```{r datasets joints , echo=FALSE, out.width="50%"}
+knitr::include_graphics("imgs/datasets.jpeg")
+```
+]
+
+- Très souvent, les données relatives à une analyse sont réparties dans plusieurs tables différentes
+
+- Joindre deux tables de données peut permettre d'ajouter 
+  - des variables supplémentaires
+  - des observations supplémentaires
+  
+- L'ajout de variables peut se faire sur la base:
+  - de la position des observations dans les deux jeux de données: **binding joints**
+  - relativement aux valeurs d'une ou plusieurs autres colonnes, les *clés*: **mutating joints**
 
 
 ---
-### Left-right-full-anti joints
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Binding joints 
+
+.center[
+**Binding Rows**
+
+```{r little dataset bindrows, echo=FALSE, out.width="45%"}
+knitr::include_graphics("imgs/little_datasets.jpeg")
+```
+]
+
+
+.left-column[
+```{r datasets joints bindrows, echo=FALSE, out.width="150%"}
+knitr::include_graphics("imgs/bindrows.jpeg")
+```
+]
+.right-column[
+`bind_rows(a, b)`: dans une jointure de lignes, les colonnes sont associées à leur nom et toute colonne manquante est remplacée par NA.
+]
+
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Binding joints 
+
+.center[
+**Binding Columns**
+
+```{r little dataset bindcols, echo=FALSE, out.width="45%"}
+knitr::include_graphics("imgs/little_datasets.jpeg")
+```
+]
+
+
+.left-column[
+```{r datasets joints bindcols , echo=FALSE, out.width="150%"}
+knitr::include_graphics("imgs/bindcols.jpeg")
+```
+]
+.right-column[
+`bind_cols(a, b)`: dans une jointure de colonnes, les lignes sont mises en correspondance en fonction de leur **position**
+]
+
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Mutating joints 
+
+
+.center[
+**Left-joint**
+
+```{r little dataset left, echo=FALSE, out.width="45%"}
+knitr::include_graphics("imgs/little_datasets.jpeg")
+```
+]
+
+
+.left-column[
+```{r joints left, echo=FALSE, out.width="200%"}
+knitr::include_graphics("imgs/left_joint.jpeg")
+```
+]
+.right-column[
+`left_join(a, b, by = "x1")`: pour chaque ligne de **a** on a ajouté les colonnes de **b** pour lesquelles la valeur de la *clé* **x1** est la même
+]
 
 
 
 ---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Mutating joints 
+
+.center[
+**Right-joint**
+
+```{r little dataset right, echo=FALSE, out.width="45%"}
+knitr::include_graphics("imgs/little_datasets.jpeg")
+```
+]
+
+
+.left-column[
+```{r joints right, echo=FALSE, out.width="200%"}
+knitr::include_graphics("imgs/right_joint.jpeg")
+```
+]
+.right-column[
+`right_join(a, b, by = "x1")`: pour chaque ligne de **b** on a ajouté les colonnes de **a** pour lesquelles la valeur de la *clé* **x1** est la même
+]
+
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Mutating joints 
+
+.center[
+**Inner-joint**
+
+```{r little dataset inner, echo=FALSE, out.width="45%"}
+knitr::include_graphics("imgs/little_datasets.jpeg")
+```
+]
+
+
+.left-column[
+```{r joints inner, echo=FALSE, out.width="200%"}
+knitr::include_graphics("imgs/inner_joint.jpeg")
+```
+]
+.right-column[
+`inner_join(a, b, by = "x1")`: seules les lignes présentes à la fois dans **a** et **b** sont jointes
+]
+
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Mutating joints 
+
+.center[
+**Full-joint**
+
+```{r little dataset full, echo=FALSE, out.width="45%"}
+knitr::include_graphics("imgs/little_datasets.jpeg")
+```
+]
+
+
+.left-column[
+```{r joints full, echo=FALSE, out.width="200%"}
+knitr::include_graphics("imgs/full_joint.jpeg")
+```
+]
+.right-column[
+`full_join(a, b, by = "x1")`: toutes les lignes de **a** et toutes les lignes de **b** sont jointes (avec des NA ajoutés si nécessaire) même si elles sont absentes de l’autre table
+]
+
+
+
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
 ### Formats wide et long
+
+Un jeu de données est dit ***tidy*** (i.e. "bien rangé") si:
+
+1. Chaque ligne correspond à une observation  
+2. Chaque colonne correspond à une variable  
+3. Chaque valeur est présente dans une unique case de la table  
+
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Formats wide et long
+
+Pour **rassembler des colonnes** et passer en format **long**: `pivot_longer`
+
+.center[
+```{r longer, echo=FALSE, out.width="50%"}
+knitr::include_graphics("imgs/longer.jpeg")
+```
+]
+
+&nbsp;
+
+`b = pivot_longer(a, cols = 2:3,  names_to = "grade", values_to = "mean")`
+       
+       
+ 
+---
+## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+
+### Formats wide et long
+
+Pour **disperser des lignes** et obtenir un format **wide**: `pivot_wider`
+
+.center[
+```{r wider, echo=FALSE, out.width="60%"}
+knitr::include_graphics("imgs/wider.jpeg")
+```
+]
+
+&nbsp;
+
+`b = pivot_wider(a,  names_from = subject, values_from = mean)`      
+
 
 ---
 class: inverse
 ## Application : Élections législatives de 2024 en France 
 
-`r countdown(minutes = 5, top = 0)`
+&nbsp;
 
-1. Importer les données
+Utilisation de 3 bases de données:
+- résultats au premier tour: `resultats-definitifs-par-circonscription-t1.csv`
+- résultats au second tour: `resultats-definitifs-par-circonscription-t2.csv`
+- population par circoncsription en 2019: `population_2019.csv`
 
-2. Calculer le taux d'absention moyen par département
 
-3. Calculer le taux de participation moyen des villes dont le code postal termine par un 7
+---
+class: inverse
+## Application : Élections législatives de 2024 en France 
+
+`r emo::ji("rotating_light")` **Encodage du libellé des circonscriptions**
+
+```{r , echo = F, message = F, warning = F}
+
+# 1. Import data 
+
+resultats_t1 = read.csv("data/resultats-definitifs-par-circonscription-t1.csv", sep = ";", na.strings=c("","NA")) 
+resultats_t2 = read.csv("data/resultats-definitifs-par-circonscription-t2.csv", sep = ";", na.strings=c("","NA")) 
+pop_2019 = read.csv("data/population_2019.csv", sep = ";")
+
+```
+
+```{r , echo = T}
+
+head(resultats_t1[1:4,c(2,4)])
+
+head(pop_2019)[1:4,]
+```
+ 
+
+---
+class: inverse
+## Application : Élections législatives de 2024 en France 
+
+`r emo::ji("rotating_light")` **Encodage du libellé des circonscriptions**
+
+
+```{r , echo = T}
+resultats_t1 = resultats_t1 %>% 
+  mutate(Libellé.circonscription.législative = gsub("\\D", "", Libellé.circonscription.législative))
+
+unique(resultats_t1$Libellé.circonscription.législative)  
+```
+
+```{r , echo = F}
+resultats_t2 = resultats_t2 %>% 
+  mutate(Libellé.circonscription.législative = gsub("\\D", "", Libellé.circonscription.législative))
+ 
+```
+
+&nbsp;
+
+
+$$\underbrace{ \text{gsub}}_{\text{remplace}}( \underbrace{ \text{"\\\D"}}_{\substack{\text{tout ce qui n'est} \\  \text{pas numérique}}}  , \underbrace{\text{""}}_{\substack{\text{par une chaîne} \\ \text{de caractères vide}}},  \underbrace{\text{Libellé.circonscription.législative}}_{\substack{\text{dans la variable} \\ \text{Libellé.circonscription.législative}}})$$
+
+
+---
+class: inverse
+## Application : Élections législatives de 2024 en France 
+
+`r emo::ji("rotating_light")` **Encodage du libellé des circonscriptions**
+
+
+```{r , echo = T}
+pop_2019 = pop_2019 %>% 
+  separate(Circonscriptions, into = c("Libellé.département", "Libellé.circonscription.législative"), sep = ", ") %>% 
+  mutate(Libellé.circonscription.législative = gsub("\\D", "", Libellé.circonscription.législative))
+
+unique(pop_2019$Libellé.circonscription.législative)  
+```
+
+&nbsp;
+
+
+$$\underbrace{ \text{separate}}_{\text{sépare}}( \underbrace{ \text{"Circonscriptions"}}_{\substack{\text{les caractères de la} \\ \text{variable Circonscriptions}}}  , \underbrace{\text{into = c("A", "B")}}_{ \substack{ \text{en deux chaînes de caractères} \\ \text{qui définissent ces deux variables}}},  \underbrace{\text{ sep = ", "}}_{\substack{\text{la séparation étant} \\ \text{faite à l'endroit de} \\ \text{la virgule}}})$$
+
+---
+class: inverse
+## Application : Élections législatives de 2024 en France 
+
+`r countdown(minutes = 10, top = 0)`
+
+1) Importer les données
+
+2) Effectuer sur chaque jeu de données les opérations nécessaires pour harmoniser l'encodage du libellé de circonscription   
+  - **pop-19**: `separate(Circonscriptions, into = c("Libellé.département", "Libellé.circonscription.législative"), sep = ", ")`    
+  - **resultats_t1** et **resultats_t2** et **pop_2019**: `gsub("\\D", "", Libellé.circonscription.législative)`
+
+3) Reformatter `resultats_t1` et `resultats_t2`  en format long
+
+4) Ajouter une variable `tour` qui vaut 1 dans `resultats_t1` et 2 dans `resultats_t2`
+
+5) Concaténer `resultats_t1` et `resultats_t2` et stocker dans `resultats`
+
+6) Ne conserver que les observations des candidats élus
+
+7) Joindre `pop_2019` à `resultats` et renommer `Population.20191...hab..` en `pop`
+
 
 
 ---
 background-color: #fbe6ec
 # Solution
 
+1) Importer les données
 
-```{r , echo = F, message = F, warning = F, include = F}
-
-# 1. Import data 
-
+```{r , echo = T, message = F, warning = F, eval = F}
 resultats_t1 = read.csv("data/resultats-definitifs-par-circonscription-t1.csv", sep = ";", na.strings=c("","NA")) 
 resultats_t2 = read.csv("data/resultats-definitifs-par-circonscription-t2.csv", sep = ";", na.strings=c("","NA")) 
+pop_2019 = read.csv("data/population_2019.csv", sep = ";")
+```
 
- 
-# 1. Pivorter les deux dataframe en format long et ajouter pour chacun une colonne 'tour' qui vaut 1 pour le premier tour et 2 pour le second tour
 
-resultats_t1_long <- resultats_t1 %>%
+2) Effectuer sur chaque jeu de données les opérations nécessaires pour harmoniser l'encodage du libellé de circonscription   
+
+```{r , echo = T, eval = F}
+resultats_t1 = resultats_t1 %>% 
+  mutate(Libellé.circonscription.législative = gsub("\\D", "", Libellé.circonscription.législative))
+
+resultats_t2 = resultats_t2 %>% 
+  mutate(Libellé.circonscription.législative = gsub("\\D", "", Libellé.circonscription.législative))
+
+pop_2019 = pop_2019 %>% 
+  separate(Circonscriptions, into = c("Libellé.département", "Libellé.circonscription.législative"), sep = ", ") %>% 
+  mutate(Libellé.circonscription.législative = gsub("\\D", "", Libellé.circonscription.législative))
+```
+
+---
+background-color: #fbe6ec
+# Solution
+
+3) Reformatter `resultats_t1` et `resultats_t2`  en format long
+
+4) Ajouter une variable `tour` qui vaut 1 dans `resultats_t1` et 2 dans `resultats_t2`
+
+
+```{r , echo = T, message = F, warning = F}
+resultats_t1_long = resultats_t1 %>%
   pivot_longer(
     cols = matches(".*\\.[1-9]$|.*\\.[1][0-9]$"),  # Sélectionne les variables avec suffixes .1 à .19
     names_to = c(".value", "candidate_number"),
     names_pattern = "(.*)\\.(\\d+)"
   ) %>%
-  mutate(tour = 1) %>% 
-  filter(!is.na(Nom.candidat))
+  mutate(tour = 1) 
 
 
 resultats_t2_long = resultats_t2 %>%
@@ -570,16 +922,199 @@ resultats_t2_long = resultats_t2 %>%
     names_to = c(".value", "candidate_number"),
     names_pattern = "(.*)\\.(\\d+)"
   ) %>%
-  mutate(tour = 2) %>% 
-  filter(!is.na(Nom.candidat))
-
-
-# 2. Fusionner les deux dataframe par les lignes et ne conserver que les observations des candidats élus
-resultats = rbind(resultats_t1_long, resultats_t2_long) %>% 
-  filter(Elu == "élu")
-
+  mutate(tour = 2) 
 ```
 
+
+---
+background-color: #fbe6ec
+# Solution
+
+5) Concaténer `resultats_t1` et `resultats_t2` et stocker dans `resultats`
+
+6) Ne conserver que les observations des candidats élus
+
+7) Joindre `pop_2019` à `resultats` et renommer `Population.20191...hab..` en `pop`
+
+
+```{r , echo = T, message = F, warning = F}
+resultats = bind_rows(resultats_t1_long, resultats_t2_long) %>% 
+  filter(Elu == "élu") %>% 
+  left_join(pop_2019 %>% rename(pop = Population.20191...hab..), by = c("Libellé.département", "Libellé.circonscription.législative"))
+```
+
+
+
+---
+background-image: url(imgs/ggplot2_logo.png)
+background-position: 90% 10%
+background-size: 15%
+
+## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+
+
+Principal package pour la visualitation de données : `ggplot`
+
+**Template pour n'importe quel graphique**
+
+.center[
+ggplot(**data = **)
+]
+
+--
+### Principales fonctions 
+
+[Cheatsheet Dplyr]()
+
+---
+## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+
+### Une variable _discrète_
+
+.pull-left[
+```{r , echo = T, eval = F}
+ggplot(resultats, 
+       aes(x = Nuance.candidat)) + 
+  geom_bar() +
+  labs(
+    title = "Number of Votes by Candidate",
+    x = "Candidate",
+    y = "Number") +
+  theme_minimal()
+```
+]
+
+.pull-right[
+```{r , echo = F, eval = T, fig.dim = c(8, 6)}
+resultats %>% 
+  ggplot(aes(x = Nuance.candidat)) + 
+  geom_bar() +
+  labs(
+    title = "Number of Votes by Candidate",
+    x = "Candidate",
+    y = "Number") +
+  theme_minimal()
+```
+]
+
+---
+count: false
+## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+
+### Une variable _discrète_
+
+.pull-left[
+```{r , echo = T, eval = F}
+resultats %>%
+  count(Nuance.candidat) %>% #<<
+  mutate(percentage = n/sum(n)*100) %>% #<<
+  ggplot(aes(x = Nuance.candidat, 
+             y = percentage)) + #<<
+  geom_bar(stat = "identity") + #<<
+  labs(
+    title = "Percentage of Votes by Candidate",
+    x = "Candidate",
+    y = "Percentage") +
+  theme_minimal() 
+```
+]
+
+.pull-right[
+```{r , echo = F, eval = T, fig.dim = c(8, 6)}
+resultats %>%
+  count(Nuance.candidat) %>%
+  mutate(percentage = n / sum(n) * 100) %>% 
+  ggplot(aes(x = Nuance.candidat, y = percentage)) + 
+  geom_bar(stat = "identity") +
+  labs(title = "Percentage of Votes by Candidate",
+       x = "Candidate",
+       y = "Percentage") +
+  theme_minimal() #<<
+  
+```
+]
+
+
+
+---
+## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+
+### Une variable _continue_
+
+.pull-left[
+```{r , echo = T, eval = F}
+resultats %>% 
+  mutate(pop = as.numeric(pop)) %>% 
+  ggplot(aes(x = pop)) + 
+  geom_density() +
+  labs(
+    title = "Distribution of population",
+    x = "Population",
+    y = "Frequency") +
+  theme_minimal() 
+```
+]
+
+.pull-right[
+```{r , echo = F, fig.dim = c(8, 6)}
+resultats %>% 
+  mutate(pop = as.numeric(pop)) %>% 
+  ggplot(aes(x = pop)) + 
+  geom_density() +
+  labs(
+    title = "Distribution of population",
+    x = "Population",
+    y = "Frequency") +
+  theme_minimal() 
+```
+]
+
+
+---
+## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+
+### `facet_wrap`
+
+.pull-left[
+```{r , echo = T, eval = F}
+resultats %>%
+  group_by(Nuance.candidat) %>% #<<
+  count(Sexe.candidat) %>% 
+  mutate(percentage = n/sum(n)*100) %>% 
+  ggplot(aes(x = Sexe.candidat, 
+             y = percentage)) + 
+  geom_bar(stat = "identity") + 
+  labs(
+    title = "Percentage of Votes by Candidate",
+    x = "Candidate",
+    y = "Percentage") +
+  facet_wrap( ~ Nuance.candidat) + #<<
+  theme_minimal() 
+```
+]
+
+.pull-right[
+```{r , echo = F, eval = T, fig.dim = c(8, 6)}
+resultats %>%
+  group_by(Nuance.candidat) %>% 
+  count(Sexe.candidat) %>% 
+  mutate(percentage = n/sum(n)*100) %>% 
+  ggplot(aes(x = Sexe.candidat, 
+             y = percentage)) + 
+  geom_bar(stat = "identity") + 
+  labs(
+    title = "Percentage of Votes by Candidate",
+    x = "Candidate",
+    y = "Percentage") +
+  facet_wrap( ~ Nuance.candidat) + #<<
+  theme_minimal() 
+```
+]
+
+
+
+---
+## 2.6. `R`ecap: Maps
 
 
 
@@ -587,27 +1122,25 @@ resultats = rbind(resultats_t1_long, resultats_t2_long) %>%
 
 ---
 class: inverse
-## Application: Carte des résultats du 2nd tour des législatives 2024
+## Application: carte résultats législatives
 
 `r countdown(minutes = 10, top = 0)`
 
 
-
-```{r carte résultats, echo = F, message = F, warning = F, include = F}
+```{r carte résultats, echo = F, message = F, warning = F, include = T}
 
 # Import data 
 
 map = st_read("data/france-circonscriptions-legislatives-2012.shp") %>% 
-  rename(CODDPT = code_dpt,
-         CODCIRLG = num_circ)
+  rename(Code.département = code_dpt,
+         Libellé.circonscription.législative = num_circ) %>% 
+  mutate(Code.département = ifelse(substr(Code.département, 1, 1) == "0", substr(Code.département, 2, 2), Code.département))
 
-results = read.csv("data/legislatives-2024-candidats-elus-france-entiere-tour-1-2-2024.csv", sep = ";") %>% 
-  mutate(CODCIRLG = as.character(CODCIRLG),
-         CODDPT = ifelse(nchar(CODDPT) == 1, paste0("0", CODDPT), CODDPT)) %>% 
-  left_join(map , by = c("CODDPT", "CODCIRLG"))
+resultats_map = resultats %>% 
+  left_join(map , by = c("Code.département", "Libellé.circonscription.législative"))
 
-ggplot(results %>% filter(! (CODDPT %in% c("971", "972", "973", "974", "975", "976", "986", "987", "988", "ZX", "ZZ")))) +
-  geom_sf(aes(fill = CODE_NUA, geometry = geometry)) +
+ggplot(resultats_map %>% filter(! (Code.département %in% c("971", "972", "973", "974", "975", "976", "986", "987", "988", "ZX", "ZZ")))) +
+  geom_sf(aes(fill = Nuance.candidat, geometry = geometry)) +
   theme_minimal() +
   labs(title = "Résultats des élections législatives par circonscription",
        fill = "Parti") +
@@ -703,6 +1236,16 @@ L'apprentissage de `R` est long et fastidieux, mais les rendements sont croissan
 ]
 ]
 
+
+---
+# References
+
+[Introduction à l’analyse d’enquêtes avec R et RStudio](https://larmarange.github.io/analyse-R/)
+[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/01-introduction)
+
+
+---
+# Appendix
 
 ---
 # Cheatsheets
