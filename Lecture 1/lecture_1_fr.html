@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Lecture 1: Refresher</title>
+    <title>Refresher</title>
     <meta charset="utf-8" />
     <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2024-07-24" />
+    <meta name="date" content="2024-09-13" />
     <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
     <link href="libs/countdown/countdown.css" rel="stylesheet" />
     <script src="libs/countdown/countdown.js"></script>
-    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="custom.css" type="text/css" />
   </head>
   <body>
@@ -16,7 +17,7 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# Lecture 1: <code>R</code>efresher
+# <code>R</code>efresher
 ]
 .subtitle[
 ## Pratiques de la Recherche en Économie
@@ -25,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Florentine Oliveira
 ]
 .date[
-### 2024-07-24
+### 2024-09-13
 ]
 
 ---
@@ -87,13 +88,13 @@ Champs de recherche: économie de la famille, de l'éducation, du travail
 
 1. Séance 1 (aujourd'hui): Rappels de `R` 
 2. Séance 2 (12/11/2024): Rédiger en `\(\LaTeX\)`
-3. Séance 3 (19/12/2024): Statistiques Descriptives
+3. Séance 3 (19/12/2024): Régressions linéaires
 
 ### Semestre 2
-4. Séance 4 (): Régressions linéaires simples et multiples
-5. Séance 5 (): Méthode des variables instrumentales
-6. Séance 6 (): Doubles-Différences (DiD)
-7. Séance 7 (): Regression Discontinuity Design
+4. Séance 4 (): Méthode des variables instrumentales
+5. Séance 5 (): Doubles-Différences (DiD)
+6. Séance 6 (): Regression Discontinuity Design (RDD)
+7. Séance 7 (): 
 8. Séance 8 ():
 
 
@@ -197,7 +198,7 @@ class: center, middle, inverse
 ### Popularité de `R`&lt;sup&gt;1&lt;/sup&gt;
 
 .pull-left[
-&lt;img src="imgs/popularity_datascientist.jpg" width="150%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/popularity_datascientist.jpg" width="90%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -211,15 +212,16 @@ class: center, middle, inverse
 ---
 ## 2.1. `R`ecap : Définition, usages, interface
 
-&lt;img src="imgs/interface.png" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/interface.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 
 ---
 ## 2.2. `R`ecap : Projet `R`
 
 Les projets `R` permettent une meilleure organisation de votre travail.
+
 .pull-left[
-&lt;img src="imgs/rproj.jpeg" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/rproj.jpeg" width="50%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -232,10 +234,10 @@ Les projets `R` permettent une meilleure organisation de votre travail.
 
 
 ---
-class: inverse
+background-color: #f19bb5
 # Application: créer votre projet `R`
 
-<div class="countdown" id="timer_4c84d685" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_5936c724" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -317,6 +319,8 @@ Principal package pour la manipulation de données : `dplyr`
 
 ### Opérateurs 
 
+&amp;nbsp;
+
 .pull-left[
 | Opérateur **arithmétiques**  | Description               |
 |------------------------------|---------------------------|
@@ -338,7 +342,7 @@ Principal package pour la manipulation de données : `dplyr`
 ]
 
 ---
-class: inverse
+background-color: #f19bb5
 # Application : Titanic
 
 Ce jeu de données fournit des informations sur le sort des passagers du paquebot « Titanic », résumées en fonction du statut économique (class), du sexe, de l'âge et de la survie.
@@ -361,10 +365,10 @@ head(titanic)
 ```
 
 ---
-class: inverse
+background-color: #f19bb5
 # Application : Titanic
 
-<div class="countdown" id="timer_f9a37cbd" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_f2d818a3" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -513,7 +517,7 @@ titanic %&gt;%
 ## 2.4. `R`ecap: Manipulation des données avec `dplyr`
 
 .center[
-&lt;img src="imgs/datasets.jpeg" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/datasets.jpeg" width="40%" style="display: block; margin: auto;" /&gt;
 ]
 
 - Très souvent, les données relatives à une analyse sont réparties dans plusieurs tables différentes
@@ -534,13 +538,12 @@ titanic %&gt;%
 
 .center[
 **Binding Rows**
-
 &lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
 ]
 
 
 .left-column[
-&lt;img src="imgs/bindrows.jpeg" width="150%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/bindrows.jpeg" width="80%" style="display: block; margin: auto;" /&gt;
 ]
 .right-column[
 `bind_rows(a, b)`: dans une jointure de lignes, les colonnes sont associées à leur nom et toute colonne manquante est remplacée par NA.
@@ -554,13 +557,12 @@ titanic %&gt;%
 
 .center[
 **Binding Columns**
-
 &lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
 ]
 
 
 .left-column[
-&lt;img src="imgs/bindcols.jpeg" width="150%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/bindcols.jpeg" width="90%" style="display: block; margin: auto;" /&gt;
 ]
 .right-column[
 `bind_cols(a, b)`: dans une jointure de colonnes, les lignes sont mises en correspondance en fonction de leur **position**
@@ -575,13 +577,12 @@ titanic %&gt;%
 
 .center[
 **Left-joint**
-
 &lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
 ]
 
 
 .left-column[
-&lt;img src="imgs/left_joint.jpeg" width="200%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/left_joint.jpeg" width="80%" style="display: block; margin: auto;" /&gt;
 ]
 .right-column[
 `left_join(a, b, by = "x1")`: pour chaque ligne de **a** on a ajouté les colonnes de **b** pour lesquelles la valeur de la *clé* **x1** est la même
@@ -596,13 +597,12 @@ titanic %&gt;%
 
 .center[
 **Right-joint**
-
 &lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
 ]
 
 
 .left-column[
-&lt;img src="imgs/right_joint.jpeg" width="200%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/right_joint.jpeg" width="80%" style="display: block; margin: auto;" /&gt;
 ]
 .right-column[
 `right_join(a, b, by = "x1")`: pour chaque ligne de **b** on a ajouté les colonnes de **a** pour lesquelles la valeur de la *clé* **x1** est la même
@@ -616,13 +616,12 @@ titanic %&gt;%
 
 .center[
 **Inner-joint**
-
 &lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
 ]
 
 
 .left-column[
-&lt;img src="imgs/inner_joint.jpeg" width="200%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/inner_joint.jpeg" width="80%" style="display: block; margin: auto;" /&gt;
 ]
 .right-column[
 `inner_join(a, b, by = "x1")`: seules les lignes présentes à la fois dans **a** et **b** sont jointes
@@ -636,13 +635,12 @@ titanic %&gt;%
 
 .center[
 **Full-joint**
-
 &lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
 ]
 
 
 .left-column[
-&lt;img src="imgs/full_joint.jpeg" width="200%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/full_joint.jpeg" width="80%" style="display: block; margin: auto;" /&gt;
 ]
 .right-column[
 `full_join(a, b, by = "x1")`: toutes les lignes de **a** et toutes les lignes de **b** sont jointes (avec des NA ajoutés si nécessaire) même si elles sont absentes de l’autre table
@@ -670,7 +668,7 @@ Un jeu de données est dit ***tidy*** (i.e. "bien rangé") si:
 Pour **rassembler des colonnes** et passer en format **long**: `pivot_longer`
 
 .center[
-&lt;img src="imgs/longer.jpeg" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/longer.jpeg" width="40%" style="display: block; margin: auto;" /&gt;
 ]
 
 &amp;nbsp;
@@ -687,17 +685,15 @@ Pour **rassembler des colonnes** et passer en format **long**: `pivot_longer`
 Pour **disperser des lignes** et obtenir un format **wide**: `pivot_wider`
 
 .center[
-&lt;img src="imgs/wider.jpeg" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/wider.jpeg" width="50%" style="display: block; margin: auto;" /&gt;
 ]
-
-&amp;nbsp;
 
 `b = pivot_wider(a,  names_from = subject, values_from = mean)`      
 
 
 ---
-class: inverse
-## Application : Élections législatives de 2024 en France 
+background-color: #f19bb5
+# Application : Élections législatives de 2024 en France 
 
 &amp;nbsp;
 
@@ -708,8 +704,8 @@ Utilisation de 3 bases de données:
 
 
 ---
-class: inverse
-## Application : Élections législatives de 2024 en France 
+background-color: #f19bb5
+# Application : Élections législatives de 2024 en France 
 
 🚨 **Encodage du libellé des circonscriptions**
 
@@ -742,8 +738,8 @@ head(pop_2019)[1:4,]
  
 
 ---
-class: inverse
-## Application : Élections législatives de 2024 en France 
+background-color: #f19bb5
+# Application : Élections législatives de 2024 en France 
 
 🚨 **Encodage du libellé des circonscriptions**
 
@@ -770,8 +766,8 @@ unique(resultats_t1$Libellé.circonscription.législative)
 
 
 ---
-class: inverse
-## Application : Élections législatives de 2024 en France 
+background-color: #f19bb5
+# Application : Élections législatives de 2024 en France 
 
 🚨 **Encodage du libellé des circonscriptions**
 
@@ -796,10 +792,10 @@ unique(pop_2019$Libellé.circonscription.législative)
 `$$\underbrace{ \text{separate}}_{\text{sépare}}( \underbrace{ \text{"Circonscriptions"}}_{\substack{\text{les caractères de la} \\ \text{variable Circonscriptions}}}  , \underbrace{\text{into = c("A", "B")}}_{ \substack{ \text{en deux chaînes de caractères} \\ \text{qui définissent ces deux variables}}},  \underbrace{\text{ sep = ", "}}_{\substack{\text{la séparation étant} \\ \text{faite à l'endroit de} \\ \text{la virgule}}})$$`
 
 ---
-class: inverse
-## Application : Élections législatives de 2024 en France 
+background-color: #f19bb5
+# Application : Élections législatives de 2024 en France 
 
-<div class="countdown" id="timer_1b3d7320" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_889aaad6" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -1037,10 +1033,10 @@ resultats %&gt;%
 
 
 ---
-class: inverse
-## Application: carte résultats législatives
+background-color: #f19bb5
+# Application: carte résultats législatives
 
-<div class="countdown" id="timer_d4a0f6d9" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_5e61b15f" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>

@@ -25,11 +25,11 @@
 
 :root {
   /* Fonts */
-  --text-font-family: Palatino;
+  --text-font-family: metropolis-fonts;
   --text-font-is-google: 0;
   --text-font-family-fallback: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial;
   --text-font-base: sans-serif;
-  --header-font-family: Palatino;
+  --header-font-family: metropolis-fonts;
   --header-font-is-google: 0;
   --header-font-family-fallback: Georgia, serif;
   --code-font-family: 'Source Code Pro';

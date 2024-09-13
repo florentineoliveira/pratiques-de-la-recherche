@@ -1,14 +1,12 @@
 ---
-title: "Lecture 1: `R`efresher"
+title: "`R`efresher"
 subtitle: "Pratiques de la Recherche en Économie"
 author: "Florentine Oliveira"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     lib_dir: libs
-    css: 
-    - xaringan-themer.css
-    - custom.css
+    css:  ['metropolis', 'metropolis-fonts', 'custom.css']
     nature:
       highlightStyle: github
       highlightLines: true
@@ -48,7 +46,7 @@ countdown(
   color_finished_background = "white",
   color_finished_text       = "#dd0747",
   color_finished_border     = "#dd0747",
-  font_size = "2em" 
+  font_size = "1.5em" 
 )
 
 
@@ -61,8 +59,8 @@ style_xaringan(
   text_slide_number_color = "black",
   code_inline_background_color = "#e0e1df",
   base_font_size = "24px",
-  text_font_family = "Palatino",
-  header_font_family = "Palatino",
+  text_font_family = "metropolis-fonts",
+  header_font_family = "metropolis-fonts",
   header_h1_font_size = "45px",
   header_h2_font_size = "35px",
   header_h3_font_size = "28px",
@@ -161,13 +159,13 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
 
 1. Séance 1 (aujourd'hui): Rappels de `R` 
 2. Séance 2 (12/11/2024): Rédiger en $\LaTeX$
-3. Séance 3 (19/12/2024): Statistiques Descriptives
+3. Séance 3 (19/12/2024): Régressions linéaires
 
 ### Semestre 2
-4. Séance 4 (): Régressions linéaires simples et multiples
-5. Séance 5 (): Méthode des variables instrumentales
-6. Séance 6 (): Doubles-Différences (DiD)
-7. Séance 7 (): Regression Discontinuity Design
+4. Séance 4 (): Méthode des variables instrumentales
+5. Séance 5 (): Doubles-Différences (DiD)
+6. Séance 6 (): Regression Discontinuity Design (RDD)
+7. Séance 7 (): 
 8. Séance 8 ():
 
 
@@ -271,7 +269,7 @@ class: center, middle, inverse
 ### Popularité de `R`<sup>1</sup>
 
 .pull-left[
-```{r popularity scholar, echo=FALSE, out.width="150%"}
+```{r popularity scholar, echo=FALSE, out.width="90%"}
 knitr::include_graphics("imgs/popularity_datascientist.jpg")
 ```
 ]
@@ -289,7 +287,7 @@ knitr::include_graphics("imgs/popularity_scholar.png")
 ---
 ## 2.1. `R`ecap : Définition, usages, interface
 
-```{r interface, echo=FALSE, out.width="80%"}
+```{r interface, echo=FALSE, out.width="70%"}
 knitr::include_graphics("imgs/interface.png")
 ```
 
@@ -298,8 +296,9 @@ knitr::include_graphics("imgs/interface.png")
 ## 2.2. `R`ecap : Projet `R`
 
 Les projets `R` permettent une meilleure organisation de votre travail.
+
 .pull-left[
-```{r rproj, echo=FALSE, out.width="60%"}
+```{r rproj, echo=FALSE, out.width="50%"}
 knitr::include_graphics("imgs/rproj.jpeg")
 ```
 ]
@@ -314,7 +313,7 @@ knitr::include_graphics("imgs/rproj.jpeg")
 
 
 ---
-class: inverse
+background-color: #f19bb5
 # Application: créer votre projet `R`
 
 `r countdown(minutes = 3, top = 0)`
@@ -398,6 +397,8 @@ $$\text{data.frame} \;\; \underbrace{\text{%>%}}_{\text{pipe}} \;\; \text{functi
 
 ### Opérateurs 
 
+&nbsp;
+
 .pull-left[
 | Opérateur **arithmétiques**  | Description               |
 |------------------------------|---------------------------|
@@ -419,7 +420,7 @@ $$\text{data.frame} \;\; \underbrace{\text{%>%}}_{\text{pipe}} \;\; \text{functi
 ]
 
 ---
-class: inverse
+background-color: #f19bb5
 # Application : Titanic
 
 Ce jeu de données fournit des informations sur le sort des passagers du paquebot « Titanic », résumées en fonction du statut économique (class), du sexe, de l'âge et de la survie.
@@ -433,7 +434,7 @@ head(titanic)
 ```
 
 ---
-class: inverse
+background-color: #f19bb5
 # Application : Titanic
 
 `r countdown(minutes = 5, top = 0)`
@@ -552,7 +553,7 @@ titanic %>%
 ## 2.4. `R`ecap: Manipulation des données avec `dplyr`
 
 .center[
-```{r datasets joints , echo=FALSE, out.width="50%"}
+```{r datasets joints , echo=FALSE, out.width="40%"}
 knitr::include_graphics("imgs/datasets.jpeg")
 ```
 ]
@@ -575,7 +576,6 @@ knitr::include_graphics("imgs/datasets.jpeg")
 
 .center[
 **Binding Rows**
-
 ```{r little dataset bindrows, echo=FALSE, out.width="45%"}
 knitr::include_graphics("imgs/little_datasets.jpeg")
 ```
@@ -583,7 +583,7 @@ knitr::include_graphics("imgs/little_datasets.jpeg")
 
 
 .left-column[
-```{r datasets joints bindrows, echo=FALSE, out.width="150%"}
+```{r datasets joints bindrows, echo=FALSE, out.width="80%"}
 knitr::include_graphics("imgs/bindrows.jpeg")
 ```
 ]
@@ -599,7 +599,6 @@ knitr::include_graphics("imgs/bindrows.jpeg")
 
 .center[
 **Binding Columns**
-
 ```{r little dataset bindcols, echo=FALSE, out.width="45%"}
 knitr::include_graphics("imgs/little_datasets.jpeg")
 ```
@@ -607,7 +606,7 @@ knitr::include_graphics("imgs/little_datasets.jpeg")
 
 
 .left-column[
-```{r datasets joints bindcols , echo=FALSE, out.width="150%"}
+```{r datasets joints bindcols , echo=FALSE, out.width="90%"}
 knitr::include_graphics("imgs/bindcols.jpeg")
 ```
 ]
@@ -624,7 +623,6 @@ knitr::include_graphics("imgs/bindcols.jpeg")
 
 .center[
 **Left-joint**
-
 ```{r little dataset left, echo=FALSE, out.width="45%"}
 knitr::include_graphics("imgs/little_datasets.jpeg")
 ```
@@ -632,7 +630,7 @@ knitr::include_graphics("imgs/little_datasets.jpeg")
 
 
 .left-column[
-```{r joints left, echo=FALSE, out.width="200%"}
+```{r joints left, echo=FALSE, out.width="80%"}
 knitr::include_graphics("imgs/left_joint.jpeg")
 ```
 ]
@@ -649,7 +647,6 @@ knitr::include_graphics("imgs/left_joint.jpeg")
 
 .center[
 **Right-joint**
-
 ```{r little dataset right, echo=FALSE, out.width="45%"}
 knitr::include_graphics("imgs/little_datasets.jpeg")
 ```
@@ -657,7 +654,7 @@ knitr::include_graphics("imgs/little_datasets.jpeg")
 
 
 .left-column[
-```{r joints right, echo=FALSE, out.width="200%"}
+```{r joints right, echo=FALSE, out.width="80%"}
 knitr::include_graphics("imgs/right_joint.jpeg")
 ```
 ]
@@ -673,7 +670,6 @@ knitr::include_graphics("imgs/right_joint.jpeg")
 
 .center[
 **Inner-joint**
-
 ```{r little dataset inner, echo=FALSE, out.width="45%"}
 knitr::include_graphics("imgs/little_datasets.jpeg")
 ```
@@ -681,7 +677,7 @@ knitr::include_graphics("imgs/little_datasets.jpeg")
 
 
 .left-column[
-```{r joints inner, echo=FALSE, out.width="200%"}
+```{r joints inner, echo=FALSE, out.width="80%"}
 knitr::include_graphics("imgs/inner_joint.jpeg")
 ```
 ]
@@ -697,7 +693,6 @@ knitr::include_graphics("imgs/inner_joint.jpeg")
 
 .center[
 **Full-joint**
-
 ```{r little dataset full, echo=FALSE, out.width="45%"}
 knitr::include_graphics("imgs/little_datasets.jpeg")
 ```
@@ -705,7 +700,7 @@ knitr::include_graphics("imgs/little_datasets.jpeg")
 
 
 .left-column[
-```{r joints full, echo=FALSE, out.width="200%"}
+```{r joints full, echo=FALSE, out.width="80%"}
 knitr::include_graphics("imgs/full_joint.jpeg")
 ```
 ]
@@ -735,7 +730,7 @@ Un jeu de données est dit ***tidy*** (i.e. "bien rangé") si:
 Pour **rassembler des colonnes** et passer en format **long**: `pivot_longer`
 
 .center[
-```{r longer, echo=FALSE, out.width="50%"}
+```{r longer, echo=FALSE, out.width="40%"}
 knitr::include_graphics("imgs/longer.jpeg")
 ```
 ]
@@ -754,19 +749,17 @@ knitr::include_graphics("imgs/longer.jpeg")
 Pour **disperser des lignes** et obtenir un format **wide**: `pivot_wider`
 
 .center[
-```{r wider, echo=FALSE, out.width="60%"}
+```{r wider, echo=FALSE, out.width="50%"}
 knitr::include_graphics("imgs/wider.jpeg")
 ```
 ]
-
-&nbsp;
 
 `b = pivot_wider(a,  names_from = subject, values_from = mean)`      
 
 
 ---
-class: inverse
-## Application : Élections législatives de 2024 en France 
+background-color: #f19bb5
+# Application : Élections législatives de 2024 en France 
 
 &nbsp;
 
@@ -777,8 +770,8 @@ Utilisation de 3 bases de données:
 
 
 ---
-class: inverse
-## Application : Élections législatives de 2024 en France 
+background-color: #f19bb5
+# Application : Élections législatives de 2024 en France 
 
 `r emo::ji("rotating_light")` **Encodage du libellé des circonscriptions**
 
@@ -801,8 +794,8 @@ head(pop_2019)[1:4,]
  
 
 ---
-class: inverse
-## Application : Élections législatives de 2024 en France 
+background-color: #f19bb5
+# Application : Élections législatives de 2024 en France 
 
 `r emo::ji("rotating_light")` **Encodage du libellé des circonscriptions**
 
@@ -827,8 +820,8 @@ $$\underbrace{ \text{gsub}}_{\text{remplace}}( \underbrace{ \text{"\\\D"}}_{\sub
 
 
 ---
-class: inverse
-## Application : Élections législatives de 2024 en France 
+background-color: #f19bb5
+# Application : Élections législatives de 2024 en France 
 
 `r emo::ji("rotating_light")` **Encodage du libellé des circonscriptions**
 
@@ -847,8 +840,8 @@ unique(pop_2019$Libellé.circonscription.législative)
 $$\underbrace{ \text{separate}}_{\text{sépare}}( \underbrace{ \text{"Circonscriptions"}}_{\substack{\text{les caractères de la} \\ \text{variable Circonscriptions}}}  , \underbrace{\text{into = c("A", "B")}}_{ \substack{ \text{en deux chaînes de caractères} \\ \text{qui définissent ces deux variables}}},  \underbrace{\text{ sep = ", "}}_{\substack{\text{la séparation étant} \\ \text{faite à l'endroit de} \\ \text{la virgule}}})$$
 
 ---
-class: inverse
-## Application : Élections législatives de 2024 en France 
+background-color: #f19bb5
+# Application : Élections législatives de 2024 en France 
 
 `r countdown(minutes = 10, top = 0)`
 
@@ -985,7 +978,7 @@ ggplot(resultats,
 ]
 
 .pull-right[
-```{r , echo = F, eval = T, fig.dim = c(8, 6)}
+```{r , echo = F, eval = T, fig.dim = c(5, 4)}
 resultats %>% 
   ggplot(aes(x = Nuance.candidat)) + 
   geom_bar() +
@@ -1020,7 +1013,7 @@ resultats %>%
 ]
 
 .pull-right[
-```{r , echo = F, eval = T, fig.dim = c(8, 6)}
+```{r , echo = F, eval = T, fig.dim = c(5, 4)}
 resultats %>%
   count(Nuance.candidat) %>%
   mutate(percentage = n / sum(n) * 100) %>% 
@@ -1056,7 +1049,7 @@ resultats %>%
 ]
 
 .pull-right[
-```{r , echo = F, fig.dim = c(8, 6)}
+```{r , echo = F, fig.dim = c(5, 4)}
 resultats %>% 
   mutate(pop = as.numeric(pop)) %>% 
   ggplot(aes(x = pop)) + 
@@ -1094,7 +1087,7 @@ resultats %>%
 ]
 
 .pull-right[
-```{r , echo = F, eval = T, fig.dim = c(8, 6)}
+```{r , echo = F, eval = T, fig.dim = c(5, 4)}
 resultats %>%
   group_by(Nuance.candidat) %>% 
   count(Sexe.candidat) %>% 
@@ -1121,8 +1114,8 @@ resultats %>%
 
 
 ---
-class: inverse
-## Application: carte résultats législatives
+background-color: #f19bb5
+# Application: carte résultats législatives
 
 `r countdown(minutes = 10, top = 0)`
 

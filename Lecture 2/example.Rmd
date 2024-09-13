@@ -1,0 +1,41 @@
+---
+title: "Magnifique titre"
+author: "Florentine Oliveira"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+# 1. Première partie 
+
+## 1.1. Première sous-partie
+
+On peut écrire du texte en *italique* et en **gras**.  
+
+
+On peut définir des listes à puces :
+
+- premier élément
+  - premier sous-élément
+  - deuxième sous-élément
+- deuxième élément
+
+
+## 1.2. Deuxième sous-partie
+
+Il est également possible d'ajouter des équations mathématiques en utilisant la syntaxe latex vue précédemment:
+   
+$\text{SCE} = \sum_{i = 1}^N \varepsilon_i^2 = \sum_{i = 1}^N \left( y_i - \hat{y}_i\right)^2$ 
+
+En développant, 
+
+$$\text{SCE} = \sum_{i = 1}^N \left( y_i^2 - 2 y_i \hat{\alpha} - 2 y_i \hat{\beta} x_i + \hat{\alpha}^2 + 2 \hat{\alpha} \hat{\beta} x_i + \hat{\beta}^2 x_i^2 \right)$$
+
+Les conditions de premier ordre de la minimisation sont:
+
+\begin{equation}
+\dfrac{\partial \text{SSE}}{\partial \hat{\alpha}} = 0       
+\end{equation}
+
+\begin{equation*}
+       \dfrac{\partial \text{SSE}}{\partial \hat{\beta}} = 0  
+\end{equation*}

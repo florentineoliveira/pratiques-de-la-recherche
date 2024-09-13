@@ -1,12 +1,12 @@
 ---
-title: "Lecture 3: Régressions linéaires"
+title: "Régressions linéaires"
 subtitle: "Pratiques de la Recherche en Économie"
 author: "Florentine Oliveira"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     lib_dir: libs
-    css: xaringan-themer.css
+    css: ['metropolis', 'metropolis-fonts', 'custom.css']
     nature:
       highlightStyle: github
       highlightLines: true
@@ -40,6 +40,7 @@ library(xaringanthemer)
 library(latex2exp)
 library(xaringanExtra)
 library(parallel)
+library(gridExtra)
 
 # countdown style
 countdown(
@@ -157,20 +158,19 @@ lm3 <- lm(y ~ x, data = filter(df, s3 == T))
 layout: true
 
 ---
-# Programme de cette lecture 
+# Cette séance
 
-## Notions
+&nbsp;
 
-**Régression linéaire** et **estimateur des MCO**
-
-### Application
-
-**Taille de la fratrie** et **performances scolaires** des enfants.
-  - Données simulées à partir de la description de l'échantillon faite dans l'article
+1. Régression linéaire simple
+2. Estimateur des MCO dans le cas univarié
+3. Régression linéaire multiple
+4. Estimateur des MCO dans le cas multivarié
+5. Hypothèses et propriétés de l'estimateur des MCO
 
 
 ---
-# Régression linéaire simple
+# 1. Régression linéaire simple
 
 On s'intéresse à la relation entre deux variables:
 
@@ -203,7 +203,7 @@ On s'intéresse à la relation entre deux variables:
 
 
 ---
-# Régression linéaire simple
+# 1. Régression linéaire simple
 
 On considère l'échantillon suivant
 
@@ -220,7 +220,7 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# Régression linéaire simple
+# 1. Régression linéaire simple
 
 Pour toute droite $\hat{y} = \hat{\alpha} + \hat{\beta} x$
 
@@ -250,7 +250,7 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# Régression linéaire simple
+# 1. Régression linéaire simple
 
 Pour toute droite $\hat{y} = \hat{\alpha} + \hat{\beta} x$, on peut calculer les erreurs: $e_i = y_i - \hat{y}_i$
 
@@ -271,7 +271,7 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# Régression linéaire simple
+# 1. Régression linéaire simple
 
 Pour toute droite $\hat{y} = \hat{\alpha} + \hat{\beta} x$, on peut calculer les erreurs: $e_i = y_i - \hat{y}_i$
 
@@ -293,7 +293,7 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# Régression linéaire simple
+# 1. Régression linéaire simple
 
 Pour toute droite $\hat{y} = \hat{\alpha} + \hat{\beta} x$, on peut calculer les erreurs: $e_i = y_i - \hat{y}_i$
 
@@ -312,7 +312,7 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# Régression linéaire simple
+# 1. Régression linéaire simple
 
 Pour toute droite $\hat{y} = \hat{\alpha} + \hat{\beta} x$, on peut calculer les erreurs: $e_i = y_i - \hat{y}_i$
 
@@ -335,7 +335,7 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# Régression linéaire simple
+# 1. Régression linéaire simple
 
 La SCE somme les erreurs au carré $\left(\sum \varepsilon_i^2\right)$: les erreurs importantes ont de plus grosses pénalités.
 
@@ -360,7 +360,7 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# Estimateur des Moindres Carrés Ordinaires
+# 2. Estimateur des Moindres Carrés Ordinaires
 
 L'estimateur des MCO (OLS) calcule $\hat{\alpha}$ and $\hat{\beta}$ qui minimisent la SCE.
 
@@ -390,7 +390,7 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# Estimateur des Moindres Carrés Ordinaires
+# 2. Estimateur des Moindres Carrés Ordinaires
 
 L'estimateur des MCO (OLS) calcule $\hat{\alpha}$ and $\hat{\beta}$ qui minimisent la SCE.
 
@@ -408,7 +408,7 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 name: OLS
-# Estimateur des Moindres Carrés Ordinaires
+# 2. Estimateur des Moindres Carrés Ordinaires
 
 ### Formellement
 
@@ -426,6 +426,8 @@ $\hat{\beta} = \dfrac{Cov(x,y)}{Var(x)}$
 [Maths](#derivation)
 
 ---
+# 2. Estimateur des Moindres Carrés Ordinaires
+
 ## Implémentation sur `R`
 
 - Calcul de la variance empirique
@@ -447,10 +449,11 @@ lm(variable dépendante ~  variable indépendante, data = data.frame)
 - Résultats de l'estimation visibles avec la commande `summary`
 
 ---
+# 2. Estimateur des Moindres Carrés Ordinaires
+
 ## $\hat{\beta}$ est une variable aléatoire
 .pull-left[
-
-```{R, scatter1, echo = F, fig.fullwidth = T, dev = "svg"}
+```{R, scatter1, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
 ggplot(data = df, aes(x = x, y = y)) +
 geom_abline(
   intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
@@ -458,14 +461,12 @@ geom_abline(
 geom_point(color = "black", size = 4) +
 theme_empty
 ```
-
 ]
 
 --
 
 .pull-left[
-
-```{R, sample1 scatter, echo = F, fig.fullwidth = T, dev = "svg"}
+```{R, sample1 scatter, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
 ggplot(data = df, aes(x = x, y = y)) +
 geom_abline(
   intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
@@ -479,16 +480,16 @@ geom_abline(
 scale_shape_manual(values = c(1, 19)) +
 theme_empty
 ```
-
-
 ]
 
 
 ---
+# 2. Estimateur des Moindres Carrés Ordinaires
+
 ## $\hat{\beta}$ est une variable aléatoire
 .pull-left[
 
-```{R, scatter1 opur sample 2, echo = F, fig.fullwidth = T, dev = "svg"}
+```{R, scatter1 opur sample 2, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
 ggplot(data = df, aes(x = x, y = y)) +
 geom_abline(
   intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
@@ -503,7 +504,7 @@ theme_empty
 
 .pull-left[
 
-```{R, sample2 scatter, echo = F, fig.fullwidth = T, dev = "svg"}
+```{R, sample2 scatter, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
 ggplot(data = df, aes(x = x, y = y)) +
 geom_abline(
   intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
@@ -526,10 +527,12 @@ theme_empty
 
 
 ---
+# 2. Estimateur des Moindres Carrés Ordinaires
+
 ## $\hat{\beta}$ est une variable aléatoire
 .pull-left[
 
-```{R, scatter1 opur sample 3, echo = F, fig.fullwidth = T, dev = "svg"}
+```{R, scatter1 opur sample 3, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
 ggplot(data = df, aes(x = x, y = y)) +
 geom_abline(
   intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
@@ -542,7 +545,7 @@ theme_empty
 
 .pull-left[
 
-```{R, sample3 scatter, echo = F, fig.fullwidth = T, dev = "svg"}
+```{R, sample3 scatter, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
 ggplot(data = df, aes(x = x, y = y)) +
 geom_abline(
   intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
@@ -567,10 +570,12 @@ theme_empty
 ]
 
 ---
+# 2. Estimateur des Moindres Carrés Ordinaires
+
 ## $\hat{\beta}$ est une variable aléatoire
 
 .pull-left[
-```{R, simulation, echo = F, dev = "png", dpi = 300, cache = T}
+```{R, simulation, echo = F, dev = "png", dpi = 100, cache = T, fig.width = 6, fig.height = 5}
 # Définir la fonction de régression pour les simulations
 simulate_regression <- function(seed, df, n_sample) {
   set.seed(seed)
@@ -614,7 +619,7 @@ ggplot() +
 ### Échantillon non représentatif
 
 .pull-left[
-```{R, selected sample, echo = F, dev = "png", dpi = 300, cache = T}
+```{R, selected sample, echo = F, dev = "png", dpi = 100, cache = T,  fig.width = 6, fig.height = 5}
 selected_sample <- df %>% filter(y > quantile(y, 0.75)) %>% mutate(selected = "Selected")
 df <- df %>% mutate(selected = ifelse(x %in% selected_sample$x & y %in% selected_sample$y, "Selected", "not selected"))
 
@@ -625,39 +630,11 @@ ggplot() +
     geom_smooth(data = df, aes(x = x, y = y), method = "lm", color = "#dd0747", se = FALSE, size = 1,  alpha = 0.5) +
     theme_empty
 ```
-
 ]
+
 
 ---
-### Outliers
-
-.pull-left[
-```{R, outlier, echo = F, dev = "png", dpi = 300, cache = T}
-df_with_outlier <- rbind(df %>% select(x,y,selected), data.frame(x = 10, y = 40, selected = "Outlier"))
-
-ggplot(data = df_with_outlier, aes(x = x, y = y)) +
-  geom_point(size = 3, alpha = 0.8) +
-  geom_smooth(data = df_with_outlier, aes(x = x, y = y), method = "lm", color = "#921539", se = FALSE, size = 1) +
-  geom_smooth(data = df, aes(x = x, y = y), method = "lm", color = "#dd0747", se = FALSE, size = 1, alpha = 0.5) +
-  theme_empty
-
-```
-]
-
---
-
-.pull-right[
-
-**Identifier les outliers**:
-
-- à partir de l'**écart-type**: *lorsque la distribution des données est relativement symmetrique*. Une observation éloignée de plus de 3 écarts-types de la moyenne peut être considérée comme une valeur abberrante 
-
-- à partir de l'**écart interquartile**: peut être considérée comme outlier toute observation non incluse dans l'intervalle $[Q_1 - k(Q_3 - Q_1) \;;\; Q3 + k (Q3 - Q1)]$  où $k>0$. On détecte des outliers *moyens* pour $k=1.5$, et *extrêmes* pour $k=3$
-]
-
----
-
-class:: inverse
+background-color: #f19bb5
 ## Application : taille de la fratrie et performances scolaires
 
 `r countdown(minutes = 7, top = 0)`
@@ -746,7 +723,7 @@ background-color: #fbe6ec
 
 Représenter le nuage de points qui définit la relation entre **taille de la fratrie** et **nombre d'années d'études**
 
-```{r, echo=FALSE,fig.width = 12, fig.height = 5}
+```{r, echo=FALSE,fig.width = 8, fig.height = 5}
 g_educ = ggplot(data, aes(x = as.numeric(family_size), y = as.numeric(education))) + 
   geom_point(size = 2, alpha = 0.5) +
   xlim(0,8) +
@@ -778,7 +755,7 @@ g_educ
 ```
 
 
-```{r, echo=FALSE, include = F, fig.width = 12, fig.height = 5}
+```{r, echo=FALSE, include = F, fig.width = 8, fig.height = 5}
 educ_avg_famsize <- data %>%
  mutate(family_size = as.numeric(family_size),
         education = as.numeric(education)) %>% 
@@ -820,37 +797,45 @@ g_educ_famsize
 ---
 ## Taille de fratrie et nombre d'années d'études
 
-```{r, echo = F, fig.width = 12, fig.height = 5}
+.middle[
+```{r, echo = F,fig.width = 8, fig.height = 5}
 plot_1 <- g_educ_famsize +
     ylim(11, 12.7) +
     theme_minimum
 
 plot_1
 ```
+]
 
 ---
 
 ## Taille de fratrie et nombre d'années d'études
 
-```{r, echo = F, fig.width = 12, fig.height = 5}
+.middle[
+```{r, echo = F,fig.width = 8, fig.height = 5}
 plot_2 <- plot_1 +
   stat_smooth(data = educ_avg_famsize, method = "lm", se = FALSE, colour = "#dd0747") +
   theme_minimum
 plot_2
 ```
-
+]
 
 
 ---
-## Régression linéaire multiple
-
-
+## 3. Régression linéaire multiple
 
 
 
 
 ---
-## Hypothèses de l'estimateur des MCO
+## 4. Estimateur des MCO dans le cas multivarié
+
+$$\hat{\beta} = (X'X)^{-1}X'Y $$
+
+
+
+---
+## 5. Hypothèses de l'estimateur des MCO
 
 - $H_1$ **Linéarité**: le modèle est linéaire dans les paramètres. Formellement, $\frac{\partial y_i}{\partial x_{ik}} = \beta_k$ $\forall k =1, ...; K$
 
@@ -864,13 +849,111 @@ plot_2
 
 --
 
-- $H_4$ : epsilon est iid et de distribution N(0, sigma 2) homoscédasticité
+- $H_4$ : **Homoscédasticité** : $\varepsilon_i$ est _iid_ et de distribution $\mathcal{N}(0, \sigma^2)$ 
 
 
 
 ---
 ## Remise en cause de $H_1$
 
+**Quartet d'Anscombe**
+
+
+```{r, echo = F, fig.width = 12, fig.height = 2}
+anscombe = datasets::anscombe
+
+p1 <- ggplot(anscombe, aes(x = x1, y = y1)) + geom_point() + stat_smooth(method = "lm", se = FALSE, colour = "#dd0747", fullrange = TRUE, linewidth = 0.5) + xlim(c(0, 20)) + ylim(c(0, 15)) + xlab("") + ylab("") + theme_minimum
+p2 <- ggplot(anscombe, aes(x = x2, y = y2)) + geom_point() + stat_smooth(method = "lm", se = FALSE, colour = "#dd0747", fullrange = TRUE, linewidth = 0.5) + xlim(c(0, 20)) + ylim(c(0, 15)) + xlab("") + ylab("") + theme_minimum
+p3 <- ggplot(anscombe, aes(x = x3, y = y3)) + geom_point() + stat_smooth(method = "lm", se = FALSE, colour = "#dd0747", fullrange = TRUE, linewidth = 0.5) + xlim(c(0, 20)) + ylim(c(0, 15)) + xlab("") + ylab("") + theme_minimum
+p4 <- ggplot(anscombe, aes(x = x4, y = y4)) + geom_point() + stat_smooth(method = "lm", se = FALSE, colour = "#dd0747", fullrange = TRUE, linewidth = 0.5) + xlim(c(0, 20)) + ylim(c(0, 15)) + xlab("") + ylab("") + theme_minimum
+
+grid.arrange(p1, p2, p3, p4, ncol = 4)
+```
+
+
+
+
+
+---
+## Remise en cause de $H_1$
+
+**Quartet d'Anscombe**
+
+
+```{r, echo = F, fig.width = 12, fig.height = 2}
+
+p1 <- ggplot(anscombe, aes(x = x1, y = y1)) + 
+  geom_point() + 
+  stat_smooth(method = "lm", se = FALSE, colour = "#dd0747", fullrange = TRUE, linewidth = 0.5) + 
+  xlim(c(0, 20)) + ylim(c(0, 15)) + xlab("") + ylab("") + 
+  theme_minimum
+
+```
+
+
+---
+## Relation non-linéaire
+
+```{r, echo = F, fig.width = 12, fig.height = 2}
+
+p2 <- ggplot(anscombe, aes(x = x2, y = y2)) + 
+  geom_point() + 
+  stat_smooth(method = "lm", se = FALSE, colour = "#dd0747", fullrange = TRUE, linewidth = 0.5) + 
+  stat_smooth(method = "lm", formula = y ~ poly(x, 2), se = FALSE, colour = "blue", fullrange = TRUE, linewidth = 0.5) + 
+  xlim(c(0, 20)) + ylim(c(0, 15)) + xlab("") + ylab("") + 
+  theme_minimum
+
+
+```
+
+
+---
+## Outliers
+
+```{r, echo = F, fig.width = 12, fig.height = 2}
+
+p3 <- ggplot(anscombe, aes(x = x3, y = y3)) + 
+  geom_point() + 
+  stat_smooth(method = "lm", se = FALSE, colour = "#dd0747", fullrange = TRUE, linewidth = 0.5) + 
+  xlim(c(0, 20)) + ylim(c(0, 15)) + xlab("") + ylab("") + 
+  theme_minimum
+
+p4 <- ggplot(anscombe, aes(x = x4, y = y4)) + 
+  geom_point() + 
+  stat_smooth(method = "lm", se = FALSE, colour = "#dd0747", fullrange = TRUE, linewidth = 0.5) + 
+  xlim(c(0, 20)) + ylim(c(0, 15)) + xlab("") + ylab("") + 
+  theme_minimum
+
+grid.arrange(p3, p4, ncol = 4)
+```
+
+
+---
+### Identifier les outliers
+
+.pull-left[
+```{R, outlier, echo = F, dev = "png", dpi = 300, cache = T}
+df_with_outlier <- rbind(df %>% select(x,y,selected), data.frame(x = 10, y = 40, selected = "Outlier"))
+
+ggplot(data = df_with_outlier, aes(x = x, y = y)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_smooth(data = df_with_outlier, aes(x = x, y = y), method = "lm", color = "#921539", se = FALSE, size = 1) +
+  geom_smooth(data = df, aes(x = x, y = y), method = "lm", color = "#dd0747", se = FALSE, size = 1, alpha = 0.5) +
+  theme_empty
+
+```
+]
+
+--
+
+.pull-right[
+
+**Identifier les outliers**:
+
+- à partir de l'**écart-type**: *lorsque la distribution des données est relativement symmetrique*. Une observation éloignée de plus de 3 écarts-types de la moyenne peut être considérée comme une valeur abberrante 
+
+- à partir de l'**écart interquartile**: peut être considérée comme outlier toute observation non incluse dans l'intervalle $[Q_1 - k(Q_3 - Q_1) \;;\; Q3 + k (Q3 - Q1)]$  où $k>0$. On détecte des outliers *moyens* pour $k=1.5$, et *extrêmes* pour $k=3$
+]
 
 ---
 ## Remise en cause de $H_2$
