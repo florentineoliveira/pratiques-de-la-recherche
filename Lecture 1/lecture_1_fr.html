@@ -4,7 +4,7 @@
     <title>Refresher</title>
     <meta charset="utf-8" />
     <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2024-09-13" />
+    <meta name="date" content="2024-09-18" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Florentine Oliveira
 ]
 .date[
-### 2024-09-13
+### 2024-09-18
 ]
 
 ---
@@ -169,13 +169,11 @@ Champs de recherche: économie de la famille, de l'éducation, du travail
 layout: false
 class: center, middle, inverse
 
-# R
+# 2. `R`: rappels
 
 ---
-# 2. `R`: rappels et **trouver mot** 
+# 2.1. Définition, usages, interface
 
-
-## 2.1. `R`ecap : Définition, usages, interface
 
 - D'après le site internet de `R` : *R is a free software environment for statistical computing and graphics.*
 
@@ -210,13 +208,13 @@ class: center, middle, inverse
 ]
 
 ---
-## 2.1. `R`ecap : Définition, usages, interface
+# 2.1. Définition, usages, interface
 
 &lt;img src="imgs/interface.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 
 ---
-## 2.2. `R`ecap : Projet `R`
+# 2.2. Projet `R`
 
 Les projets `R` permettent une meilleure organisation de votre travail.
 
@@ -237,7 +235,7 @@ Les projets `R` permettent une meilleure organisation de votre travail.
 background-color: #f19bb5
 # Application: créer votre projet `R`
 
-<div class="countdown" id="timer_5936c724" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_3409d244" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -255,7 +253,7 @@ background-color: #f19bb5
 
 
 ---
-## 2.3. `R`ecap: Importer des données
+# 2.3. Importer des données
 
 **Format .csv:**
 
@@ -276,7 +274,7 @@ background-color: #f19bb5
   - `read_excel()`  
   
 ---
-## 2.3. `R`ecap: Importer des données
+# 2.3. Importer des données
 
 &amp;nbsp;
 
@@ -294,7 +292,7 @@ background-image: url(imgs/dplyr_logo.png)
 background-position: 90% 10%
 background-size: 15%
 
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 
 Principal package pour la manipulation de données : `dplyr`
@@ -315,7 +313,7 @@ Principal package pour la manipulation de données : `dplyr`
 [Cheatsheet Dplyr]()
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Opérateurs 
 
@@ -368,7 +366,7 @@ head(titanic)
 background-color: #f19bb5
 # Application : Titanic
 
-<div class="countdown" id="timer_f2d818a3" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_060f224d" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -514,10 +512,10 @@ titanic %&gt;%
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 .center[
-&lt;img src="imgs/datasets.jpeg" width="40%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/datasets.png" width="40%" style="display: block; margin: auto;" /&gt;
 ]
 
 - Très souvent, les données relatives à une analyse sont réparties dans plusieurs tables différentes
@@ -532,13 +530,13 @@ titanic %&gt;%
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Binding joints 
 
 .center[
 **Binding Rows**
-&lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/little_datasets.png" width="45%" style="display: block; margin: auto;" /&gt;
 ]
 
 
@@ -551,13 +549,13 @@ titanic %&gt;%
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Binding joints 
 
 .center[
 **Binding Columns**
-&lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/little_datasets.png" width="45%" style="display: block; margin: auto;" /&gt;
 ]
 
 
@@ -570,14 +568,14 @@ titanic %&gt;%
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Mutating joints 
 
 
 .center[
 **Left-joint**
-&lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/little_datasets.png" width="45%" style="display: block; margin: auto;" /&gt;
 ]
 
 
@@ -591,13 +589,13 @@ titanic %&gt;%
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Mutating joints 
 
 .center[
 **Right-joint**
-&lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/little_datasets.png" width="45%" style="display: block; margin: auto;" /&gt;
 ]
 
 
@@ -610,13 +608,13 @@ titanic %&gt;%
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Mutating joints 
 
 .center[
 **Inner-joint**
-&lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/little_datasets.png" width="45%" style="display: block; margin: auto;" /&gt;
 ]
 
 
@@ -629,13 +627,13 @@ titanic %&gt;%
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Mutating joints 
 
 .center[
 **Full-joint**
-&lt;img src="imgs/little_datasets.jpeg" width="45%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/little_datasets.png" width="45%" style="display: block; margin: auto;" /&gt;
 ]
 
 
@@ -650,7 +648,7 @@ titanic %&gt;%
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Formats wide et long
 
@@ -661,14 +659,14 @@ Un jeu de données est dit ***tidy*** (i.e. "bien rangé") si:
 3. Chaque valeur est présente dans une unique case de la table  
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Formats wide et long
 
 Pour **rassembler des colonnes** et passer en format **long**: `pivot_longer`
 
 .center[
-&lt;img src="imgs/longer.jpeg" width="40%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/longer.png" width="40%" style="display: block; margin: auto;" /&gt;
 ]
 
 &amp;nbsp;
@@ -678,14 +676,14 @@ Pour **rassembler des colonnes** et passer en format **long**: `pivot_longer`
        
  
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Formats wide et long
 
 Pour **disperser des lignes** et obtenir un format **wide**: `pivot_wider`
 
 .center[
-&lt;img src="imgs/wider.jpeg" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/wider.png" width="50%" style="display: block; margin: auto;" /&gt;
 ]
 
 `b = pivot_wider(a,  names_from = subject, values_from = mean)`      
@@ -795,7 +793,7 @@ unique(pop_2019$Libellé.circonscription.législative)
 background-color: #f19bb5
 # Application : Élections législatives de 2024 en France 
 
-<div class="countdown" id="timer_889aaad6" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_a92c8a55" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -899,27 +897,55 @@ resultats = bind_rows(resultats_t1_long, resultats_t2_long) %&gt;%
 
 ---
 background-image: url(imgs/ggplot2_logo.png)
-background-position: 90% 10%
-background-size: 15%
+background-position: 95% 15%
+background-size: 10%
 
-## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+# 2.5. Visualisation des données avec `ggplot2`
 
 
-Principal package pour la visualitation de données : `ggplot`
+`ggplot2` est un package `R` qui permet de **visualiser des données** sous forme de graphiques. Afin de chaîner des opérations ensemble, c'est à dire d'**ajouter des couches au graphique, on utilise les `+`**
+ (l'équivalent de ` %&gt;% ` avec `dplyr`).
+ 
+ &amp;nbsp;
+ 
+Pour consturire n'importe quel graphique, il faut:
+- une base de données
+- lier les variables aux élements graphiques (axes, couleurs, tailles) via l'argument `aes()`
+- définir un type de graphique (ligne, point, histogramme, densité, etc)
 
-**Template pour n'importe quel graphique**
+### Structure de base
 
-.center[
-ggplot(**data = **)
-]
 
---
+``` r
+ggplot(data, 
+       aes(x = x, y = y)) + 
+  geom_point()
+```
+
+
+---
+# 2.5. Visualisation des données avec `ggplot2`
+
 ### Principales fonctions 
+
+- `ggplot()` : Initialiser un graphique en spécifiant les données et les aesthetics    
+
+- `geom_` : Représente les types de graphiques:   
+  - `geom_point()` pour un nuage de points   
+  - `geom_line()` pour des lignes   
+  - `geom_bar() `pour un histogramme/barplot   
+  - `geom_density()` pour une densité    
+  
+- `labs()` : Ajouter des titres et légendes    
+
+- `theme()` : Personnaliser l'apparence du graphique    
+
+ &amp;nbsp;
 
 [Cheatsheet Dplyr]()
 
 ---
-## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+# 2.5. Visualisation des données avec `ggplot2`
 
 ### Une variable _discrète_
 
@@ -938,12 +964,12 @@ ggplot(resultats,
 ]
 
 .pull-right[
-&lt;img src="lecture_1_fr_files/figure-html/unnamed-chunk-18-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture_1_fr_files/figure-html/unnamed-chunk-19-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
 count: false
-## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+# 2.5. Visualisation des données avec `ggplot2`
 
 ### Une variable _discrète_
 
@@ -965,13 +991,34 @@ resultats %&gt;%
 ]
 
 .pull-right[
-&lt;img src="lecture_1_fr_files/figure-html/unnamed-chunk-20-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture_1_fr_files/figure-html/unnamed-chunk-21-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
+---
+# 2.5. Visualisation des données avec `ggplot2`
 
+### Une variable _discrète_
+
+.pull-left[
+
+``` r
+ggplot(resultats, 
+*      aes(x = Nuance.candidat, fill = Sexe.candidat)) +
+  geom_bar() +
+  labs(
+    title = "Number of Votes by Candidate",
+    x = "Candidate",
+    y = "Number") +
+  theme_minimal()
+```
+]
+
+.pull-right[
+&lt;img src="lecture_1_fr_files/figure-html/unnamed-chunk-23-1.svg" style="display: block; margin: auto;" /&gt;
+]
 
 ---
-## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+# 2.5. Visualisation des données avec `ggplot2`
 
 ### Une variable _continue_
 
@@ -979,24 +1026,25 @@ resultats %&gt;%
 
 ``` r
 resultats %&gt;% 
-  mutate(pop = as.numeric(pop)) %&gt;% 
-  ggplot(aes(x = pop)) + 
-  geom_density() +
-  labs(
-    title = "Distribution of population",
-    x = "Population",
-    y = "Frequency") +
-  theme_minimal() 
+    mutate(Blancs = as.numeric(Blancs)/100) %&gt;% 
+    ggplot(aes(x = Blancs)) + 
+    geom_density() +
+    labs(
+        title = "Distribution des votes blancs",
+        x = "Votes blancs (en centaines)",
+        y = "Frequency") +
+    theme_minimal() 
 ```
 ]
 
 .pull-right[
-&lt;img src="lecture_1_fr_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture_1_fr_files/figure-html/unnamed-chunk-25-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 
+
 ---
-## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+# 2.5. Visualisation des données avec `ggplot2`
 
 ### `facet_wrap`
 
@@ -1020,39 +1068,138 @@ resultats %&gt;%
 ]
 
 .pull-right[
-&lt;img src="lecture_1_fr_files/figure-html/unnamed-chunk-24-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture_1_fr_files/figure-html/unnamed-chunk-27-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 
 
 ---
-## 2.6. `R`ecap: Maps
+# 2.6. Visualisation des données spaciales
 
+### Format de cartes et données
+
+
+&lt;img src="imgs/spacialdata.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+
+
+Très bonne référence: [Géomatique sur R](https://rcarto.github.io/geomatique_avec_r/)
+
+
+---
+count:false
+# 2.6. Visualisation des données spaciales
+
+### Format de cartes et données
+
+&lt;img src="imgs/sf.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+Très bonne référence: [Géomatique sur R](https://rcarto.github.io/geomatique_avec_r/)
+
+
+---
+background-image: url(imgs/sflogo.png)
+background-position: 95% 10%
+background-size: 10%
+
+# 2.6. Visualisation des données spaciales
+
+## Package `sf`
+
+
+**Shapefile**: format de fichier géospatial utilisé pour représenter des entités géographiques
+- contient des informations sur la forme (polygones, points, lignes) et des attributs.
+- composé de plusieurs fichiers `.shp`, `.shx`, `.dbf`, tous nécessaires pour la réalisation de cartes
+
+
+Une fois importés sur `R`, les objets `sf` sont des `data.frame` dont l’une des colonnes contient des géométries.
+
+
+
+
+
+``` r
+head(map[ , -c(5,6)],4)
+```
+
+```
+## Simple feature collection with 4 features and 4 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -0.837084 ymin: 44.67258 xmax: 5.889757 ymax: 50.7899
+## Geodetic CRS:  WGS 84
+##      ID Code.département code_reg nom_dpt                       geometry
+## 1 33004               33       75 GIRONDE MULTIPOLYGON (((-0.454946 4...
+## 2 38001               38       84   ISERE MULTIPOLYGON (((5.805288 45...
+## 3 59010               59       32    NORD MULTIPOLYGON (((3.058745 50...
+## 4 33007               33       75 GIRONDE MULTIPOLYGON (((-0.610649 4...
+```
 
 
 
 
 ---
+# 2.6. Visualisation des données spaciales
+
+### Réaliser une carte en 3 étapes
+
+1. Importer les données    
+  - Le jeu de données qui contient l'information à visualiser   
+  - Les fichiers `shapefiles` qui contiennent le fond de carte, etc, avec la fonction `st_read()`    
+    - 🚨: on importe sur `R` uniquement le fichier `.shp`, mais tous les autres fichiers (`.shx`, `.dbf`, etc) téléchargés avec le *shapefile* doivent être localisés au même endroit que le `.shp`   
+    
+2. Lier le jeu de données qui contient l'information à visualiser avec les données géographiques  
+  - Pour ajouter de l'information à un fond de carte, il est nécessaire de disposer d'une **variable (*key*) géographique commune entre les deux fichiers**:
+    - Par exemple si vous souhaitez représenter la carte des réusltats aux éléctions législatives de 2024 en France à l'échelle départementale, il est nécessaire que le fichier qui recence les résultats et le fichier qui recence les données géographiques aient une variable commune qui permet de les lier: nom de département, numéro de département
+
+3. Représenter la carte avec la fonction `geom_sf()`  sur le même principe que `geom_line()` par exemple avec `ggplot2`
+ 
+
+---
 background-color: #f19bb5
 # Application: carte résultats législatives
 
-<div class="countdown" id="timer_5e61b15f" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_2d240bbf" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
 
 
+``` r
+# Import data 
+map = st_read("data/france-circonscriptions-legislatives-2012.shp", quiet = TRUE) %&gt;% 
+  rename(Code.département = code_dpt,
+         Libellé.circonscription.législative = num_circ) %&gt;% 
+  mutate(Code.département = ifelse(substr(Code.département, 1, 1) == "0", substr(Code.département, 2, 2), Code.département))
+
+# Merge geographic data and results data
+resultats_map = resultats %&gt;% 
+* left_join(map , by = c("Code.département", "Libellé.circonscription.législative"))
+
+# Draw map
+ggplot(resultats_map %&gt;% filter(! (Code.département %in% c("971", "972", "973", "974", "975", "976", "986", "987", "988", "ZX", "ZZ")))) +
+  geom_sf(aes(fill = Nuance.candidat, geometry = geometry)) +
+  theme_minimal() +
+  scale_fill_manual(values = hcl.colors(14, "Purple-Yellow")) + 
+  labs(title = "Résultats des élections législatives par circonscription",
+       fill = "Parti") +
+  theme(legend.position = "bottom", 
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank()) +
+  guides(fill = guide_legend(nrow = 1))
 ```
-## Reading layer `france-circonscriptions-legislatives-2012' from data source 
-##   `/Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Lecture 1/data/france-circonscriptions-legislatives-2012.shp' 
-##   using driver `ESRI Shapefile'
-## Simple feature collection with 566 features and 6 fields
-## Geometry type: MULTIPOLYGON
-## Dimension:     XY
-## Bounding box:  xmin: -178.1818 ymin: -28.09902 xmax: 168.1362 ymax: 51.0894
-## Geodetic CRS:  WGS 84
-```
+
+---
+background-color: #f19bb5
+# Application: carte résultats législatives
+
+<div class="countdown" id="timer_17b1e91e" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
 
 &lt;img src="lecture_1_fr_files/figure-html/carte résultats-1.svg" style="display: block; margin: auto;" /&gt;
 
@@ -1111,18 +1258,18 @@ name: bestfriend
 
 
 ---
-### Commenter son code pour vous-même...&lt;sup&gt;1&lt;/sup&gt;
+# Commenter son code pour soi...&lt;sup&gt;1&lt;/sup&gt;
 
-&lt;img src="imgs/meme_comment_code.jpeg" width="60%" style="display: block; margin: auto;" /&gt;
-
----
-### ... et vos collègues&lt;sup&gt;1&lt;/sup&gt;
-
-&lt;img src="imgs/headache.png" width="60%" style="display: block; margin: auto;" /&gt;
-
+&lt;img src="imgs/meme_comment_code.jpeg" width="50%" style="display: block; margin: auto;" /&gt;
 
 ---
-### **Essayer** de ne pas s'énerver&lt;sup&gt;1&lt;/sup&gt;
+# ... et ses collègues&lt;sup&gt;1&lt;/sup&gt;
+
+&lt;img src="imgs/headache.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# **Essayer** de ne pas s'énerver&lt;sup&gt;1&lt;/sup&gt;
 
 .pull-left[
 &lt;img src="imgs/parenthesis.jpeg" width="70%" style="display: block; margin: auto;" /&gt;
@@ -1140,7 +1287,7 @@ L'apprentissage de `R` est long et fastidieux, mais les rendements sont croissan
 
 [Introduction à l’analyse d’enquêtes avec R et RStudio](https://larmarange.github.io/analyse-R/)
 [Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/01-introduction)
-
+[Géomatique sur R](https://rcarto.github.io/geomatique_avec_r/)
 
 ---
 # Appendix

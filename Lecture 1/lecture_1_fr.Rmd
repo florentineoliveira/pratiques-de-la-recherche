@@ -36,6 +36,7 @@ library(countdown)
 library(xaringanthemer)
 library(xaringanExtra)
 library(sf)
+library(RColorBrewer)
 
 # countdown style
 countdown(
@@ -240,13 +241,11 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
 layout: false
 class: center, middle, inverse
 
-# R
+# 2. `R`: rappels
 
 ---
-# 2. `R`: rappels et **trouver mot** 
+# 2.1. Définition, usages, interface
 
-
-## 2.1. `R`ecap : Définition, usages, interface
 
 - D'après le site internet de `R` : *R is a free software environment for statistical computing and graphics.*
 
@@ -285,7 +284,7 @@ knitr::include_graphics("imgs/popularity_scholar.png")
 ]
 
 ---
-## 2.1. `R`ecap : Définition, usages, interface
+# 2.1. Définition, usages, interface
 
 ```{r interface, echo=FALSE, out.width="70%"}
 knitr::include_graphics("imgs/interface.png")
@@ -293,7 +292,7 @@ knitr::include_graphics("imgs/interface.png")
 
 
 ---
-## 2.2. `R`ecap : Projet `R`
+# 2.2. Projet `R`
 
 Les projets `R` permettent une meilleure organisation de votre travail.
 
@@ -333,7 +332,7 @@ knitr::include_graphics("imgs/rproj_sans_fond.png")
 
 
 ---
-## 2.3. `R`ecap: Importer des données
+# 2.3. Importer des données
 
 **Format .csv:**
 
@@ -354,7 +353,7 @@ knitr::include_graphics("imgs/rproj_sans_fond.png")
   - `read_excel()`  
   
 ---
-## 2.3. `R`ecap: Importer des données
+# 2.3. Importer des données
 
 &nbsp;
 
@@ -372,7 +371,7 @@ background-image: url(imgs/dplyr_logo.png)
 background-position: 90% 10%
 background-size: 15%
 
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 
 Principal package pour la manipulation de données : `dplyr`
@@ -393,7 +392,7 @@ $$\text{data.frame} \;\; \underbrace{\text{%>%}}_{\text{pipe}} \;\; \text{functi
 [Cheatsheet Dplyr]()
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Opérateurs 
 
@@ -550,11 +549,11 @@ titanic %>%
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 .center[
 ```{r datasets joints , echo=FALSE, out.width="40%"}
-knitr::include_graphics("imgs/datasets.jpeg")
+knitr::include_graphics("imgs/datasets.png")
 ```
 ]
 
@@ -570,14 +569,14 @@ knitr::include_graphics("imgs/datasets.jpeg")
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Binding joints 
 
 .center[
 **Binding Rows**
 ```{r little dataset bindrows, echo=FALSE, out.width="45%"}
-knitr::include_graphics("imgs/little_datasets.jpeg")
+knitr::include_graphics("imgs/little_datasets.png")
 ```
 ]
 
@@ -593,14 +592,14 @@ knitr::include_graphics("imgs/bindrows.jpeg")
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Binding joints 
 
 .center[
 **Binding Columns**
 ```{r little dataset bindcols, echo=FALSE, out.width="45%"}
-knitr::include_graphics("imgs/little_datasets.jpeg")
+knitr::include_graphics("imgs/little_datasets.png")
 ```
 ]
 
@@ -616,7 +615,7 @@ knitr::include_graphics("imgs/bindcols.jpeg")
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Mutating joints 
 
@@ -624,7 +623,7 @@ knitr::include_graphics("imgs/bindcols.jpeg")
 .center[
 **Left-joint**
 ```{r little dataset left, echo=FALSE, out.width="45%"}
-knitr::include_graphics("imgs/little_datasets.jpeg")
+knitr::include_graphics("imgs/little_datasets.png")
 ```
 ]
 
@@ -641,14 +640,14 @@ knitr::include_graphics("imgs/left_joint.jpeg")
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Mutating joints 
 
 .center[
 **Right-joint**
 ```{r little dataset right, echo=FALSE, out.width="45%"}
-knitr::include_graphics("imgs/little_datasets.jpeg")
+knitr::include_graphics("imgs/little_datasets.png")
 ```
 ]
 
@@ -664,14 +663,14 @@ knitr::include_graphics("imgs/right_joint.jpeg")
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Mutating joints 
 
 .center[
 **Inner-joint**
 ```{r little dataset inner, echo=FALSE, out.width="45%"}
-knitr::include_graphics("imgs/little_datasets.jpeg")
+knitr::include_graphics("imgs/little_datasets.png")
 ```
 ]
 
@@ -687,14 +686,14 @@ knitr::include_graphics("imgs/inner_joint.jpeg")
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Mutating joints 
 
 .center[
 **Full-joint**
 ```{r little dataset full, echo=FALSE, out.width="45%"}
-knitr::include_graphics("imgs/little_datasets.jpeg")
+knitr::include_graphics("imgs/little_datasets.png")
 ```
 ]
 
@@ -712,7 +711,7 @@ knitr::include_graphics("imgs/full_joint.jpeg")
 
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Formats wide et long
 
@@ -723,7 +722,7 @@ Un jeu de données est dit ***tidy*** (i.e. "bien rangé") si:
 3. Chaque valeur est présente dans une unique case de la table  
 
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Formats wide et long
 
@@ -731,7 +730,7 @@ Pour **rassembler des colonnes** et passer en format **long**: `pivot_longer`
 
 .center[
 ```{r longer, echo=FALSE, out.width="40%"}
-knitr::include_graphics("imgs/longer.jpeg")
+knitr::include_graphics("imgs/longer.png")
 ```
 ]
 
@@ -742,7 +741,7 @@ knitr::include_graphics("imgs/longer.jpeg")
        
  
 ---
-## 2.4. `R`ecap: Manipulation des données avec `dplyr`
+# 2.4. Manipulation des données avec `dplyr`
 
 ### Formats wide et long
 
@@ -750,7 +749,7 @@ Pour **disperser des lignes** et obtenir un format **wide**: `pivot_wider`
 
 .center[
 ```{r wider, echo=FALSE, out.width="50%"}
-knitr::include_graphics("imgs/wider.jpeg")
+knitr::include_graphics("imgs/wider.png")
 ```
 ]
 
@@ -940,27 +939,54 @@ resultats = bind_rows(resultats_t1_long, resultats_t2_long) %>%
 
 ---
 background-image: url(imgs/ggplot2_logo.png)
-background-position: 90% 10%
-background-size: 15%
+background-position: 95% 15%
+background-size: 10%
 
-## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+# 2.5. Visualisation des données avec `ggplot2`
 
 
-Principal package pour la visualitation de données : `ggplot`
+`ggplot2` est un package `R` qui permet de **visualiser des données** sous forme de graphiques. Afin de chaîner des opérations ensemble, c'est à dire d'**ajouter des couches au graphique, on utilise les `+`**
+ (l'équivalent de ` %>% ` avec `dplyr`).
+ 
+ &nbsp;
+ 
+Pour consturire n'importe quel graphique, il faut:
+- une base de données
+- lier les variables aux élements graphiques (axes, couleurs, tailles) via l'argument `aes()`
+- définir un type de graphique (ligne, point, histogramme, densité, etc)
 
-**Template pour n'importe quel graphique**
+### Structure de base
 
-.center[
-ggplot(**data = **)
-]
+```{r , echo = T, eval = F}
+ggplot(data, 
+       aes(x = x, y = y)) + 
+  geom_point()
+```
 
---
+
+---
+# 2.5. Visualisation des données avec `ggplot2`
+
 ### Principales fonctions 
+
+- `ggplot()` : Initialiser un graphique en spécifiant les données et les aesthetics    
+
+- `geom_` : Représente les types de graphiques:   
+  - `geom_point()` pour un nuage de points   
+  - `geom_line()` pour des lignes   
+  - `geom_bar() `pour un histogramme/barplot   
+  - `geom_density()` pour une densité    
+  
+- `labs()` : Ajouter des titres et légendes    
+
+- `theme()` : Personnaliser l'apparence du graphique    
+
+ &nbsp;
 
 [Cheatsheet Dplyr]()
 
 ---
-## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+# 2.5. Visualisation des données avec `ggplot2`
 
 ### Une variable _discrète_
 
@@ -992,7 +1018,7 @@ resultats %>%
 
 ---
 count: false
-## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+# 2.5. Visualisation des données avec `ggplot2`
 
 ### Une variable _discrète_
 
@@ -1027,44 +1053,74 @@ resultats %>%
 ```
 ]
 
+---
+# 2.5. Visualisation des données avec `ggplot2`
 
+### Une variable _discrète_
+
+.pull-left[
+```{r , echo = T, eval = F}
+ggplot(resultats, 
+       aes(x = Nuance.candidat, fill = Sexe.candidat)) + #<<
+  geom_bar() +
+  labs(
+    title = "Number of Votes by Candidate",
+    x = "Candidate",
+    y = "Number") +
+  theme_minimal()
+```
+]
+
+.pull-right[
+```{r , echo = F, eval = T, fig.dim = c(5, 4)}
+resultats %>% 
+  ggplot(aes(x = Nuance.candidat, fill = Sexe.candidat)) + 
+  geom_bar() +
+  labs(
+    title = "Number of Votes by Candidate",
+    x = "Candidate",
+    y = "Number") +
+  theme_minimal()
+```
+]
 
 ---
-## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+# 2.5. Visualisation des données avec `ggplot2`
 
 ### Une variable _continue_
 
 .pull-left[
 ```{r , echo = T, eval = F}
 resultats %>% 
-  mutate(pop = as.numeric(pop)) %>% 
-  ggplot(aes(x = pop)) + 
-  geom_density() +
-  labs(
-    title = "Distribution of population",
-    x = "Population",
-    y = "Frequency") +
-  theme_minimal() 
+    mutate(Blancs = as.numeric(Blancs)/100) %>% 
+    ggplot(aes(x = Blancs)) + 
+    geom_density() +
+    labs(
+        title = "Distribution des votes blancs",
+        x = "Votes blancs (en centaines)",
+        y = "Frequency") +
+    theme_minimal() 
 ```
 ]
 
 .pull-right[
-```{r , echo = F, fig.dim = c(5, 4)}
+```{r , echo = F, eval = T, fig.dim = c(5, 4)}
 resultats %>% 
-  mutate(pop = as.numeric(pop)) %>% 
-  ggplot(aes(x = pop)) + 
-  geom_density() +
-  labs(
-    title = "Distribution of population",
-    x = "Population",
-    y = "Frequency") +
-  theme_minimal() 
+    mutate(Blancs = as.numeric(Blancs)/100) %>% 
+    ggplot(aes(x = Blancs)) + 
+    geom_density() +
+    labs(
+        title = "Distribution des votes blancs",
+        x = "Votes blancs (en centaines)",
+        y = "Frequency") +
+    theme_minimal() 
 ```
 ]
 
 
+
 ---
-## 2.5. `R`ecap: Visualisation des données avec `ggplot2`
+# 2.5. Visualisation des données avec `ggplot2`
 
 ### `facet_wrap`
 
@@ -1107,24 +1163,56 @@ resultats %>%
 
 
 ---
-## 2.6. `R`ecap: Maps
+# 2.6. Visualisation des données spaciales
+
+### Format de cartes et données
+
+
+```{r format cartes, echo=FALSE, out.width="75%"}
+knitr::include_graphics("imgs/spacialdata.png")
+```
 
 
 
+Très bonne référence: [Géomatique sur R](https://rcarto.github.io/geomatique_avec_r/)
 
 
 ---
-background-color: #f19bb5
-# Application: carte résultats législatives
+count:false
+# 2.6. Visualisation des données spaciales
 
-`r countdown(minutes = 10, top = 0)`
+### Format de cartes et données
+
+```{r sf, echo=FALSE, out.width="75%"}
+knitr::include_graphics("imgs/sf.png")
+```
+
+Très bonne référence: [Géomatique sur R](https://rcarto.github.io/geomatique_avec_r/)
 
 
-```{r carte résultats, echo = F, message = F, warning = F, include = T}
+---
+background-image: url(imgs/sflogo.png)
+background-position: 95% 10%
+background-size: 10%
+
+# 2.6. Visualisation des données spaciales
+
+## Package `sf`
+
+
+**Shapefile**: format de fichier géospatial utilisé pour représenter des entités géographiques
+- contient des informations sur la forme (polygones, points, lignes) et des attributs.
+- composé de plusieurs fichiers `.shp`, `.shx`, `.dbf`, tous nécessaires pour la réalisation de cartes
+
+
+Une fois importés sur `R`, les objets `sf` sont des `data.frame` dont l’une des colonnes contient des géométries.
+
+
+```{r geometry, echo = F, message = F, warning = F, include = F}
 
 # Import data 
 
-map = st_read("data/france-circonscriptions-legislatives-2012.shp") %>% 
+map = st_read("data/france-circonscriptions-legislatives-2012.shp", quiet = TRUE) %>% 
   rename(Code.département = code_dpt,
          Libellé.circonscription.législative = num_circ) %>% 
   mutate(Code.département = ifelse(substr(Code.département, 1, 1) == "0", substr(Code.département, 2, 2), Code.département))
@@ -1141,6 +1229,98 @@ ggplot(resultats_map %>% filter(! (Code.département %in% c("971", "972", "973",
         axis.text = element_blank(),
         axis.ticks = element_blank(),
         panel.grid = element_blank())
+
+
+```
+
+```{r head, echo = T, include = T, message = F, warning = F,}
+head(map[ , -c(5,6)],4)
+```
+
+
+
+
+---
+# 2.6. Visualisation des données spaciales
+
+### Réaliser une carte en 3 étapes
+
+1. Importer les données    
+  - Le jeu de données qui contient l'information à visualiser   
+  - Les fichiers `shapefiles` qui contiennent le fond de carte, etc, avec la fonction `st_read()`    
+    - `r emo::ji("rotating_light")`: on importe sur `R` uniquement le fichier `.shp`, mais tous les autres fichiers (`.shx`, `.dbf`, etc) téléchargés avec le *shapefile* doivent être localisés au même endroit que le `.shp`   
+    
+2. Lier le jeu de données qui contient l'information à visualiser avec les données géographiques  
+  - Pour ajouter de l'information à un fond de carte, il est nécessaire de disposer d'une **variable (*key*) géographique commune entre les deux fichiers**:
+    - Par exemple si vous souhaitez représenter la carte des réusltats aux éléctions législatives de 2024 en France à l'échelle départementale, il est nécessaire que le fichier qui recence les résultats et le fichier qui recence les données géographiques aient une variable commune qui permet de les lier: nom de département, numéro de département
+
+3. Représenter la carte avec la fonction `geom_sf()`  sur le même principe que `geom_line()` par exemple avec `ggplot2`
+ 
+
+---
+background-color: #f19bb5
+# Application: carte résultats législatives
+
+`r countdown(minutes = 10, top = 0)`
+
+
+```{r carte résultats code, echo = T, message = F, warning = F, eval = F}
+
+# Import data 
+map = st_read("data/france-circonscriptions-legislatives-2012.shp", quiet = TRUE) %>% 
+  rename(Code.département = code_dpt,
+         Libellé.circonscription.législative = num_circ) %>% 
+  mutate(Code.département = ifelse(substr(Code.département, 1, 1) == "0", substr(Code.département, 2, 2), Code.département))
+
+# Merge geographic data and results data
+resultats_map = resultats %>% 
+  left_join(map , by = c("Code.département", "Libellé.circonscription.législative")) #<<
+
+# Draw map
+ggplot(resultats_map %>% filter(! (Code.département %in% c("971", "972", "973", "974", "975", "976", "986", "987", "988", "ZX", "ZZ")))) +
+  geom_sf(aes(fill = Nuance.candidat, geometry = geometry)) +
+  theme_minimal() +
+  scale_fill_manual(values = hcl.colors(14, "Purple-Yellow")) + 
+  labs(title = "Résultats des élections législatives par circonscription",
+       fill = "Parti") +
+  theme(legend.position = "bottom", 
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank()) +
+  guides(fill = guide_legend(nrow = 1))
+
+
+```
+
+---
+background-color: #f19bb5
+# Application: carte résultats législatives
+
+`r countdown(minutes = 10, top = 0)`
+
+
+```{r carte résultats, echo = F, message = F, warning = F, include = T, fig.height= 6, fig.width=9.5}
+
+# Import data 
+
+map = st_read("data/france-circonscriptions-legislatives-2012.shp", quiet = TRUE) %>% 
+  rename(Code.département = code_dpt,
+         Libellé.circonscription.législative = num_circ) %>% 
+  mutate(Code.département = ifelse(substr(Code.département, 1, 1) == "0", substr(Code.département, 2, 2), Code.département))
+
+resultats_map = resultats %>% 
+  left_join(map , by = c("Code.département", "Libellé.circonscription.législative"))
+
+ggplot(resultats_map %>% filter(! (Code.département %in% c("971", "972", "973", "974", "975", "976", "986", "987", "988", "ZX", "ZZ")))) +
+  geom_sf(aes(fill = Nuance.candidat, geometry = geometry)) +
+  theme_minimal() +
+  scale_fill_manual(values = hcl.colors(14, "Purple-Yellow")) + 
+  labs(fill = "Parti") +
+  theme(legend.position = "bottom", 
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank()) +
+  guides(fill = guide_legend(nrow = 1))
 
 
 ```
@@ -1200,22 +1380,22 @@ name: bestfriend
 
 
 ---
-### Commenter son code pour vous-même...<sup>1</sup>
+# Commenter son code pour soi...<sup>1</sup>
 
-```{r meme1, echo=FALSE, out.width="60%"}
+```{r meme1, echo=FALSE, out.width="50%"}
 knitr::include_graphics("imgs/meme_comment_code.jpeg")
 ```
 
 ---
-### ... et vos collègues<sup>1</sup>
+# ... et ses collègues<sup>1</sup>
 
-```{r meme2, echo=FALSE, out.width="60%"}
+```{r meme2, echo=FALSE, out.width="50%"}
 knitr::include_graphics("imgs/headache.png")
 ```
 
 
 ---
-### **Essayer** de ne pas s'énerver<sup>1</sup>
+# **Essayer** de ne pas s'énerver<sup>1</sup>
 
 .pull-left[
 ```{r meme3, echo=FALSE, out.width="70%"}
@@ -1235,7 +1415,7 @@ L'apprentissage de `R` est long et fastidieux, mais les rendements sont croissan
 
 [Introduction à l’analyse d’enquêtes avec R et RStudio](https://larmarange.github.io/analyse-R/)
 [Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/01-introduction)
-
+[Géomatique sur R](https://rcarto.github.io/geomatique_avec_r/)
 
 ---
 # Appendix
@@ -1243,8 +1423,8 @@ L'apprentissage de `R` est long et fastidieux, mais les rendements sont croissan
 ---
 # Cheatsheets
 
-- [test1](https://rstudio.github.io/cheatsheets/rstudio-ide.pdf)
-- [test](https://posit.co/resources/cheatsheets/)
+- [R Studio Environment](https://rstudio.github.io/cheatsheets/rstudio-ide.pdf)
+- [All cheatsheets](https://posit.co/resources/cheatsheets/)
 
 ---
 name: cheatR

@@ -1,5 +1,5 @@
 ---
-title: "Régressions linéaires"
+title: "L'estimateur des Moindres Carrés Ordinaires (OLS)"
 subtitle: "Pratiques de la Recherche en Économie"
 author: "Florentine Oliveira"
 date: "`r Sys.Date()`"
@@ -51,13 +51,13 @@ countdown(
   color_finished_background = "white",
   color_finished_text       = "#dd0747",
   color_finished_border     = "#dd0747",
-  font_size = "2em" 
+  font_size = "1.5em" 
 )
 
 
 style_xaringan( 
   title_slide_background_color = "#dd0747",
-  title_slide_text_color = "white",
+  title_slide_text_color = "#eee",
   text_color = "black",
   header_color = "#dd0747",
   text_bold_color = "#dd0747",
@@ -89,7 +89,7 @@ theme_minimum = theme_bw() +
   legend.position = "none"  # Masquer la légende
 )
 
-# A blank theme for ggplot
+
 theme_empty = theme_bw() + 
   theme(
   text = element_text(family = "Palatino"),
@@ -100,13 +100,29 @@ theme_empty = theme_bw() +
   axis.text = element_blank(),  # Masquer les étiquettes des axes
   axis.title = element_text(size = 12),  # Afficher les titres des axes
   plot.title = element_blank(),  # Masquer le titre du graphique
-  panel.background = element_blank(),  # Masquer le fond du panneau
+  panel.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"),  # Masquer le fond du panneau
   panel.grid.major = element_blank(),  # Masquer la grille principale
   panel.grid.minor = element_blank(),  # Masquer la grille secondaire
-  plot.background = element_blank(),  # Masquer le fond du graphique
+  plot.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"),  # Masquer le fond du graphique
   legend.position = "none"  # Masquer la légende
 )
 
+#theme_empty = theme_bw() + 
+#  theme(
+#    text = element_text(family = "Palatino"),
+#    line = element_blank(),  # Masquer toutes les lignes par défaut
+#    rect = element_blank(),  # Masquer tous les rectangles par défaut, sauf le fond
+#    axis.line = element_line(color = "black"),  # Afficher les lignes des axes
+#    axis.ticks = element_blank(),  # Masquer les ticks des axes
+#    axis.text = element_blank(),  # Masquer les étiquettes des axes
+#    axis.title = element_text(size = 12),  # Afficher les titres des axes
+#    plot.title = element_blank(),  # Masquer le titre du graphique
+#    panel.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"),  # Fond du panneau #FAFAFA
+#    panel.grid.major = element_blank(),  # Masquer la grille principale
+#    panel.grid.minor = element_blank(),  # Masquer la grille secondaire
+#    plot.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"),  # Fond du graphique #FAFAFA
+#    legend.position = "none"  # Masquer la légende
+#  )
 
 # style_mono_accent(
 #   base_color = "#dd0747",
@@ -162,69 +178,70 @@ layout: true
 
 &nbsp;
 
-1. Régression linéaire simple
-2. Estimateur des MCO dans le cas univarié
-3. Régression linéaire multiple
-4. Estimateur des MCO dans le cas multivarié
-5. Hypothèses et propriétés de l'estimateur des MCO
+1. L'estimateur des MCO    
+  1.1. Modèle linéaire univarié et interprétation géométrique    
+  1.3. Du modèle univarié au modèle multivarié    
+  
+2. Hypothèses de l'estimateur des MCO   
+  2.1. Linéarité   
+  2.2.      
+  
+3. Propriétés statistiques   
+  3.1. Espérance   
+  3.2. Variance     
+  
+4. Remise en cause des hypothèses       
 
 
 ---
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-On s'intéresse à la relation entre deux variables:
+## 1.1. Modèle linéaire univarié et interprétation géométrique   
 
---
+La régression linéaire simple est une méthode statistique permettant de trouver une relation **linéaire** entre
 
-  * une __variable expliquée__ (ou __variable dépendante__ ou ***outcome***), *** $y$ ***
+  * une **variable expliquée** (ou **variable dépendante** ou ***outcome***), *** $y$ ***
   
---
+  * une **variable explicative** (ou **variable indépendante** ou **régresseur**), *** $x$ ***
   
-  * an __variable explicative__ (ou __variable indépendante__ ou __régresseur__), *** $x$ ***
   
---
+La relation linéaire entre $y$ et $x$ n'est pas parfaite: elle est perturbée par une **erreur** (ou **bruit** ou ***noise***), $\varepsilon$.
 
-* Pour chaque individu $i$, on observe à la fois $x_i$ et $y_i$ ce qui nous permet de représenter la *distribution jointe* de ces deux variables.
+Pour chaque individu $i$, on observe à la fois $x_i$ et $y_i$ ce qui nous permet de représenter la *distribution jointe* de ces deux variables.
 
+Le modèle linéaire univarié s'écrit, $\forall \; i$, 
 
---
-
-* Pour le moment, cette relation est synthétisée par une droite, ayant pour constante $\alpha$ et pente $\beta$:
-
-    $$
-    \hat{y}_i = \alpha + \beta x_i
-    $$
-
---
-
-* ** $\hat{y}_i$ ** est la **prediction** de $y$ pour l'observation $i$ $(y_i)$.
-
----
+$$y_i = \alpha + \beta x_i + \varepsilon_i$$
 
 
 ---
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
+
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
 
 On considère l'échantillon suivant
 
 --
 
-```{R, nuage, echo = F, dev = "svg", fig.width = 12, fig.height = 5}
+```{R, nuage, echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
 ggplot(data = df, aes(x = x, y = y)) +
   geom_point(size = 3, color = "black", alpha = 0.9) +
   scale_x_continuous(limits = c(-1,8)) +
   scale_y_continuous(limits = c(0.5,7)) +
   theme_empty 
+
 ```
 
 
 ---
 count: false
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-Pour toute droite $\hat{y} = \hat{\alpha} + \hat{\beta} x$
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
 
-```{R, nuage et droite, echo = F, dev = "svg", fig.width = 12, fig.height = 5}
+Pour toute droite $\tilde{y} = \tilde{\alpha} + \tilde{\beta} x$,
+
+```{R, nuage et droite, echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
 
 # Define a function
 y_hat <- function(x, b0, b1) {b0 + b1 * x}
@@ -239,7 +256,7 @@ y_hat_min2 <- y_hat(x_min2, b0, b1)
 ggplot(data = df, aes(x = x, y = y)) +
     geom_point(size = 3, color = "black", alpha = 0.9) +
     geom_abline(intercept = b0, slope = b1, color = "#f08b27", size = 1, alpha = 0.9)  +
-    annotate("text", x = -0.4, y = 3.2, label = "hat(y)", parse = TRUE, color = "#f08b27", size = 6, family = "serif") +
+    annotate("text", x = -0.4, y = 3.2, label = "tilde(y)", parse = TRUE, color = "#f08b27", size = 6, family = "serif") +
     scale_x_continuous(limits = c(-1,8)) +
     scale_y_continuous(limits = c(0.5,7)) +
     theme_empty
@@ -250,18 +267,20 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-Pour toute droite $\hat{y} = \hat{\alpha} + \hat{\beta} x$, on peut calculer les erreurs: $e_i = y_i - \hat{y}_i$
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
 
-```{R, nuage et droite et point y2, echo = F, dev = "svg",fig.width = 12, fig.height = 5}
+Pour toute droite $\tilde{y} = \tilde{\alpha} + \tilde{\beta} x$, on peut calculer les erreurs: $e_i = y_i - \tilde{y}_i$
+
+```{R, nuage et droite et point y2, echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
 
 ggplot(data = df, aes(x = x, y = y)) +
   geom_point(size = 3, color = "black", alpha = 0.9) +
   geom_point(data = df %>% filter(x == x_min2), size = 3, color = "#f08b27", alpha = 0.9) +
   geom_abline(intercept = b0, slope = b1, color = "#f08b27", size = 1, alpha = 0.9) + 
   annotate("text", x = x_min2, y = y_min2 - 0.2, label = paste0("y[2]"), parse = TRUE, color = "#f08b27", size = 6, family = "serif") +
-  annotate("text", x = -0.4, y = 3.2, label = "hat(y)", parse = TRUE, color = "#f08b27", size = 6, family = "serif") +
+  annotate("text", x = -0.4, y = 3.2, label = "tilde(y)", parse = TRUE, color = "#f08b27", size = 6, family = "serif") +
   scale_x_continuous(limits = c(-1,8)) +
   scale_y_continuous(limits = c(0.5,7)) +
   theme_empty
@@ -271,18 +290,20 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-Pour toute droite $\hat{y} = \hat{\alpha} + \hat{\beta} x$, on peut calculer les erreurs: $e_i = y_i - \hat{y}_i$
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
 
-```{R, nuage et droite et point y2 et e2, echo = F, dev = "svg", fig.width = 12, fig.height = 5}
+Pour toute droite $\tilde{y} = \tilde{\alpha} + \tilde{\beta} x$, on peut calculer les erreurs: $e_i = y_i - \tilde{y}_i$
+
+```{R, nuage et droite et point y2 et e2, echo = F, dev = "svg",  fig.width = 9, fig.height = 4.5}
 
 ggplot(data = df, aes(x = x, y = y)) +
     geom_point(size = 3, color = "black", alpha = 0.9) +
     geom_point(data = df %>% filter(x == x_min2), size = 3, color = "#f08b27", alpha = 0.9) +
     geom_abline(intercept = b0, slope = b1, color = "#f08b27", size = 1, alpha = 0.9) +
     geom_segment(aes(x = x_min2, xend = x_min2, y = y_min2, yend = y_hat_min2), color = "#f08b27", size = 0.5, alpha = 0.2) +
-    annotate("text", x = -0.4, y = 3.2, label = "hat(y)", parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
+    annotate("text", x = -0.4, y = 3.2, label = "tilde(y)", parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
     annotate("text", x = x_min2, y = y_min2 - 0.2, label = paste0("y[2]"), parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
     annotate("text", x = x_min2 - 0.1, y = (y_min2 + y_hat_min2) / 2, label = expression(epsilon[2]), color = "#f08b27", size = 6, family = "Palatino") +
     scale_x_continuous(limits = c(-1,8)) +
@@ -293,17 +314,19 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-Pour toute droite $\hat{y} = \hat{\alpha} + \hat{\beta} x$, on peut calculer les erreurs: $e_i = y_i - \hat{y}_i$
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
 
-```{R, nuage et droite et toutes erreurs, echo = F, dev = "svg", fig.width = 12, fig.height = 5}
+Pour toute droite $\tilde{y} = \tilde{\alpha} + \tilde{\beta} x$, on peut calculer les erreurs: $e_i = y_i - \tilde{y}_i$
+
+```{R, nuage et droite et toutes erreurs, echo = F, dev = "svg",  fig.width = 9, fig.height = 4.5}
 
 ggplot(data = df, aes(x = x, y = y)) +
     geom_point(size = 3, color = "black", alpha = 0.9) +
     geom_abline(intercept = b0, slope = b1, color = "#f08b27", size = 1, alpha = 0.9) +
     geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
-    annotate("text", x = -0.4, y = 3.2, label = "hat(y)", parse = TRUE, color = "#f08b27", size = 6, family = "serif") +
+    annotate("text", x = -0.4, y = 3.2, label = "tilde(y)", parse = TRUE, color = "#f08b27", size = 6, family = "serif") +
     scale_x_continuous(limits = c(-1,8)) +
     scale_y_continuous(limits = c(0.5,7)) +
     theme_empty
@@ -312,11 +335,13 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-Pour toute droite $\hat{y} = \hat{\alpha} + \hat{\beta} x$, on peut calculer les erreurs: $e_i = y_i - \hat{y}_i$
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
 
-```{R, nuage et autre droite et toutes erreurs , echo = F, dev = "svg", fig.width = 12, fig.height = 5}
+Pour toute droite $\tilde{y} = \tilde{\alpha} + \tilde{\beta} x$, on peut calculer les erreurs: $e_i = y_i - \tilde{y}_i$
+
+```{R, nuage et autre droite et toutes erreurs , echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
 
 b0 <- 5
 b1 <- -0.2
@@ -325,7 +350,7 @@ ggplot(data = df, aes(x = x, y = y)) +
     geom_point(size = 3, color = "black", alpha = 0.9) +
     geom_abline(intercept = b0, slope = b1, color = "#f08b27", size = 1, alpha = 0.9) +
     geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
-    annotate("text", x = -0.4, y = 5.6, label = "hat(y)", parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
+    annotate("text", x = -0.4, y = 5.6, label = "tilde(y)", parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
     scale_x_continuous(limits = c(-1,8)) +
     scale_y_continuous(limits = c(0.5,7)) +
     theme_empty
@@ -335,18 +360,20 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-La SCE somme les erreurs au carré $\left(\sum \varepsilon_i^2\right)$: les erreurs importantes ont de plus grosses pénalités.
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
 
-```{R, penalties, echo = F, dev = "svg", fig.width = 12, fig.height = 5}
+SCE = $\left(\sum \varepsilon_i^2\right)$: les erreurs importantes ont de plus grosses pénalités.
+
+```{R, penalties, echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
 
 df = df %>%
   mutate(y_hat = y_hat(x, b0, b1),
          distance = abs(y - y_hat))
 
 ggplot(data = df, aes(x = x, y = y)) +
-    annotate("text", x = -0.4, y = 5.6, label = "hat(y)", parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
+    annotate("text", x = -0.4, y = 5.6, label = "tilde(y)", parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
     geom_rect(aes(xmin = x, xmax = x + distance, ymin = pmin(y, y_hat), ymax = pmax(y, y_hat)), 
               color = "#f7c593", fill = "#f7c593", alpha = 0.09) +
     geom_point(size = 3, color = "black", alpha = 0.9) +
@@ -360,11 +387,13 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# 2. Estimateur des Moindres Carrés Ordinaires
+# 1. L'estimateur des MCO   
 
-L'estimateur des MCO (OLS) calcule $\hat{\alpha}$ and $\hat{\beta}$ qui minimisent la SCE.
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
 
-```{R, mco penalties, echo = F, dev = "svg", fig.width = 12, fig.height = 5}
+L'estimateur des MCO (*OLS*) calcule $\hat{\alpha}$ et $\hat{\beta}$ qui **<span style="color:#dd0747;">minimisent la SCE</span>**.
+
+```{R, mco penalties, echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
 # Define a function
 y_hat <- function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
@@ -390,11 +419,13 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 count: false
-# 2. Estimateur des Moindres Carrés Ordinaires
+# 1. L'estimateur des MCO   
 
-L'estimateur des MCO (OLS) calcule $\hat{\alpha}$ and $\hat{\beta}$ qui minimisent la SCE.
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
 
-```{R, mco, echo = F, dev = "svg",fig.width = 12, fig.height = 5}
+L'estimateur des MCO (*OLS*) calcule $\hat{\alpha}$ et $\hat{\beta}$ qui **<span style="color:#dd0747;">minimisent la SCE</span>**.
+
+```{R, mco, echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
 
 ggplot(data = df, aes(x = x, y = y)) +
     annotate("text", x = -0.4, y = 2, label = "hat(y)", parse = TRUE, color = "#dd0747", size = 6, family = "Palatino") +
@@ -408,7 +439,9 @@ ggplot(data = df, aes(x = x, y = y)) +
 
 ---
 name: OLS
-# 2. Estimateur des Moindres Carrés Ordinaires
+# 1. L'estimateur des MCO   
+
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
 
 ### Formellement
 
@@ -426,9 +459,11 @@ $\hat{\beta} = \dfrac{Cov(x,y)}{Var(x)}$
 [Maths](#derivation)
 
 ---
-# 2. Estimateur des Moindres Carrés Ordinaires
+# 1. L'estimateur des MCO   
 
-## Implémentation sur `R`
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
+
+### Implémentation sur `R`
 
 - Calcul de la variance empirique
 
@@ -635,7 +670,9 @@ ggplot() +
 
 ---
 background-color: #f19bb5
-## Application : taille de la fratrie et performances scolaires
+# Application 
+
+### Taille de la fratrie et performances scolaires
 
 `r countdown(minutes = 7, top = 0)`
 
@@ -719,7 +756,7 @@ data %>%
 ---
 background-color: #fbe6ec
 
-## Solution 
+# Solution 
 
 Représenter le nuage de points qui définit la relation entre **taille de la fratrie** et **nombre d'années d'études**
 
@@ -822,22 +859,25 @@ plot_2
 
 
 ---
-## 3. Régression linéaire multiple
+# 1. L'estimateur des MCO   
+
+## 1.2. Du modèle univarié au modèle multivarié
 
 
 
-
----
-## 4. Estimateur des MCO dans le cas multivarié
 
 $$\hat{\beta} = (X'X)^{-1}X'Y $$
+
+
+
 
 
 
 ---
 ## 5. Hypothèses de l'estimateur des MCO
 
-- $H_1$ **Linéarité**: le modèle est linéaire dans les paramètres. Formellement, $\frac{\partial y_i}{\partial x_{ik}} = \beta_k$ $\forall k =1, ...; K$
+- $H_1$ **Linéarité**: le modèle est linéaire dans les paramètres. 
+  - Formellement, $\frac{\partial y_i}{\partial x_{ik}} = \beta_k$ $\forall k =1, ...; K$
 
 --
 
@@ -845,7 +885,9 @@ $$\hat{\beta} = (X'X)^{-1}X'Y $$
 
 --
 
-- $H_3$ : Il y a suffisamment de variation dans X. Formellement, s'il y a plusieurs variables explicatives, elles ne sont pas colinéaires, donc $(X'X)$ est inversible. 
+- $H_3$ : Il y a suffisamment de variation dans X. 
+  - Dit autrement, chaque variable explicative apporte une information qui lui est propre
+  - Formellement, s'il y a plusieurs variables explicatives, elles ne sont pas colinéaires, donc $(X'X)$ est inversible. 
 
 --
 

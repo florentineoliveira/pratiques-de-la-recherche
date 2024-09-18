@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Régressions linéaires</title>
+    <title>L’estimateur des Moindres Carrés Ordinaires (OLS)</title>
     <meta charset="utf-8" />
     <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2024-09-13" />
+    <meta name="date" content="2024-09-18" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
@@ -17,7 +17,7 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# Régressions linéaires
+# L’estimateur des Moindres Carrés Ordinaires (OLS)
 ]
 .subtitle[
 ## Pratiques de la Recherche en Économie
@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Florentine Oliveira
 ]
 .date[
-### 2024-09-13
+### 2024-09-18
 ]
 
 ---
@@ -44,48 +44,46 @@ layout: true
 
 &amp;nbsp;
 
-1. Régression linéaire simple
-2. Estimateur des MCO dans le cas univarié
-3. Régression linéaire multiple
-4. Estimateur des MCO dans le cas multivarié
-5. Hypothèses et propriétés de l'estimateur des MCO
+1. L'estimateur des MCO    
+  1.1. Modèle linéaire univarié et interprétation géométrique    
+  1.3. Du modèle univarié au modèle multivarié    
+  
+2. Hypothèses de l'estimateur des MCO   
+  2.1. Linéarité   
+  2.2.      
+  
+3. Propriétés statistiques   
+  3.1. Espérance   
+  3.2. Variance     
+  
+4. Remise en cause des hypothèses       
 
 
 ---
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-On s'intéresse à la relation entre deux variables:
+## 1.1. Modèle linéaire univarié et interprétation géométrique   
 
---
+La régression linéaire simple est une méthode statistique permettant de trouver une relation **linéaire** entre
 
-  * une __variable expliquée__ (ou __variable dépendante__ ou ***outcome***), *** `\(y\)` ***
+  * une **variable expliquée** (ou **variable dépendante** ou ***outcome***), *** `\(y\)` ***
   
---
+  * une **variable explicative** (ou **variable indépendante** ou **régresseur**), *** `\(x\)` ***
   
-  * an __variable explicative__ (ou __variable indépendante__ ou __régresseur__), *** `\(x\)` ***
   
---
+La relation linéaire entre `\(y\)` et `\(x\)` n'est pas parfaite: elle est perturbée par une **erreur** (ou **bruit** ou ***noise***), `\(\varepsilon\)`.
 
-* Pour chaque individu `\(i\)`, on observe à la fois `\(x_i\)` et `\(y_i\)` ce qui nous permet de représenter la *distribution jointe* de ces deux variables.
+Pour chaque individu `\(i\)`, on observe à la fois `\(x_i\)` et `\(y_i\)` ce qui nous permet de représenter la *distribution jointe* de ces deux variables.
 
+Le modèle linéaire univarié s'écrit, `\(\forall \; i\)`, 
 
---
-
-* Pour le moment, cette relation est synthétisée par une droite, ayant pour constante `\(\alpha\)` et pente `\(\beta\)`:
-
-    $$
-    \hat{y}_i = \alpha + \beta x_i
-    $$
-
---
-
-* ** `\(\hat{y}_i\)` ** est la **prediction** de `\(y\)` pour l'observation `\(i\)` `\((y_i)\)`.
-
----
+`$$y_i = \alpha + \beta x_i + \varepsilon_i$$`
 
 
 ---
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
+
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
 
 On considère l'échantillon suivant
 
@@ -96,9 +94,11 @@ On considère l'échantillon suivant
 
 ---
 count: false
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-Pour toute droite `\(\hat{y} = \hat{\alpha} + \hat{\beta} x\)`
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
+
+Pour toute droite `\(\tilde{y} = \tilde{\alpha} + \tilde{\beta} x\)`,
 
 &lt;img src="lecture_3_fr_files/figure-html/nuage et droite-1.svg" style="display: block; margin: auto;" /&gt;
 
@@ -106,36 +106,44 @@ Pour toute droite `\(\hat{y} = \hat{\alpha} + \hat{\beta} x\)`
 
 ---
 count: false
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-Pour toute droite `\(\hat{y} = \hat{\alpha} + \hat{\beta} x\)`, on peut calculer les erreurs: `\(e_i = y_i - \hat{y}_i\)`
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
+
+Pour toute droite `\(\tilde{y} = \tilde{\alpha} + \tilde{\beta} x\)`, on peut calculer les erreurs: `\(e_i = y_i - \tilde{y}_i\)`
 
 &lt;img src="lecture_3_fr_files/figure-html/nuage et droite et point y2-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 ---
 count: false
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-Pour toute droite `\(\hat{y} = \hat{\alpha} + \hat{\beta} x\)`, on peut calculer les erreurs: `\(e_i = y_i - \hat{y}_i\)`
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
+
+Pour toute droite `\(\tilde{y} = \tilde{\alpha} + \tilde{\beta} x\)`, on peut calculer les erreurs: `\(e_i = y_i - \tilde{y}_i\)`
 
 &lt;img src="lecture_3_fr_files/figure-html/nuage et droite et point y2 et e2-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 ---
 count: false
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-Pour toute droite `\(\hat{y} = \hat{\alpha} + \hat{\beta} x\)`, on peut calculer les erreurs: `\(e_i = y_i - \hat{y}_i\)`
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
+
+Pour toute droite `\(\tilde{y} = \tilde{\alpha} + \tilde{\beta} x\)`, on peut calculer les erreurs: `\(e_i = y_i - \tilde{y}_i\)`
 
 &lt;img src="lecture_3_fr_files/figure-html/nuage et droite et toutes erreurs-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 ---
 count: false
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-Pour toute droite `\(\hat{y} = \hat{\alpha} + \hat{\beta} x\)`, on peut calculer les erreurs: `\(e_i = y_i - \hat{y}_i\)`
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
+
+Pour toute droite `\(\tilde{y} = \tilde{\alpha} + \tilde{\beta} x\)`, on peut calculer les erreurs: `\(e_i = y_i - \tilde{y}_i\)`
 
 &lt;img src="lecture_3_fr_files/figure-html/nuage et autre droite et toutes erreurs -1.svg" style="display: block; margin: auto;" /&gt;
 
@@ -143,32 +151,40 @@ Pour toute droite `\(\hat{y} = \hat{\alpha} + \hat{\beta} x\)`, on peut calculer
 
 ---
 count: false
-# 1. Régression linéaire simple
+# 1. L'estimateur des MCO   
 
-La SCE somme les erreurs au carré `\(\left(\sum \varepsilon_i^2\right)\)`: les erreurs importantes ont de plus grosses pénalités.
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
+
+SCE = `\(\left(\sum \varepsilon_i^2\right)\)`: les erreurs importantes ont de plus grosses pénalités.
 
 &lt;img src="lecture_3_fr_files/figure-html/penalties-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 ---
 count: false
-# 2. Estimateur des Moindres Carrés Ordinaires
+# 1. L'estimateur des MCO   
 
-L'estimateur des MCO (OLS) calcule `\(\hat{\alpha}\)` and `\(\hat{\beta}\)` qui minimisent la SCE.
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
+
+L'estimateur des MCO (*OLS*) calcule `\(\hat{\alpha}\)` et `\(\hat{\beta}\)` qui **&lt;span style="color:#dd0747;"&gt;minimisent la SCE&lt;/span&gt;**.
 
 &lt;img src="lecture_3_fr_files/figure-html/mco penalties-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 count: false
-# 2. Estimateur des Moindres Carrés Ordinaires
+# 1. L'estimateur des MCO   
 
-L'estimateur des MCO (OLS) calcule `\(\hat{\alpha}\)` and `\(\hat{\beta}\)` qui minimisent la SCE.
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
+
+L'estimateur des MCO (*OLS*) calcule `\(\hat{\alpha}\)` et `\(\hat{\beta}\)` qui **&lt;span style="color:#dd0747;"&gt;minimisent la SCE&lt;/span&gt;**.
 
 &lt;img src="lecture_3_fr_files/figure-html/mco-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 name: OLS
-# 2. Estimateur des Moindres Carrés Ordinaires
+# 1. L'estimateur des MCO   
+
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
 
 ### Formellement
 
@@ -186,9 +202,11 @@ On obtient, dans le cas univarié:
 [Maths](#derivation)
 
 ---
-# 2. Estimateur des Moindres Carrés Ordinaires
+# 1. L'estimateur des MCO   
 
-## Implémentation sur `R`
+## 1.1. Modèle linéaire univarié et interprétation géométrique  
+
+### Implémentation sur `R`
 
 - Calcul de la variance empirique
 
@@ -296,9 +314,11 @@ lm(variable dépendante ~  variable indépendante, data = data.frame)
 
 ---
 background-color: #f19bb5
-## Application : taille de la fratrie et performances scolaires
+# Application 
 
-<div class="countdown" id="timer_86d0941c" data-update-every="1" tabindex="0" style="top:0;right:0;">
+### Taille de la fratrie et performances scolaires
+
+<div class="countdown" id="timer_ccea92ac" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">07</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -390,7 +410,7 @@ data %&gt;%
 ---
 background-color: #fbe6ec
 
-## Solution 
+# Solution 
 
 Représenter le nuage de points qui définit la relation entre **taille de la fratrie** et **nombre d'années d'études**
 
@@ -422,22 +442,25 @@ Représenter le nuage de points qui définit la relation entre **taille de la fr
 
 
 ---
-## 3. Régression linéaire multiple
+# 1. L'estimateur des MCO   
+
+## 1.2. Du modèle univarié au modèle multivarié
 
 
 
-
----
-## 4. Estimateur des MCO dans le cas multivarié
 
 $$\hat{\beta} = (X'X)^{-1}X'Y $$
+
+
+
 
 
 
 ---
 ## 5. Hypothèses de l'estimateur des MCO
 
-- `\(H_1\)` **Linéarité**: le modèle est linéaire dans les paramètres. Formellement, `\(\frac{\partial y_i}{\partial x_{ik}} = \beta_k\)` `\(\forall k =1, ...; K\)`
+- `\(H_1\)` **Linéarité**: le modèle est linéaire dans les paramètres. 
+  - Formellement, `\(\frac{\partial y_i}{\partial x_{ik}} = \beta_k\)` `\(\forall k =1, ...; K\)`
 
 --
 
@@ -445,7 +468,9 @@ $$\hat{\beta} = (X'X)^{-1}X'Y $$
 
 --
 
-- `\(H_3\)` : Il y a suffisamment de variation dans X. Formellement, s'il y a plusieurs variables explicatives, elles ne sont pas colinéaires, donc `\((X'X)\)` est inversible. 
+- `\(H_3\)` : Il y a suffisamment de variation dans X. 
+  - Dit autrement, chaque variable explicative apporte une information qui lui est propre
+  - Formellement, s'il y a plusieurs variables explicatives, elles ne sont pas colinéaires, donc `\((X'X)\)` est inversible. 
 
 --
 
