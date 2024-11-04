@@ -44,14 +44,14 @@ h3 {
     margin-bottom: 1em;
 }
 
-/* Style du tableau avec table-layout et des largeurs forcées */
+/* Style du tableau */
 table {
     width: 80%;
     max-width: 800px;
     margin: 20px auto;
     border-collapse: collapse;
     font-size: 0.9em;
-    table-layout: auto; /* Laisser la table ajuster les largeurs en fonction du contenu */
+    table-layout: auto; /* Autorise le navigateur à ajuster les largeurs */
     text-align: left;
 }
 
@@ -59,19 +59,19 @@ th {
     display: none; /* Masquer les en-têtes de colonne */
 }
 
-/* Ajustement de la largeur des colonnes */
 td {
-    padding: 10px 5px; /* Ajuste l'espacement des cellules */
+    padding: 10px 5px; /* Espacement des cellules */
     color: #333;
 }
 
+/* Première colonne sans contrainte de largeur */
 td:first-child {
-    width: 65%; /* Largeur ajustée pour la première colonne */
     text-align: left;
 }
 
+/* Colonnes de liens avec une largeur minimale */
 td:nth-child(2), td:nth-child(3) {
-    width: 17.5%; /* Largeur ajustée pour les colonnes de liens */
+    min-width: 80px; /* Largeur minimale pour éviter le resserrement */
     text-align: right;
     white-space: nowrap; /* Évite que le texte se casse en plusieurs lignes */
 }
