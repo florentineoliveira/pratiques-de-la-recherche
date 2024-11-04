@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Causalité</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Florentine Oliveira" />
+    <meta name="date" content="2024-10-28" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="libs/countdown/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Causalité
+]
+.subtitle[
+## Pratiques de la Recherche en Économie
+]
+.author[
+### Florentine Oliveira
+]
+.date[
+### 2024-10-28
+]
+
+---
+
+
+
+
+
+
+
+
+layout: true
+
+---
+# Cette séance
+
+&amp;nbsp;
+
+1. Rappels : Régression linéaire simple   
+  1.1. Interprétation géométrique      
+  1.2. Formule de l'estimateur MCO dans le cas univarié   
+  1.3. Hypothèses et propriétés     
+  1.4. Implémentation sur `R`     
+  1.5. Application: performances scolaires et taille de la fratie
+
+2. Causalité  
+  2.1.  Corrélation *vs* Causalité   
+  2.2.  Potential Outcomes Framework   
+  2.3.  Application: simulations
+
+3. Randomized Controlled Trials (RCT)   
+  3.1.  Résolution du problème de sélection
+  3.2.  Application : STAR Experiment
+  3.2.  Limites (coût, ethique, durée, etc)   
+  
+
+
+
+---
+count:false
+class: middle, center
+background-color: #dd0747
+
+# &lt;span style="color:#FAFAFA;"&gt;  1. Rappels: Régression linéaire simple &lt;/span&gt;
+
+---
+# 1. Rappels: Régression linéaire simple 
+
+## 1.1. Interprétation géométrique   
+
+La régression linéaire simple est une méthode statistique permettant de trouver une relation **linéaire** entre
+
+  * une **variable expliquée** (ou **variable dépendante** ou ***outcome***), *** `\(y\)` ***
+  
+  * une **variable explicative** (ou **variable indépendante** ou **régresseur**), *** `\(x\)` ***
+  
+  
+La relation linéaire entre `\(y\)` et `\(x\)` n'est pas parfaite: elle est perturbée par une **erreur** (ou **bruit** ou ***noise***), `\(\varepsilon\)` qui comprend tous les facteurs **non observés** qui affectent `\(y\)`.
+
+
+Le modèle linéaire univarié s'écrit, `\(\forall \; i\)`, 
+
+`$$y_i = \beta_0 + \beta_1x_i + \varepsilon_i$$`
+
+
+---
+# 1. Rappels: Régression linéaire simple   
+
+## 1.1. Interprétation géométrique   
+
+On considère l'échantillon suivant
+
+--
+
+&lt;img src="lecture_3_fr_files/figure-html/nuage-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+count: false
+# 1. Rappel: Régression linéaire simple   
+
+## 1.1. Interprétation géométrique   
+
+Pour toute droite `\(\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x\)`,
+
+&lt;img src="lecture_3_fr_files/figure-html/nuage et droite-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+
+
+---
+count: false
+# 1. Rappel: Régression linéaire simple   
+
+## 1.1. Interprétation géométrique   
+
+Pour toute droite `\(\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x\)`, on peut calculer les erreurs: `\(\varepsilon_i = y_i - \tilde{y}_i\)`
+
+&lt;img src="lecture_3_fr_files/figure-html/nuage et droite et point y2-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+count: false
+# 1. Rappel: Régression linéaire simple   
+
+## 1.1. Interprétation géométrique   
+
+Pour toute droite `\(\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x\)`, on peut calculer les erreurs: `\(\varepsilon_i = y_i - \tilde{y}_i\)`
+
+&lt;img src="lecture_3_fr_files/figure-html/nuage et droite et point y2 et e2-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+count: false
+# 1. Rappel: Régression linéaire simple   
+
+## 1.1. Interprétation géométrique   
+
+Pour toute droite `\(\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x\)`, on peut calculer les erreurs: `\(\varepsilon_i = y_i - \tilde{y}_i\)`
+
+&lt;img src="lecture_3_fr_files/figure-html/nuage et droite et toutes erreurs-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+count: false
+# 1. Rappel: Régression linéaire simple   
+
+## 1.1. Interprétation géométrique   
+
+Pour toute droite `\(\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x\)`, on peut calculer les erreurs: `\(\varepsilon_i = y_i - \tilde{y}_i\)`
+
+&lt;img src="lecture_3_fr_files/figure-html/nuage et autre droite et toutes erreurs -1.svg" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+count: false
+# 1. Rappel: Régression linéaire simple   
+
+## 1.1. Interprétation géométrique   
+
+SCE = `\(\left(\sum \varepsilon_i^2\right)\)`: les erreurs importantes ont de plus grosses pénalités.
+
+&lt;img src="lecture_3_fr_files/figure-html/penalties-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+count: false
+# 1. Rappel: Régression linéaire simple   
+
+## 1.1. Interprétation géométrique   
+
+L'estimateur des MCO (*OLS*) calcule `\(\hat{\beta_0}\)` et `\(\hat{\beta_1}\)` qui **&lt;span style="color:#dd0747;"&gt;minimisent la SCE&lt;/span&gt;**.
+
+&lt;img src="lecture_3_fr_files/figure-html/mco penalties-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+count: false
+# 1. Rappel: Régression linéaire simple   
+
+## 1.1. Interprétation géométrique   
+
+L'estimateur des MCO (*OLS*) calcule `\(\hat{\beta_0}\)` et `\(\hat{\beta_1}\)` qui **&lt;span style="color:#dd0747;"&gt;minimisent la SCE&lt;/span&gt;**.
+
+&lt;img src="lecture_3_fr_files/figure-html/mco-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+name: OLS
+# 1. Rappel: Régression linéaire simple   
+
+##  1.2. Formule de l'estimateur MCO dans le cas univarié  
+
+L'estimateur des MCO calcule `\(\hat{\beta_0}\)` et `\(\hat{\beta_1}\)` qui minimmise la Somme des Carrés des Erreurs (SCE, ou *Sum of Squared Errors*) : 
+
+`$$\min_{\hat{\beta_0},\, \hat{\beta_1}} \text{SCE} =\sum_{i=1}^N \varepsilon _i^2$$`
+On obtient, dans le cas univarié:
+
+.center[
+`\(\hat{\beta_0} = \overline{y} - \hat{\beta} \overline{x}\)` 
+
+`\(\hat{\beta_1} = \dfrac{Cov(x,y)}{Var(x)}\)`
+]
+
+[Maths modèle univarié](#derivation)
+
+---
+# 1. Rappel: Régression linéaire simple   
+
+## 1.3. Hypothèses
+
+&lt;span style="color:#9933FF"&gt; `\(\color{#9933FF}{H_1}\)` **Linéarité**&lt;/span&gt;: le modèle est linéaire dans les paramètres
+ - Formellement, `\(\color{#9933FF}{\frac{\partial y_i}{\partial x_{ik}} = \beta_k}\)` `\(\color{#9933FF}{\forall k =1, ...; K}\)`
+  
+  
+&lt;span style="color:#9933FF"&gt; `\(\color{#9933FF}{H_2}\)` **Exogeneité**&lt;/span&gt;: `\(X\)` est exogène
+  - Formellement, `\(\color{#9933FF}{\mathbb{E}(\varepsilon|x) = 0}\)`   
+
+&lt;span style="color:#9933FF"&gt; `\(\color{#9933FF}{H_3}\)` **Variation**:&lt;/span&gt; il y a suffisamment de variation dans `\(x\)`. 
+  - Dit autrement, chaque variable explicative apporte une information qui lui est propre
+  - Formellement, les explicatives ne sont pas colinéaires (cas univarié: `\(\color{#9933FF}{x_i \neq}\)` &lt;span style="color:#9933FF"&gt;constante&lt;/span&gt;). 
+  
+&lt;span style="color:#9933FF"&gt; `\(\color{#9933FF}{H_4}\)` **Homoscédasticité** &lt;/span&gt;: `\(\varepsilon_i\)` est _iid_ et de distribution `\(\mathcal{N}(0, \sigma^2)\)`
+  - Formellement, `\(\color{#9933FF}{\forall i, \;\mathbb{E}(u_i) = \mathbb{E}(u) = 0}\)`, `\(\color{#9933FF}{\mathbb{E}(u_i^2) = \mathbb{E}(u^2) = \sigma^2}\)` et `\(\color{#9933FF}{\mathbb{E}(u_iu_j) =  0 \; \; \forall i \neq j}\)`
+  
+&lt;span style="color:#dd0747"&gt;**Sous ces hypothèses, l'estimateur des MCO est BLUE (Best Linear Unbiased Estimator)**&lt;/span&gt; (cf démonstrations faites en cours).
+
+
+---
+# 1. Rappel: Régression linéaire simple   
+
+## 1.4. Implémentation sur `R`
+
+- Calcul de la variance empirique
+
+
+``` r
+var(x)
+```
+
+- Calcul de la covariance empirique
+
+``` r
+cov(x,y)
+```
+
+- Régression linéaire (simple)
+
+``` r
+lm(variable dépendante ~  variable indépendante, data = data.frame)
+```
+
+- Résultats de l'estimation visibles avec la commande `summary`
+
+
+
+
+
+---
+background-color: #f19bb5
+# Application 
+
+### Taille de la fratrie et performances scolaires
+
+<div class="countdown" id="timer_7a00c119" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">07</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+**Intuition** 
+
+1) Selon vous, quelle est la relation entre **taille de la fratrie** et **performances scolaires** ?
+
+
+**Sur `R`: se familiariser avec les données**
+
+ 
+2) Importer la [base de données]() `simulated_data_black_et_al_2005.csv` que vous nommerez `data`
+
+3) Calculer quelques statistiques descriptives de la **taille de la fratrie** (`family_size`) et du **nombre d'années d'études** (`education`):  
+  - moyenne, écart-type et variance, corrélation entre les deux variables
+
+4) Représenter le nuage de points qui définit la relation entre **taille de la fratrie** et **nombre d'années d'études**
+
+5) Calculer les estimateurs de `\(\beta_0\)` et `\(\beta_1\)` du modèle `\(\text{Nb Années études} = \beta_0 + \beta_1 \text{Taille Fratrie} + \varepsilon\)`, à la main et directement via la fonction `lm`
+
+
+---
+background-color: #fbe6ec
+# Solution
+
+### Intuition 
+
+1) Selon vous, quelle est la relation entre **taille de la fratrie** et **performances scolaires** ?
+
+--
+
+- Relation théorique ([Becker (1960)](https://www.nber.org/system/files/chapters/c2387/c2387.pdf), [Becker and Lewis (1973)](https://www.jstor.org/stable/1840425), [Becker and Tomes (1976)](https://www.jstor.org/stable/1831106)): 
+
+  - arbitrage entre la quantité et la *qualité* des enfants au sein d'une famille.
+
+--
+
+- Relations empiriques ([Black, Devereux and Salvanes (2005)](https://watermark.silverchair.com/120-2-669.pdf?token=AQECAHi208BE49Ooan9kkhW_Ercy7Dm3ZL_9Cf3qfKAc485ysgAAA2YwggNiBgkqhkiG9w0BBwagggNTMIIDTwIBADCCA0gGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMRUFpt9yUxU8Wuu4FAgEQgIIDGVcdvdpNZkmD_Fbj4_wa9HaGQTAoM2tQsF2wuRUmWvvlH23Fhxp68TwZUK_P2MpI1e4pA0PyMp-QAURQMsN_P7FcQuEoYqMkBs_7l-8reeiCLHbQYIdRAyJ7Ud-hDxSJwuZ1iqH-7kMcMtNHtrlh5JydP2Ya8p9GRWtFVmtfq4bzIbKfbqh2dI4_dv_8mVc-h8CQQxE-J7ME9RH9pw-1ZQccud0e4RCqHuVa6tR3ByEceFgsmwl1l779gZjQGoBrLm5sBLxc47Ni6bVW8_Czit3EPJjaq6vh22L8XnfsF256FHmtDgmSFUTljZ8l37VwGA4Y_4q62_k4RKJZbJft3i7_XW2eJxcfWAFTje1jjUIHi81WitYT24sisKkRmqHak6_yQFwbayocifHA23T8PfXoKqkLlDO9ewUYL83HrGsOrPHSd8JbitwP400KOWotEZVDATVqQxJhnJRa6LsVTtiYuZVcC6-PLcVSTAHPDbRF7Q_WcB4QL-0MeEorgQ-ULn_9trRFCjrs3tXlCo_6qPEvDFtAm3YAcZVVEaCcMRcwY5cnLeIL7q2gsB06txdyzGgriCrc_gMZksCy3M_V32yX8pP4RE81BP6cggKZu7BwlLzh3nOozg0AJqvC00IKcJ7k5iMhjSARFURevVtIhWz3RQ6_CAQAU5M4PfSaAnYzDHLO2FDKfnTThgJmZEYMAqUUJOXgLn4jrcE4OLXxuPLHfxdiqoAiAfhzTsTu6Wvn5x0YTaRq27_2bhw2pMXRNDotTjHQW6StxWxhlCvynLBVONRE4YKiXLN_YCXTd0FNjEyGQQRjmLbTQK6vvGgReEP2aUdB4-FarpRYU0b3DMFn6eFCUx0hdFMc2BunByvGDB8f3h5aubWaEZM4E-H-a7fIA_FE9wAORKqHd7wM1rx2x3nYVGk9k0HqHbYCyO48lAS2L5DmKUXPhH81ugVBbWCgX9EpzyLgUlloaTWnseadBr1rZBsUOUBqZ0M9gzJjtzYbqH8xvJiFtZ4Za01xveOJAv4qBp3uib9MHFtJqK1JkpQRP214aEQ)): 
+  - données norvégiennes exhaustives
+  - corrélation négative entre la taille des fratries et le nombre d'années de scolarisation moyenne des enfants
+
+---
+background-color: #fbe6ec
+# Solution
+
+### Sur `R`: se familiariser avec les données
+
+
+2) Importer la [base de données]() `simulated_data_black_et_al_2005.csv` que vous nommerez `data`
+
+
+
+``` r
+# Import data
+data = read.csv2(here("Lecture 3/data", "simulated_data_black_et_al_2005.csv"), sep = ",") %&gt;% 
+  mutate(family_size = as.numeric(family_size),
+         education = as.numeric(education),
+         age_2000 = as.numeric(age_2000))
+# data = read_sav(here("Lecture 3/data", "asciiqob.sav"))
+```
+ 
+---
+background-color: #fbe6ec
+# Solution
+
+
+3) Calculer quelques statistiques descriptives de la **taille de la fratrie** (`family_size`) et du **nombre d'années d'études** (`education`): 
+  - moyenne
+  - écart-type et variance
+  - corrélation entre les deux variables
+
+
+``` r
+data %&gt;%
+  summarise(
+    across(c(family_size, education), ~ round(mean(.), 2), .names = "mean_{.col}"),
+    across(c(family_size, education), ~ round(sd(.), 2), .names = "sd_{.col}"),
+    across(c(family_size, education), ~ round(var(.), 2), .names = "var_{.col}"),
+    correlation = cor(family_size, education, use = "complete.obs")
+  )
+```
+
+```
+##   mean_family_size mean_education sd_family_size sd_education var_family_size
+## 1             2.92          12.15           1.18          2.4             1.4
+##   var_education correlation
+## 1          5.78 -0.05414467
+```
+
+
+---
+background-color: #fbe6ec
+
+# Solution 
+
+4) Représenter le nuage de points qui définit la relation entre **taille de la fratrie** et **nombre d'années d'études**
+
+&lt;img src="lecture_3_fr_files/figure-html/unnamed-chunk-6-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+
+
+
+
+
+
+---
+background-color: #fbe6ec
+
+# Solution 
+
+5) Calculer les estimateurs de `\(\beta_0\)` et `\(\beta_1\)` du modèle `\(\text{Nb Années études} = \beta_0 + \beta_1\text{Taille Fratrie} + \varepsilon\)`, à la main et directement via la fonction `lm`
+
+
+``` r
+# 1: Calcul à la main
+b = cov(data$family_size, data$education)/var(data$family_size)
+b
+```
+
+```
+## [1] -0.1100237
+```
+
+``` r
+a = mean(data$education) - b*mean(data$family_size)
+a
+```
+
+```
+## [1] 12.47488
+```
+
+``` r
+# 2: Via lm
+summary(lm(education ~ family_size, data = data))$coefficients
+```
+
+```
+##               Estimate Std. Error   t value      Pr(&gt;|t|)
+## (Intercept) 12.4748830 0.01293457 964.46072  0.000000e+00
+## family_size -0.1100237 0.00411108 -26.76271 1.487704e-157
+```
+
+
+
+---
+# Taille de fratrie et nombre d'années d'études
+
+.middle[
+&lt;img src="lecture_3_fr_files/figure-html/unnamed-chunk-10-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Taille de fratrie et nombre d'années d'études
+
+.middle[
+&lt;img src="lecture_3_fr_files/figure-html/unnamed-chunk-11-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+# Taille de fratrie et nombre d'années d'études
+
+&amp;nbsp;
+
+&amp;nbsp;
+
+**Question**: Est-ce que `\(\hat{\beta_1}\)` représente l'**effet causal** de la taille de la fratrie sur le nombre d'années d'études?
+
+--
+
+&amp;nbsp;
+
+&lt;span style="color:#dd0747"&gt; **Black et al. (2005)** &lt;/span&gt;: montrent qu'il existe un autre prédicteur de la performance scolaire, corrêlé à la taille de la fratrie       
+
+--
+  
+
+ .center[
+&lt;span style="color:#dd0747"&gt; le rang de naissance &lt;/span&gt;
+ ]
+
+
+
+---
+count:false
+class: middle, center
+background-color: #dd0747
+
+# &lt;span style="color:#FAFAFA;"&gt;  2. Causalité &lt;/span&gt;
+
+
+---
+name: introcausality
+# 2. Causalité
+
+## 2.1. Corrélation *vs* Causalité
+
+L'hypothèse d'exogeneité implique que l'estimateur des MCO est non biaisé
+  - donc que `\(\hat{\beta}\)` représente l'effet causal de `\(x\)` sur `\(y\)`
+
+&lt;span style="color:#dd0747"&gt;**Cependant, cette hypothèse est très forte et rarement vérifiée**&lt;/span&gt;
+
+&lt;span style="color:#33B8FF"&gt;**Biais de Variable Omise/Biais de sélection** (*Omitted Variable Bias - OVB*) : il existe un biais de variable omise lorsqu'une variable qui n'est pas inclue dans le set de variables explicatives (et donc `\(\in \varepsilon\)`):      
+1) affecte `\(y\)`      
+2) est correlée à `\(x_i\)` &lt;/span&gt;  
+
+**Exemple canonique de l'équation de Mincer**: on cherche à estimer l'effet d'une année de scolarisation supplémentaire sur le salaire
+  - problème: l'abilité, la motivation, ne sont pas observées
+  - dans ce cas, le paramètre n'estime pas l'effet causal de l'éducation sur le salaire
+  
+
+---
+# 2. Causalité
+## 2.2. Potential Outcomes Framework
+
+**Neyman, 1923** &amp; **Rubin, 1974**: cadre conceptuel qui aide à penser la causalité. On s'intéresse à la relation entre deux variables:
+
+- une variable d'outcome `\(Y_i\)`  
+- une variable de traitement (que l'on suppose binaire par simplicité), `$$D_i = \left\{ \begin{array}{ll} 1 \; \text{si l'individu} \; i  \; \text{est traîté} \\ 0 \; \text{si l'individu} \; i \; \text{ n'est pas est traîté}  \end{array} \right.$$`
+
+&amp;nbsp;
+
+Plus précisément, on cherche estimer l'**effet de `\(D_i\)` sur `\(Y_i\)`**, par exemple:
+- l'effet d'avoir un master sur le salaire (*returns to education*)
+- l'effet d'une peine de prison sur la probabilité de récidive
+- l'effet d'un médicament sur la santé d'un patient
+
+
+---
+# 2. Causalité
+## 2.2. Potential Outcomes Framework
+
+Chaque individu `\(i\)` a deux outcomes potentiels:
+- `\(Y_{1i}\)` si `\(D_i = 1\)`, l'outcome en cas de traitement
+- `\(Y_{0i}\)` si `\(D_i = 0\)`, l'outcome en l'absence de traitement
+
+La différence entre ces deux outcomes potentiels donne l'effet causal du traitement pour chaque individu `\(i\)`:
+
+`$$\delta_i = Y_{1i} - Y_{0i}$$`
+La moyenne des `\(\delta_i\)` donne l'effet moyen du traitement (**A**verage **T**reatment **E**ffect):
+
+&lt;span style="color:#dd0747"&gt;$$\text{ATE} = \mathbb{E}(\delta_i)$$&lt;/span&gt;
+
+
+---
+# 2. Causalité
+## 2.2. Potential Outcomes Framework
+
+&amp;nbsp;
+
+🚨 &lt;span style="color:#dd0747"&gt; **Problème fondamental de l'inférence causale: il n'est pas possible d'observer à la fois `\(\color{#dd0747}{\text{Y}_{1i}}\)` et `\(\color{#dd0747}{\text{Y}_{0i}}\)`**&lt;/span&gt; 🚨
+
+Dit autrement, on observe uniquement `\(Y_i = Y_{1i} D_i + Y_{0i}(1 - D_i)\)`
+- quand l'individu `\(i\)` est traîté, i.e. `\(D_i = 1\)`, on observe uniquement `\(Y_i = Y_{1i}\)`
+- quand l'individu `\(i\)` n'est pas traîté, i.e. `\(D_i = 0\)`, on observe uniquement `\(Y_i = Y_{0i}\)`
+
+ 
+---
+name: potential
+# 2. Causalité
+## 2.2. Potential Outcomes Framework
+
+&amp;nbsp;
+
+Est-il possible de calculer l'effet moyen du traitement à partir des données que l'on observe?
+  - par exemple en calculant la différence entre l'outcome moyen des individus traîtés et celui des individus non traîtés?
+
+Intuition: 
+- si le **le traitement est indépendant de la variable d'intérêt**, i.e. si le groupe de contrôle est comparable au groupe de traîtés,
+- alors **la différence entre l'outcome moyen du groupe des individus traîtés et celui des individus non traîtés estime l'effet causal du traitement (ATE)**:
+`$$\Delta = \mathbb{E}(Y_{1i} | D_i = 1) - \mathbb{E}(Y_{0i} | D_i = 0) = \text{ATE} \;\; \text{iff} \;\; (Y_{1i}, Y_{0i}) \perp D_i$$` 
+
+[Maths](#mathpotential)
+
+
+---
+# 2. Causalité
+## 2.2. Potential Outcomes Framework
+
+&lt;span style="color:#dd0747"&gt;Problème &lt;/span&gt;: `\(\mathbb{E}(Y_{0i} | D_i = 1) = \mathbb{E}(Y_{0i} | D_i = 0)\)` (= absence de sélection) est une hypothèse forte. Souvent les groupes traités et non traîtés ne sont pas comparables (étudiants qui décident de faire un master sont peut-être plus motivés, les individus contraints à de la prison sûrement plus dangereux, etc.).
+
+&amp;nbsp;
+
+Deux types de sélection possibles:
+
+- **Auto-selection**:
+  - si les gains espérés du traitement sont corrêlés à l'outcome 
+  - si les coûts liés au traitement ne sont hétérogènes
+
+- **Selection par les entités qui délivrent le traitement**
+  - si seuls les individus ayant un outcome initial faible sont traîtés
+  - ou l'inverse
+
+---
+background-color: #f19bb5
+# Application 
+
+<div class="countdown" id="timer_d7c6c63a" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+Voici le code pour simuler un jeu de données. Il comprend 10 000 individus, deux variables d'outcome potentiel `\(Y_0\)` et `\(Y_1\)`, une variable de traitement D:
+
+
+``` r
+set.seed(123) # pour la reproductibilité
+n = 10000 # nombre d'individus
+ATE = 3 
+
+# Outcomes potentiels
+y0 = rnorm(n, mean = 10, sd = 2)  # outcome potentiel en cas de traitement
+y1 = y0 + rnorm(n, mean = ATE, sd = 1)  # outcome potentiel en l'absence de traitement
+
+# Traitement non aléatoire
+D = ifelse(y0 &gt; median(y0), 1, 0)
+
+# Outcome observé
+y = y1*D + y0*(1-D)  
+```
+
+Calculer:   
+  - `\(\Delta\)`  
+  - l'ATT
+  - le biais de sélection   
+  
+
+---
+background-color: #fbe6ec
+# Solution   
+
+
+``` r
+head(data.frame(y0, y1, D, y))
+```
+
+```
+##          y0       y1 D         y
+## 1  8.879049 14.24977 0  8.879049
+## 2  9.539645 12.37283 0  9.539645
+## 3 13.117417 17.04438 1 17.044378
+## 4 10.141017 12.57287 1 12.572865
+## 5 10.258575 13.48367 1 13.483666
+## 6 13.430130 17.56212 1 17.562116
+```
+
+  
+---
+background-color: #fbe6ec
+# Solution   
+
+
+``` r
+SD = mean(y1[D == 1]) - mean(y0[D == 0])
+ATT = mean(y1[D==1] - y0[D==1])
+bias = mean(y0[D == 1]) - mean(y0[D == 0])
+
+# Afficher les résultats
+data.frame(
+  Delta = SD,
+  ATT = ATT,
+  Biais_de_selection = bias
+)
+```
+
+```
+##      Delta      ATT Biais_de_selection
+## 1 6.177746 2.995577           3.182169
+```
+
+
+
+
+
+
+---
+count:false
+class: middle, center
+background-color: #dd0747
+
+# &lt;span style="color:#FAFAFA;"&gt;  3. Randomized Controlled Trials (RCTs) &lt;/span&gt;
+
+
+
+---
+# 3. Randomized Controlled Trials (RCTs)
+
+## 3.1. Suppression du biais de sélection
+
+La **randomisation** permet d'éliminer le biais de sélection en allouant aléatoirement les individus au groupe de contrôle et au gorupe de traitement.
+
+Formellement, cela signifie que `\((Y_{1i}, Y_{0i}) \perp D_i \;\; \implies \mathbb{E}(Y_{0i} | D_i = 1) = \mathbb{E}(Y_{0i} | D_i = 0)\)`. 
+
+Donc, `$$\begin{align} \text{Biais de Sélection} &amp;= \mathbb{E}(Y_{0i} | D_i = 1) - \mathbb{E}(Y_{0i} | D_i = 0) \\ &amp;= 0 \end{align}$$`
+
+Les expériences aléatoires contrôlées, ou ***Randomized Controlled Trials (RCT)***, permettent ainsi d'estimer l'effet causal d'un traitement
+  - Très répandues en médecine 
+  - De plus en plus répandues (et reconnues) en économie pour l'évaluation des politiques publiques (Prix Nobel par Esther Duflo, Abhijit Banerjee et Michael Kremer en 2019)
+  
+
+---
+# 3. Randomized Controlled Trials (RCTs)
+
+## 3.2. Exemple: le projet STAR
+
+&lt;span style="color:#dd0747"&gt;**Krueger, A. B.** &lt;/span&gt; "Experimental estimates of education production functions.", QJE 1999   
+
+
+Le projet **STAR** (*Student-Teacher Achievement Ratio*) est un exemple très connu d'expériementation qui a pour but d'estimer l'effet causal de la taille des classes sur les performances scolaires des élèves.
+
+Principaux éléments:
+- 11 600 élèves de l'état du Tennessee ont participé à l'expérimentation
+- l'expériementation a débutée l'année scolaire 1985-1986 et concerne des élèves de la GS au CE2 
+- **Trois groupes de traitement**:
+   - assigmement à une classe de petite taille, de 13 à 17 élèves
+   - assignement à une classe de taille moyenne, de 22 à 35 élèves (= groupe de contrôle)
+   - assignement à une classe de taille moyenne, de 22 à 35 élèves + aide d'un professeur à temps plein
+- élèves et enseignants répartis aléatoirement, à l'échelle d'une école, dans ces trois types de classes
+- chaque année les compétences en maths et lecture des élèves sont évaluées
+
+
+---
+background-color: #f19bb5
+name: star
+# Application: le projet STAR
+
+<div class="countdown" id="timer_f74b8255" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+La réplication des résultats de cette expérimentation est possible grâce à la mise à disposition des données directement sur `R`, à l'aide du package `AER` (pour Applied Econometrics with `R`). [Variables details](#variables)
+
+
+``` r
+#install.packages("AER") 
+library(AER)
+
+data(STAR)
+
+head(STAR)
+```
+
+```
+##      gender ethnicity   birth        stark star1        star2        star3
+## 1122 female      afam 1979 Q3         &lt;NA&gt;  &lt;NA&gt;         &lt;NA&gt;      regular
+## 1137 female      cauc 1980 Q1        small small        small        small
+## 1143 female      afam 1979 Q4        small small regular+aide regular+aide
+## 1160   male      cauc 1979 Q4         &lt;NA&gt;  &lt;NA&gt;         &lt;NA&gt;        small
+## 1183   male      afam 1980 Q1 regular+aide  &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;
+## 1195   male      cauc 1979 Q3         &lt;NA&gt;  &lt;NA&gt;      regular      regular
+##      readk read1 read2 read3 mathk math1 math2 math3   lunchk lunch1   lunch2
+## 1122    NA    NA    NA   580    NA    NA    NA   564     &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;
+## 1137   447   507   568   587   473   538   579   593 non-free   free non-free
+## 1143   450   579   588   644   536   592   579   639 non-free   &lt;NA&gt; non-free
+## 1160    NA    NA    NA   686    NA    NA    NA   667     &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;
+## 1183   439    NA    NA    NA   463    NA    NA    NA     free   &lt;NA&gt;     &lt;NA&gt;
+## 1195    NA    NA    NA   644    NA    NA    NA   648     &lt;NA&gt;   &lt;NA&gt; non-free
+##        lunch3    schoolk  school1  school2  school3  degreek  degree1  degree2
+## 1122     free       &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt; suburban     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 1137     free      rural    rural    rural    rural bachelor bachelor bachelor
+## 1143 non-free   suburban suburban suburban suburban bachelor   master bachelor
+## 1160 non-free       &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;    rural     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 1183     &lt;NA&gt; inner-city     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt; bachelor     &lt;NA&gt;     &lt;NA&gt;
+## 1195 non-free       &lt;NA&gt;     &lt;NA&gt;    rural    rural     &lt;NA&gt;     &lt;NA&gt; bachelor
+##       degree3   ladderk   ladder1    ladder2    ladder3 experiencek experience1
+## 1122 bachelor      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;     level1          NA          NA
+## 1137 bachelor    level1    level1 apprentice apprentice           7           7
+## 1143 bachelor    level1 probation     level1     level1          21          32
+## 1160 bachelor      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;     level1          NA          NA
+## 1183     &lt;NA&gt; probation      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;           0          NA
+## 1195 bachelor      &lt;NA&gt;      &lt;NA&gt;  notladder     level1          NA          NA
+##      experience2 experience3 tethnicityk tethnicity1 tethnicity2 tethnicity3
+## 1122          NA          30        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        cauc
+## 1137           3           1        cauc        cauc        cauc        cauc
+## 1143           4           4        cauc        afam        afam        cauc
+## 1160          NA          10        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        cauc
+## 1183          NA          NA        cauc        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+## 1195          13          15        &lt;NA&gt;        &lt;NA&gt;        cauc        cauc
+##      systemk system1 system2 system3 schoolidk schoolid1 schoolid2 schoolid3
+## 1122    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;      22      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;        54
+## 1137      30      30      30      30        63        63        63        63
+## 1143      11      11      11      11        20        20        20        20
+## 1160    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;       6      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;         8
+## 1183      11    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        19      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+## 1195    &lt;NA&gt;    &lt;NA&gt;       6       6      &lt;NA&gt;      &lt;NA&gt;         8         8
+```
+
+
+---
+background-color: #f19bb5
+# Application: le projet STAR
+
+### Intuition:
+1) En quoi la répartition aléatoire des élèves et enseignants aux différents groupes de traitement et contrôles au sein des écoles permet de 
+
+### Code
+
+**NB: Aide pour calculer les percentiles**.
+
+2) **À faire pour la semaine prochaine: Reproduire le Panel A de la Table 1 page 503 (= calcul de moyennes et F-tests)**
+
+3) Représenter graphiquement la densité de `avg_perc` pour le groupe *small* et le groupe *regular + regular-with-aide* (Reproduction de la Figure 1, Panel Kindergarten, page 509)
+
+4) Estimer les paramètres du modèle : `\(Y_i = \beta_0 + \beta_1 \text{Small}_i + \beta_2 \text{RegularAide}_i + \varepsilon_i\)` (Reproduction de la Table 5, Colonne 1 page 512)   
+
+---
+background-color: #fbe6ec
+# Data Cleaning   
+
+*In each grade level the regular and regular/aide students were pooled together, and students were assigned percentile scores based on their raw test scores, ranging from 0 (lowest score) to 100 (highest score). A separate percentile distribution was generated for each subject test (e.g. _Math-STA_, _Reading-SAT_, _Word-SAT_, etc). For each test I then determined where in the distribution of the regular-class students every student in the small classes would fall, and students in the small classes were assigned these percentiles scores. Finally, to summarize overall achievement, the average of the _three_ SAT percentile rankings was calculated.*
+
+
+``` r
+STAR = STAR %&gt;%
+  mutate(
+    group = ifelse(as.character(stark) == "regular+aide", "regular", as.character(stark)), 
+    readk_perc = case_when(
+      group == "regular" ~ ecdf(readk[group == "regular"])(readk) * 100, 
+      group == "small"   ~ ecdf(readk[group == "regular"])(readk) * 100),
+    mathk_perc = case_when(
+      group == "regular" ~ ecdf(mathk[group == "regular"])(mathk) * 100,  
+      group == "small"   ~ ecdf(mathk[group == "regular"])(mathk) * 100),
+    avg_perc = (readk_perc + mathk_perc)/2
+  )
+```
+
+---
+count: false
+background-color: #fbe6ec
+# Data Cleaning   
+
+*In each grade level the **regular and regular/aide students were pooled together**, and students were assigned percentile scores based on their raw test scores, ranging from 0 (lowest score) to 100 (highest score). A separate percentile distribution was generated for each subject test (e.g. _Math-STA_, _Reading-SAT_, _Word-SAT_, etc). For each test I then determined where in the distribution of the regular-class students every student in the small classes would fall, and students in the small classes were assigned these percentiles scores. Finally, to summarize overall achievement, the average of the _three_ SAT percentile rankings was calculated.*
+
+
+``` r
+STAR = STAR %&gt;%
+  mutate(
+*   group = ifelse(as.character(stark) == "regular+aide", "regular", as.character(stark)),
+    readk_perc = case_when(
+      group == "regular" ~ ecdf(readk[group == "regular"])(readk) * 100, 
+      group == "small"   ~ ecdf(readk[group == "regular"])(readk) * 100),
+    mathk_perc = case_when(
+      group == "regular" ~ ecdf(mathk[group == "regular"])(mathk) * 100,  
+      group == "small"   ~ ecdf(mathk[group == "regular"])(mathk) * 100),
+    avg_perc = (readk_perc + mathk_perc)/2
+  )
+```
+
+---
+count:false
+background-color: #fbe6ec
+# Data Cleaning   
+
+*In each grade level the regular and regular/aide students were pooled together, and students were assigned percentile scores based on their raw test scores, ranging from 0 (lowest score) to 100 (highest score). A **separate percentile distribution was generated for each subject test (e.g. _Math-STA_, _Reading-SAT_, _Word-SAT_, etc). For each test I then determined where in the distribution of the regular-class students every student in the small classes would fall**, and students in the small classes were assigned these percentiles scores. Finally, to summarize overall achievement, the average of the _three_ SAT percentile rankings was calculated.*
+
+
+``` r
+STAR = STAR %&gt;%
+  mutate(
+    group = ifelse(as.character(stark) == "regular+aide", "regular", as.character(stark)),
+    readk_perc = case_when(
+*     group == "regular" ~ ecdf(readk[group == "regular"])(readk) * 100,
+      group == "small"   ~ ecdf(readk[group == "regular"])(readk) * 100),
+    mathk_perc = case_when(
+*     group == "regular" ~ ecdf(mathk[group == "regular"])(mathk) * 100,
+      group == "small"   ~ ecdf(mathk[group == "regular"])(mathk) * 100),
+    avg_perc = (readk_perc + mathk_perc)/2
+  )
+```
+
+---
+count:false
+background-color: #fbe6ec
+# Data Cleaning   
+
+*In each grade level the regular and regular/aide students were pooled together, and students were assigned percentile scores based on their raw test scores, ranging from 0 (lowest score) to 100 (highest score). A separate percentile distribution was generated for each subject test (e.g. _Math-STA_, _Reading-SAT_, _Word-SAT_, etc). For each test I then determined where in the distribution of the regular-class students every student in the small classes would fall, and **students in the small classes were assigned these percentiles scores**. Finally, to summarize overall achievement, the average of the _three_ SAT percentile rankings was calculated.*
+
+
+``` r
+STAR = STAR %&gt;%
+  mutate(
+    group = ifelse(as.character(stark) == "regular+aide", "regular", as.character(stark)),
+    readk_perc = case_when(
+      group == "regular" ~ ecdf(readk[group == "regular"])(readk) * 100, 
+*     group == "small"   ~ ecdf(readk[group == "regular"])(readk) * 100),
+    mathk_perc = case_when(
+      group == "regular" ~ ecdf(mathk[group == "regular"])(mathk) * 100, 
+*     group == "small"   ~ ecdf(mathk[group == "regular"])(mathk) * 100),
+    avg_perc = (readk_perc + mathk_perc)/2
+  )
+```
+
+
+---
+count:false
+background-color: #fbe6ec
+# Data Cleaning   
+
+*In each grade level the regular and regular/aide students were pooled together, and students were assigned percentile scores based on their raw test scores, ranging from 0 (lowest score) to 100 (highest score). A separate percentile distribution was generated for each subject test (e.g. _Math-STA_, _Reading-SAT_, _Word-SAT_, etc). For each test I then determined where in the distribution of the regular-class students every student in the small classes would fall, and students in the small classes were assigned these percentiles scores. Finally, to **summarize overall achievement, the average of the _three_ SAT percentile rankings was calculated**.*
+
+
+``` r
+STAR = STAR %&gt;%
+  mutate(
+    group = ifelse(as.character(stark) == "regular+aide", "regular", as.character(stark)),
+    readk_perc = case_when(
+      group == "regular" ~ ecdf(readk[group == "regular"])(readk) * 100, 
+      group == "small"   ~ ecdf(readk[group == "regular"])(readk) * 100),
+    mathk_perc = case_when(
+      group == "regular" ~ ecdf(mathk[group == "regular"])(mathk) * 100, 
+      group == "small"   ~ ecdf(mathk[group == "regular"])(mathk) * 100),
+*   avg_perc = (readk_perc + mathk_perc)/2
+  )
+```
+
+---
+background-color: #fbe6ec
+# Solution   
+
+### Intuition
+
+*Questions*: 
+- en l'absence de randomisation, pourquoi simplement comparer les résultats des élèves de petites classes et de classes de taille moyenne ne suffit pas à estimer un effet causal de la taille des classes ?
+
+
+--
+
+
+**Within School sorting**: L'allocation des élèves et professeurs **au sein** des écoles n'est pas aléatoire  
+- les élèves les plus en difficultés peuvent-être volontairement placés dans des classes plus petites 
+    - auquel cas l'abilité de l'élève, que l'on observe pas, est correlée à la taille des classes, et est également intrinsèquement liée à ses performances scolaires
+    - donc l'effet de la taille des classes peut refléter l'effet de l'abilité initiale 
+- les enseignants les plus expérimentés peuvent vouloir préférer enseigner dans les classes les plus petites au sein des écoles
+  
+  
+---
+background-color: #fbe6ec
+# Solution   
+
+3) Représenter graphiquement la densité de `avg_perc` pour le groupe *small* et le groupe *regular + regular-with-aide* (Reproduction de la Figure 1, Panel Kindergarten, page 509)
+
+.pull-left[
+
+``` r
+STAR %&gt;% 
+  ggplot(aes(x = avg_perc, color = stark, fill = stark)) + 
+  geom_density(alpha = 0.4) +  
+  labs(title = "Densité de avg_perc par stark",
+       x = "",
+       y = "Densité") +
+  theme_minimal()
+```
+
+&lt;img src="lecture_3_fr_files/figure-html/unnamed-chunk-21-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+``` r
+STAR %&gt;% 
+  ggplot(aes(x = avg_perc, color = group, fill = group)) + 
+  geom_density(alpha = 0.4) +  
+  labs(title = "Densité de avg_perc par group",
+       x = "",
+       y = "Densité") +
+  theme_minimal()
+```
+
+&lt;img src="lecture_3_fr_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
+]
+  
+    
+---
+background-color: #fbe6ec
+# Solution   
+
+4) Estimer les paramètres du modèle : `\(Y_i = \beta_0 + \beta_1 \text{Small}_i + \beta_2 \text{RegularAide}_i + \varepsilon_i\)` (Reproduction de la Table 5, Colonne 1 page 512)  
+
+
+``` r
+STAR = STAR %&gt;% 
+  mutate(smallk = ifelse(as.character(stark == "small"), 1, 0),
+         regularaidek = ifelse(as.character(stark == "regular+aide"), 1, 0))
+
+summary(lm(avg_perc ~ smallk + regularaidek, data = STAR)) # coeftest(lm(avg_perc ~ smallk + regularaidek, data = STAR), vcov = sandwich)
+```
+
+```
+## 
+## Call:
+## lm(formula = avg_perc ~ smallk + regularaidek, data = STAR)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -55.484 -22.186   1.383  22.693  48.677 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   51.4352     0.6033  85.249  &lt; 2e-16 ***
+## smallk         4.9178     0.8854   5.554 2.91e-08 ***
+## regularaidek  -0.1125     0.8493  -0.133    0.895    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 27.02 on 5783 degrees of freedom
+##   (5812 observations deleted due to missingness)
+## Multiple R-squared:  0.007081,	Adjusted R-squared:  0.006738 
+## F-statistic: 20.62 on 2 and 5783 DF,  p-value: 1.191e-09
+```
+
+---
+# 3. Randomized Controlled Trials (RCTs)
+
+## 3.3. Limites
+
+Bien qu'il s'agisse d'une stratégie empirique très ***clean***, les expériences aléatoires comportent des limites:
+- **Coût**:
+  - Financier: coût de mise en place de la politique (ex: projet STAR = $12 million)
+  - Durée: design de l'expérimentation, validation par l'ERB, pilote, durée du traitement, analyse des résultats (ex: projet STAR a duré 4 ans)
+  
+- **Validité externe**: les expérimentations sont souvent réalisées à une échelle très locale. Dans quelle mesure les résultats se généralisent à d'autres contextes? Quid du passage à l'échelle?
+
+- Ethique: 
+
+
+---
+background-color: #f2c394
+# Recap: Randomized Controlled Trial
+
+**Data**: Données expérimentales
+
+&lt;span style="color:#9933FF"&gt;**Hypothèse d'identification**:  &lt;/span&gt;
+- &lt;span style="color:#9933FF"&gt; Intuition: allocation aléatoire du statut de traitement &lt;/span&gt;
+- &lt;span style="color:#9933FF"&gt; Formellement: `\(\color{#9933FF}{(Y_{1i}, Y_{0i}) \perp D_i}\)` &lt;/span&gt;
+
+**Modèle**: pour tout individu `\(i\)`,
+`$$Y_i = \alpha + \delta D_i + \varepsilon$$`
+
+**Estimateur de l'effet du traitement**:
+- Différence entre l'outcome moyen du groupe des individus traîtés et celui du groupe de contrôle
+- `\(\hat{\delta} = \mathbb{E}(Y_i | D_i = 1) - \mathbb{E}(Y_i | D_i = 0)\)`
+
+**Implémentation sur `R`**: 
+- Balancing Tests: 
+- Estimation de l'effet du traitement: `lm(y ~ D, data = data)`
+
+
+
+
+
+
+
+---
+background-color: #f19bb5
+# Application 
+
+<div class="countdown" id="timer_3205f796" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+Voici le code utilisé dans la précédente application auquel on ajoute une variable `D_random` qui distribue aléatoirement le traitement `\(D\)`.
+
+
+``` r
+set.seed(123) # pour la reproductibilité
+n = 10000 # nombre d'individus
+ATE = 3 
+y0 = rnorm(n, mean = 10, sd = 2)  # outcome potentiel en cas de traitement
+y1 = y0 + rnorm(n, mean = ATE, sd = 1)  # outcome potentiel en l'absence de traitement
+D = ifelse(y0 &gt; median(y0), 1, 0)
+y = y1*D + y0*(1-D)  
+
+# Traitement aléatoire
+D_random = rbinom(n, 1, 0.5)
+y_random = y1*D_random + y0*(1-D_random)
+```
+
+Calculer:   
+  - &lt;span style="color:grey"&gt; `\(\Delta\)` avec `D`   &lt;/span&gt; 
+  - &lt;span style="color:grey"&gt; l'ATT &lt;/span&gt; 
+  - &lt;span style="color:grey"&gt; le biais de sélection   &lt;/span&gt; 
+  - `\(\Delta\)` avec `D_random`
+  
+
+---
+background-color: #fbe6ec
+# Solution   
+
+
+``` r
+SDO = mean(y[D == 1]) - mean(y[D == 0])
+ATT = mean(y1[D_random == 1] - y0[D_random == 1])
+bias = mean(y0[D_random == 1]) - mean(y0[D_random == 0])
+SD_random = mean(y1[D_random == 1]) - mean(y0[D_random == 0])
+
+# Afficher les résultats
+data.frame(
+  Delta = SD,
+  ATT = ATT,
+  Biais_de_selection = bias,
+  Random_diff = SD_random
+)
+```
+
+```
+##      Delta      ATT Biais_de_selection Random_diff
+## 1 6.177746 2.995971        -0.04824477    2.947726
+```
+
+
+---
+# Sources
+
+[Econometrics with R](https://www.econometrics-with-r.org/13.3-experimental-estimates-of-the-effect-of-class-size-reductions.html)    
+[Project STAR: Student-Teacher Achievement Ratio in AER](https://rdrr.io/cran/AER/man/STAR.html)    
+[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/04-potential_outcomes)    
+[Florian Oswald](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter_slr/chapter_slr.html)
+[Edward Rubin](https://github.com/edrubin/EC421S19/tree/master)
+[Scott Cunningham](https://mixtape.scunning.com)
+[Scientific Research and Methodology, Peter K. Dunn](https://bookdown.org/pkaldunn/Book/)
+
+
+---
+class: center, middle
+
+# Annexe
+
+
+---
+name: derivation
+# Calcul de l'estimateur des MCO dans le cas univarié
+
+On a : `\(\text{SCE} = \sum_{i = 1}^N \varepsilon_i^2 = \sum_{i = 1}^N \left( y_i - \hat{y}_i\right)^2  = \sum_{i = 1}^N \left( y_i^2 - 2 y_i \hat{\beta_0} - 2 y_i \hat{\beta_1} x_i + \hat{\beta_0}^2 + 2 \hat{\beta_0} \hat{\beta_1} x_i + \hat{\beta_1}^2 x_i^2 \right)\)`
+
+Les conditions de premier ordre de la minimisation sont:
+
+.center[
+`\(\dfrac{\partial \text{SSE}}{\partial \hat{\beta_0}} = 0\)`   **(1)**      et      `\(\dfrac{\partial \text{SSE}}{\partial \hat{\beta}} = 0\)`    **(2)**
+]
+
+Pour (1):
+
+`$$\begin{align} \dfrac{\partial \text{SSE}}{\partial \hat{\beta_0}} = 0 
+ \;\;\;\; &amp;\implies \sum_{i = 1}^N \left( 2 \hat{\beta_0} + 2 \hat{\beta_1} x_i - 2 y_i \right) = 2N \hat{\beta_0} + 2 \hat{\beta_1} \sum_{i = 1}^N x_i - 2 \sum_{i = 1}^N y_i = 2N \hat{\beta_0} + 2\hat{\beta} N \overline{x} - 2N \overline{y} = \; 0 \\&amp;\implies \color{#dd0747}{\hat{\beta_0} = \overline{y} - \hat{\beta_1} \overline{x}} \;\;\;\;\;(3)\end{align}$$`
+ 
+où 
+`\(\overline{x} = \frac{\sum_{i=1}^N x_i}{n}\)` et `\(\overline{y} = \frac{\sum_{i=1}^N y_i}{N}\)` sont les moyennes de `\(x\)` et `\(y\)` sur notre échantillon de taille `\(n\)`.
+
+
+---
+
+Pour (2):
+
+`$$\begin{align} 
+\dfrac{\partial \text{SSE}}{\partial \hat{\beta}} = 0  \;\;\;\; &amp;\implies \sum_{i = 1}^N \left( 2 \hat{\beta_0} x_i + 2 \hat{\beta_1} x_i^2 - 2 y_i x_i \right) = 2 \hat{\beta_0} N \overline{x} + 2 \hat{\beta_1} \sum_{i = 1}^N x_i^2 - 2 \sum_{i = 1}^N y_i x_i = 0   \;\;\;\;\; (4)\end{align}$$`
+
+
+En remplaçant `\(\hat{\beta_0}\)` par sa valeur définie dans (3), on obtient:
+.center[
+`\(2N \left(\overline{y} - \hat{\beta_1} \overline{x}\right) \overline{x} + 2 \hat{\beta} \sum_{i = 1}^N  x_i^2 - 2 \sum_{i = 1}^N  y_i x_i = 0\)`
+]
+
+en développant, 
+.center[
+`$$2N \overline{y} \, \overline{x} - 2N \hat{\beta} \overline{x}^2 + 2 \hat{\beta} \sum_{i = 1}^N  x_i^2 - 2 \sum_{i = 1}^N  y_i x_i = 0 \; \implies \; 2 \hat{\beta} \left( \sum_{i = 1}^N  x_i^2 - N \overline{x}^2 \right) = 2 \sum_{i = 1}^N  y_i x_i - 2N \overline{y}\,\overline{x}$$`
+
+`$$\implies \color{#dd0747}{\hat{\beta}} = \dfrac{\sum_{i = 1}^N  y_i x_i - N \overline{y}\,\overline{x}}{\sum_{i = 1}^N  x_i^2 - N \overline{x}^2} = \dfrac{\sum_{i = 1}^N  (x_i - \overline{x})(y_i - \overline{y})}{\sum_{i = 1}^N  (x_i - \overline{x})^2}   \color{#dd0747}{=\dfrac{Cov(x,y)}{Var(x)}}$$`
+]
+
+[Back](#OLS)
+
+
+
+
+---
+name: mathpotential
+
+# ATE
+
+On a `\(\delta_i = Y_{1i} - Y_{0i}\)` que l'on peut réécrire 
+`$$Y_{1i} = \delta_i + Y_{0i} \;\; \;\; (1)$$` 
+
+Prenons la différence entre la moyenne de l'outcome des individus traîtés et celle des individus non traîtés:
+
+`$$\begin{align}\Delta &amp;= \mathbb{E}(Y_i | D_i = 1) - \mathbb{E}(Y_i | D_i = 0) \\ &amp;= \mathbb{E}(Y_{1i} | D_i = 1) - \mathbb{E}(Y_{0i} | D_i = 0) \end{align}$$`
+En remplaçant `\(Y_{1i}\)` par sa valeur décrite en (1),
+
+`$$\begin{align}\Delta  &amp;= \mathbb{E}(\delta_i + Y_{0i} | D_i = 1) - \mathbb{E}(Y_{0i} | D_i = 0) \\ &amp;= \underbrace{\mathbb{E}(\delta_i| D_i = 1)}_{= \;\text{ATT}} + \underbrace{\mathbb{E}(Y_{0i} | D_i = 1)  - \mathbb{E}(Y_{0i} | D_i = 0)}_{= \;\text{Selection Bias}} \end{align}$$`
+Donc `\(\Delta = \text{ATT} + \text{Selection Bias}\)`.
+
+
+---
+
+# ATE
+
+Si &lt;span style="color:#dd0747"&gt; `\(\color{#dd0747}{D_i}\)` est aléatoire &lt;/span&gt;, c'est à dire si `\((Y_{1i}, Y_{0i}) \perp D_i\)`,
+
+Alors `$$\mathbb{E}(\delta_i | D_i = 1) = \mathbb{E}(\delta_i)$$`
+
+Et `$$\mathbb{E}(Y_{0i} | D_i = 1) = \mathbb{E}(Y_{0i} | D_i = 0)$$`
+
+Donc `$$\color{#dd0747}{\Delta = ATE}$$`
+
+
+[Back](#potential)
+
+
+
+---
+name: variables
+# Variables STAR 
+
+- `gender`: genre de l'élève,`male` ou `female`
+- `ethnicity`: ethnicité de l'élève, `cauc` (caucasien), `afam` (afro-americain), `asian`, hispanic, `amindian` (amerindien), `other`
+- `birth`: sous la forme Année de naissance Trimestre de naissance (eg 1998 Q2)
+- `stark` à `star3`: groupe de traitement (`small` ou `regular-with-aide`) ou contrôle (`regular`) pour chaque classe du kindergarten (GS) à la grade 3 (CE2). Si `NA`, alors l'élève ne fait pas encore parti/a quitté l'expérience
+- `readk` à `read3`: score en lecture, pour chaque classe (k,1,2,3)
+- `mathk` à `math3`: score en maths pour, chaque classe (k,1,2,3)
+- `lunchk` à `lunch3`: dummy qui indique si l'élève est élègible aux repas gratuits (= proxy pour l'origine sociale), pour chaque classe (k,1,2,3)
+- `schoolk` à `school3`: type d'école (`inner-city`, `suburban`, `rural` or `urban`), pour chaque classe (k,1,2,3)
+- `degreek` à `degree3`: plus haut niveau de diplôme du professeur (`bachelor`, `master`, `specialist`, `phd`), pour chaque classe (k,1,2,3)
+- `ladderk` à `ladder3`: degré d'expérience/statut du professeur (`level1`, `level2`, `level3`, `apprentice`, `probation`, `pending`), pour chaque classe (k,1,2,3)
+- `experiencek` à `experience3`: nombre d'années d'expérience du professeur, pour chaque classe (k,1,2,3)
+- `tethnicityk` à `tethnicity3`: ethnicité du professeur, `cauc` (caucasien), `afam` (afro-americain), `asian`
+- `systemk` à `system3`: identifiant du système scolaire
+- `schoolidk` à `schoolid3`: identifiant de l'école   
+[Back](#star)
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Regression Discontinuity Design (RDD)</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Florentine Oliveira" />
+    <meta name="date" content="2024-10-24" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="libs/countdown/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Regression Discontinuity Design (RDD)
+]
+.subtitle[
+## Pratiques de la Recherche en Économie
+]
+.author[
+### Florentine Oliveira
+]
+.date[
+### 2024-10-24
+]
+
+---
+
+
+
+
+layout: true
+
+
+---
+# 1. Intuition
+
+De nombreux traitements sont définis selon une **règle/un seuil**. 
+
+Par exemple:
+- le revenu à partir duquel un individu peut bénéficier d'une prestation sociale
+- l'âge d'entrée à l'école, âge légal pour avoir droit de vote, consommer de l'alcool (majorité)
+- moyenne au bac requise pour pouvoir candidater à certaines écoles
+
+
+La régression sur discontinuité, ou ***Regression Discontinuity Design***, exploite ce(s) seuil(s) pour estimer l'effet causal du traitement.
+
+Intuition: **exogeneité locale**
+- les individus proches du seuil sont raisonnablement comparables
+- cependant ceux au dessus du seuil sont traîtés alors que ceux en dessous ne le sont pas
+- la discontinuité crée une **quasi-expérience** au voisinage du seuil de discontinuité 
+  - autour du seuil, l'allocation au traitement est *as good as random*
+
+
+---
+# 1. Intuition
+
+### Formellement
+
+Si l'on revient au framework des outcomes potentiels:
+
+`$$Y_i = Y_{1i} D_i + Y_{0i}(1-D_i)$$`
+&lt;span style="color:#33B8FF"&gt; ***Running/Forcing variable***&lt;/span&gt;: variable sur laquelle s'applique le critère de traitement.
+
+
+
+---
+# 2. Sharp RDD
+
+## 2.1. Définition de l'estimateur
+
+La probabilité pour l'individu `\(i\)` d'être traîté passe de 0 à 1 au seuil de discontinuité `\(c\)`:
+
+`$$D_i = \mathbb{1}\{X_i \ge c\}$$`
+&lt;span style="color:#9933FF"&gt; **Hypothèse d'identification: `\(\color{#9933FF}{\mathbb{E}(Y_{1i} | X_i = x)}\)` et `\(\color{#9933FF}{\mathbb{E}(Y_{0i} | X_i = x)}\)` sont continues en `\(\color{#9933FF}{x}\)`**&lt;/span&gt; 
+
+L'estimateur de l'effet causal du traitement `\(D_i\)` sur `\(Y_i\)` revient alors à comparer la moyenne de l'outcome `\(Y_i\)` de part et d'autre du seuil `\(c\)`:
+
+`$$\begin{align} \tau_{\text{RDD}}^{\text{sharp}} &amp;= \underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(Y_i | X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(Y_i | X_i = x) \\  &amp;= \underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(\color{#dd0747}{Y_{1i}} | X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(\color{#dd0747}{Y_{0i}} | X_i = x) \end{align}$$`
+
+L'estimateur `\(\tau_{\text{RDD}}^{\text{sharp}}\)` est un estimateur local de l'effet moyen du traitement (***LATE***).
+
+
+
+
+---
+# 2. Sharp RDD
+
+## 2.2. En pratique
+
+
+&lt;span style="color:#33B8FF"&gt; ***Bandwith***&lt;/span&gt;: .
+
+
+---
+# 2. Sharp RDD
+
+## 2.3. Example 1
+
+&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
+
+**Motivation**:
+- Peu d'évidence sur les effets du congé maternité rémunéré sur la santé mentale des mères... alors même que c'est la première jsutification de l'existence de ce congé
+- Effet ambigü:
+  - Effets positifs si l'emploi augmente le stress ou réduit le temps que la femme consacre à s'occuper d'elle-même et à se remettre des effets physiques de l'accouchement   
+  - Effets négatifs si cela permet à la mère d'avoir davantage d'interractions sociales et cela augmente le revenu
+
+**Contexte**:
+- Introduction d'un congé payé maternité en Norvège, au 1er Juillet 1977
+  - avant la réforme, aucun congé rémunéré; seulement 12 semaines de congé non rémunérés
+  - après la réforme:  4 mois de congés payés et à 12 mois de congés non rénumérés
+  
+  
+**Question de recherche**: quel effet l'introduction du congé payé a t-elle eu sur la santé mentale des mères ?
+  
+---
+# 2. Sharp RDD
+
+## 2.3. Example 1
+
+&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
+
+**Question**: pourquoi ne peut-on pas simplement comparer la santé mentale moyenne des mères ayant recours au congé maternité et celle des mères n'y ayant pas recours?
+
+--
+
+**Endogeneité**
+- certaines caractéristiques inobservables peuvent affecter à la fois le recours au congé maternité et la santé mentale des mères
+- causalité inversée: si la santé mentale des mères impacte le recours au congé maternité
+
+
+---
+# 2. Sharp RDD
+
+## 2.3. Example 1
+
+&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
+
+**Stratégie d'identification**: Regression Discontinuity Design!!
+
+**Question**: quelle est la running variable? quel est le seuil? 
+
+--
+- Date de naissance de l'enfant
+- 1er juillet 1977
+
+Les mères ayant accouché de leur enfant **avant le 1er juillet 1977** ne bénéficient pas de l'introduction du congé maternité rémunéré. Celles ayant accouché **le 1er juillet 1977 ou après** peuvent en bénéficier.
+
+
+---
+# 2. Sharp RDD
+
+## 2.3. Example 1
+
+&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
+
+**Stratégie d'identification**: Regression Discontinuity Design!!
+
+**Question**: quelles sont les hypothèses d'identification?
+
+--
+- **Pas de manipulation de la running variable**: ici, cela signifie que les mères ne peuvent pas stratégiquement choisir d'accoucher avant ou après le 1er juillet 1977   
+- **Continuité de la running variable au point de discontinuité**: ici, cela signifie que le nombre de naissances est continu au point de discontinuité    
+
+---
+# 2. Sharp RDD
+
+## 2.3. Example 1
+
+&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
+
+.pull-left[
+&lt;img src="imgs/bütikofer_et_al_2021_eligibility.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="imgs/bütikofer_et_al_2021_births.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+# 2. Sharp RDD
+
+## 2.3. Example 1
+
+&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
+
+.center[
+&lt;img src="imgs/bütikofer_et_al_2021_covariates.png" width="45%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# 2. Sharp RDD
+
+## 2.3. Example 1
+
+&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
+
+&lt;div style="display: flex; justify-content: space-around;"&gt;
+
+  &lt;img src="imgs/bütikofer_et_al_2021_bmi.png" alt="Image 1" style="width: 30%;"&gt;
+  &lt;img src="imgs/bütikofer_et_al_2021_blood_pressure.png" alt="Image 2" style="width: 30%;"&gt;
+  &lt;img src="imgs/bütikofer_et_al_2021_index.png" alt="Image 3" style="width: 30%;"&gt;
+
+&lt;/div&gt;
+
+---
+# 2. Sharp RDD
+
+## 2.3. Example 2
+
+&lt;span style="color:#dd0747"&gt;**Canaan, S. (2022)** &lt;/span&gt;. *Parental leave, household specialization and children’s well-being*. Labour Economics.
+
+  - Impact de l'allongement de la durée du congé parental en France en 1994: allocation mensuelle pouvant aller jusqu'aux trois ans de l'enfant
+    - avant réforme, parents éligibles à partir du 3ème enfant
+    - après la réforme, parents éligibles à partir du 2ème enfant 
+    - `\(\simeq\)` augmentation de la durée du congé parental de 3 ans   
+    
+  - Effets :
+    - Négatifs sur l'emploi des mères: éloignées plus longtemps du marché du travail et baisse du salaire 
+    - Négatifs la spécialization des tâches au sein du ménage: les hommes ne prennent pas ce congé parental et travaillent davantage
+    - Négatifs sur le développement verbal des enfants
+
+
+
+
+---
+# 3. Fuzzy RDD
+
+
+
+
+
+---
+# Sources
+
+[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/06-regression_discontinuity)    
+
+
+
+---
+
+## Introduction to RDD
+- RDD exploits a threshold-based assignment rule for treatment.
+- Often used when treatment is assigned based on a continuous variable.
+- Observations close to the threshold are comparable.
+
+---
+
+## Key Assumptions
+- **Continuity assumption**: The potential outcomes would be smooth in the absence of treatment.
+- **No manipulation**: No strategic behavior around the threshold.
+
+---
+
+## Estimation Methods
+- Compare outcomes just below and above the threshold.
+- Local linear regression is commonly used.
+
+---
+
+## Sharp vs. Fuzzy RDD
+- **Sharp RDD**: Treatment is perfectly assigned at the threshold.
+- **Fuzzy RDD**: Probability of treatment increases at the threshold but is not guaranteed.
+
+---
+
+## Common Pitfalls
+- Misspecification of the functional form.
+- Data manipulation around the cutoff.
+- Incorrect bandwidth choice.
+
+---
+
+## Practical Applications
+- Educational interventions, social programs, and political studies.
+
+---
+
+## Conclusion
+- RDD provides causal estimates in a non-experimental setting when correctly implemented.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>LaTeX</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Florentine Oliveira" />
+    <meta name="date" content="2024-10-25" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="libs/countdown/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# LaTeX
+]
+.subtitle[
+## Pratiques de la Recherche en Économie
+]
+.author[
+### Florentine Oliveira
+]
+.date[
+### 2024-10-25
+]
+
+---
+
+
+
+
+layout: true
+
+
+
+---
+# Cette séance
+
+&amp;nbsp;
+
+.pull-left[
+1. Overleaf
+
+  1.1. Présentation  
+  1.2. Structure de base d'un document  
+  1.3. Formattage du texte   
+  1.4. Math mode  
+  1.4. Figures 
+  1.5. Bibliographie  
+  1.6. Commentaires, compilation et téléchargement du fichier
+  1.7. Avantages et inconvénients
+]
+.pull-right[
+2. R Markdown  
+
+  2.1. Présentation  
+  2.2. Syntaxe Markdown  
+  2.3. Chunks  
+  2.4. Figures
+  2.5. Bibliographie
+  2.6. Commentaires, compilation et téléchargement du fichier
+  2.7. Avantages et inconvénients
+]
+  
+---
+layout: false
+class: center, middle, inverse
+
+# 1. Overleaf
+
+---
+background-image: url(imgs/Overleaf_Logo.png)
+background-position: 95% 10%
+background-size: 7%
+
+# 1. Overleaf
+
+## 1.1. Présentation
+
+- Selon le site internet d'Overleaf,   
+
+  - "an online `\(\LaTeX\)` editor that's easy to use. No installation, real-time collaboration, version control, hundreds of LaTeX templates, and more."
+  
+  
+- **Éditeur Latex** en ligne, collaboratif en temps réel  
+
+
+---
+# Interface
+
+&lt;img src="imgs/preview.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+Console, compilation fichier PDF, téléchargement, collaboration, fichiers, structure du document
+
+---
+# 1. Overleaf
+
+## 1.2. Structure de base d'un document
+
+**Préambule**
+
+Le préambule est la partie du document LaTeX avant la commande `\begin{document}`. Il inclut:
+
+1. La définition de la classe de document : `\documentclass{...}`  
+  - `article` : pour les articles académiques ou de courts rapports  
+  - `report` : pour les rapports plus longs, avec chapitres  
+  - `book` : pour les livres, thèses, etc  
+  - `beamer` : pour les présentations
+
+2. Les packages ajoutent des fonctionnalités supplémentaires: `\usepackage{graphicx}`
+  - `\usepackage{amsmath}` : pour des formules mathématiques avancées  
+  - `\usepackage{graphicx}` : pour inclure des images  
+  - `\usepackage{xcolor}` : pour utiliser des couleurs   
+  
+3. Les commandes spécifiques pour configurer le document
+
+
+
+
+---
+# 1. Overleaf
+
+## 1.2. Structure de base d'un document
+
+
+&lt;img src="imgs/overleaf1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# 1. Overleaf
+## 1.3. Formatage du texte : saut de ligne
+
+&lt;img src="imgs/overleaf2.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# 1. Overleaf
+## 1.3. Formatage du texte : indentation
+
+&lt;img src="imgs/overleaf3.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# 1. Overleaf
+## 1.3. Formatage du texte : section et sous-section
+
+&lt;img src="imgs/overleaf4.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+# 1. Overleaf
+## 1.3. Formatage du texte : texte en italique, gras et couleur
+
+&lt;img src="imgs/overleaf5.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+# 1. Overleaf
+## 1.3. Formatage du texte : listes à puces et numerottées
+
+&lt;img src="imgs/overleaf6.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+# 1. Overleaf
+## 1.4. Math mode
+
+Pour écrire une équation, il suffit de mettre l'expression mathématique entre `$...$`.
+
+Pour des équations centrées et numérotées, utilisez l'environnement `equation`.
+
+.pull-left[
+| Opérateur **arithmétiques**  | Description               |
+|------------------------------|---------------------------|
+| `+` / `-`                    | Addition / Soustraction   |
+| `*`                          | Multiplication            |
+| `\frac{num.}{denum.}`        | Fraction                  |
+| `^`                          | Exposant                  |
+| `_`                          | Indice                    |
+]
+
+.pull-right[
+| Opérateur **logiques**  | Description                          |
+|-------------------------|--------------------------------------|
+| `&lt;` / `&gt;`               | Strictement inférieur / supérieur à  |
+| `\ge` / `\le`           | Supérieur / inférieur ou égal à      |
+| `=`                     | Égal à                               |
+| `\neq`                  | Différent de                         |
+]
+
+&amp;nbsp;
+
+**NB1: l'environnement `equation` est un environnement mathématique, il n'y a donc pas besoin de mettre des `$`** 
+
+**NB2: Pour ne pas numéroter les équations de l'environnement `equation`, utiliser `\begin{equation*}` au lieu de `\begin{equation}`**
+
+---
+# 1. Overleaf
+## 1.4. Math mode
+
+&lt;img src="imgs/mathmode.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# 1. Overleaf
+## 1.5. Figures et Subfigures
+
+Pour insérer une figure, on utilise l'environnement `figure`.
+
+Plusieurs éléments:
+- `\caption{Titre de la figure}`: titre de la figure
+  - 🚨 les figures sont numérotées automatiquement selon leur ordre d'apparition dans le document
+- `\label{fig1}`: nom de la figure pour référence dans le texte avec la commande `\ref{fig1}`
+-  `\centering` pour centrer la figure sur la page
+- `\includegraphics[width=9cm]{fig1.png}`: commande qui charge le fichier image 
+  - entre `[ ]` est définie la taille de l'image
+  - entre `{ }` le nom (ou chemin) de l'image
+
+
+---
+# 1. Overleaf
+## 1.5. **Figures** et Subfigures
+
+&lt;img src="imgs/figure.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# 1. Overleaf
+## 1.5. Figures et **Subfigures**
+
+&lt;img src="imgs/sufigure.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+# 1. Overleaf
+## 1.5 Bibliographie
+
+Il existe différents packages qui permettent de mettre en page automatiquement une bibliographie et gérer les citations dans le corps du texte: `biblatex`, `natbib`.  
+
+Aujourd'hui, utilisation du package `natbib` qui est préféré par les éditeurs et journaux.
+
+Quatre éléments indispensables:
+- charger le package: `\usepackage{natbib}` et définir un style de bibliographie
+- construire un fichier qui recence les références bibliographiques au format `.bib`
+- citer la référence dans le corps du texte à l'endroit voulu avec la commande `\cite{}`
+- afficher la bibliographie à l'endroit où l'on veut qu'elle apparaisse avec la commande `\bibliography{mybibliography}`
+
+🚨 **Seules les références citées dans le texte apparaitront dans la bibliographie**
+
+---
+# 1. Overleaf
+## 1.5 Bibliographie
+
+1) Chercher le code de la référence souhaitée en ligne (par ex sur Google Scholar) `\(\rightarrow\)` Cliquer sur **Citer** 
+
+&lt;img src="imgs/cite1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# 1. Overleaf
+## 1.5 Bibliographie
+
+1) Chercher le code de la référence souhaitée en ligne (par ex sur Google Scholar) `\(\rightarrow\)` Cliquer sur **BibTex**
+
+&lt;img src="imgs/cite2.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+# 1. Overleaf
+## 1.5 Bibliographie
+
+2) Copier le code de la citation
+
+&lt;img src="imgs/cite3.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+# 1. Overleaf
+## 1.5 Bibliographie
+
+3) Créer un fichier `.bib`
+
+&lt;img src="imgs/bibfile.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+# 1. Overleaf
+## 1.5 Bibliographie
+
+4) Coller le code de la citation
+
+&lt;img src="imgs/bibfilecontent.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# 1. Overleaf
+## 1.5 Bibliographie
+
+5) Citer des références et afficher la bibliographie
+
+&lt;img src="imgs/renducitation.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# 1. Overleaf
+## 1.6. **Commentaires**, compilation et téléchargement du fichier
+
+Pour ajouter un commentaire au texte, utiliser `%` suivi du commentaire en fin de ligne de code. 
+
+&lt;img src="imgs/comment.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+# 1. Overleaf
+## 1.6. Commentaires, **compilation** et téléchargement du fichier
+
+Pour visualiser un apperçu du fichier pdf suite à chaque modification apportée au document, cliquer sur **Recompile**
+
+&lt;img src="imgs/recompile.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# 1. Overleaf
+## 1.6. Commentaires, compilation et **téléchargement du fichier**
+
+Pour télécharger le document, cliquer sur le bouton **Download PDF**
+
+&lt;img src="imgs/save.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+# 1. Overleaf
+## 1.7. Avantages et inconvénients
+
+&amp;nbsp;
+
+**Avantages**
+- collaboration en temps réel
+- facilité d'utilisation
+
+
+**Inconvénients**
+- Dépendance à internet: en cas de connexion instable, compliqué de travailler sur overleaf
+- Limites de la version gratuite
+- Peut être chronophage: en cas de mise à jour régulière des graphiques/tables
+
+
+
+
+---
+## Sources 
+
+[Site internet Overleaf : lean Latex in 30 minutes](https://fr.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes)
+
+
+
+---
+layout: false
+class: center, middle, inverse
+
+# 2. R Markdown
+
+
+---
+background-image: url(imgs/rmdlogo.png)
+background-position: 95% 10%
+background-size: 7%
+
+# 2. R Markdown
+## 2.1. Présentation
+
+&amp;nbsp;
+
+*`R Markdown` est une extension de `R` qui se présente sous la forme d’un **package**. `R Markdown` permet de **produire des documents texte en y intégrant nativement des morceaux de code `R` ** (pour le rendre public, pour générer des sorties…). `R Markdown` permet de fluidifier le processus de rédaction d’une publication, en réduisant fortement le nombre de gestes manuels nécessaires pour inclure des graphiques ou du code dans un document : plutôt qu’avoir un code SAS ou Stata ayant généré des sorties Excel/Calc intégrées dans un document Word ou transformées en table LaTeX, on dispose d’un unique document-source qui contient à la fois le texte et les codes qui produisent les sorties du document final. L’utilisation de `R Markdown` **facilite la production de publications reproductibles.** *&lt;sup&gt;1&lt;/sup&gt;
+
+
+.footnote[
+[1]: https://book.utilitr.org/03_Fiches_thematiques/Fiche_rmarkdown.html
+]
+---
+# 2. R Markdown
+## 2.2. Structure de base d'un document
+
+Un document `R Markdown` comprend deux parties:
+- l'en-tête, ou **YAML header** qui définit le titre, le(s) auteur(s), et le format du document
+
+
+``` r
+---
+title: "Example"
+author: "Florentine Oliveira"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+```
+
+- le contenu, composé à la fois
+  - de blocks de texte respectant la syntaxe `markdown`
+  - de blocks de code, appelés `chunks`
+
+---
+# 2. R Markdown
+ 
+## 2.3. Syntaxe `markdown` : sections et sous-sections
+
+Les sections et sous-sections peuvent-être facilement crées à l'aide de titres de différents niveaux: 
+
+` # Titre de niveau 1`   
+` ## Titre de niveau 2`   
+` ### Titre de niveau 3`  
+
+
+
+---
+# 2. R Markdown
+ 
+## 2.3. Syntaxe `markdown` : texte en italique et gras
+
+Pour écrire un mot en *italique*, il faut encadrer le mot de `*`: `*italique*`  
+
+Pour écrire un mot en **gras**, il faut encadrer le mot de `**`: `**gras**`
+
+Pour écrire un mot en ***gras italique***, il faut encadrer le mot de `***`: `***gras italique***`
+
+---
+# 2. R Markdown
+ 
+## 2.3. Syntaxe `markdown` : listes à puces
+
+Pour créer une liste à puces, il suffit de précéder chaque élément d'un `-`:
+
+`Exemple d'une liste à puces:`    
+`- premier élément`   
+`- deuxième élément`  
+
+
+---
+# Apperçu
+ 
+&lt;img src="imgs/rmd.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+# 2. R Markdown
+ 
+## 2.4. Code `Chunks`
+
+
+Le code contenu dans un document `R Markdown` est contenu dans des *chunks* délimités par des balises: ` ``` `.
+
+Chaque chunk a la structure suivante:
+
+` ```{r chunk label, options } `
+
+` code `
+
+` ``` `  
+
+Exemple: 
+
+&lt;img src="imgs/chunk.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+# 2. R Markdown
+ 
+## 2.4. Code `Chunks`
+
+### Chunk options
+
+&amp;nbsp;
+
+|   Option  | Défault  | Effet                  |
+|----------------------|--------------------------------------|
+| `echo`    | `TRUE`   | Affiche le code dans le document compilé  |
+| `error`   | `FALSE`  | `F`: arrête d'exécuter le code en cas d'erreur, `T`: affiche le message d'erreur dans le document |
+| `include` | `TRUE`   | Inclue l'output du chunk dans le document |
+| `eval`    | `TRUE`   | Run le code contenu dans le chunk    |
+| `message` | `TRUE`   | Affiche les messages du code dans le document |
+| `warning` | `TRUE`   | Affiche les warnings du code dans le document |
+
+
+---
+# 2. R Markdown
+ 
+## 2.4. Code `Chunks`
+
+### Chunk options pour les figures
+
+&amp;nbsp;
+
+|        Option                 | Défault   | Effet                                           |
+|-------------------------------|-----------|-------------------------------------------------|
+| `fig.align`                   | `default` | `"left"`, `"right"`, `"center"`                 |
+| `fig.cap`                     | `NULL`    | Titre de la figure (chaîne de caractères)       |
+| `fig.width` &amp;  `fig.height`   | 7         | Dimensions de la figure (en pouces)             |
+| `out.width`                   |           | Redimensionne la taille de l'output (eg "50%")  |
+
+
+
+---
+# 2. R Markdown
+
+### 2.5. Figures
+
+Au sein d'un document `R Markdown`, il est possible d'ajouter:
+
+- des graphiques générés à partir du code contenu dans les code chunks
+
+&lt;img src="imgs/chunk.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+- des graphiques ou figures non générées dans le document, grâce au package `knitr` et à la fonction `include_graphics()`
+
+&lt;img src="imgs/include_graphics.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+# 2.6. Bibliographie
+
+Comme sur Overleaf, il est possible d'ajouter une bibligraphie à votre document `R Markdown`. La chaque référence est listée dans le fichier `bibliohraphy.bib`, selon le même modèle que vu précedemment. 
+
+La bibliographie est appelée dans le document `R Markdown` dans le YAML: 
+
+
+``` r
+---
+title: "Example"
+author: "Florentine Oliveira"
+date: "`r Sys.Date()`"
+output: pdf_document
+*bibliography: bibliography.bib
+---
+```
+
+Dans le corps du texte, pour renvoyer à une référence, il faut utiliser la commande `@`. 
+
+Par exemple, `@kleven2019children`.
+
+---
+# 2.7. Avantages et inconvénients
+
+&amp;nbsp;
+
+**Avantages**
+- Intégration avec R
+- Syntaxe Markdown simple
+
+
+**Inconvénients**
+- Nécessite connaissances de base en `R` (mais c'est votre cas 😄)
+- Collaboration possible avec GitHub mais coût d'entrée à Git
+
+
+
+---
+# Sources
+
+[R Markdown Cheatsheet](https://rstudio.github.io/cheatsheets/rmarkdown.pdf)     
+[R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/)    
+ 
+
+
+
+
+
+  
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

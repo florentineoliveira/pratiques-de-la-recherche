@@ -1,0 +1,222 @@
+---
+title: "Variables de contrôle et matching"
+subtitle: "Pratiques de la Recherche en Économie"
+author: "Florentine Oliveira"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ['metropolis', 'metropolis-fonts', 'custom.css']
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r setup, include = FALSE, warning = FALSE, message = FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  dev = "svg",
+  cache = TRUE,
+  fig.align = "center"
+  #fig.width = 11,
+  #fig.height = 5
+)
+
+# Load packages
+library(tidyverse)
+library(pander)
+library(ggthemes)
+library(gapminder)
+library(emo)
+library(countdown)
+library(xaringanthemer)
+library(xaringanExtra)
+library(sf)
+
+# countdown style
+countdown(
+  color_border              = "#dd0747",
+  color_text                = "black",
+  color_running_background  = "#dd0747",
+  color_running_text        = "white",
+  color_finished_background = "white",
+  color_finished_text       = "#dd0747",
+  color_finished_border     = "#dd0747",
+  font_size = "2em" 
+)
+
+
+style_xaringan( 
+  title_slide_background_color = "#dd0747",
+  title_slide_text_color = "white",
+  text_color = "black",
+  header_color = "#dd0747",
+  text_bold_color = "#dd0747",
+  text_slide_number_color = "black",
+  code_inline_background_color = "#e0e1df",
+  base_font_size = "24px",
+  text_font_family = "Palatino",
+  header_font_family = "Palatino",
+  header_h1_font_size = "45px",
+  header_h2_font_size = "35px",
+  header_h3_font_size = "28px",
+  inverse_background_color = "#f8cdda",
+  inverse_text_color = "black",
+  inverse_header_color = "#dd0747")
+
+# Theme with only x and y axis ans names
+theme_minimum = theme_bw() + 
+  theme(
+  text = element_text(family = "Palatino"),
+  line = element_blank(),  # Masquer toutes les lignes par défaut
+  rect = element_blank(),  # Masquer tous les rectangles par défaut
+  axis.line = element_line(color = "black"),  # Afficher les lignes des axes
+  axis.ticks = element_blank(),  # Masquer les ticks des axes
+  plot.title = element_blank(),  # Masquer le titre du graphique
+  panel.background = element_blank(),  # Masquer le fond du panneau
+  panel.grid.major = element_blank(),  # Masquer la grille principale
+  panel.grid.minor = element_blank(),  # Masquer la grille secondaire
+  plot.background = element_blank(),  # Masquer le fond du graphique
+  legend.position = "none"  # Masquer la légende
+)
+
+# A blank theme for ggplot
+theme_empty = theme_bw() + 
+  theme(
+  text = element_text(family = "Palatino"),
+  line = element_blank(),  # Masquer toutes les lignes par défaut
+  rect = element_blank(),  # Masquer tous les rectangles par défaut
+  axis.line = element_line(color = "black"),  # Afficher les lignes des axes
+  axis.ticks = element_blank(),  # Masquer les ticks des axes
+  axis.text = element_blank(),  # Masquer les étiquettes des axes
+  axis.title = element_text(size = 12),  # Afficher les titres des axes
+  plot.title = element_blank(),  # Masquer le titre du graphique
+  panel.background = element_blank(),  # Masquer le fond du panneau
+  panel.grid.major = element_blank(),  # Masquer la grille principale
+  panel.grid.minor = element_blank(),  # Masquer la grille secondaire
+  plot.background = element_blank(),  # Masquer le fond du graphique
+  legend.position = "none"  # Masquer la légende
+)
+
+
+```
+
+layout: true
+
+---
+# Cette séance
+
+&nbsp;
+
+1. Hypothèse d'Indépendance Conditionnelle
+
+2. Variables de Contrôle
+
+3. Matching  
+  
+
+
+
+---
+count:false
+class: middle, center
+background-color: #dd0747
+
+# <span style="color:#FAFAFA;">  1. Hypothèse d'Indépendance Conditionnelle </span>
+
+
+---
+# Hypothèse d'indépendance conditionnelle 
+
+L'hypothèse d'indépendance conditionnelle, ou ***Conditional Independance Assumption (CIA)***, aussi appelée sélection sur les observables, indique que:
+- conditionellement à des variables explicatives $X_i$, les outcomes potentiels $\{Y_{0i}, Y_{1i}\}$ sont indépendants du traitement $D_i$, donc il n'y a plus de biais de sélection
+- dit autrement, en contrôlant par les variables $X_i$, le traitement $D_i$ est *as-good-as random*
+
+&nbsp;
+
+Formellement, si l'on revient au framework des outcomes potentiels de Rubin, alors l'hypothèse d'identification devient:    
+
+$$\{Y_{0i}, Y_{1i}\} \perp D_i \color{#dd0747}{|X_i}$$ 
+On a donc: $$\begin{align} \text{Biais de Sélection} &= \mathbb{E}(Y_{0i} |  \color{#dd0747}{X_i}, D_i = 1) - \mathbb{E}(Y_{0i} |  \color{#dd0747}{X_i}, D_i = 0) \\ &= \mathbb{E}(Y_{0i} | \color{#dd0747}{X_i}) -  \mathbb{E}(Y_{0i} | \color{#dd0747}{X_i}) \\ &= 0 \end{align}$$
+
+---
+# Hypothèse d'indépendance conditionnelle
+
+## CATE
+
+Sous l'hypothèse d'indépendance conditionnelle, l'effet estimé est l'**effet moyen du traitement conditionnel** (***Conditional*** **ATE**)
+
+
+---
+# Hypothèse d'indépendance conditionnelle 
+
+En réalité, il s'agit d'une hypothèse d'identification très forte:
+- elle suppose d'inclure toutes les variables explicatives $X$ qui permettent de tenir comp
+
+The CIA is challenging—you need to know which set of covariates $X_i$ leads to as-good-as-random residual variation in your treatment.
+
+
+---
+count:false
+class: middle, center
+background-color: #dd0747
+
+# <span style="color:#FAFAFA;">  2. Variables de Contrôle </span>
+
+
+
+---
+# 2. Variables de Contrôle
+
+
+
+
+
+---
+# Reprenons l'expérimentation STAR
+
+On a vu que la randomisation au sein des écoles permettait d'éliminer le biais de sélection au sein des écoles.
+
+Cependant, les élèves ne sont pas forcément comparables entre écoles:
+
+**Problème: school sorting**: l'allocation des élèves et professeurs **entre** écoles n'est pas aléatoire
+- certaines écoles peuvent avoir davantage de ressources et donc des classes de taille moyenne plus petite que d'autres et être davantage fréquentées par des élèves issus de milieux favorisés 
+  - formellement, l'origine sociale de l'élève, inclue dans le terme d'erreur, est corrêlée à la taille des classes et affecte les performances scolaires, donc cela crée un biais de sélection/variable omise
+  - auquel cas l'effet de la taille des classes peut-être confondu avec celui de l'origine sociale
+  - mécanisme similaire du point de vue des enseignants: les plus expérimentés peuvent préférer enseigner dans des écoles ayant davantage de ressources, et donc de petites classes
+    - comme la taille des classes est corrêlée avec la qualité de l'enseignant qui a elle-même un effet sur la réussite scolaire des élèves
+    - alors l'effet de la taille des classes est confondu avec celui de la qualité de l'enseignant
+
+**Solution: effet fixe École**: permet de contrôler pour les différences non observées entre les écoles
+  - interprétation: on compare les résultats des élèves dans des classes de tailles différentes **au sein de la même école**
+
+
+---
+count:false
+class: middle, center
+background-color: #dd0747
+
+# <span style="color:#FAFAFA;">  3. Matching </span>
+
+
+
+---
+# 3. Matching
+
+Les méthodes de **matching** sont des méthodes d'identification qui reposent sur la CIA, c'est à dire que la sélection dans le traitement est uniquement liée à des variables **observables** $X$.
+
+
+
+
+---
+# Sources
+
+[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/05-matching_and_subclassification)         
+
+
+
+

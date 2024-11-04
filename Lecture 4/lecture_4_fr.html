@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Variables de contrôle et matching</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Florentine Oliveira" />
+    <meta name="date" content="2024-10-25" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="libs/countdown/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Variables de contrôle et matching
+]
+.subtitle[
+## Pratiques de la Recherche en Économie
+]
+.author[
+### Florentine Oliveira
+]
+.date[
+### 2024-10-25
+]
+
+---
+
+
+
+
+layout: true
+
+---
+# Cette séance
+
+&amp;nbsp;
+
+1. Hypothèse d'Indépendance Conditionnelle
+
+2. Variables de Contrôme
+
+3. Matching  
+  
+
+
+
+---
+count:false
+class: middle, center
+background-color: #dd0747
+
+# &lt;span style="color:#FAFAFA;"&gt;  1. Hypothèse d'Indépendance Conditionnelle &lt;/span&gt;
+
+
+---
+# Hypothèse d'indépendance conditionnelle 
+
+L'hypothèse d'indépendance conditionnelle, ou ***Conditional Independance Assumption (CIA)***, aussi appelée sélection sur les observables, indique que:
+- conditionellement à des variables explicatives `\(X_i\)`, les outcomes potentiels `\(\{Y_{0i}, Y_{1i}\}\)` sont indépendants du traitement `\(D_i\)`, donc il n'y a plus de biais de sélection
+- dit autrement, en contrôlant par les variables `\(X_i\)`, le traitement `\(D_i\)` est *as-good-as random*
+
+&amp;nbsp;
+
+Formellement, si l'on revient au framework des outcomes potentiels de Rubin, alors l'hypothèse d'identification devient:    
+
+`$$\{Y_{0i}, Y_{1i}\} \perp D_i \color{#dd0747}{|X_i}$$` 
+On a donc: `$$\begin{align} \text{Biais de Sélection} &amp;= \mathbb{E}(Y_{0i} |  \color{#dd0747}{X_i}, D_i = 1) - \mathbb{E}(Y_{0i} |  \color{#dd0747}{X_i}, D_i = 0) \\ &amp;= \mathbb{E}(Y_{0i} | \color{#dd0747}{X_i}) -  \mathbb{E}(Y_{0i} | \color{#dd0747}{X_i}) \\ &amp;= 0 \end{align}$$`
+
+---
+# Hypothèse d'indépendance conditionnelle
+
+## CATE
+
+Sous l'hypothèse d'indépendance conditionnelle, l'effet estimé est l'**effet moyen du traitement conditionnel** (***Conditional*** **ATE**)
+
+
+---
+# Hypothèse d'indépendance conditionnelle 
+
+En réalité, il s'agit d'une hypothèse d'identification très forte:
+- elle suppose d'inclure toutes les variables explicatives `\(X\)` qui permettent de tenir comp
+
+The CIA is challenging—you need to know which set of covariates `\(X_i\)` leads to as-good-as-random residual variation in your treatment.
+
+---
+# Biais de Variable Omise 
+
+
+
+
+---
+# Reprenons l'expérimentation STAR
+
+On a vu que la randomisation au sein des écoles permettait d'éliminer le biais de sélection au sein des écoles.
+
+Cependant, les élèves ne sont pas forcément comparables entre écoles:
+
+**Problème: school sorting**: l'allocation des élèves et professeurs **entre** écoles n'est pas aléatoire
+- certaines écoles peuvent avoir davantage de ressources et donc des classes de taille moyenne plus petite que d'autres et être davantage fréquentées par des élèves issus de milieux favorisés 
+  - formellement, l'origine sociale de l'élève, inclue dans le terme d'erreur, est corrêlée à la taille des classes et affecte les performances scolaires, donc cela crée un biais de sélection/variable omise
+  - auquel cas l'effet de la taille des classes peut-être confondu avec celui de l'origine sociale
+  - mécanisme similaire du point de vue des enseignants: les plus expérimentés peuvent préférer enseigner dans des écoles ayant davantage de ressources, et donc de petites classes
+    - comme la taille des classes est corrêlée avec la qualité de l'enseignant qui a elle-même un effet sur la réussite scolaire des élèves
+    - alors l'effet de la taille des classes est confondu avec celui de la qualité de l'enseignant
+
+**Solution: effet fixe École**: permet de contrôler pour les différences non observées entre les écoles
+  - interprétation: on compare les résultats des élèves dans des classes de tailles différentes **au sein de la même école**
+
+
+
+
+
+---
+# Sources
+
+[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/05-matching_and_subclassification)         
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
