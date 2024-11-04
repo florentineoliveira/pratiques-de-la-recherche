@@ -110,6 +110,9 @@ layout: true
 
 
 ---
+
+<link rel="shortcut icon" href="#" />
+
 # About me
 
 &nbsp;
@@ -125,9 +128,11 @@ Champs de recherche: économie de la famille, de l'éducation, du travail
 &nbsp;
 
 .center[
-**Me contacter**: florentine.oliveira@psemail.eu
+**Pour me contacter, si vous avez des questions ou envie/besoin de parler**:
 
-**Si vous avez des questions ou envie/besoin de parler**: Campus Jourdan, Bureau R4-54 
+florentine.oliveira@psemail.eu   
+
+Campus Jourdan, Bureau R4-54 
 ]
 
 ---
@@ -160,14 +165,14 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
 
 1. Séance 1 (aujourd'hui): Rappels de `R` 
 2. Séance 2 (12/11/2024): Rédiger en $\LaTeX$
-3. Séance 3 (19/12/2024): Régressions linéaires
+3. Séance 3 (19/12/2024): Régressions Linéaires et Causalité
 
 ### Semestre 2
-4. Séance 4 (): Méthode des variables instrumentales
-5. Séance 5 (): Doubles-Différences (DiD)
-6. Séance 6 (): Regression Discontinuity Design (RDD)
-7. Séance 7 (): 
-8. Séance 8 ():
+4. Séance 4 (04/02/2025): Variables de Contrôle et Matching
+5. Séance 5 (18/02/2025): Méthode des Variables Instrumentales
+6. Séance 6 (11/03/2025): Méthode des Doubles-Différences (DiD)
+7. Séance 7 (25/03/2025): Regression Discontinuity Design (RDD)
+8. Séance 8 (08/04/2025): Q & A
 
 
 ---
@@ -175,6 +180,13 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
 
 ## DM
 
+**Objectif**: manipulation de données sur `R`, intuition, quelques régressions
+
+À faire seul(e) ou à deux
+
+**À rendre pour le 10 Janvier 23h59**
+
+&nbsp;
 
 ## Mémoire
 
@@ -186,7 +198,7 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
 
 1. La recherche en économie appliquée
 
-2. `R`: rappels et **trouver mot**
+2. `R`: Rappels 
 
   2.1. Définition, usages, interface  
   2.2. Projet `R`   
@@ -244,7 +256,9 @@ class: center, middle, inverse
 # 2. `R`: rappels
 
 ---
-# 2.1. Définition, usages, interface
+# 2. `R`: rappels
+
+## 2.1. Définition, usages, interface
 
 
 - D'après le site internet de `R` : *R is a free software environment for statistical computing and graphics.*
@@ -261,7 +275,7 @@ class: center, middle, inverse
 
   - statistiques decriptives, analyses économétriques, analyse de données spaciales, ML, Rmarkdown
 
-- Compétence valorisable et de plus en plus appréciée (public & privé)   
+- Compétence valorisée et de plus en plus recherchée (public & privé)   
 
 
 ---
@@ -284,7 +298,9 @@ knitr::include_graphics("imgs/popularity_scholar.png")
 ]
 
 ---
-# 2.1. Définition, usages, interface
+# 2. `R`: rappels
+
+## 2.1. Définition, usages, interface
 
 ```{r interface, echo=FALSE, out.width="70%"}
 knitr::include_graphics("imgs/interface.png")
@@ -292,7 +308,9 @@ knitr::include_graphics("imgs/interface.png")
 
 
 ---
-# 2.2. Projet `R`
+# 2. `R`: rappels
+
+## 2.2. Projet `R`
 
 Les projets `R` permettent une meilleure organisation de votre travail.
 
@@ -332,7 +350,9 @@ knitr::include_graphics("imgs/rproj_sans_fond.png")
 
 
 ---
-# 2.3. Importer des données
+# 2. `R`: rappels
+
+## 2.3. Importer des données
 
 **Format .csv:**
 
@@ -353,7 +373,9 @@ knitr::include_graphics("imgs/rproj_sans_fond.png")
   - `read_excel()`  
   
 ---
-# 2.3. Importer des données
+# 2. `R`: rappels
+
+## 2.3. Importer des données
 
 &nbsp;
 
@@ -371,7 +393,9 @@ background-image: url(imgs/dplyr_logo.png)
 background-position: 90% 10%
 background-size: 15%
 
-# 2.4. Manipulation des données avec `dplyr`
+# 2. `R`: rappels
+
+## 2.4. Manipulation des données avec `dplyr`
 
 
 Principal package pour la manipulation de données : `dplyr`
@@ -385,14 +409,15 @@ $$\text{data.frame} \;\; \underbrace{\text{%>%}}_{\text{pipe}} \;\; \text{functi
 - `summarise()`: résume les données par des statistiques descriptives 
 - `filter()`: conserve ou supprime les lignes 
 - `group_by()`: permet de grouper des observations entre elles 
-- `select()`: consevre ou supprime des colonnes
+- `select()`: conserve ou supprime des colonnes
 - `arrange()`: ordonne les observations par rapport aux valeurs d'une colonne
 
 
-[Cheatsheet Dplyr]()
 
 ---
-# 2.4. Manipulation des données avec `dplyr`
+# 2. `R`: rappels
+
+## 2.4. Manipulation des données avec `dplyr`
 
 ### Opérateurs 
 
@@ -410,9 +435,9 @@ $$\text{data.frame} \;\; \underbrace{\text{%>%}}_{\text{pipe}} \;\; \text{functi
 | Opérateur **logiques**  | Description                          |
 |-------------------------|--------------------------------------|
 | `<` / `>`               | Strictement inférieur / supérieur à  |
-| `<=` / `>=`             | Supérieur / inférieur ou égal à      |
-| `==`                    | Égal à                               |
-| `!=`                    | Différent de                         |
+| `< =` / `> =`           | Supérieur / inférieur ou égal à      |
+| `= =`                   | Égal à                               |
+| `! =`                   | Différent de                         |
 | `x %in% c(1,6)`         | $x$ dans $\{1,6\}$                   |
 | `x & y`                 | $x$ *et* $y$                         |
 | <code>x &#124; y</code> | $x$ *ou* $y$                         |
@@ -547,9 +572,80 @@ titanic %>%
 
 ```
 
+---
+count: false
+background-color: #fbe6ec
+# Solution : Titanic
+
+3) Créer une table qui résume, **pour les adultes uniquement**, le taux de survie par classe x Sexe et ordonner par ordre décroissant
+
+```{r, echo = T, results = 'hide'}
+
+titanic %>%
+  filter(Age == "Adult") %>% #<<
+  group_by(Class, Sex) %>%
+  summarise(tx_survie = sum(Freq[Survived == "Yes"]) / sum(Freq)) %>%
+  arrange(desc(tx_survie))
+
+```
 
 ---
-# 2.4. Manipulation des données avec `dplyr`
+count: false
+background-color: #fbe6ec
+# Solution : Titanic
+
+3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par **classe x Sexe** et ordonner par ordre décroissant
+
+```{r, echo = T, results = 'hide'}
+
+titanic %>%
+  filter(Age == "Adult") %>%
+  group_by(Class, Sex) %>% #<<
+  summarise(tx_survie = sum(Freq[Survived == "Yes"]) / sum(Freq)) %>%
+  arrange(desc(tx_survie))
+
+```
+
+---
+count: false
+background-color: #fbe6ec
+# Solution : Titanic
+
+3) Créer une table qui résume, pour les adultes uniquement, le **taux de survie** par classe x Sexe et ordonner par ordre décroissant
+
+```{r, echo = T, results = 'hide'}
+
+titanic %>%
+  filter(Age == "Adult") %>%
+  group_by(Class, Sex) %>%
+  summarise(tx_survie = sum(Freq[Survived == "Yes"]) / sum(Freq)) %>% #<<
+  arrange(desc(tx_survie))
+
+```
+
+
+---
+count: false
+background-color: #fbe6ec
+# Solution : Titanic
+
+3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et **ordonner par ordre décroissant**
+
+```{r, echo = T}
+
+titanic %>%
+  filter(Age == "Adult") %>%
+  group_by(Class, Sex) %>%
+  summarise(tx_survie = sum(Freq[Survived == "Yes"]) / sum(Freq)) %>%
+  arrange(desc(tx_survie)) #<<
+
+```
+
+
+---
+# 2. `R`: rappels
+
+## 2.4. Manipulation des données avec `dplyr`
 
 .center[
 ```{r datasets joints , echo=FALSE, out.width="40%"}
@@ -557,7 +653,7 @@ knitr::include_graphics("imgs/datasets.png")
 ```
 ]
 
-- Très souvent, les données relatives à une analyse sont réparties dans plusieurs tables différentes
+- Très souvent, les données nécessaires à l'analyse sont issues de plusieurs sources   
 
 - Joindre deux tables de données peut permettre d'ajouter 
   - des variables supplémentaires
@@ -569,7 +665,9 @@ knitr::include_graphics("imgs/datasets.png")
 
 
 ---
-# 2.4. Manipulation des données avec `dplyr`
+# 2. `R`: rappels
+
+## 2.4. Manipulation des données avec `dplyr`
 
 ### Binding joints 
 
@@ -592,7 +690,9 @@ knitr::include_graphics("imgs/bindrows.jpeg")
 
 
 ---
-# 2.4. Manipulation des données avec `dplyr`
+# 2. `R`: rappels
+
+## 2.4. Manipulation des données avec `dplyr`
 
 ### Binding joints 
 
@@ -615,7 +715,9 @@ knitr::include_graphics("imgs/bindcols.jpeg")
 
 
 ---
-# 2.4. Manipulation des données avec `dplyr`
+# 2. `R`: rappels
+
+## 2.4. Manipulation des données avec `dplyr`
 
 ### Mutating joints 
 
@@ -640,7 +742,9 @@ knitr::include_graphics("imgs/left_joint.jpeg")
 
 
 ---
-# 2.4. Manipulation des données avec `dplyr`
+# 2. `R`: rappels
+
+## 2.4. Manipulation des données avec `dplyr`
 
 ### Mutating joints 
 
@@ -663,7 +767,9 @@ knitr::include_graphics("imgs/right_joint.jpeg")
 
 
 ---
-# 2.4. Manipulation des données avec `dplyr`
+# 2. `R`: rappels
+
+## 2.4. Manipulation des données avec `dplyr`
 
 ### Mutating joints 
 
@@ -686,7 +792,9 @@ knitr::include_graphics("imgs/inner_joint.jpeg")
 
 
 ---
-# 2.4. Manipulation des données avec `dplyr`
+# 2. `R`: rappels
+
+## 2.4. Manipulation des données avec `dplyr`
 
 ### Mutating joints 
 
@@ -711,18 +819,9 @@ knitr::include_graphics("imgs/full_joint.jpeg")
 
 
 ---
-# 2.4. Manipulation des données avec `dplyr`
+# 2. `R`: rappels
 
-### Formats wide et long
-
-Un jeu de données est dit ***tidy*** (i.e. "bien rangé") si:
-
-1. Chaque ligne correspond à une observation  
-2. Chaque colonne correspond à une variable  
-3. Chaque valeur est présente dans une unique case de la table  
-
----
-# 2.4. Manipulation des données avec `dplyr`
+## 2.4. Manipulation des données avec `dplyr`
 
 ### Formats wide et long
 
@@ -741,7 +840,9 @@ knitr::include_graphics("imgs/longer.png")
        
  
 ---
-# 2.4. Manipulation des données avec `dplyr`
+# 2. `R`: rappels
+
+## 2.4. Manipulation des données avec `dplyr`
 
 ### Formats wide et long
 
@@ -758,19 +859,27 @@ knitr::include_graphics("imgs/wider.png")
 
 ---
 background-color: #f19bb5
-# Application : Élections législatives de 2024 en France 
+# Application : Législatives 2024 
 
 &nbsp;
 
-Utilisation de 3 bases de données:
+**Utilisation de 3 bases de données:**
 - résultats au premier tour: `resultats-definitifs-par-circonscription-t1.csv`
 - résultats au second tour: `resultats-definitifs-par-circonscription-t2.csv`
-- population par circoncsription en 2019: `population_2019.csv`
+- population par circonscription en 2019: `population_2019.csv`
+
+Chaque observation = une circonscription
+
+Les bases de *données des résultats aux élections sont en format wide*:
+- chaque circonscription à un nombre fini de candidats (jusqu'à 19 candidats)
+- les informations relatives aux différents candidats (nom, sexe, parti politique, etc) sont renseignées dans différentes variables
+- les variables relatives au même candidat ont le même suffixe (eg Nom.candidat.1, Nuance.candidat.1, ...)
+
 
 
 ---
 background-color: #f19bb5
-# Application : Élections législatives de 2024 en France 
+# Application : Législatives 2024 
 
 `r emo::ji("rotating_light")` **Encodage du libellé des circonscriptions**
 
@@ -790,11 +899,12 @@ head(resultats_t1[1:4,c(2,4)])
 
 head(pop_2019)[1:4,]
 ```
- 
+
+**Variables Clés**: `Libellé.département` qui comprend uniquement le nom du département, et `Libellé.circonscription` qui contient uniquement le numéro de la circonscription.
 
 ---
 background-color: #f19bb5
-# Application : Élections législatives de 2024 en France 
+# Application : Législatives 2024 
 
 `r emo::ji("rotating_light")` **Encodage du libellé des circonscriptions**
 
@@ -820,7 +930,7 @@ $$\underbrace{ \text{gsub}}_{\text{remplace}}( \underbrace{ \text{"\\\D"}}_{\sub
 
 ---
 background-color: #f19bb5
-# Application : Élections législatives de 2024 en France 
+# Application : Législatives 2024 
 
 `r emo::ji("rotating_light")` **Encodage du libellé des circonscriptions**
 
@@ -840,21 +950,21 @@ $$\underbrace{ \text{separate}}_{\text{sépare}}( \underbrace{ \text{"Circonscri
 
 ---
 background-color: #f19bb5
-# Application : Élections législatives de 2024 en France 
+# Application : Législatives 2024 
 
 `r countdown(minutes = 10, top = 0)`
 
-1) Importer les données
+1) Importer les données (nommer les dataframes `resultats_t1`, `resultats_t2` et `pop_2019`)
 
 2) Effectuer sur chaque jeu de données les opérations nécessaires pour harmoniser l'encodage du libellé de circonscription   
   - **pop-19**: `separate(Circonscriptions, into = c("Libellé.département", "Libellé.circonscription.législative"), sep = ", ")`    
   - **resultats_t1** et **resultats_t2** et **pop_2019**: `gsub("\\D", "", Libellé.circonscription.législative)`
 
-3) Reformatter `resultats_t1` et `resultats_t2`  en format long
+3) Reformatter `resultats_t1` et `resultats_t2`  en format long (chaque observation = un candidat)
 
 4) Ajouter une variable `tour` qui vaut 1 dans `resultats_t1` et 2 dans `resultats_t2`
 
-5) Concaténer `resultats_t1` et `resultats_t2` et stocker dans `resultats`
+5) Ajouter les observations de `resultats_t2` à `resultats_t1` et stocker le tout dans `resultats`
 
 6) Ne conserver que les observations des candidats élus
 
@@ -901,16 +1011,91 @@ background-color: #fbe6ec
 ```{r , echo = T, message = F, warning = F}
 resultats_t1_long = resultats_t1 %>%
   pivot_longer(
-    cols = matches(".*\\.[1-9]$|.*\\.[1][0-9]$"),  # Sélectionne les variables avec suffixes .1 à .19
-    names_to = c(".value", "candidate_number"),
-    names_pattern = "(.*)\\.(\\d+)"
+    cols = matches(".*\\.[1-9]$|.*\\.[1][0-9]$"),  #<<
+    names_to = c(".value", "candidate_number"), 
+    names_pattern = "(.*)\\.(\\d+)" 
   ) %>%
   mutate(tour = 1) 
 
+```
 
+**Explication**:
+- `cols = matches(".*\\.[1-9]$|.*\\.[1][0-9]$")`: Sélectionne les colonnes dont le nom termine par un point suivi d'un nombre de 1 à 19        
+
+
+
+---
+count: false
+background-color: #fbe6ec
+# Solution
+
+3) Reformatter `resultats_t1` et `resultats_t2`  en format long
+
+4) Ajouter une variable `tour` qui vaut 1 dans `resultats_t1` et 2 dans `resultats_t2`
+
+
+```{r , echo = T, message = F, warning = F}
+resultats_t1_long = resultats_t1 %>%
+  pivot_longer(
+    cols = matches(".*\\.[1-9]$|.*\\.[1][0-9]$"),  
+    names_to = c(".value", "candidate_number"), #<<
+    names_pattern = "(.*)\\.(\\d+)" 
+  ) %>%
+  mutate(tour = 1) 
+
+```
+
+**Explications**:
+- `names_to = c(".value", "candidate_number")`: définie le **nom** des nouvelles variables      
+  - `.value` crée de nouvelles variables dont le nom correspond à ce qui précède le point pour chaque variable ayant un suffixe numérique         
+  - `candidate_number` crée une nouvelle colonne qui contient les suffixes numériques (1 à 19) indiquant le numéro du candidat
+
+
+
+---
+count: false
+background-color: #fbe6ec
+# Solution
+
+3) Reformatter `resultats_t1` et `resultats_t2`  en format long
+
+4) Ajouter une variable `tour` qui vaut 1 dans `resultats_t1` et 2 dans `resultats_t2`
+
+
+```{r , echo = T, message = F, warning = F}
+resultats_t1_long = resultats_t1 %>%
+  pivot_longer(
+    cols = matches(".*\\.[1-9]$|.*\\.[1][0-9]$"),  
+    names_to = c(".value", "candidate_number"), 
+    names_pattern = "(.*)\\.(\\d+)" #<<
+  ) %>%
+  mutate(tour = 1) 
+
+```
+
+**Explications**:
+
+- `names_pattern = "(.*)\\.(\\d+)"`: utilise une expression régulière pour **séparer** les noms de colonnes en deux parties:    
+  - `(.*)` capture tout ce qui précède le point et l’assigne à `.value`       
+  - `(\\d+)` capture les nombres après le point et les assigne à `candidate_number`      
+
+
+
+
+---
+background-color: #fbe6ec
+# Solution
+
+3) Reformatter `resultats_t1` et `resultats_t2`  en format long
+
+4) Ajouter une variable `tour` qui vaut 1 dans `resultats_t1` et 2 dans `resultats_t2`
+
+**On reproduit les mêmes opérations sur `resultats_t2` (sauf que cette fois-ci il y a au maximum 4 candidats par circonscription)**
+
+```{r , echo = T, message = F, warning = F}
 resultats_t2_long = resultats_t2 %>%
   pivot_longer(
-    cols = matches(".*\\.[1-4]$"),  # Sélectionne les variables avec suffixes .1 à .4
+    cols = matches(".*\\.[1-4]$"),  #<<
     names_to = c(".value", "candidate_number"),
     names_pattern = "(.*)\\.(\\d+)"
   ) %>%
@@ -922,7 +1107,7 @@ resultats_t2_long = resultats_t2 %>%
 background-color: #fbe6ec
 # Solution
 
-5) Concaténer `resultats_t1` et `resultats_t2` et stocker dans `resultats`
+5) Ajouter les observations de `resultats_t2` à `resultats_t1` et stocker le tout dans `resultats`      
 
 6) Ne conserver que les observations des candidats élus
 
@@ -939,16 +1124,20 @@ resultats = bind_rows(resultats_t1_long, resultats_t2_long) %>%
 
 ---
 background-image: url(imgs/ggplot2_logo.png)
-background-position: 95% 15%
+background-position: 95% 5%
 background-size: 10%
 
-# 2.5. Visualisation des données avec `ggplot2`
+# 2. `R`: rappels
 
+## 2.5. Visualisation des données avec `ggplot2`
 
-`ggplot2` est un package `R` qui permet de **visualiser des données** sous forme de graphiques. Afin de chaîner des opérations ensemble, c'est à dire d'**ajouter des couches au graphique, on utilise les `+`**
- (l'équivalent de ` %>% ` avec `dplyr`).
- 
  &nbsp;
+
+`ggplot2` est un package `R` qui permet de **visualiser des données** sous forme de graphiques.    
+
+Afin de *chaîner* des opérations, c'est à dire d'**ajouter des couches au graphique, on utilise les `+`**
+ (l'équivalent de ` %>% ` avec `dplyr`).   
+ 
  
 Pour consturire n'importe quel graphique, il faut:
 - une base de données
@@ -965,7 +1154,9 @@ ggplot(data,
 
 
 ---
-# 2.5. Visualisation des données avec `ggplot2`
+# 2. `R`: rappels
+
+## 2.5. Visualisation des données avec `ggplot2`
 
 ### Principales fonctions 
 
@@ -983,12 +1174,13 @@ ggplot(data,
 
  &nbsp;
 
-[Cheatsheet Dplyr]()
 
 ---
-# 2.5. Visualisation des données avec `ggplot2`
+# 2. `R`: rappels
 
-### Une variable _discrète_
+## 2.5. Visualisation des données avec `ggplot2`
+
+### Variable _discrète_
 
 .pull-left[
 ```{r , echo = T, eval = F}
@@ -1018,9 +1210,11 @@ resultats %>%
 
 ---
 count: false
-# 2.5. Visualisation des données avec `ggplot2`
+# 2. `R`: rappels
 
-### Une variable _discrète_
+## 2.5. Visualisation des données avec `ggplot2`
+
+### Variable _discrète_
 
 .pull-left[
 ```{r , echo = T, eval = F}
@@ -1036,6 +1230,8 @@ resultats %>%
     y = "Percentage") +
   theme_minimal() 
 ```
+
+La fonction `count()` compte le nombre d'observation par groupe `Nuance.candidat` et stocke cette information dans une nouvelle variable, `n` (équivaut à `group_by(Nuance.candidat) %>% summarize(n = n())`)
 ]
 
 .pull-right[
@@ -1054,9 +1250,11 @@ resultats %>%
 ]
 
 ---
-# 2.5. Visualisation des données avec `ggplot2`
+# 2. `R`: rappels
 
-### Une variable _discrète_
+## 2.5. Visualisation des données avec `ggplot2`
+
+### Variable _discrète_
 
 .pull-left[
 ```{r , echo = T, eval = F}
@@ -1067,7 +1265,8 @@ ggplot(resultats,
     title = "Number of Votes by Candidate",
     x = "Candidate",
     y = "Number") +
-  theme_minimal()
+   theme_minimal() +
+   theme(legend.position="bottom")
 ```
 ]
 
@@ -1080,14 +1279,17 @@ resultats %>%
     title = "Number of Votes by Candidate",
     x = "Candidate",
     y = "Number") +
-  theme_minimal()
+  theme_minimal() +
+  theme(legend.position="bottom")
 ```
 ]
 
 ---
-# 2.5. Visualisation des données avec `ggplot2`
+# 2. `R`: rappels
 
-### Une variable _continue_
+## 2.5. Visualisation des données avec `ggplot2`
+
+### Variable _continue_
 
 .pull-left[
 ```{r , echo = T, eval = F}
@@ -1120,7 +1322,9 @@ resultats %>%
 
 
 ---
-# 2.5. Visualisation des données avec `ggplot2`
+# 2. `R`: rappels
+
+## 2.5. Visualisation des données avec `ggplot2`
 
 ### `facet_wrap`
 
@@ -1163,7 +1367,9 @@ resultats %>%
 
 
 ---
-# 2.6. Visualisation des données spaciales
+# 2. `R`: rappels
+
+## 2.6. Visualisation des données spaciales
 
 ### Format de cartes et données
 
@@ -1179,7 +1385,9 @@ Très bonne référence: [Géomatique sur R](https://rcarto.github.io/geomatique
 
 ---
 count:false
-# 2.6. Visualisation des données spaciales
+# 2. `R`: rappels
+
+## 2.6. Visualisation des données spaciales
 
 ### Format de cartes et données
 
@@ -1195,9 +1403,11 @@ background-image: url(imgs/sflogo.png)
 background-position: 95% 10%
 background-size: 10%
 
-# 2.6. Visualisation des données spaciales
+# 2. `R`: rappels
 
-## Package `sf`
+## 2.6. Visualisation des données spaciales
+
+**Package `sf`**
 
 
 **Shapefile**: format de fichier géospatial utilisé pour représenter des entités géographiques
@@ -1234,16 +1444,18 @@ ggplot(resultats_map %>% filter(! (Code.département %in% c("971", "972", "973",
 ```
 
 ```{r head, echo = T, include = T, message = F, warning = F,}
-head(map[ , -c(5,6)],4)
+head(map[ , -c(5,6)],3)
 ```
 
 
 
 
 ---
-# 2.6. Visualisation des données spaciales
+# 2. `R`: rappels
 
-### Réaliser une carte en 3 étapes
+## 2.6. Visualisation des données spaciales
+
+**Réaliser une carte en 3 étapes**
 
 1. Importer les données    
   - Le jeu de données qui contient l'information à visualiser   
@@ -1251,10 +1463,10 @@ head(map[ , -c(5,6)],4)
     - `r emo::ji("rotating_light")`: on importe sur `R` uniquement le fichier `.shp`, mais tous les autres fichiers (`.shx`, `.dbf`, etc) téléchargés avec le *shapefile* doivent être localisés au même endroit que le `.shp`   
     
 2. Lier le jeu de données qui contient l'information à visualiser avec les données géographiques  
-  - Pour ajouter de l'information à un fond de carte, il est nécessaire de disposer d'une **variable (*key*) géographique commune entre les deux fichiers**:
-    - Par exemple si vous souhaitez représenter la carte des réusltats aux éléctions législatives de 2024 en France à l'échelle départementale, il est nécessaire que le fichier qui recence les résultats et le fichier qui recence les données géographiques aient une variable commune qui permet de les lier: nom de département, numéro de département
+  - Pour ajouter de l'information à un fond de carte, il est nécessaire de disposer d'une **variable (*key*) géographique commune entre les deux fichiers**
 
-3. Représenter la carte avec la fonction `geom_sf()`  sur le même principe que `geom_line()` par exemple avec `ggplot2`
+3. Représenter la carte avec la fonction `geom_sf()`  sur le même principe que `geom_line()` par exemple avec `ggplot2`     
+  - Ici, l'esthétique du graphique (`aes`) comprend un nouvel argument, `geometry`, qui doit être égal à la variable contenant les données géographiques
  
 
 ---
@@ -1263,18 +1475,137 @@ background-color: #f19bb5
 
 `r countdown(minutes = 10, top = 0)`
 
+**Importer les données**     
+1) Importer `france-circonscriptions-legislatives-2012.shp`, que vous stockerez dans `maps`      
 
-```{r carte résultats code, echo = T, message = F, warning = F, eval = F}
+**Cleaning**      
+2) Renommer `code_dpt` en `Code.département` et `num_circ` en `Libellé.circonscription`       
+3) Modifier la variable `Code.département`: *si* le premier caractère est un `0`, `Code.département` prend la valeur du deuxième caracère. *Sinon* pas de modification       
+
+**Joindre les bases de données**         
+4) Ajouter les informations de `map` à `resultats` et stocker le tout dans `resultats_map`        
+
+**Réaliser une carte**       
+5) Réaliser la carte des résultats des éléctions législatives de 2024       
+*NB: ne pas sélectionner les départements 971, 972, 973, 974, 975, 976, 986, 987, 988, ZX, ZZ qui correspondent aux DROM et qui ne sont pas sur ce fond de carte*      
+
+---
+
+background-color: #fbe6ec
+# Solution
+
+**Importer les données**     
+1) Importer `france-circonscriptions-legislatives-2012.shp`, que vous stockerez dans `maps`    
+
+**Cleaning**      
+2) Renommer `code_dpt` en `Code.département` et `num_circ` en `Libellé.circonscription`       
+3) Modifier la variable `Code.département`: *si* le premier caractère est un `0`, `Code.département` prend la valeur du deuxième caracère. *Sinon* pas de modification    
+
+```{r carte résultats code , echo = T, message = F, warning = F, eval = F}
 
 # Import data 
 map = st_read("data/france-circonscriptions-legislatives-2012.shp", quiet = TRUE) %>% 
   rename(Code.département = code_dpt,
          Libellé.circonscription.législative = num_circ) %>% 
   mutate(Code.département = ifelse(substr(Code.département, 1, 1) == "0", substr(Code.département, 2, 2), Code.département))
+```
+
+
+
+---
+count: false
+background-color: #fbe6ec
+# Solution
+
+**Importer les données**     
+**1) Importer `france-circonscriptions-legislatives-2012.shp`, que vous stockerez dans `maps`**    
+
+**Cleaning**      
+2) Renommer `code_dpt` en `Code.département` et `num_circ` en `Libellé.circonscription`       
+3) Modifier la variable `Code.département`: *si* le premier caractère est un `0`, `Code.département` prend la valeur du deuxième caracère. *Sinon* pas de modification    
+
+```{r carte résultats code q1, echo = T, message = F, warning = F, eval = F}
+
+# Import data 
+map = st_read("data/france-circonscriptions-legislatives-2012.shp", quiet = TRUE) %>% #<<
+  rename(Code.département = code_dpt,
+         Libellé.circonscription.législative = num_circ) %>% 
+  mutate(Code.département = ifelse(substr(Code.département, 1, 1) == "0", substr(Code.département, 2, 2), Code.département))
+```
+
+
+---
+count: false
+background-color: #fbe6ec
+# Solution
+
+**Importer les données**     
+1) Importer `france-circonscriptions-legislatives-2012.shp`, que vous stockerez dans `maps`    
+
+**Cleaning**      
+**2) Renommer `code_dpt` en `Code.département` et `num_circ` en `Libellé.circonscription`**       
+3) Modifier la variable `Code.département`: *si* le premier caractère est un `0`, `Code.département` prend la valeur du deuxième caracère. *Sinon* pas de modification    
+
+```{r carte résultats code q2, echo = T, message = F, warning = F, eval = F}
+
+# Import data 
+map = st_read("data/france-circonscriptions-legislatives-2012.shp", quiet = TRUE) %>% 
+  rename(Code.département = code_dpt, #<<
+         Libellé.circonscription.législative = num_circ) %>% #<<
+  mutate(Code.département = ifelse(substr(Code.département, 1, 1) == "0", substr(Code.département, 2, 2), Code.département))
+```
+
+---
+count: false
+background-color: #fbe6ec
+# Solution
+
+**Importer les données**     
+1) Importer `france-circonscriptions-legislatives-2012.shp`, que vous stockerez dans `maps`    
+
+**Cleaning**      
+2) Renommer `code_dpt` en `Code.département` et `num_circ` en `Libellé.circonscription`       
+**3) Modifier la variable `Code.département`: *si* le premier caractère est un `0`, `Code.département` prend la valeur du deuxième caracère. *Sinon* pas de modification**    
+
+```{r carte résultats code q3, echo = T, message = F, warning = F, eval = F}
+
+# Import data 
+map = st_read("data/france-circonscriptions-legislatives-2012.shp", quiet = TRUE) %>% 
+  rename(Code.département = code_dpt,
+         Libellé.circonscription.législative = num_circ) %>% 
+  mutate(Code.département = ifelse(substr(Code.département, 1, 1) == "0", substr(Code.département, 2, 2), Code.département)) #<<
+```
+
+
+
+---
+
+background-color: #fbe6ec
+# Solution
+
+**Joindre les bases de données**         
+4) Ajouter les informations de `map` à `resultats` et stocker le tout dans `resultats_map`        
+
+
+```{r carte résultats code q4, echo = T, message = F, warning = F, eval = F}
 
 # Merge geographic data and results data
 resultats_map = resultats %>% 
   left_join(map , by = c("Code.département", "Libellé.circonscription.législative")) #<<
+
+```
+
+
+---
+
+background-color: #fbe6ec
+# Solution
+
+**Réaliser une carte**       
+5) Réaliser la carte des résultats des éléctions législatives de 2024       
+*NB: ne pas sélectionner les départements 971, 972, 973, 974, 975, 976, 986, 987, 988, ZX, ZZ qui correspondent aux DROM et qui ne sont pas sur ce fond de carte*      
+
+```{r carte résultats code q5, echo = T, message = F, warning = F, eval = F}
 
 # Draw map
 ggplot(resultats_map %>% filter(! (Code.département %in% c("971", "972", "973", "974", "975", "976", "986", "987", "988", "ZX", "ZZ")))) +
@@ -1287,16 +1618,14 @@ ggplot(resultats_map %>% filter(! (Code.département %in% c("971", "972", "973",
         axis.text = element_blank(),
         axis.ticks = element_blank(),
         panel.grid = element_blank()) +
-  guides(fill = guide_legend(nrow = 1))
+  guides(fill = guide_legend(nrow = 1)) 
 
 
 ```
 
 ---
-background-color: #f19bb5
-# Application: carte résultats législatives
-
-`r countdown(minutes = 10, top = 0)`
+background-color: #fbe6ec
+# Solution
 
 
 ```{r carte résultats, echo = F, message = F, warning = F, include = T, fig.height= 6, fig.width=9.5}
@@ -1326,8 +1655,11 @@ ggplot(resultats_map %>% filter(! (Code.département %in% c("971", "972", "973",
 ```
 
 
+---
+layout: false
+class: center, middle, inverse
 
-
+# Miscellaneous
 
 ---
 name: bestfriend
@@ -1365,17 +1697,18 @@ name: bestfriend
 
 ### Organisation du travail
 
-- Un dossier pour chaque projet de recherche
+Un dossier pour chaque projet de recherche et différents sous-dossiers pour:
 
-  - Scripts
-    - un scripts par tâche: cleaning, statistiques descriptives, anlayse empirique
+- Scripts      
+  - un scripts par tâche: cleaning, statistiques descriptives, anlayse empirique
   
-  - Data
-    - `.rds`
+- Data     
+  - `.rds`
   
-  - Figures
+- Figures
   
-  - (Admin)
+- (Admin)
+  - par exemple les documents relatifs à l'accès à une base de données
   
 
 
@@ -1413,11 +1746,16 @@ L'apprentissage de `R` est long et fastidieux, mais les rendements sont croissan
 ---
 # References
 
-[Introduction à l’analyse d’enquêtes avec R et RStudio](https://larmarange.github.io/analyse-R/)
-[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/01-introduction)
-[Géomatique sur R](https://rcarto.github.io/geomatique_avec_r/)
+[Introduction à l’analyse d’enquêtes avec R et RStudio](https://larmarange.github.io/analyse-R/)    
+[Introduction to Econometrics & R Programming, Louis Sirugue](https://louissirugue.github.io/metrics_on_R/home.html)
+[Econometrics, Florian Oswald](https://github.com/ScPoEcon/ScPoEconometrics-Slides)
+[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/01-introduction)     
+[Géomatique sur R](https://rcarto.github.io/geomatique_avec_r/)      
 
 ---
+layout: false
+class: center, middle, inverse
+
 # Appendix
 
 ---
@@ -1428,10 +1766,13 @@ L'apprentissage de `R` est long et fastidieux, mais les rendements sont croissan
 
 ---
 name: cheatR
-class: center, middle
-```{r cheatR, echo=FALSE, out.width="110%"}
+
+.center[
+```{r cheatR, echo=FALSE, out.width="70%"}
 knitr::include_graphics("imgs/cheatsheetR.png")
 ```
+]
+
 [Back](#bestfriend)
 
 
