@@ -7,7 +7,7 @@ body, h1, h2, h3, th, td {
 /* Couleur de fond et alignement général */
 body {
     background-color: #FAFAFA;
-    font-size: 16px;
+    font-size: 18px;
     text-align: center;
     margin: 0;
     padding: 0;
@@ -46,11 +46,11 @@ h3 {
 
 /* Style du tableau */
 table {
-    width: 80%;
+    width: 110%;
     max-width: 800px;
     margin: 20px auto;
     border-collapse: collapse;
-    font-size: 0.9em;
+    font-size: 1em;
     table-layout: auto; /* Autorise le navigateur à ajuster les largeurs */
     text-align: left;
 }
