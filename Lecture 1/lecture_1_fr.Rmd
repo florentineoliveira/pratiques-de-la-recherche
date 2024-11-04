@@ -144,7 +144,7 @@ Campus Jourdan, Bureau R4-54
 
 - Se familiariser avec 
   - les techniques **économétriques** de base
-  - la **recherche** en **économie appliquée**
+  - la **recherche** en **économie empirique**
 
 - Apprendre le language de programmation `R`
 
@@ -196,7 +196,7 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
 
 &nbsp;
 
-1. La recherche en économie appliquée
+1. La recherche en économie empirique
 
 2. `R`: Rappels 
 
@@ -208,9 +208,9 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
   2.6. Maps
   
 ---
-# 1. La recherche en économie appliquée
+# 1. La recherche en économie empirique
 
-### Qu'est-ce que la recherche en économie appliquée?
+### Qu'est-ce que la recherche en économie empirique?
 
 - Répondre à des **questions de recherche** pour apprendre sur les comportements humains, l'efficacité des poliques publiques, ...   
 
@@ -231,9 +231,9 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
   - Quel est l'effet de la densité de population **sur** les salaires?
 
 ---
-# 1. La recherche en économie appliquée
+# 1. La recherche en économie empirique
 
-### Qu'est-ce que la recherche en économie appliquée?
+### Qu'est-ce que la recherche en économie empirique?
 
 - Répondre à des **questions de recherche** pour apprendre sur les comportements humains, l'efficacité des poliques publiques, ...
 
@@ -269,7 +269,7 @@ class: center, middle, inverse
   
 - `R` est **gratuit** et en **open source**
 
-  - donc utilisé par beaucoup de monde dans les milieux académique insitutionnel
+  - donc très utilisé dans les milieux académique et institutionnel
 
 - Logiciel très **polyvalent**
 
@@ -470,7 +470,7 @@ background-color: #f19bb5
 
 2) Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
 
-3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
+3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par Classe x Sexe et ordonner par ordre décroissant
 
 ---
 background-color: #fbe6ec
@@ -560,7 +560,7 @@ titanic %>%
 background-color: #fbe6ec
 # Solution : Titanic
 
-3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et ordonner par ordre décroissant
+3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par Classe x Sexe et ordonner par ordre décroissant
 
 ```{r, echo = T, results = 'hide'}
 
@@ -577,7 +577,7 @@ count: false
 background-color: #fbe6ec
 # Solution : Titanic
 
-3) Créer une table qui résume, **pour les adultes uniquement**, le taux de survie par classe x Sexe et ordonner par ordre décroissant
+3) Créer une table qui résume, **pour les adultes uniquement**, le taux de survie par Classe x Sexe et ordonner par ordre décroissant
 
 ```{r, echo = T, results = 'hide'}
 
@@ -594,7 +594,7 @@ count: false
 background-color: #fbe6ec
 # Solution : Titanic
 
-3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par **classe x Sexe** et ordonner par ordre décroissant
+3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par **Classe x Sexe** et ordonner par ordre décroissant
 
 ```{r, echo = T, results = 'hide'}
 
@@ -611,7 +611,7 @@ count: false
 background-color: #fbe6ec
 # Solution : Titanic
 
-3) Créer une table qui résume, pour les adultes uniquement, le **taux de survie** par classe x Sexe et ordonner par ordre décroissant
+3) Créer une table qui résume, pour les adultes uniquement, le **taux de survie** par Classe x Sexe et ordonner par ordre décroissant
 
 ```{r, echo = T, results = 'hide'}
 
@@ -629,7 +629,7 @@ count: false
 background-color: #fbe6ec
 # Solution : Titanic
 
-3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par classe x Sexe et **ordonner par ordre décroissant**
+3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par Classe x Sexe et **ordonner par ordre décroissant**
 
 ```{r, echo = T}
 
@@ -1188,9 +1188,9 @@ ggplot(resultats,
        aes(x = Nuance.candidat)) + 
   geom_bar() +
   labs(
-    title = "Number of Votes by Candidate",
-    x = "Candidate",
-    y = "Number") +
+    title = "Nombre de sièges par parti",
+    x = "Parti",
+    y = "Nombre de sièges") +
   theme_minimal()
 ```
 ]
@@ -1201,9 +1201,9 @@ resultats %>%
   ggplot(aes(x = Nuance.candidat)) + 
   geom_bar() +
   labs(
-    title = "Number of Votes by Candidate",
-    x = "Candidate",
-    y = "Number") +
+    title = "Nombre de sièges par parti",
+    x = "Parti",
+    y = "Nombre de sièges") +
   theme_minimal()
 ```
 ]
@@ -1225,9 +1225,9 @@ resultats %>%
              y = percentage)) + #<<
   geom_bar(stat = "identity") + #<<
   labs(
-    title = "Percentage of Votes by Candidate",
-    x = "Candidate",
-    y = "Percentage") +
+    title = "Proportion de sièges par parti",
+    x = "Parti",
+    y = "Proportion de sièges") +
   theme_minimal() 
 ```
 
@@ -1241,9 +1241,10 @@ resultats %>%
   mutate(percentage = n / sum(n) * 100) %>% 
   ggplot(aes(x = Nuance.candidat, y = percentage)) + 
   geom_bar(stat = "identity") +
-  labs(title = "Percentage of Votes by Candidate",
-       x = "Candidate",
-       y = "Percentage") +
+  labs(
+    title = "Proportion de sièges par parti",
+    x = "Parti",
+    y = "Proportion de sièges") +
   theme_minimal() #<<
   
 ```
@@ -1262,9 +1263,9 @@ ggplot(resultats,
        aes(x = Nuance.candidat, fill = Sexe.candidat)) + #<<
   geom_bar() +
   labs(
-    title = "Number of Votes by Candidate",
-    x = "Candidate",
-    y = "Number") +
+    title = "Nombre de sièges par parti",
+    x = "Parti",
+    y = "Nombre de sièges") +
    theme_minimal() +
    theme(legend.position="bottom")
 ```
@@ -1276,9 +1277,9 @@ resultats %>%
   ggplot(aes(x = Nuance.candidat, fill = Sexe.candidat)) + 
   geom_bar() +
   labs(
-    title = "Number of Votes by Candidate",
-    x = "Candidate",
-    y = "Number") +
+    title = "Nombre de sièges par parti",
+    x = "Parti",
+    y = "Nombre de sièges") +
   theme_minimal() +
   theme(legend.position="bottom")
 ```
@@ -1300,7 +1301,7 @@ resultats %>%
     labs(
         title = "Distribution des votes blancs",
         x = "Votes blancs (en centaines)",
-        y = "Frequency") +
+        y = "Fréquence") +
     theme_minimal() 
 ```
 ]
@@ -1314,7 +1315,7 @@ resultats %>%
     labs(
         title = "Distribution des votes blancs",
         x = "Votes blancs (en centaines)",
-        y = "Frequency") +
+        y = "Fréquence") +
     theme_minimal() 
 ```
 ]
@@ -1338,9 +1339,9 @@ resultats %>%
              y = percentage)) + 
   geom_bar(stat = "identity") + 
   labs(
-    title = "Percentage of Votes by Candidate",
-    x = "Candidate",
-    y = "Percentage") +
+    title = "Proportion de sièges par parti",
+    x = "Parti",
+    y = "Proportion de sièges") +
   facet_wrap( ~ Nuance.candidat) + #<<
   theme_minimal() 
 ```
@@ -1356,9 +1357,9 @@ resultats %>%
              y = percentage)) + 
   geom_bar(stat = "identity") + 
   labs(
-    title = "Percentage of Votes by Candidate",
-    x = "Candidate",
-    y = "Percentage") +
+    title = "Proportion de sièges par parti",
+    x = "Parti",
+    y = "Proportion de sièges") +
   facet_wrap( ~ Nuance.candidat) + #<<
   theme_minimal() 
 ```
@@ -1401,7 +1402,7 @@ Très bonne référence: [Géomatique sur R](https://rcarto.github.io/geomatique
 ---
 background-image: url(imgs/sflogo.png)
 background-position: 95% 10%
-background-size: 10%
+background-size: 15%
 
 # 2. `R`: rappels
 
@@ -1746,10 +1747,10 @@ L'apprentissage de `R` est long et fastidieux, mais les rendements sont croissan
 ---
 # References
 
-[Introduction à l’analyse d’enquêtes avec R et RStudio](https://larmarange.github.io/analyse-R/)    
-[Introduction to Econometrics & R Programming, Louis Sirugue](https://louissirugue.github.io/metrics_on_R/home.html)
-[Econometrics, Florian Oswald](https://github.com/ScPoEcon/ScPoEconometrics-Slides)
-[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/01-introduction)     
+[Introduction à l’analyse d’enquêtes avec R et RStudio](https://larmarange.github.io/analyse-R/)      
+[Introduction to Econometrics & R Programming, Louis Sirugue](https://louissirugue.github.io/metrics_on_R/home.html)         
+[Econometrics, Florian Oswald](https://github.com/ScPoEcon/ScPoEconometrics-Slides)         
+[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/01-introduction)      
 [Géomatique sur R](https://rcarto.github.io/geomatique_avec_r/)      
 
 ---
