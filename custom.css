@@ -1,0 +1,92 @@
+/* Style général avec la police Cabin */
+body, h1, h2, h3, th, td {
+    font-family: 'Cabin', sans-serif;
+    color: black;
+}
+
+/* Couleur de fond et alignement général */
+body {
+    background-color: #FAFAFA;
+    font-size: 16px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* En-têtes */
+header {
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
+h1 {
+    color: #dd0747;
+    font-size: 2.2em;
+    font-weight: 200; /* Utiliser la variante en gras de Cabin */
+    margin: 0.1em 0;
+}
+
+h2 {
+    color: #dd0747;
+    font-size: 1.5em;
+    font-weight: 400;
+    margin: 0.1em 0;
+}
+
+h3 {
+    color: #f8cdda;
+    font-size: 1.1em;
+    font-weight: 400;
+    margin-bottom: 1em;
+}
+
+/* Style du tableau avec table-layout pour fixer la largeur des colonnes */
+table {
+    width: 80%;
+    max-width: 800px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    text-align: left;
+    table-layout: fixed; /* Forcer la disposition du tableau */
+}
+
+th {
+    display: none; /* Masquer les en-têtes de colonne */
+}
+
+/* Largeur des colonnes */
+td {
+    padding: 10px 0;
+    border: none;
+    color: #333;
+    overflow-wrap: break-word;
+}
+
+td:first-child {
+    width: auto; /* Permet à la première colonne de prendre tout l'espace restant */
+}
+
+td:nth-child(2), td:nth-child(3) {
+    width: 50px; /* Limite la largeur des colonnes de liens */
+    text-align: right;
+}
+
+/* Style des liens */
+td a {
+    color: rgb(249, 38, 114);
+    text-decoration: none;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+/* Liens désactivés */
+td span {
+    color: grey;
+}
