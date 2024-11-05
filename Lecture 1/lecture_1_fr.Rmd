@@ -164,7 +164,7 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
 ### Semestre 1
 
 1. Séance 1 (aujourd'hui): Rappels de `R` 
-2. Séance 2 (12/11/2024): Rédiger en $\LaTeX$
+2. Séance 2 (12/11/2024): $\LaTeX$ et R Markdown
 3. Séance 3 (19/12/2024): Régressions Linéaires et Causalité
 
 ### Semestre 2

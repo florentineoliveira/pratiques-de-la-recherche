@@ -1,5 +1,5 @@
 ---
-title: "LaTeX"
+title: "LaTeX et R Markdown"
 subtitle: "Pratiques de la Recherche en Économie"
 author: "Florentine Oliveira"
 date: "`r Sys.Date()`"
@@ -185,7 +185,7 @@ Le préambule est la partie du document LaTeX avant la commande `\begin{document
   - `book` : pour les livres, thèses, etc  
   - `beamer` : pour les présentations
 
-2. Les packages ajoutent des fonctionnalités supplémentaires: `\usepackage{graphicx}`
+2. Les packages ajoutent des fonctionnalités supplémentaires:      
   - `\usepackage{amsmath}` : pour des formules mathématiques avancées  
   - `\usepackage{graphicx}` : pour inclure des images  
   - `\usepackage{xcolor}` : pour utiliser des couleurs   
@@ -445,19 +445,13 @@ knitr::include_graphics("imgs/save.png")
 - collaboration en temps réel
 - facilité d'utilisation
 
+&nbsp;
 
 **Inconvénients**
 - Dépendance à internet: en cas de connexion instable, compliqué de travailler sur overleaf
 - Limites de la version gratuite
 - Peut être chronophage: en cas de mise à jour régulière des graphiques/tables
 
-
-
-
----
-## Sources 
-
-[Site internet Overleaf : lean Latex in 30 minutes](https://fr.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes)
 
 
 
@@ -632,7 +626,9 @@ knitr::include_graphics("imgs/include_graphics.png")
 ---
 # 2.6. Bibliographie
 
-Comme sur Overleaf, il est possible d'ajouter une bibligraphie à votre document `R Markdown`. La chaque référence est listée dans le fichier `bibliohraphy.bib`, selon le même modèle que vu précedemment. 
+Comme sur Overleaf, il est possible d'ajouter une bibligraphie à votre document `R Markdown`     
+
+Chaque référence est listée dans le fichier `bibliohraphy.bib`, selon le même modèle que vu précedemment     
 
 La bibliographie est appelée dans le document `R Markdown` dans le YAML: 
 
@@ -660,6 +656,7 @@ Par exemple, `@kleven2019children`.
 - Intégration avec R
 - Syntaxe Markdown simple
 
+&nbsp;
 
 **Inconvénients**
 - Nécessite connaissances de base en `R` (mais c'est votre cas `r emo::ji("smile")`)
@@ -670,6 +667,7 @@ Par exemple, `@kleven2019children`.
 ---
 # Sources
 
+[Site internet Overleaf : lean Latex in 30 minutes](https://fr.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes)        
 [R Markdown Cheatsheet](https://rstudio.github.io/cheatsheets/rmarkdown.pdf)     
 [R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/)    
  

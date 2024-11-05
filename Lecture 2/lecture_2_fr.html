@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>LaTeX</title>
+    <title>LaTeX et R Markdown</title>
     <meta charset="utf-8" />
     <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2024-10-25" />
+    <meta name="date" content="2024-11-05" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
@@ -17,7 +17,7 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# LaTeX
+# LaTeX et R Markdown
 ]
 .subtitle[
 ## Pratiques de la Recherche en Économie
@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Florentine Oliveira
 ]
 .date[
-### 2024-10-25
+### 2024-11-05
 ]
 
 ---
@@ -112,7 +112,7 @@ Le préambule est la partie du document LaTeX avant la commande `\begin{document
   - `book` : pour les livres, thèses, etc  
   - `beamer` : pour les présentations
 
-2. Les packages ajoutent des fonctionnalités supplémentaires: `\usepackage{graphicx}`
+2. Les packages ajoutent des fonctionnalités supplémentaires:      
   - `\usepackage{amsmath}` : pour des formules mathématiques avancées  
   - `\usepackage{graphicx}` : pour inclure des images  
   - `\usepackage{xcolor}` : pour utiliser des couleurs   
@@ -336,19 +336,13 @@ Pour télécharger le document, cliquer sur le bouton **Download PDF**
 - collaboration en temps réel
 - facilité d'utilisation
 
+&amp;nbsp;
 
 **Inconvénients**
 - Dépendance à internet: en cas de connexion instable, compliqué de travailler sur overleaf
 - Limites de la version gratuite
 - Peut être chronophage: en cas de mise à jour régulière des graphiques/tables
 
-
-
-
----
-## Sources 
-
-[Site internet Overleaf : lean Latex in 30 minutes](https://fr.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes)
 
 
 
@@ -515,7 +509,9 @@ Au sein d'un document `R Markdown`, il est possible d'ajouter:
 ---
 # 2.6. Bibliographie
 
-Comme sur Overleaf, il est possible d'ajouter une bibligraphie à votre document `R Markdown`. La chaque référence est listée dans le fichier `bibliohraphy.bib`, selon le même modèle que vu précedemment. 
+Comme sur Overleaf, il est possible d'ajouter une bibligraphie à votre document `R Markdown`     
+
+Chaque référence est listée dans le fichier `bibliohraphy.bib`, selon le même modèle que vu précedemment     
 
 La bibliographie est appelée dans le document `R Markdown` dans le YAML: 
 
@@ -543,6 +539,7 @@ Par exemple, `@kleven2019children`.
 - Intégration avec R
 - Syntaxe Markdown simple
 
+&amp;nbsp;
 
 **Inconvénients**
 - Nécessite connaissances de base en `R` (mais c'est votre cas 😄)
@@ -553,6 +550,7 @@ Par exemple, `@kleven2019children`.
 ---
 # Sources
 
+[Site internet Overleaf : lean Latex in 30 minutes](https://fr.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes)        
 [R Markdown Cheatsheet](https://rstudio.github.io/cheatsheets/rmarkdown.pdf)     
 [R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/)    
  
