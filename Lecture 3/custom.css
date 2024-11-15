@@ -1,5 +1,10 @@
 /* custom.css */
 
+/* Supprimer la numérotation de sections automatique
+h1::before, h2::before, h3::before {
+  content: none;
+}
+
 /* Supprimer les bandes grises alternées */
 .remark-slide table tr:nth-child(even),
 .remark-slide table tr:nth-child(odd) {

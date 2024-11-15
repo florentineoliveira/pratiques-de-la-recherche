@@ -4,7 +4,7 @@
     <title>LaTeX et R Markdown</title>
     <meta charset="utf-8" />
     <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2024-11-05" />
+    <meta name="date" content="2024-11-15" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Florentine Oliveira
 ]
 .date[
-### 2024-11-05
+### 2024-11-15
 ]
 
 ---
@@ -37,6 +37,67 @@ class: center, middle, inverse, title-slide
 layout: true
 
 
+---
+# Format d'un article de recherche 
+
+Les articles académiques en économie empirique suivent un format très **standardisé** :
+
+- **Plan**: 
+      - *Introduction*: motivation, présentation de la question de recherche, revue de littérature, contributions
+      - *Contexte historique/institutionnel*: contexte spécifique au sujet, cadre économique et institutionnel
+      - *Données*: description des sources de données, échantillon, statistiques descriptives
+      - *Stratégie empirique modèle*: stratégie et hypothèses d'identification
+      - *Résultats*: présentation des résultats principaux
+      - *Tests de robustesse*: vérification de la validité des résultats
+      - *Conclusion*: synthèse des contributions et implications
+- **Bibliographie**: références précises et standardisées, intégrées dans le texte
+
+- **Mise en page très sobre**:    
+    - Pas de couleur, sauf pour les graphiques    
+    - Police de caractère standardisée (Computer Modern ou Palatino)
+    - Marges et interligne standards
+    - Titres de sections apparents 
+   
+
+---
+# Pourquoi ne pas rédiger en Word ?
+
+&amp;nbsp;
+
+- **Mise en page**: 
+  - Word est moins adapté aux documents longs et complexes
+  - `\(\LaTeX\)` et R Markdown permettent un contrôle plus précis et **automatisé** de la mise en page et la typographie 
+
+- **Gestion des références et bibliographies**: gestion de la bibliographie automatisée et directement intégrée sur `\(\LaTeX\)` et R Markdown  
+
+- **Collaboration**: `\(\LaTeX\)` et R Markdown sont compatibles avec les outils de contrôle de version comme Git, ce qui facilite le suivi des modifications et la collaboration
+
+- **Intégration des analyses de données**: R Markdown permet d'intégrer du code directement dans le document
+
+
+---
+# LaTeX ?
+
+.center[
+ `\(\LaTeX\)` est un **langage** et un **système de composition de documents** (Wikipédia)
+ ]
+
+**&lt;span style="color:#dd0747;"&gt;Deux attributs principaux&lt;/span&gt;**    
+- **Mise en page automatique** et conforme à des normes typographiques  
+- **Mode Maths**: permet d'écrire des formules mathématiques complexes 
+
+
+**&lt;span style="color:#dd0747;"&gt;Fonctionnement&lt;/span&gt;**      
+- **Syntaxe en texte brut** : le contenu et la mise en forme sont définis par des commandes `\(\LaTeX\)`
+- **Compilation** : le code est *compilé* pour générer un PDF
+
+
+**&lt;span style="color:#dd0747;"&gt;Modes d'édition&lt;/span&gt;**      
+- **Éditeurs locaux**: travailler hors ligne avec *TeXworks*, *TeXShop*, *MiKTeX*
+- **Éditeur en ligne: Overleaf**
+  - Éditeur en ligne collaboratif permettant de créer, compiler et partager des documents `\(\LaTeX\)` sans installation
+  - Particulièrement utile pour les projets en équipe
+
 
 ---
 # Cette séance
@@ -44,29 +105,32 @@ layout: true
 &amp;nbsp;
 
 .pull-left[
-1. Overleaf
+&lt;span&gt;1. Overleaf&lt;/span&gt;
 
-  1.1. Présentation  
-  1.2. Structure de base d'un document  
-  1.3. Formattage du texte   
-  1.4. Math mode  
-  1.4. Figures 
-  1.5. Bibliographie  
-  1.6. Commentaires, compilation et téléchargement du fichier
-  1.7. Avantages et inconvénients
+  &amp;nbsp;&amp;nbsp; 1.1. Présentation            
+  &amp;nbsp;&amp;nbsp; 1.2. Structure de base d'un document            
+  &amp;nbsp;&amp;nbsp; 1.3. Formattage du texte             
+  &amp;nbsp;&amp;nbsp; 1.4. Math mode            
+  &amp;nbsp;&amp;nbsp; 1.5. Figures            
+  &amp;nbsp;&amp;nbsp; 1.6. Bibliographie            
+  &amp;nbsp;&amp;nbsp; 1.7. Commentaires, compilation, téléchargement           
+  &amp;nbsp;&amp;nbsp; 1.8. Avantages et inconvénients          
 ]
+
 .pull-right[
-2. R Markdown  
+&lt;span&gt;2. R Markdown&lt;/span&gt;
 
-  2.1. Présentation  
-  2.2. Syntaxe Markdown  
-  2.3. Chunks  
-  2.4. Figures
-  2.5. Bibliographie
-  2.6. Commentaires, compilation et téléchargement du fichier
-  2.7. Avantages et inconvénients
+  &amp;nbsp;&amp;nbsp; 2.1. Présentation                
+  &amp;nbsp;&amp;nbsp; 2.2. Syntaxe Markdown                
+  &amp;nbsp;&amp;nbsp; 2.3. Chunks                
+  &amp;nbsp;&amp;nbsp; 2.4. Figures                
+  &amp;nbsp;&amp;nbsp; 2.5. Bibliographie                
+  &amp;nbsp;&amp;nbsp; 2.6. Commentaires, compilation, téléchargement                
+  &amp;nbsp;&amp;nbsp; 2.7. Avantages et inconvénients              
 ]
-  
+
+
+
 ---
 layout: false
 class: center, middle, inverse
@@ -82,12 +146,16 @@ background-size: 7%
 
 ## 1.1. Présentation
 
+&amp;nbsp;
+
 - Selon le site internet d'Overleaf,   
 
   - "an online `\(\LaTeX\)` editor that's easy to use. No installation, real-time collaboration, version control, hundreds of LaTeX templates, and more."
   
   
 - **Éditeur Latex** en ligne, collaboratif en temps réel  
+
+- Principe identique à *google docs*, mais syntaxe `\(\LaTeX\)`
 
 
 ---
@@ -159,7 +227,7 @@ Le préambule est la partie du document LaTeX avant la commande `\begin{document
 
 ---
 # 1. Overleaf
-## 1.3. Formatage du texte : listes à puces et numerottées
+## 1.3. Formatage du texte : listes à puces et numerotées
 
 &lt;img src="imgs/overleaf6.png" width="90%" style="display: block; margin: auto;" /&gt;
 
@@ -248,7 +316,7 @@ Quatre éléments indispensables:
 - citer la référence dans le corps du texte à l'endroit voulu avec la commande `\cite{}`
 - afficher la bibliographie à l'endroit où l'on veut qu'elle apparaisse avec la commande `\bibliography{mybibliography}`
 
-🚨 **Seules les références citées dans le texte apparaitront dans la bibliographie**
+🚨 **Seules les références citées dans le texte apparaîtront dans la bibliographie**
 
 ---
 # 1. Overleaf
@@ -333,8 +401,8 @@ Pour télécharger le document, cliquer sur le bouton **Download PDF**
 &amp;nbsp;
 
 **Avantages**
-- collaboration en temps réel
-- facilité d'utilisation
+- Collaboration en temps réel
+- Facilité d'utilisation
 
 &amp;nbsp;
 
