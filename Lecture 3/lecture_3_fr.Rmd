@@ -109,33 +109,10 @@ theme_empty = theme_bw() +
   legend.position = "none"  # Masquer la légende
 )
 
-#theme_empty = theme_bw() + 
-#  theme(
-#    text = element_text(family = "Palatino"),
-#    line = element_blank(),  # Masquer toutes les lignes par défaut
-#    rect = element_blank(),  # Masquer tous les rectangles par défaut, sauf le fond
-#    axis.line = element_line(color = "black"),  # Afficher les lignes des axes
-#    axis.ticks = element_blank(),  # Masquer les ticks des axes
-#    axis.text = element_blank(),  # Masquer les étiquettes des axes
-#    axis.title = element_text(size = 12),  # Afficher les titres des axes
-#    plot.title = element_blank(),  # Masquer le titre du graphique
-#    panel.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"),  # Fond du panneau #FAFAFA
-#    panel.grid.major = element_blank(),  # Masquer la grille principale
-#    panel.grid.minor = element_blank(),  # Masquer la grille secondaire
-#    plot.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"),  # Fond du graphique #FAFAFA
-#    legend.position = "none"  # Masquer la légende
-#  )
-
-# style_mono_accent(
-#   base_color = "#dd0747",
-#   header_font_google = google_font("Palatino"),
-#   text_font_google   = google_font("Palatino", "300", "300i"),
-#   code_font_google   = google_font("Palatino")
-# )
 ```
 
 
-```{R, gen dataset, include = F, cache = T}
+```{r dataset simulation, include = F, cache = T}
 set.seed(123)
 
 # Population and sample size
@@ -154,7 +131,7 @@ e = rnorm(n_population, mean = 0, sd = 1)
 y = a + b*x + e
 
 # Dataframe
-df = data.frame(
+df_simulation = data.frame(
   a = rep(a, n_population),
   b = rep(b, n_population),
   x = x,
@@ -166,10 +143,10 @@ df = data.frame(
 )
 
 # Regressions
-lm0 <- lm(y ~ x, data = df)
-lm1 <- lm(y ~ x, data = filter(df, s1 == T))
-lm2 <- lm(y ~ x, data = filter(df, s2 == T))
-lm3 <- lm(y ~ x, data = filter(df, s3 == T))
+lm0 <- lm(y ~ x, data = df_simulation)
+lm1 <- lm(y ~ x, data = filter(df_simulation, s1 == T))
+lm2 <- lm(y ~ x, data = filter(df_simulation, s2 == T))
+lm3 <- lm(y ~ x, data = filter(df_simulation, s3 == T))
 
 ```
 
@@ -236,7 +213,7 @@ On considère l'échantillon suivant
 --
 
 ```{R, nuage, echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
-ggplot(data = df, aes(x = x, y = y)) +
+ggplot(data = df_simulation, aes(x = x, y = y)) +
   geom_point(size = 3, color = "black", alpha = 0.9) +
   scale_x_continuous(limits = c(-1,8)) +
   scale_y_continuous(limits = c(0.5,7)) +
@@ -260,11 +237,11 @@ y_hat <- function(x, b0, b1) {b0 + b1 * x}
 b0 <- 4
 b1 <- 0.4
 # The plot
-x_min2 <- sort(df$x)[2]
-y_min2 <- df$y[df$x == x_min2]
+x_min2 <- sort(df_simulation$x)[2]
+y_min2 <- df_simulation$y[df_simulation$x == x_min2]
 y_hat_min2 <- y_hat(x_min2, b0, b1)
 
-ggplot(data = df, aes(x = x, y = y)) +
+ggplot(data = df_simulation, aes(x = x, y = y)) +
     geom_point(size = 3, color = "black", alpha = 0.9) +
     geom_abline(intercept = b0, slope = b1, color = "#f08b27", size = 1, alpha = 0.9)  +
     annotate("text", x = -0.4, y = 3.2, label = "tilde(y)", parse = TRUE, color = "#f08b27", size = 6, family = "serif") +
@@ -287,9 +264,9 @@ Pour toute droite $\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x$, on peut cal
 
 ```{R, nuage et droite et point y2, echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
 
-ggplot(data = df, aes(x = x, y = y)) +
+ggplot(data = df_simulation, aes(x = x, y = y)) +
   geom_point(size = 3, color = "black", alpha = 0.9) +
-  geom_point(data = df %>% filter(x == x_min2), size = 3, color = "#f08b27", alpha = 0.9) +
+  geom_point(data = df_simulation %>% filter(x == x_min2), size = 3, color = "#f08b27", alpha = 0.9) +
   geom_abline(intercept = b0, slope = b1, color = "#f08b27", size = 1, alpha = 0.9) + 
   annotate("text", x = x_min2, y = y_min2 - 0.2, label = paste0("y[2]"), parse = TRUE, color = "#f08b27", size = 6, family = "serif") +
   annotate("text", x = -0.4, y = 3.2, label = "tilde(y)", parse = TRUE, color = "#f08b27", size = 6, family = "serif") +
@@ -310,9 +287,9 @@ Pour toute droite $\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x$, on peut cal
 
 ```{R, nuage et droite et point y2 et e2, echo = F, dev = "svg",  fig.width = 9, fig.height = 4.5}
 
-ggplot(data = df, aes(x = x, y = y)) +
+ggplot(data = df_simulation, aes(x = x, y = y)) +
     geom_point(size = 3, color = "black", alpha = 0.9) +
-    geom_point(data = df %>% filter(x == x_min2), size = 3, color = "#f08b27", alpha = 0.9) +
+    geom_point(data = df_simulation %>% filter(x == x_min2), size = 3, color = "#f08b27", alpha = 0.9) +
     geom_abline(intercept = b0, slope = b1, color = "#f08b27", size = 1, alpha = 0.9) +
     geom_segment(aes(x = x_min2, xend = x_min2, y = y_min2, yend = y_hat_min2), color = "#f08b27", size = 0.5, alpha = 0.2) +
     annotate("text", x = -0.4, y = 3.2, label = "tilde(y)", parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
@@ -334,7 +311,7 @@ Pour toute droite $\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x$, on peut cal
 
 ```{R, nuage et droite et toutes erreurs, echo = F, dev = "svg",  fig.width = 9, fig.height = 4.5}
 
-ggplot(data = df, aes(x = x, y = y)) +
+ggplot(data = df_simulation, aes(x = x, y = y)) +
     geom_point(size = 3, color = "black", alpha = 0.9) +
     geom_abline(intercept = b0, slope = b1, color = "#f08b27", size = 1, alpha = 0.9) +
     geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
@@ -358,7 +335,7 @@ Pour toute droite $\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x$, on peut cal
 b0 <- 5
 b1 <- -0.2
 
-ggplot(data = df, aes(x = x, y = y)) +
+ggplot(data = df_simulation, aes(x = x, y = y)) +
     geom_point(size = 3, color = "black", alpha = 0.9) +
     geom_abline(intercept = b0, slope = b1, color = "#f08b27", size = 1, alpha = 0.9) +
     geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
@@ -380,11 +357,11 @@ SCE = $\left(\sum \varepsilon_i^2\right)$: les erreurs importantes sont davantag
 
 ```{R, penalties, echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
 
-df = df %>%
+df_simulation = df_simulation %>%
   mutate(y_hat = y_hat(x, b0, b1),
          distance = abs(y - y_hat))
 
-ggplot(data = df, aes(x = x, y = y)) +
+ggplot(data = df_simulation, aes(x = x, y = y)) +
     annotate("text", x = -0.4, y = 5.6, label = "tilde(y)", parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
     geom_rect(aes(xmin = x, xmax = x + distance, ymin = pmin(y, y_hat), ymax = pmax(y, y_hat)), 
               color = "#f7c593", fill = "#f7c593", alpha = 0.09) +
@@ -413,11 +390,11 @@ b0 <- lm0$coefficients[1]
 b1 <- lm0$coefficients[2]
 
 # The plot
-df = df %>%
+df_simulation = df_simulation %>%
   mutate(y_hat = y_hat(x, b0, b1),
          distance = abs(y - y_hat))
 
-ggplot(data = df, aes(x = x, y = y)) +
+ggplot(data = df_simulation, aes(x = x, y = y)) +
     annotate("text", x = -0.4, y = 2, label = "hat(y)", parse = TRUE, color = "#dd0747", size = 6, family = "Palatino") +
     geom_rect(aes(xmin = x, xmax = x + distance, ymin = pmin(y, y_hat), ymax = pmax(y, y_hat)), 
               color = "#f7c593", fill = "#f7c593", alpha = 0.09) +
@@ -439,7 +416,7 @@ L'estimateur des MCO (*OLS*) calcule $\hat{\beta_0}$ et $\hat{\beta_1}$ qui **<s
 
 ```{R, mco, echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
 
-ggplot(data = df, aes(x = x, y = y)) +
+ggplot(data = df_simulation, aes(x = x, y = y)) +
     annotate("text", x = -0.4, y = 2, label = "hat(y)", parse = TRUE, color = "#dd0747", size = 6, family = "Palatino") +
     geom_point(size = 3, color = "black", alpha = 0.9) +
     geom_abline(intercept = b0, slope = b1, color = "#dd0747", size = 1, alpha = 0.9) +
@@ -469,39 +446,45 @@ $\hat{\beta_1} = \dfrac{Cov(x,y)}{Var(x)}$
 [Maths modèle univarié](#derivation)
 
 ---
+name:hypothesis
 # 1. Rappel: Régression linéaire simple   
 
 ## 1.3. Hypothèses
 
 <span style="color:#9933FF"> $\color{#9933FF}{H_1}$ **Linéarité**</span>: le modèle est linéaire dans les paramètres
- - Formellement, $\color{#9933FF}{\frac{\partial y_i}{\partial x_{ik}} = \beta_k}$ $\color{#9933FF}{\forall k =1, ...; K}$
-
-&nbsp; 
+  - Formellement, $\color{#9933FF}{\frac{\partial y_i}{\partial x_{ik}} = \beta_k}$,  $\color{#9933FF}{\forall k =1, ..., K}$
   
-<span style="color:#9933FF"> $\color{#9933FF}{H_2}$ **Exogeneité/Identification**</span>: $X$ est exogène
+
+<span style="color:#9933FF"> $\color{#9933FF}{H_2}$ **Échantillon Aléatoire**</span>: l'échantillon $(x_i, y_i)$ est un échantillon aléatoire et représentatif de la population.
+  - [Visualisation](#randomsample)
+
+  
+<span style="color:#9933FF"> $\color{#9933FF}{H_3}$ **Exogeneité/Identification**</span>: $X$ est exogène
   - Formellement, $\color{#9933FF}{\mathbb{E}(\varepsilon_i|x) = 0}$   
 
-&nbsp;
 
-<span style="color:#9933FF"> $\color{#9933FF}{H_3}$ **Variation**:</span> il y a suffisamment de variation dans $x$. 
+<span style="color:#9933FF"> $\color{#9933FF}{H_4}$ **Variation**:</span> il y a suffisamment de variation dans $x$. 
   - Dit autrement, chaque variable explicative apporte une information qui lui est propre
-  - Formellement, les explicatives ne sont pas colinéaires (cas univarié: $\color{#9933FF}{x_i \neq}$ <span style="color:#9933FF">constante</span>). 
+  - Formellement, les explicatives ne sont pas colinéaires (cas univarié: $\color{#9933FF}{x_i \neq}$ <span style="color:#9933FF">constante</span>)
+  - `r emo::ji("rotating_light")` [Outliers](#outliers)
   
 
 
 ---
+name: hypothesis2
 # 1. Rappel: Régression linéaire simple   
 
 ## 1.3. Hypothèses
 
   
-<span style="color:#9933FF"> $\color{#9933FF}{H_4}$ **Les erreurs $\varepsilon_i$ sont sphériques** </span>:
-  - <span style="color:#9933FF"> $\color{#9933FF}{H_{4a}}$**Homoscédasticité** </span>: la variance est constante : $\color{#9933FF}{\forall i}$, $\color{#9933FF}{\mathbb{V}(\varepsilon_i|x) = \mathbb{E}(\varepsilon_i^2|x) = \sigma^2}$
-  - <span style="color:#9933FF"> $\color{#9933FF}{H_{4b}}$ **Absence d'autocorrélation** </span>: $\color{#9933FF}{\mathbb{E}(\varepsilon_i\varepsilon_j|x) =  0, \forall i \neq j}$
+<span style="color:#9933FF"> $\color{#9933FF}{H_5}$ **Les erreurs $\varepsilon_i$ sont sphériques** </span>:
+  - <span style="color:#9933FF"> $\color{#9933FF}{H_{5a}}$ **Homoscédasticité** </span>: la variance est constante : $\color{#9933FF}{\forall i}$, $\color{#9933FF}{\mathbb{V}(\varepsilon_i|x) = \mathbb{E}(\varepsilon_i^2|x) = \sigma^2}$    
+    - [Visualisation](#heteroscedasticity)
+  - <span style="color:#9933FF"> $\color{#9933FF}{H_{5b}}$ **Absence d'autocorrélation** </span>: $\color{#9933FF}{\mathbb{E}(\varepsilon_i\varepsilon_j|x) =  0, \forall i \neq j}$
   
   &nbsp;
 
-<span style="color:#9933FF"> **Propriété asymptotique: Normalité**:</span> sous hypothèse que l'échantillon $(x_{i}, y_{i})$ est $iid$, l'esitmateur $\hat{\beta}$ suit une loi normale:  $\color{#9933FF}{\hat{\beta} \; {\sim} \; \mathcal{N}(\beta, \mathbb{V}(\beta)) }$ 
+<span style="color:#9933FF"> **Propriété: Normalité (asymptotique)**:</span> sous hypothèse que l'échantillon $(x_{i}, y_{i})$ est $iid$, l'esitmateur $\hat{\beta}$ suit une loi normale:  $$\color{#9933FF}{\hat{\beta} \; {\sim} \; \mathcal{N}(\beta, \mathbb{V}(\hat{\beta})) }$$
 
 &nbsp;
 
@@ -591,7 +574,7 @@ background-color: #f19bb5
 
 
 4) Calculer quelques statistiques descriptives de la **taille de la fratrie** (`family_size`) et du **nombre d'années d'études** (`education`):  
-  - moyenne, écart-type et variance, corrélation entre les deux variables
+  - moyenne, écart-type, corrélation entre les deux variables
 
 5) Représenter le nuage de points qui définit la relation entre **taille de la fratrie** et **nombre d'années d'études**
 
@@ -735,7 +718,7 @@ background-color: #fbe6ec
 
 ### Intuition 
 
-2) Selon vous, quelle est la relation entre **taille de la fratrie** et **performances scolaires** ?
+3) Selon vous, quelle est la relation entre **taille de la fratrie** et **performances scolaires** ?
 
 --
 
@@ -856,10 +839,10 @@ background-color: #fbe6ec
 
 ```{r, echo=T, eval = T}
 # 1: Calcul à la main
-b = cov(df$family_size, df$education)/var(df$family_size)
-b
-a = mean(df$education) - b*mean(df$family_size)
-a
+beta_1 = cov(df$family_size, df$education)/var(df$family_size)
+beta_1
+beta_0 = mean(df$education) - beta_1*mean(df$family_size)
+beta_0
 # 2: Via lm
 summary(lm(education ~ family_size, data = df))$coefficients
 ```
@@ -887,7 +870,8 @@ plot_1
 plot_2 <- g_educ_famsize +
     ylim(11, 12.7) +
     theme_minimum +
-  stat_smooth(data = educ_avg_famsize, method = "lm", se = FALSE, colour = "#dd0747") +
+  geom_abline(intercept = beta_0, slope = beta_1, color = "#dd0747", size = 1, alpha = 0.9) +
+  #stat_smooth(data = educ_avg_famsize, method = "lm", se = FALSE, colour = "#dd0747") +
   theme_minimum
 plot_2
 ```
@@ -899,7 +883,15 @@ plot_2
 
 &nbsp;
 
-**Question**: Que se passe t-il quand on considère `family_size` comme une variable discète et non continue?
+**Question**: Que se passe t-il quand on considère `family_size` comme une variable discrète et non continue?    
+     
+--
+
+.center[
+*hint*: utiliser `as.factor(family_size)`
+]
+
+
 
 --
 
@@ -911,7 +903,7 @@ plot_2
 
 &nbsp;
 
-<span style="color:#dd0747"> **Black et al. (2005)** </span>: montrent qu'il existe un autre prédicteur de la performance scolaire, corrêlé à la taille de la fratrie       
+<span style="color:#dd0747"> **Black, Devereux and Salvanes (2005)** </span>: montrent qu'il existe un autre prédicteur de la performance scolaire, corrêlé à la taille de la fratrie       
 
 --
   
@@ -919,6 +911,31 @@ plot_2
  .center[
 <span style="color:#dd0747"> le rang de naissance </span>
  ]
+
+
+---
+background-color: #d7e2d8
+# Recap: Régression linéaire simple
+
+**Data**: Données observationnelles
+
+<span style="color:#9933FF">**Hypothèse d'identification**</span>: $\color{#9933FF}{\mathbb{E}(\varepsilon_i|x) = 0}$, i.e. $x$ n'est pas corrêlée au terme d'erreur $\varepsilon$
+- dit autrement, $x$ est exogène, i.e. il n'y a pas de variable omise/biais de sélection
+
+**Modèle**: pour tout individu $i$, 
+
+$$Y_i = \beta_0 + \beta_1 x_i + \varepsilon_i$$
+  
+**Estimateur de l'effet causal de $x$ sur $Y$**:
+
+$$\hat{\beta_1} = \frac{Cov(x,y)}{\mathbb{V}(x)}$$
+
+**Implémentation sur `R`**
+- `lm` pour estimer les paramètres du modèle
+- `summary` pour afficher le résultat de l'estimation
+- `coeftest`, argument `vcov = vcovHC(fit, type = 'HC0')` pour obtenir des se robustes à l'hétéroscédasticité
+- `stargazer` ou `modelsummary` pour exporter les résultats en une table $\LaTeX$
+
 
 
 
@@ -941,7 +958,7 @@ L'hypothèse d'exogeneité implique que l'estimateur des MCO est non biaisé
 
 <span style="color:#dd0747">**Cependant, cette hypothèse est très forte et rarement vérifiée**</span>
 
-<span style="color:#33B8FF">**Biais de Variable Omise/Biais de sélection** (*Omitted Variable Bias - OVB*) : il existe un biais de variable omise lorsqu'une variable qui n'est pas inclue dans le set de variables explicatives (et donc $\in \varepsilon$), et qui:      
+<span style="color:#33B8FF">**Biais de Variable Omise/Biais de sélection** (*Omitted Variable Bias - OVB*) : il existe un biais de variable omise lorsqu'une variable qui n'est pas inclue dans le set de variables explicatives (et donc $\in \varepsilon$),       
 1) affecte $y$      
 2) est correlée à $x_i$ </span>  
 
@@ -961,10 +978,11 @@ L'hypothèse d'exogeneité implique que l'estimateur des MCO est non biaisé
 
 &nbsp;
 
-Plus précisément, on cherche estimer l'**effet de $D_i$ sur $Y_i$**, par exemple:
+On cherche estimer l'**effet de $D_i$ sur $Y_i$**, par exemple:
 - l'effet d'avoir un master sur le salaire (*returns to education*)
 - l'effet d'une peine de prison sur la probabilité de récidive
 - l'effet d'un médicament sur la santé d'un patient
+- l'effet d'appartenir à une fratrie de plus de 2 enfants sur la réussite scolaire
 
 
 ---
@@ -975,12 +993,12 @@ Chaque individu $i$ a deux outcomes potentiels:
 - $Y_{1i}$ si $D_i = 1$, l'outcome en cas de traitement
 - $Y_{0i}$ si $D_i = 0$, l'outcome en l'absence de traitement
 
-La différence entre ces deux outcomes potentiels donne l'effet causal du traitement pour chaque individu $i$:
+L'effet causal du traitement pour chaque individu $i$ est simplement la différence entre l'outcome en cas de traitement et l'outcome en l'absence de traitement:
 
 $$\delta_i = Y_{1i} - Y_{0i}$$
-La moyenne des $\delta_i$ donne l'effet moyen du traitement (**A**verage **T**reatment **E**ffect):
+L'espérance des $\delta_i$ donne l'effet **moyen** du traitement (**A**verage **T**reatment **E**ffect):
 
-<span style="color:#dd0747">$$\text{ATE} = \mathbb{E}(\delta_i)$$</span>
+<span style="color:#dd0747"> $$\text{ATE} = \mathbb{E}(\delta_i) = \mathbb{E}(Y_{1i}) - \mathbb{E}(Y_{0i})$$ </span>
 
 
 ---
@@ -989,12 +1007,37 @@ La moyenne des $\delta_i$ donne l'effet moyen du traitement (**A**verage **T**re
 
 &nbsp;
 
+.center[
 `r emo::ji("rotating_light")` <span style="color:#dd0747"> **Problème fondamental de l'inférence causale: il n'est pas possible d'observer à la fois $\color{#dd0747}{\text{Y}_{1i}}$ et $\color{#dd0747}{\text{Y}_{0i}}$**</span> `r emo::ji("rotating_light")`
+]
 
-Dit autrement, on observe uniquement $Y_i = Y_{1i} D_i + Y_{0i}(1 - D_i)$
+&nbsp;
+
+On observe uniquement $Y_i = Y_{1i} D_i + Y_{0i}(1 - D_i)$:
 - quand l'individu $i$ est traîté, i.e. $D_i = 1$, on observe uniquement $Y_i = Y_{1i}$
 - quand l'individu $i$ n'est pas traîté, i.e. $D_i = 0$, on observe uniquement $Y_i = Y_{0i}$
 
+$\implies$ on observe **deux groupes**: le groupe des individus **traités** et le groupe des individus **non traîtés (ou témoins ou contrôles)**
+
+
+
+
+---
+# 2. Causalité
+## 2.2. Potential Outcomes Framework
+
+&nbsp;
+
+<span style="color:#dd0747">**Question:**</span> que peut-on faire à partir des données que l'on observe sur ces deux groupes ?
+ 
+--
+
+&nbsp;
+
+<span style="color:#dd0747">**Réponse:**</span> calculer la différence entre l'outcome moyen des individus traîtés et l'outcome moyen des individus non traîtés, 
+
+$$\Delta = \mathbb{E}(Y_{1i} | D_i = 1) - \mathbb{E}(Y_{0i} | D_i = 0)$$ 
+ 
  
 ---
 name: potential
@@ -1003,12 +1046,18 @@ name: potential
 
 &nbsp;
 
-Est-il possible de calculer l'effet moyen du traitement à partir des données que l'on observe?
-  - par exemple en calculant la différence entre l'outcome moyen des individus traîtés et celui des individus non traîtés?
+<span style="color:#dd0747">**Question:**</span> est-ce que $\Delta$ = ATE, l'effet causal moyen du traitement ?
+
+--
+
+&nbsp;
+
+<span style="color:#dd0747">**Réponse: si le traitement n'est pas corrêlé à l'outcome**</span>
 
 Intuition: 
-- si le **le traitement est indépendant de la variable d'intérêt**, i.e. si le groupe de contrôle est comparable au groupe de traîtés,
-- alors **la différence entre l'outcome moyen du groupe des individus traîtés et celui des individus non traîtés estime l'effet causal du traitement (ATE)**:
+- si le **le traitement est indépendant de l'outcome**, i.e. si le groupe de contrôle est comparable au groupe de traîtés, ou formellement si $(Y_{1i}, Y_{0i}) \perp D_i$,
+- alors il n'y a pas de biais de sélection dans le traitement,
+- donc **la différence entre l'outcome moyen du groupe des individus traîtés et celui des individus non traîtés estime l'effet causal du traitement (ATE)**:
 $$\Delta = \mathbb{E}(Y_{1i} | D_i = 1) - \mathbb{E}(Y_{0i} | D_i = 0) = \text{ATE} \;\; \text{iff} \;\; (Y_{1i}, Y_{0i}) \perp D_i$$ 
 
 [Maths](#mathpotential)
@@ -1018,17 +1067,17 @@ $$\Delta = \mathbb{E}(Y_{1i} | D_i = 1) - \mathbb{E}(Y_{0i} | D_i = 0) = \text{A
 # 2. Causalité
 ## 2.2. Potential Outcomes Framework
 
-<span style="color:#dd0747">Problème </span>: $\mathbb{E}(Y_{0i} | D_i = 1) = \mathbb{E}(Y_{0i} | D_i = 0)$ (= absence de sélection) est une hypothèse forte. Souvent les groupes traités et non traîtés ne sont pas comparables (étudiants qui décident de faire un master sont peut-être plus motivés, les individus contraints à de la prison sûrement plus dangereux, etc.).
+<span style="color:#dd0747">Problème </span>: $\mathbb{E}(Y_{0i} | D_i = 1) = \mathbb{E}(Y_{0i} | D_i = 0)$ (= absence de sélection) est une hypothèse forte. Souvent les groupes traités et non traîtés ne sont pas comparables (étudiants qui décident de faire un master sont peut-être plus motivés, les individus incarcérés sûrement plus dangereux, etc, **inobservable**).
 
 &nbsp;
 
-Deux types de sélection possibles:
+Différents *types* de sélection:
 
 - **Auto-selection**:
   - si les gains espérés du traitement sont corrêlés à l'outcome 
-  - si les coûts liés au traitement ne sont hétérogènes
+  - si les coûts liés au traitement sont hétérogènes
 
-- **Selection par les entités qui délivrent le traitement**
+- **Selection par les entités qui délivrent le traitement**:
   - si seuls les individus ayant un outcome initial faible sont traîtés
   - ou l'inverse
 
@@ -1046,14 +1095,14 @@ n = 10000 # nombre d'individus
 ATE = 3 
 
 # Outcomes potentiels
-y0 = rnorm(n, mean = 10, sd = 2)  # outcome potentiel en cas de traitement
-y1 = y0 + rnorm(n, mean = ATE, sd = 1)  # outcome potentiel en l'absence de traitement
+Y0 = rnorm(n, mean = 10, sd = 2)  # outcome potentiel en cas de traitement
+Y1 = Y0 + rnorm(n, mean = ATE, sd = 1)  # outcome potentiel en l'absence de traitement
 
 # Traitement non aléatoire
-D = ifelse(y0 > median(y0), 1, 0)
+D = ifelse(Y0 > median(Y0), 1, 0)
 
 # Outcome observé
-y = y1*D + y0*(1-D)  
+Y = Y1*D + Y0*(1-D)  
 ```
 
 Calculer:   
@@ -1067,7 +1116,7 @@ background-color: #fbe6ec
 # Solution   
 
 ```{r, echo = T, include = T}
-head(data.frame(y0, y1, D, y))
+head(data.frame(Y0, Y1, D, Y))
 ```
 
   
@@ -1076,9 +1125,9 @@ background-color: #fbe6ec
 # Solution   
 
 ```{r, echo = T, include = T}
-SD = mean(y1[D == 1]) - mean(y0[D == 0])
-ATT = mean(y1[D==1] - y0[D==1])
-bias = mean(y0[D == 1]) - mean(y0[D == 0])
+SD = mean(Y1[D == 1]) - mean(Y0[D == 0])
+ATT = mean(Y1[D==1] - Y0[D==1])
+bias = mean(Y0[D == 1]) - mean(Y0[D == 0])
 
 # Afficher les résultats
 data.frame(
@@ -1087,7 +1136,6 @@ data.frame(
   Biais_de_selection = bias
 )
 ```
-
 
 
 
@@ -1126,7 +1174,7 @@ Les expériences aléatoires contrôlées, ou ***Randomized Controlled Trials (R
 <span style="color:#dd0747">**Krueger, A. B.** </span> "Experimental estimates of education production functions.", QJE 1999   
 
 
-Le projet **STAR** (*Student-Teacher Achievement Ratio*) est un exemple très connu d'expériementation qui a pour but d'estimer l'effet causal de la taille des classes sur les performances scolaires des élèves.
+Le projet **STAR** (*Student-Teacher Achievement Ratio*) est un exemple très connu d'expériementation qui a pour but d'estimer l'**effet causal de la taille des classes sur les performances scolaires des élèves**.
 
 Principaux éléments:
 - 11 600 élèves de l'état du Tennessee ont participé à l'expérimentation
@@ -1163,17 +1211,15 @@ background-color: #f19bb5
 # Application: le projet STAR
 
 ### Intuition:
-1) En quoi la répartition aléatoire des élèves et enseignants aux différents groupes de traitement et contrôles au sein des écoles permet de 
+1) En l'absence de randomisation, pourquoi simplement comparer les résultats moyens des élèves de petites classes et de classes de taille moyenne ne suffit pas à estimer un effet causal de la taille des classes ?
 
 ### Code
 
 **NB: Aide pour calculer les percentiles**.
 
-2) **À faire pour la semaine prochaine: Reproduire le Panel A de la Table 1 page 503 (= calcul de moyennes et F-tests)**
+2) Représenter graphiquement la densité de `avg_perc` pour le groupe *small* et le groupe *regular + regular-with-aide* (Reproduction de la Figure 1, Panel Kindergarten, page 509)
 
-3) Représenter graphiquement la densité de `avg_perc` pour le groupe *small* et le groupe *regular + regular-with-aide* (Reproduction de la Figure 1, Panel Kindergarten, page 509)
-
-4) Estimer les paramètres du modèle : $Y_i = \beta_0 + \beta_1 \text{Small}_i + \beta_2 \text{RegularAide}_i + \varepsilon_i$ (Reproduction de la Table 5, Colonne 1 page 512)   
+3) Estimer les paramètres du modèle : $Y_i = \beta_0 + \beta_1 \text{Small}_i + \beta_2 \text{RegularAide}_i + \varepsilon_i$ (Reproduction de la Table 5, Colonne 1 page 512)   
 
 ---
 background-color: #fbe6ec
@@ -1291,11 +1337,12 @@ background-color: #fbe6ec
 
 ### Intuition
 
-*Questions*: 
-- en l'absence de randomisation, pourquoi simplement comparer les résultats des élèves de petites classes et de classes de taille moyenne ne suffit pas à estimer un effet causal de la taille des classes ?
+1) En l'absence de randomisation, pourquoi simplement comparer les résultats des élèves de petites classes et de classes de taille moyenne ne suffit pas à estimer un effet causal de la taille des classes ?
 
 
 --
+
+&nbsp;
 
 
 **Within School sorting**: L'allocation des élèves et professeurs **au sein** des écoles n'est pas aléatoire  
@@ -1309,7 +1356,7 @@ background-color: #fbe6ec
 background-color: #fbe6ec
 # Solution   
 
-3) Représenter graphiquement la densité de `avg_perc` pour le groupe *small* et le groupe *regular + regular-with-aide* (Reproduction de la Figure 1, Panel Kindergarten, page 509)
+2) Représenter graphiquement la densité de `avg_perc` pour le groupe *small* et le groupe *regular + regular-with-aide* (Reproduction de la Figure 1, Panel Kindergarten, page 509)
 
 .pull-left[
 ```{r,  fig.dim = c(5.5, 3)}
@@ -1344,7 +1391,7 @@ STAR %>%
 background-color: #fbe6ec
 # Solution   
 
-4) Estimer les paramètres du modèle : $Y_i = \beta_0 + \beta_1 \text{Small}_i + \beta_2 \text{RegularAide}_i + \varepsilon_i$ (Reproduction de la Table 5, Colonne 1 page 512)  
+3) Estimer les paramètres du modèle : $Y_i = \beta_0 + \beta_1 \text{Small}_i + \beta_2 \text{RegularAide}_i + \varepsilon_i$ (Reproduction de la Table 5, Colonne 1 page 512)  
 
 ```{r,  fig.dim = c(5.5, 3)}
 
@@ -1368,10 +1415,12 @@ Bien qu'il s'agisse d'une stratégie empirique très ***clean***, les expérienc
 - **Validité externe**: les expérimentations sont souvent réalisées à une échelle très locale. Dans quelle mesure les résultats se généralisent à d'autres contextes? Quid du passage à l'échelle?
 
 - Ethique: 
+  - une partie de la population "privée" du traitement
+  - Quel accompagnement après le traitement?
 
 
 ---
-background-color: #f2c394
+background-color: #d7e2d8
 # Recap: Randomized Controlled Trial
 
 **Data**: Données expérimentales
@@ -1388,7 +1437,7 @@ $$Y_i = \alpha + \delta D_i + \varepsilon$$
 - $\hat{\delta} = \mathbb{E}(Y_i | D_i = 1) - \mathbb{E}(Y_i | D_i = 0)$
 
 **Implémentation sur `R`**: 
-- Balancing Tests: 
+- Balancing Tests: test de différences de moyennes 
 - Estimation de l'effet du traitement: `lm(y ~ D, data = data)`
 
 
@@ -1410,14 +1459,14 @@ Voici le code utilisé dans la précédente application auquel on ajoute une var
 set.seed(123) # pour la reproductibilité
 n = 10000 # nombre d'individus
 ATE = 3 
-y0 = rnorm(n, mean = 10, sd = 2)  # outcome potentiel en cas de traitement
-y1 = y0 + rnorm(n, mean = ATE, sd = 1)  # outcome potentiel en l'absence de traitement
-D = ifelse(y0 > median(y0), 1, 0)
-y = y1*D + y0*(1-D)  
+Y0 = rnorm(n, mean = 10, sd = 2)  # outcome potentiel en cas de traitement
+Y1 = Y0 + rnorm(n, mean = ATE, sd = 1)  # outcome potentiel en l'absence de traitement
+D = ifelse(Y0 > median(Y0), 1, 0)
+Y = Y1*D + Y0*(1-D)  
 
 # Traitement aléatoire
 D_random = rbinom(n, 1, 0.5)
-y_random = y1*D_random + y0*(1-D_random)
+Y_random = Y1*D_random + Y0*(1-D_random)
 ```
 
 Calculer:   
@@ -1433,10 +1482,10 @@ background-color: #fbe6ec
 
 ```{r, echo = T, include = T}
 
-SDO = mean(y[D == 1]) - mean(y[D == 0])
-ATT = mean(y1[D_random == 1] - y0[D_random == 1])
-bias = mean(y0[D_random == 1]) - mean(y0[D_random == 0])
-SD_random = mean(y1[D_random == 1]) - mean(y0[D_random == 0])
+SDO = mean(Y[D == 1]) - mean(Y[D == 0])
+ATT = mean(Y1[D_random == 1] - Y0[D_random == 1])
+bias = mean(Y0[D_random == 1]) - mean(Y0[D_random == 0])
+SD_random = mean(Y1[D_random == 1]) - mean(Y0[D_random == 0])
 
 # Afficher les résultats
 data.frame(
@@ -1454,19 +1503,406 @@ data.frame(
 [Econometrics with R](https://www.econometrics-with-r.org/13.3-experimental-estimates-of-the-effect-of-class-size-reductions.html)    
 [Project STAR: Student-Teacher Achievement Ratio in AER](https://rdrr.io/cran/AER/man/STAR.html)    
 [Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/04-potential_outcomes)    
-[Florian Oswald](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter_slr/chapter_slr.html)
-[Edward Rubin](https://github.com/edrubin/EC421S19/tree/master)
-[Scott Cunningham](https://mixtape.scunning.com)
-[Scientific Research and Methodology, Peter K. Dunn](https://bookdown.org/pkaldunn/Book/)
+[Florian Oswald](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter_slr/chapter_slr.html)               
+[Edward Rubin](https://github.com/edrubin/EC421S19/tree/master)               
+[Scott Cunningham](https://mixtape.scunning.com)               
+[Scientific Research and Methodology, Peter K. Dunn](https://bookdown.org/pkaldunn/Book/)               
+Économétrie: méthodes et applications. Bruno Crépon et Nicolas Jacquemet
 
 
 ---
-class: center, middle
+count:false
+class: middle, center
+background-color: #dd0747
 
-# Annexe
+# <span style="color:#FAFAFA;">  Annexe </span>
 
 
 ---
+count:false
+name: randomsample
+# $\hat{\beta}$ est une variable aléatoire
+
+
+
+.pull-left[
+```{R, scatter1, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
+ggplot(data = df_simulation, aes(x = x, y = y)) +
+geom_abline( intercept = lm0$coefficients[1], slope = lm0$coefficients[2], color = "#dd0747", size = 1) +
+geom_point(color = "black", size = 3) +
+theme_empty
+```
+]
+
+--
+
+.pull-left[
+```{R, sample1 scatter, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
+ggplot(data = df_simulation, aes(x = x, y = y)) +
+geom_abline(intercept = lm0$coefficients[1], slope = lm0$coefficients[2], color = "#dd0747", size = 1, alpha = 0.3) +
+geom_point(aes(shape = s1), color = "black", size = 3) +
+geom_abline( intercept = lm1$coefficients[1], slope = lm1$coefficients[2], size = 1, linetype = 2, color = "black") +
+scale_shape_manual(values = c(1, 19)) +
+theme_empty
+```
+]
+
+[Tiré du cours d'Edward Rubin](#https://raw.githack.com/edrubin/EC421S19/master/LectureNotes/02Review/02_review.html#1)
+
+---
+count:false
+# $\hat{\beta}$ est une variable aléatoire
+
+.pull-left[
+
+```{R, scatter1 opur sample 2, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
+ggplot(data = df_simulation, aes(x = x, y = y)) +
+geom_abline(intercept = lm0$coefficients[1], slope = lm0$coefficients[2],color = "#dd0747", size = 1) +
+geom_point(color = "black", size = 3) +
+theme_empty
+```
+
+
+]
+
+
+.pull-left[
+
+```{R, sample2 scatter, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
+ggplot(data = df_simulation, aes(x = x, y = y)) +
+geom_abline( intercept = lm0$coefficients[1], slope = lm0$coefficients[2], color = "#dd0747", size = 1, alpha = 0.3) +
+geom_point(aes(shape = s2), color = "black", size = 3) +
+geom_abline(intercept = lm1$coefficients[1], slope = lm1$coefficients[2],size = 1, linetype = 2, color = "black", alpha = 0.3) +
+geom_abline(intercept = lm2$coefficients[1], slope = lm2$coefficients[2],size = 1, linetype = 2, color = "black") +
+scale_shape_manual(values = c(1, 19)) +
+theme_empty
+```
+]
+
+[Tiré du cours d'Edward Rubin](#https://raw.githack.com/edrubin/EC421S19/master/LectureNotes/02Review/02_review.html#1)
+
+---
+count:false
+# $\hat{\beta}$ est une variable aléatoire
+
+.pull-left[
+
+```{R, scatter1 opur sample 3, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
+ggplot(data = df_simulation, aes(x = x, y = y)) +
+geom_abline(intercept = lm0$coefficients[1], slope = lm0$coefficients[2],color = "#dd0747", size = 1) +
+geom_point(color = "black", size = 3) +
+theme_empty
+```
+]
+
+
+.pull-left[
+
+```{R, sample3 scatter, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
+ggplot(data = df_simulation, aes(x = x, y = y)) +
+geom_abline(intercept = lm0$coefficients[1], slope = lm0$coefficients[2],color = "#dd0747", size = 1, alpha = 0.3) +
+geom_point(aes(shape = s3), color = "black", size = 3) +
+geom_abline(intercept = lm1$coefficients[1], slope = lm1$coefficients[2],size = 1, linetype = 2, color = "darkgrey", alpha = 0.3) +
+geom_abline(intercept = lm2$coefficients[1], slope = lm2$coefficients[2],size = 1, linetype = 2, color = "darkgrey", alpha = 0.3) +
+geom_abline(intercept = lm3$coefficients[1], slope = lm3$coefficients[2],size = 1, linetype = 2, color = "black") +
+scale_shape_manual(values = c(1, 19)) +
+theme_empty
+```
+]
+
+[Tiré du cours d'Edward Rubin](#https://raw.githack.com/edrubin/EC421S19/master/LectureNotes/02Review/02_review.html#1)
+
+---
+count:false
+# $\hat{\beta}$ est une variable aléatoire
+
+.pull-left[
+```{R, simulation, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
+# simulations
+simulate_regression <- function(seed, df_simulation, n_sample) {
+  set.seed(seed)
+  sample_df_simulation <- df_simulation %>% sample_n(n_sample)
+  model <- lm(y ~ x, data = sample_df_simulation)
+  coefs <- coef(model)
+  return(data.frame(intercept = coefs[1], slope = coefs[2]))
+}
+
+# Effectuer les simulations en parallèle
+results <- do.call(rbind, mclapply(1:10000, simulate_regression, df = df_simulation, n_sample = n_sample, mc.cores = parallel::detectCores()))
+
+# Tracer les résultats
+ggplot() +
+  geom_abline(data = results, aes(intercept = intercept, slope = slope), alpha = 0.01, color = "black") +
+  geom_point(data = df_simulation, aes(x = x, y = y), size = 3, color = "black", alpha = 0.8) +
+  geom_smooth(data = df_simulation, aes(x = x, y = y), method = "lm", color = "#dd0747", se = FALSE, size = 1) +
+  theme_empty
+
+```
+
+[Tiré du cours d'Edward Rubin](#https://raw.githack.com/edrubin/EC421S19/master/LectureNotes/02Review/02_review.html#1)
+
+
+]
+
+--
+
+.pull-right[
+
+- En **moyenne**, les droites de régressions sur les échantillons sont très proches de la droite de régression sur l'ensemble de la population
+
+
+- Mais certaines en sont très éloignées
+
+
+- ** $\hat{\beta}$ est une variable aléatoire : sa valeur est propre à l'échantillon sur lequel il est estimé**
+
+
+$\implies$ Tout l'enjeu pour l'économètre est d'assurer que l'échantillon est aléatoire et/ou représentatif de telle sorte à ce que $\hat{\beta}$ soit proche de $\beta$
+
+`r emo::ji("rotating_light")` Bien lire la description de l'échantillon et utiliser les variables de **pondération** lorsque cela est nécessaire!
+
+]
+
+
+
+
+---
+count:false
+# Échantillon non représentatif/aléatoire
+
+&nbsp;
+
+```{r representative, echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+
+ggplot(data = df_simulation, aes(x = x, y = y)) +
+    geom_point(size = 3, color = "black", alpha = 0.9) +
+    geom_abline(intercept = b0, slope = b1, color = "#dd0747", size = 1, alpha = 0.9) +
+    scale_x_continuous(limits = c(-1,8)) +
+    scale_y_continuous(limits = c(0.5,7)) +
+    theme_empty 
+```
+
+
+---
+count:false
+# Échantillon non représentatif/aléatoire
+
+&nbsp;
+
+
+```{r non representative,  echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+selected_sample = df_simulation %>% filter(y > quantile(y, 0.75)) %>% mutate(selected = "Selected")
+df_simulation = df_simulation %>% mutate(selected = ifelse(x %in% selected_sample$x & y %in% selected_sample$y, "Selected", "not selected"))
+b0_selected = (lm(y ~ x, data = selected_sample))$coefficients[1]
+b1_selected = (lm(y ~ x, data = selected_sample))$coefficients[2]
+
+ggplot() +
+    geom_point(data = df_simulation, aes(x = x, y = y, shape = selected), size = 3, color = "black", alpha = 0.8) +
+    scale_shape_manual(values = c("Selected" = 19, "not selected" = 1)) +
+    #geom_smooth(data = selected_sample, aes(x = x, y = y), method = "lm", color = "#921539", se = FALSE, size = 1, fullrange = TRUE) +
+    geom_abline(intercept = b0_selected, slope = b1_selected, color = "#921539", size = 1, alpha = 0.9) +
+    #geom_abline(intercept = b0, slope = b1, color = "#dd0747", size = 1, alpha = 0.9) +
+    scale_x_continuous(limits = c(-1,8)) +
+    scale_y_continuous(limits = c(0.5,7)) +
+    theme_empty
+```
+
+
+
+---
+count:false
+# Échantillon non représentatif/aléatoire
+
+&nbsp;
+
+
+```{r non representative 2 lines,  echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+selected_sample = df_simulation %>% filter(y > quantile(y, 0.75)) %>% mutate(selected = "Selected")
+df_simulation = df_simulation %>% mutate(selected = ifelse(x %in% selected_sample$x & y %in% selected_sample$y, "Selected", "not selected"))
+b0_selected = (lm(y ~ x, data = selected_sample))$coefficients[1]
+b1_selected = (lm(y ~ x, data = selected_sample))$coefficients[2]
+
+ggplot() +
+    geom_point(data = df_simulation, aes(x = x, y = y, shape = selected), size = 3, color = "black", alpha = 0.8) +
+    scale_shape_manual(values = c("Selected" = 19, "not selected" = 1)) +
+    #geom_smooth(data = selected_sample, aes(x = x, y = y), method = "lm", color = "#921539", se = FALSE, size = 1, fullrange = TRUE) +
+    geom_abline(intercept = b0_selected, slope = b1_selected, color = "#921539", size = 1, alpha = 0.9) +
+    geom_abline(intercept = b0, slope = b1, color = "#dd0747", size = 1, alpha = 0.9) +
+    scale_x_continuous(limits = c(-1,8)) +
+    scale_y_continuous(limits = c(0.5,7)) +
+    theme_empty
+```
+
+
+[Back](#hypothesis)
+
+
+---
+count:false
+name: outliers
+# Outliers
+
+&nbsp;
+
+
+```{r no outliers, echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+ggplot(data = df_simulation, aes(x = x, y = y)) +
+    geom_point(size = 3, color = "black", alpha = 0.9) +
+    geom_abline(intercept = b0, slope = b1, color = "#dd0747", size = 1, alpha = 0.9) +
+    scale_x_continuous(limits = c(-1,11)) +
+    scale_y_continuous(limits = c(0.5,41)) +
+    theme_empty 
+```
+
+
+
+---
+count:false
+# Outliers
+
+&nbsp;
+
+```{r point outlier, echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+df_with_outlier <- rbind(df_simulation %>% select(x,y,selected), data.frame(x = 10, y = 40, selected = "Outlier"))
+b0_outliers = (lm(y ~ x, data = df_with_outlier))$coefficients[1]
+b1_outliers = (lm(y ~ x, data = df_with_outlier))$coefficients[2]
+
+ggplot(data = df_with_outlier, aes(x = x, y = y)) +
+    geom_point(size = 3, color = "black", alpha = 0.9) +
+    #geom_abline(intercept = b0, slope = b1, color = "#dd0747", size = 1, alpha = 0.9) +
+    scale_x_continuous(limits = c(-1,11)) +
+    scale_y_continuous(limits = c(0.5,41)) +
+    theme_empty 
+```
+
+
+---
+count:false
+# Outliers
+
+&nbsp;
+
+```{r outliers, echo = F, echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+
+ggplot(data = df_with_outlier, aes(x = x, y = y)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_abline(intercept = b0_outliers, slope = b1_outliers, color = "#921539", size = 1, alpha = 0.9) +
+  scale_x_continuous(limits = c(-1,11)) +
+  scale_y_continuous(limits = c(0.5,41)) +
+  theme_empty
+
+```
+
+
+---
+count:false
+# Outliers
+
+&nbsp;
+
+```{r outliers 2 lines, echo = F, echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+
+ggplot(data = df_with_outlier, aes(x = x, y = y)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_abline(intercept = b0_outliers, slope = b1_outliers, color = "#921539", size = 1, alpha = 0.9) +
+  geom_abline(intercept = b0, slope = b1, color = "#dd0747", size = 1, alpha = 0.9) +
+  scale_x_continuous(limits = c(-1,11)) +
+  scale_y_continuous(limits = c(0.5,41)) +
+  theme_empty
+
+```
+
+
+
+---
+count:false
+# Traitement des outliers
+
+&nbsp;
+
+**Solution 1: Supprimer les outliers**
+- Identifier les outliers:
+  - à partir de l'**écart-type**: *lorsque la distribution des données est relativement symétrique*. Une observation éloignée de plus de 3 $\times$ écart-type de la moyenne peut être considérée comme une valeur abberrante 
+  - à partir de l'**écart interquartile**: peut être considérée comme outlier toute observation non incluse dans l'intervalle $[Q_1 - k(Q_3 - Q_1) \;;\; Q3 + k (Q3 - Q1)]$  où $k>0$. On détecte des outliers *moyens* pour $k=1.5$, et *extrêmes* pour $k=3$
+
+
+**Solution 2: Windsoring**: remplacer les outliers par la valeur du 99ème percentile de la variable
+
+
+**Solution 3: utiliser le log de la variable**
+
+
+**Solution 4: ne rien faire**. Parfois certaines observations/individus sont très éloignés de la moyenne.
+
+&nbsp;
+
+[Back](#hypothesis)
+
+
+
+---
+count:false
+name: heteroscedasticity
+# Hétéroscédasticité
+
+```{r dataset simulation heteroscedasticity, include = F, cache = T}
+set.seed(123)
+
+# Population and sample size
+n_population_h = 1000
+
+# True parameters
+a = 1.6
+b = 0.7
+
+# Regressor and error term
+x = rnorm(n_population_h, mean = 3, sd = 1.5)
+e = rnorm(n_population_h, mean = 0, sd = 1)
+e_heteroscedastic <- rnorm(n_population_h, mean = 0, sd = abs(x)^(1/3))
+  
+# Outcome
+y = a + b*x + e
+y_heteroscedastic <- a + b * x + e_heteroscedastic
+
+# Dataframe
+df_simulation_h = data.frame(
+  a = rep(a, n_population_h),
+  b = rep(b, n_population_h),
+  x = x,
+  e = e,
+  y = y,
+  e_heteroscedastic = e_heteroscedastic,
+  y_heteroscedastic = y_heteroscedastic
+)
+```
+
+.pull-left[
+```{r nuage homoscedastic, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
+
+ggplot(data = df_simulation_h, aes(x = x, y = y)) +
+  geom_point(size = 3, color = "black", alpha = 0.9) +
+  theme_empty 
+
+```
+]
+
+.pull-right[
+```{r nuage heteroscedastic, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
+ggplot(data = df_simulation_h, aes(x = x, y = y_heteroscedastic)) +
+  geom_point(size = 3, color = "black", alpha = 0.9) +
+  theme_empty 
+
+```
+]
+
+
+[Back](#hypothesis2)
+
+
+
+
+---
+count:false
 name: derivation
 # Calcul de l'estimateur des MCO dans le cas univarié
 
@@ -1511,8 +1947,8 @@ $$\implies \color{#dd0747}{\hat{\beta}} = \dfrac{\sum_{i = 1}^N  y_i x_i - N \ov
 
 
 
-
 ---
+count:false
 name: mathpotential
 
 # ATE
@@ -1520,9 +1956,9 @@ name: mathpotential
 On a $\delta_i = Y_{1i} - Y_{0i}$ que l'on peut réécrire 
 $$Y_{1i} = \delta_i + Y_{0i} \;\; \;\; (1)$$ 
 
-Prenons la différence entre la moyenne de l'outcome des individus traîtés et celle des individus non traîtés:
+Prenons la différence entre <span style="color:#88aa8b">l'outcome moyen des individus traîtés</span> et <span style="color:#9f9cc3">l'outcome moyen des individus non traîtés</span>:
 
-$$\begin{align}\Delta &= \mathbb{E}(Y_i | D_i = 1) - \mathbb{E}(Y_i | D_i = 0) \\ &= \mathbb{E}(Y_{1i} | D_i = 1) - \mathbb{E}(Y_{0i} | D_i = 0) \end{align}$$
+$$\begin{align}\Delta &= \color{#88aa8b}{\mathbb{E}(Y_i | D_i = 1)} - \color{#9f9cc3}{\mathbb{E}(Y_i | D_i = 0)} \\ &= \mathbb{E}(Y_{1i} | D_i = 1) - \mathbb{E}(Y_{0i} | D_i = 0) \end{align}$$
 En remplaçant $Y_{1i}$ par sa valeur décrite en (1),
 
 $$\begin{align}\Delta  &= \mathbb{E}(\delta_i + Y_{0i} | D_i = 1) - \mathbb{E}(Y_{0i} | D_i = 0) \\ &= \underbrace{\mathbb{E}(\delta_i| D_i = 1)}_{= \;\text{ATT}} + \underbrace{\mathbb{E}(Y_{0i} | D_i = 1)  - \mathbb{E}(Y_{0i} | D_i = 0)}_{= \;\text{Selection Bias}} \end{align}$$
@@ -1530,10 +1966,10 @@ Donc $\Delta = \text{ATT} + \text{Selection Bias}$.
 
 
 ---
-
+count:false
 # ATE
 
-Si <span style="color:#dd0747"> $\color{#dd0747}{D_i}$ est aléatoire </span>, c'est à dire si $(Y_{1i}, Y_{0i}) \perp D_i$,
+Si <span style="color:#dd0747"> $\color{#dd0747}{D_i}$ n'est pas corrêlé à l'outcome</span>, formellement si $(Y_{1i}, Y_{0i}) \perp D_i$,
 
 Alors $$\mathbb{E}(\delta_i | D_i = 1) = \mathbb{E}(\delta_i)$$
 
@@ -1545,8 +1981,8 @@ Donc $$\color{#dd0747}{\Delta = ATE}$$
 [Back](#potential)
 
 
-
 ---
+count:false
 name: variables
 # Variables STAR 
 
