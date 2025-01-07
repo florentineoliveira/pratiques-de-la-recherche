@@ -1,0 +1,329 @@
+---
+title: "Devoir Maison"
+author: "Florentine Oliveira"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+```{r setup}
+# Packages
+library(foreign)
+library(tidyverse)
+library(fixest)
+
+# Real EEC data with wage
+emp_t1 = read.csv('/Users/florentineoliveira/Desktop/INDIV171.csv', sep = ';')
+emp_t2 = read.csv('/Users/florentineoliveira/Desktop/INDIV172.csv', sep = ';')
+emp_t3 = read.csv('/Users/florentineoliveira/Desktop/INDIV173.csv', sep = ';')
+emp_t4 = read.csv('/Users/florentineoliveira/Desktop/INDIV174.csv', sep = ';')
+
+# Bind all wages to get wage at it is asked only onced among interviews
+# and then restrict to first trimester 
+emp = emp_t1 %>% 
+  bind_rows(emp_t2, emp_t3, emp_t4) %>% 
+  group_by(IDENT, NOI) %>% 
+  mutate(max_salaire = if (all(is.na(SALRED))) NA_real_ else max(SALRED, na.rm = TRUE) ) %>% 
+  filter(TRIM == 1)
+
+# Open source data without wage
+data = read.dbf('/Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Homework/data/fdeec17.dbf')
+varlist = read.dbf('/Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Homework/data/varlist.dbf')
+varmod = read.dbf('/Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Homework/data/varmod.dbf')
+
+```
+
+```{r setup}
+
+# 1. Delete 0 in HHCE variable 
+# 1. Compute hourly wage
+# 2. Log of this variable
+
+emp_reg_w = emp %>% 
+  filter(HHC != 0, 
+         ACTEU == 1) %>%  
+  mutate(hwage = log(max_salaire/(HHC*151.67/35))) 
+
+#q025 = quantile(emp_reg_w$hwage,.025, na.rm = T)
+#q975 = quantile(emp_reg_w$hwage,.975, na.rm = T)
+#
+#emp_reg_w = emp_reg_w %>% 
+#  mutate(hwage = pmin(pmax(hwage, q025), q975))
+#
+# compute estimates
+
+reg = feols(hwage ~ as.factor(SEXE) + as.factor(AGE5) + as.factor(DIP11) + as.factor(QPRC) + as.factor(ANCENTR4) + as.factor(CONTRA) | CSP, data = emp_reg_w, vcov = "HC1")
+
+coefs = summary(reg)$coefficients
+
+# coefs est une matrice dont les noms de lignes sont les noms des coefficients.
+# On va créer un data frame avec ces informations.
+df_coefs <- data.frame(
+  Term = names(coefs),
+  Estimate = as.numeric(coefs),
+  stringsAsFactors = FALSE
+)
+
+# Maintenant, on veut séparer la variable et la modalité, 
+# sachant que le nom est sous forme "as.factor(VAR)MOD".
+
+# On utilise une expression régulière :
+# Pattern : ^as\\.factor\\(([^)]+)\\)(.*)$
+# - ^as\\.factor\\(  : commence par "as.factor("
+# - ([^)]+)          : capture le nom de la variable jusqu'à la parenthèse fermante
+# - \\)              : parenthèse fermante
+# - (.*)$            : capture tout ce qui reste comme la modalité
+
+pattern <- "^as\\.factor\\(([^)]+)\\)(.*)$"
+
+df_coefs$Variable <- sub(pattern, "\\1", df_coefs$Term)
+df_coefs$Modalite <- sub(pattern, "\\2", df_coefs$Term)
+
+# Le data frame df_coefs contient maintenant :
+# - Term : le nom complet du coefficient
+# - Estimate : la valeur estimée du coefficient
+# - Variable : le nom de la variable factorisée
+# - Modalite : la modalité correspondante
+
+references <- data.frame(
+  Term = c("as.factor(SEXE)1",
+           "as.factor(AGE5)15",
+           "as.factor(DIP11)10",
+           "as.factor(QPRC)1",
+           "as.factor(ANCENTR4)1",
+           "as.factor(CONTRA)1"),
+  Estimate = 0,
+  Variable = c("SEXE", "AGE5", "DIP11", "QPRC", "ANCENTR4", "CONTRA"),
+  Modalite = c("1", "15", "10", "1", "1", "0"),
+  stringsAsFactors = FALSE
+)
+
+# On ajoute ces lignes à df_coefs
+df_coefs <- rbind(df_coefs, references) 
+
+dfs_list <- df_coefs %>%
+  split(.$Variable)
+
+# Pour chaque data frame dans la liste, renommer la colonne Modalite
+dfs_list <- lapply(names(dfs_list), function(var) {
+  dfs_list[[var]] %>%
+    select(Modalite, Estimate) %>%
+    rename(!!var := Modalite)  # Renomme 'Modalite' en nom de la variable
+})
+
+# Nommer les éléments de la liste selon les variables
+names(dfs_list) <- names(split(df_coefs, df_coefs$Variable))
+
+
+# Compute mean by CSP
+mean_csp = emp_reg_w %>% 
+  group_by(CSP) %>% summarise(mean_csp = mean(hwage, na.rm = T))
+
+
+
+# Now, add estimates and mean by CSP to the open source dataframe
+data_t = data %>% 
+  filter(TRIM == 1) %>% 
+  left_join(mean_csp %>% mutate(CSP = as.factor(CSP)), by = 'CSP') %>% 
+  left_join(dfs_list[['SEXE']] %>% rename(b_sexe = Estimate), by = 'SEXE') %>% 
+  left_join(dfs_list[['AGE5']] %>% rename(b_age = Estimate), by = 'AGE5') %>%  
+  left_join(dfs_list[['ANCENTR4']] %>% rename(b_anciennete = Estimate), by = 'ANCENTR4') %>% 
+  left_join(dfs_list[['CONTRA']] %>% rename(b_contrat = Estimate), by = 'CONTRA') %>% 
+  left_join(dfs_list[['DIP11']] %>% rename(b_dipl = Estimate), by = 'DIP11') %>% 
+  left_join(dfs_list[['QPRC']] %>% rename(b_status = Estimate), by = 'QPRC')
+
+data_t = data_t %>% 
+  mutate(estimated_log_hw = mean_csp + b_sexe + b_age + b_anciennete + b_contrat + b_dipl + b_status + rnorm(n(), 0, 0.01),
+         estimated_w = exp(estimated_log_hw)*(HHCE*151.67/35),
+         u = runif(n()),
+         outlier_log_wage = ifelse(u<.01 & !is.na(estimated_log_hw),runif(n(),4,6), estimated_log_hw),
+         outlier_wage = exp(outlier_log_wage)*(HHCE*151.67/35))
+
+data_to_share = data_t %>% 
+  select(- outlier_log_wage, - u, - estimated_log_hw, -estimated_w, - mean_csp, - b_sexe, - b_contrat, - b_dipl, - b_age, - b_anciennete, - b_status) %>% 
+  rename(wage = outlier_wage)
+
+saveRDS(data_to_share, "data/eec_t1_2017_simulated_wage.rds")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r setup}
+
+# Cleaning
+
+# Keep only CSP with 1000 individuals 
+
+
+
+
+
+
+
+```
+
+
+
+
+# Inégalités salariales
+
+
+
+
+# Gender wage gap
+
+
+
+
+# Child penalty
+
+
+
+
+  
+  
+
+
+
+
+
+# Dictionnaire des codes
+
+# IDENT, NOI
+
+
+**SEXE**:  1 si Masculin, 2 si féminin
+
+**DDIPL**: 
+vide: non renseigné     
+1: Diplôme supérieur au Bac+2
+3: BTS, DUT, ou autre diplôme de niveau Bac+2
+4: Baccalauréat ou brevet professionnel ou autre diplôme de ce niveau
+5: CAP, BEP ou autre diplôme de ce niveau
+6: Brevet des collèges
+7: Aucun diplôme ou Certificat d'études primaires
+
+
+**ACTIF**:
+vide: sans objet 
+1: Actif
+2: Inactif
+
+**STC**: Statut déclaré dans l'emploi principal
+vide: sans objet
+1: À son compte
+2: Salarié chef d'entreprise, gérant mandataire, PDG
+3: Salarié autre que chef d'entreprise
+4: Travaille pour un membre de sa famille sans être salarié
+
+
+**TPP**: Nature du temps de travail dans l'emploi principal
+vide: sans objet
+1: À temps complet
+2: À temps partiel
+3: sans objet, pour les personnes non salariées qui estiment que cette question ne s'appliquent pas à elles)
+
+
+**SALRED**: rémunération mensuelle nette en euros retirée de la profession principale primes comprises, redressée des non-réponses
+
+**SALREDTR**: rémunération mensuelle nette en euros retirée de la profession principale primes comprises, redressée des non-réponses, en tranches
+Vide Sans objet 
+A: Moins de 500 euros   
+B: De 500 à moins de 1 000 euros    
+C: De 1 000 à moins de 1 250 euros    
+D: De 1 250 à moins de 1 500 euros    
+E: De 1 500 à moins de 2 000 euros    
+F: De 2 000 à moins de 2 500 euros    
+G: De 2 500 à moins de 3 000 euros    
+H: De 3 000 à moins de 5 000 euros    
+I: De 5 000 à moins de 8 000 euros    
+J: Plus de 8 000 euros   
+
+
+**NAIA**: Année de naissance
+
+
+**ENCADR**: Encadrement d'une ou plusieurs personnes, pour les salariés ou ceux ayant uun emploi formel
+vide: sans objet
+1: oui
+2: non
+
+**CSP**: Catégorie socio-professionnelle pour les actifs occupés
+
+Vide: Sans objet (personnes non actives occupées)
+00 : Non renseigné
+11: Agriculteurs sur petite exploitation
+12: Agriculteurs sur moyenne exploitation
+13: Agriculteurs sur grande exploitation
+21: Artisans
+22: Commerçants et assimilés
+23: Chefs d'entreprise de 10 salariés ou plus
+31: Professions libérales
+33: Cadres de la fonction publique
+34: Professeurs, professions scientifiques
+35: Professions de l'information, des arts et des spectacles
+37: Cadres administratifs et commerciaux d'entreprise
+38: Ingénieurs et cadres techniques d'entreprise
+42: Professeurs des écoles, instituteurs et assimilés
+43: Professions intermédiaires de la santé et du travail social
+44: Clergé, religieux
+45: Professions intermédiaires administratives de la fonction publique
+46: Professions intermédiaires administratives et commerciales des entreprises
+47: Techniciens
+48: Contremaîtres, agents de maîtrise
+52: Employés civils et agents de service de la fonction publique
+53: Policiers et militaires
+54: Employés administratifs d'entreprise
+55: Employés de commerce
+56: Personnels des services directs aux particuliers
+62: Ouvriers qualifiés de type industriel
+63: Ouvriers qualifiés de type artisanal
+64: Chauffeurs
+65: Ouvriers qualifiés de la manutention, du magasinage et du transport
+67: Ouvriers non qualifiés de type industriel
+68: Ouvriers non qualifiés de type artisanal
+69: Ouvriers agricoles
+
+
+
+**CONTRA**:
+Vide: Sans objet ou non renseigné
+0: Pas de contrat de travail
+1: Contrat à durée indéterminée (CDI)
+2: Contrat à durée déterminée (CDD) autre que saisonnier
+3: Contrat saisonnier
+4: Contrat d'intérim ou de travail temporaire
+5: Contrat d'apprentissage
+
+
+
+**ANCENTR**: Ancienneté dans l'entreprise ou dans la fonction publique en mois
+vide: Sans objet (personnes non actives occupées, trabailleurs informels et travailleurs interimaires en activité temporaire ou d'appoint) ou non renseigné
+-1: date de début dans l'entreprise - telle que déclarée dans l'enquête - comprise entre la fin de la semaine de référence et le jour de collecte
+0 à 999: nombre de mois 
+
+**ANCENTR4**: Ancienneté dans l'entreprise ou dans la fonction publique
+vide: Sans objet (personnes non actives occupées, trabailleurs informels et travailleurs interimaires en activité temporaire ou d'appoint) ou non renseigné
+1: moins d'un an
+2: De 1 an à moins de 5 ans
+3: de 5 ans à moins de 10 ans
+4: 10 ans ou plus
+
+**AG**: âge détaillé en années révolues au 31/12
+
+**AGE**: âge détaillé au dernier jour de la semaine de référence
+
+# PCS des parents en + 
+
+# STATUTR: garder les CDI
+
