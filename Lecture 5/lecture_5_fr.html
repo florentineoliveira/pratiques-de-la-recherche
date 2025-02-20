@@ -4,7 +4,7 @@
     <title>Variables Instrumentales (IV)</title>
     <meta charset="utf-8" />
     <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2024-10-25" />
+    <meta name="date" content="2025-02-20" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Florentine Oliveira
 ]
 .date[
-### 2024-10-25
+### 2025-02-20
 ]
 
 ---
@@ -36,153 +36,640 @@ class: center, middle, inverse, title-slide
 
 layout: true
 
+---
+# Selection on unobservables
+
+Les méthodes d'identification basées sur l'**hypothèse d'indépendance conditionnelle** (CIA, ou **selection sur les observables**) supposent qu'en contrôlant par des variables observables `\(W_i\)`, l'estimateur OLS donne l'effet causal du traitement `\(D\)`
+  - i.e. on peut contrôler pour toute la sélection dans le traitement (*mauvaise variation*) par des variables **observées** `\(W\)`
+
+&amp;nbsp;
+
+--
+
+&lt;img src="imgs/ols.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Selection on unobservables
+
+
+.center[🚨 &lt;span style="color:#dd0747"&gt; **Il existe (quasiment) TOUJOURS des variables inobservables qui affectent à la fois le traitement et l'outcome**&lt;/span&gt; 🚨]
+
+
+--
+
+.center[
+&lt;span style="color:#dd0747"&gt; `\(\color{#dd0747}{\implies}\)` **Biais de sélection (le groupe de traitement et contrôle ne sont pas comparables)**&lt;/span&gt;
+]
+
+
+--
+
+.center[
+&lt;span style="color:#dd0747"&gt; `\(\color{#dd0747}{\implies} \; D\)` **est endogène**&lt;/span&gt;
+]
+
+
+--
+
+.center[
+&lt;span style="color:#dd0747"&gt; `\(\implies \; \hat{\beta}\)` **n'est pas causal**&lt;/span&gt;
+]
+
+--
+
+&amp;nbsp;
+
+&lt;img src="imgs/selection_unobs.png" width="40%" style="display: block; margin: auto;" /&gt;
 
 
 
 ---
-# Selection sur les non-observables
+# Intuition IV
 
-Les méthodes d'identification basées sur la **selection sur les observables** supposent que l'on peut supprimer le biais de sélection au traitement `\(D_i\)` en contrôlant par des variables observables `\(X_i\)`. L'hypothèse d'identification sous-jacente:
+La méthode des **variables instrumentales**
 
-`$$\{Y_{0i}, Y_{1i}\} \perp D_i|X_i$$`
+--
 
-Les méthodes d'identification basées sur la **sélection sur les non-observables** supposent que l'on peut utiliser seulement la "bonne variation" de `\(D_i\)`, que l'on appelle `\(Z_i\)`, et l'utiliser pour estimer l'effet de `\(D_i\)` sur `\(Y_i\)`. Cela permet par ailleurs de supprimer tout biais de sélection (en supprimant la "mauvaise" variation de `\(D_i\)`). L'hypothèse d'identification devient double: 
+- sépare `\(D\)` en une partie exogène (*bonne variation*) et une partie endogène (*mauvaise variation*)
+  
+--
+  
+- grâce à une variable que l'on appelle &lt;span style="color:#dd0747"&gt;**instrument** `\(\color{#dd0747}{Z_i}\)`&lt;/span&gt; 
+  
+--
 
-`$$\{Y_{0i}, Y_{1i}\} \perp Z_i$$`     
+- pour n'utiliser que la partie exogène dans l'estimation de l'effet du traitement
+   
+--
+   
+Cela permet de supprimer le biais de sélection en *supprimant la mauvaise variation* de `\(D_i\)`
 
-`$$Cov(Z_i, D_i) \neq 0$$`
+
+--
+
+&amp;nbsp;
+
+&lt;img src="imgs/instrument.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+
 
 ---
-# Intuition
+# Estimateur IV
 
-La méthode des variables instrumentales permet d'isoler la "bonne variation" de D, c'est à dire celle qui est correlée avec Y, de la mauvaise variation, c'est à dire celle qui est correlée avec u et rend la variable D endogène. 
+On a le modèle usuel:
 
-Comment? Au moyen d'une variable observable Z, correlée acec D mais pas avec u.
+`$$Y_i = \alpha + \beta D_i + W_i + \varepsilon_i$$`
+&amp;nbsp;
 
-&lt;span style="color:#9933FF"&gt; Formellement: `\(\color{#9933FF}{(Y_{1i}, Y_{0i}) \perp D_i}\)` &lt;/span&gt;
+
+***Rappel***: l'esimateur OLS garantie que l'estimateur de `\(\beta\)` de l'effet du traitement `\(D\)` est causal/bien identifié si et seulement si `\(Cov(D_i,\varepsilon_i)=0\)`, ce qui est une &lt;span style="color:#dd0747"&gt;hypothèse très forte&lt;/span&gt;.
+
+&amp;nbsp;
+
+La méthode des **variables instrumentales** suppose qu'il existe une variable `\(Z_i\)`, corrélée avec la variable endogène et qui impacte l'outcome uniquement via son effet sur la variable endogène.
+
+
+L'&lt;span style="color:#33B8FF"&gt;**estimateur IV**&lt;/span&gt; s'écrit:
+
+`$$\color{#33B8FF}{\hat{\beta}^{IV} = (Z'D)^{-1}(Z'Y)}$$`
+où `\(Z=(ZW)\)` et `\(D=(DW)\)`, avec `\(W\)` les variables de contrôle.
 
 
 ---
 # Hypothèses d'identification
 
-&lt;span style="color:#9933FF"&gt; **Relevance:**&lt;/span&gt; 
-- &lt;span style="color:#9933FF"&gt;Intuition: l'instrument et la variable endogène sont corrélés&lt;/span&gt; 
-- &lt;span style="color:#9933FF"&gt; Formellement,  `\(\color{#9933FF}{Cov(D_i, Z_i) \neq 0}\)` &lt;/span&gt; 
 
+&lt;span style="color:#9933FF"&gt; **Relevance:**&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt;L'instrument est corrélé à la variable endogène/traitement&lt;/span&gt; (cela nous assure qu'on garde bien une partie de la *bonne variation* de  `\(\color{#9933FF}{D}\)` )&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt; Formellement,  `\(\color{#9933FF}{Cov(D_i, Z_i) \neq 0}\)` &lt;/span&gt;
+- &lt;span style="color:#9933FF"&gt; **Hypothèse testable!**: via la régression de première étape (*first-stage*) en montrant que l'instrument a bien un effet statistiquement significatif sur la variable endogène/instrument + F-stat &gt; 10&lt;/span&gt;
+
+&amp;nbsp;
 
 &lt;img src="imgs/relevance.png" width="60%" style="display: block; margin: auto;" /&gt;
 
----
-# Hypothèses d'identification
-
-&lt;span style="color:#9933FF"&gt;L'instrument est **as-good-as-random:**&lt;/span&gt; 
-- &lt;span style="color:#9933FF"&gt;Intuition: l'instrument est distribué aléatoirement &lt;/span&gt; 
-- &lt;span style="color:#9933FF"&gt; Formellement,  `\(\color{#9933FF}{Cov(Z_i, \varepsilon_i) = 0}\)` &lt;/span&gt; 
-
-&lt;img src="imgs/as-good-as-random.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 ---
 # Hypothèses d'identification
 
-&lt;span style="color:#9933FF"&gt; **Exclusion restriction:**&lt;/span&gt; 
-- &lt;span style="color:#9933FF"&gt;Intuition: l'instrument affecte `\(\color{#9933FF}{Y}\)` **uniquement via** `\(\color{#9933FF}{D}\)` &lt;/span&gt; 
-- &lt;span style="color:#9933FF"&gt; Formellement,  `\(\color{#9933FF}{Cov(Z_i, \varepsilon_i) = 0}\)` &lt;/span&gt; 
+&lt;span style="color:#9933FF"&gt; **Exclusivité**&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt;L'instrument affecte `\(\color{#9933FF}{Y}\)` **uniquement via** `\(\color{#9933FF}{D}\)`. Dit autrement, l'instrument n'impacte pas directement `\(\color{#9933FF}{Y}\)` &lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt; Hypothèse **NON testable!**&lt;/span&gt; 
+
+&amp;nbsp;
 
 &lt;img src="imgs/exclusion.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 
----
-
-
-
-`$$\begin{align} Cov(Y_i, Z_i) &amp;= Cov(\alpha + \beta Z_i + \varepsilon_i, Z_i) \\ &amp;= \beta Cov(D_i, Z_i) + \underbrace{Cov(\varepsilon_i, Z_i)}_{=0}\end{align}$$`
-Donc, `\(\beta\)` est identifié: 
-
-$$ \beta = \frac{Cov(Y_i, Z_i)}{Cov(D_i, Z_i)} $$
----
-# Lien avec 
-
 
 ---
-# Quatres modèles
+# Hypothèses d'identification
+
+&lt;span style="color:#9933FF"&gt;**Exogeneité/as-good-as-random:**&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt;L'instrument est **exogène** (non corrélé avec le terme d'erreur) &lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt; Formellement,  `\(\color{#9933FF}{Cov(Z_i, \varepsilon_i) = 0}\)` &lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt; Hypothèse **NON testable!**&lt;/span&gt; 
+
+&amp;nbsp;
+
+&lt;img src="imgs/exogeneity.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+&amp;nbsp;
+
+*NB: Exogeneité + Exclusivité = Exclusion Restriction*
+
+
+---
+# Comment savoir si un instrument est bon ?
+
+&amp;nbsp;
+
+.center[&lt;span style="color:#dd0747"&gt;***Good instruments should feel weird***  🤨&lt;/span&gt;]
+
+&amp;nbsp;
+
+Les bons instruments peuvent sembler **contre-intuitifs**: ils créent un effet sur la variable endogène/instrument mais ne déterminent pas l'outcome.
+  - un bon instrument doit susciter la confusion chez un auditeur non averti
+  
+&amp;nbsp;
+
+L’***exclusion restriction***, hypothèse clé mais **non testable**, est plus crédible lorsque l'instrument semble incongru 
+  - il faut pouvoir défendre cette hypothèse avec une argumentation logique et théorique
+&amp;nbsp;  
+  
+Exemples : 
+  - composition de genre des deux premiers enfants comme instrument du numbre d'enfants et l’offre de travail des femmes
+  - pluviométrie comme instrument pour le revenu sur la fréquence de conflits
+  - lotteries
+
+
+
+
+
+---
+# Two-stage least squares (2SLS)
+
+&amp;nbsp;  
+
+La méthode des variables instrumentales est souvent utilisée en deux étapes, en l'occurence lorsqu'il y a plusieurs instruments/variables endogènes:
+
+1. &lt;span style="color:#33B8FF"&gt;**First stage**&lt;/span&gt;: on régresse la variable endogène sur l'instrument et les contrôles, `\(D_i = \delta + \color{#27b072}{\gamma} Z_i + \xi_i\)` et on garde la valeur prédite de la variable endogène `\(\hat{D}\)`
+2. &lt;span style="color:#33B8FF"&gt;**Second stage**&lt;/span&gt;: on régresse l'outcome sur la valeur prédite de la variable endogène `\(\hat{D}\)` et les variables de contrôle. Cette régression ne conserve que la partie de l'instrument `\(Z\)` qui est corrêlée avec la variable endogène `\(D\)`
+
+&amp;nbsp;  
+
+L'estimateur 2SLS s'écrit:
+
+$$\color{#33B8FF}{\hat{\beta}^{2SLS} = \frac{\text{Estimateur de Reduced-Form}}{\text{Estimateur de First Stage}}} = \frac{\color{#eb8934}{\hat{\pi}}}{\color{#27b072}{\hat{\gamma}}} $$
+
+
+---
+# Forme réduite (*Reduced-Form*)
+
+Le modèle en &lt;span style="color:#33B8FF"&gt;**reduced-form**&lt;/span&gt;  s'écrit:
+
+`$$Y_i = \mu + \color{#eb8934}{\pi} \color{#9e5188}{Z_i} + \nu_i$$`
+
+L'estimateur OLS de cette équation donne un estimateur causal de **l'effet de l'instrument** ( `\(\neq\)` effet du traitement `\(D_i\)`) sur l'outcome.
+
+L'hypothèse d'identification est que l'instrument est bien exogène ( `\(Cov(\varepsilon_i, Z_i) = 0\)` ) 
+
+
+
+---
+# Recap: quatres modèles
+
+&amp;nbsp;  
+
 
 **Modèle avec variable endogène**: 
-- `\(Y_i = \alpha + \beta D_i + \varepsilon_i\)`
-
+- `\(Y_i = \alpha + \beta D_i + W_i + \varepsilon_i\)`
 
 **First Stage**: régression de la &lt;span style="color:#e07126"&gt;**variable endogène**&lt;/span&gt; sur l'&lt;span style="color:#9e5188"&gt;**instrument**&lt;/span&gt; 
-- `\(\color{#e07126}{D_i} = \alpha + \gamma \color{#9e5188}{Z_i} + \epsilon_i\)`
+- `\(\color{#e07126}{D_i} = \alpha + \gamma \color{#9e5188}{Z_i} + W_i + \epsilon_i\)`
 
 **Second Stage**: régression de l'outcome d'intérêt sur les &lt;span style="color:#199c2c"&gt;**valeurs prédites en *first stage* **&lt;/span&gt; 
-- `\(Y_i = \alpha + \beta \color{#199c2c}{\hat{D_i}} + \varepsilon_i\)`
+- `\(Y_i = \alpha + \beta \color{#199c2c}{\hat{D_i}} + W_i + \varepsilon_i\)`
 
 **Reduced Form**: régression de l'outcome sur l'&lt;span style="color:#9e5188"&gt;**instrument**&lt;/span&gt; 
-- `\(Y_i = \mu + \pi \color{#9e5188}{Z_i} + \nu_i\)`
+- `\(Y_i = \mu + \pi \color{#9e5188}{Z_i} + W_i + \nu_i\)`
+
+
+
+
+---
+# IV sur `R`
+
+## Option 1: à la main
+
+L’estimation peut être réalisée en deux étapes manuelles:
+
+.pull-left[
+**Étape 1**:
+
+`first_stage &lt;- lm(D ~ Z + W, data = data)`
+
+`data$D_hat &lt;- predict(first_stage)`           
+]
+
+--
+
+.pull-right[
+**Étape 2**:
+
+`second_stage &lt;- lm(Y ~ D_hat + W, data = data)`
+]
+
+--
+
+&amp;nbsp;  
+
+## Option 2: Package `estimater`, fonction `iv_robust`
+
+`iv_model &lt;- iv_robust(Y ~ D + W | Z + W, data = data)`
+
+**Avantage**: gère directement l'erreur standard robuste.
+
+.center[🚨 Toujours inclure les contrôles dans la first stage et second stage 🚨]
+
+
 
 
 ---
 background-color: #f19bb5
 # Application: Angrist and Krueger (1991)
 
-**Question de Recherche**: quel est l'effet causal du niveau d'études sur le salaire?
+
+**Question de Recherche**: quel est l'effet du niveau d'études sur le salaire (= *Mincer equation*)?
 
 --
 
 **Question**: pourquoi ne peut-on pas simplement comparer le salaire de deux individus ayant un niveau de diplôme différent?      
 
 --
-**Biais de sélection/OVB**: 
+
+**Biais de sélection/OVB**: **Ability Bias**
 - les individus ayant de meilleures capacités ou davantage de motivation ont tendance à poursuivre leurs études plus longtemps et par ailleurs cela peut également avoir un impact sur leur salaire
-- Problème: on n'observe pas la motivation ni les capacités (ie. ces variables sont dans `\(u\)`)
+- Problème: on n'observe pas la motivation ni les capacités (ie. ces variables sont dans `\(\varepsilon_i\)`)
   - donc estimate biaisé 
+  
+--
+
+&lt;span style="color:#dd0747"&gt;**Angrist et Krueger (1991)**&lt;/span&gt;
+- papier de référence pour la prise en compte du biais d'abilité
+- proposent un instrument pour le niveau d'éducation: **le trimestre de naissance** (Quarter of Birth, QOB):
+
+**Contexte**: USA
+  - entrée à l'école l'**année des 6 ans**
+  - école obligatoire jusqu'à 16 ans
+  
   
 ---
 background-color: #f19bb5
 # Application: Angrist and Krueger (1991)
 
-Angrist et Krueger proposent un instrument pour le niveau d'éducation: **le trimestre de naissance** (Quarter of Birth, QOB):
 
-**Contexte**
-- Aux USA,
-  - entrée à l'école l'année des 6 ans
-  - école olbligatoire jusqu'à 16 ans
-  
-
+``` r
+library(estimatr)
+data("ak91", package = "masteringmetrics")
+```
 
 
 
 ---
 background-color: #f19bb5
+# Application: Angrist and Krueger (1991)
+
+
+1. Expliquer pourquoi le trimestre de naissance est un bon instrument du nombre d'années d'études? 
+  - quel est le mécanisme? l'instrument est-il valide?
+  
+2. Représenter graphiquement le nombre d'années d'études en fonction du trimestre de naissance. Que constatez-vous?
+
+3. Régressez le salaire sur le nombre d'années d'études. Interprétez.
+
+4. Régressez le nombre d'années d'études sur le trimestre de naissance. Interprétez
+
+5. Régressez le salaire sur le trimestre de naissance. Interprétez.
+
+6. Calculer l'estimateur 2SLS
+  - 1) à la main
+  - 2) avec la commande `iv_robust`
+  
+&amp;nbsp;   
 
 [Angrist Data Archive](https://economics.mit.edu/people/faculty/josh-angrist/angrist-data-archive)
 
 
 
+
+
 ---
+background-color: #fbe6ec
+# Solution : Angrist and Krueger (1991)
+
+
+1) Expliquer pourquoi le trimestre de naissance est un bon instrument du nombre d'années d'études? 
+  - quel est le mécanisme? l'instrument est-il valide?
+  
+&amp;nbsp; 
+
+Mécanisme?
+
+--
+
+  - les enfants nés en début d'année commencent l'école plus tard (6 ans + quelques mois), et ont donc moins d'années d'éducation en moyenne
+  - au contraire, les enfants nés en fin d'année commencent l'école plus tôt (5 ans et quelques mois) et passent en moyenne plus de temps scolarisés
+
+--
+
+Instrument valide?
+
+--
+
+  - Relevance: OK
+  - Exogeneité: indépendant de l'abilité (impossible que les élèves les plus abiles choisissent leur date de naissance)
+  - Excluabilité: n'a pas de raison d'affecter le salaire autrement que par l'effet sur l'éducation
+
+
+
+---
+background-color: #fbe6ec
+# Solution : Angrist and Krueger (1991)
+
+2) Représenter graphiquement le nombre d'années d'études et le salaire en fonction du trimestre de naissance. Que constatez-vous?
 
 
 &lt;img src="lecture_5_fr_files/figure-html/unnamed-chunk-2-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
-background-color: #f2c394
-# Recap: Variables Instrumentales
+count:false
+background-color: #fbe6ec
+# Solution : Angrist and Krueger (1991)
 
-**Data**: Données expérimentales
+2) Représenter graphiquement le nombre d'années d'études et le salaire en fonction du trimestre de naissance. Que constatez-vous?
 
-&lt;span style="color:#9933FF"&gt;**Hypothèse d'identification**:  &lt;/span&gt;
-- &lt;span style="color:#9933FF"&gt; Intuition: allocation aléatoire du statut de traitement &lt;/span&gt;
-- &lt;span style="color:#9933FF"&gt; Formellement: `\(\color{#9933FF}{(Y_{1i}, Y_{0i}) \perp D_i}\)` &lt;/span&gt;
 
-**Modèle**: pour tout individu `\(i\)`,
-`$$Y_i = \alpha + \delta D_i + \varepsilon$$`
 
-**Estimateur de l'effet du traitement**:
-- Différence entre l'outcome moyen du groupe des individus traîtés et celui du groupe de contrôle
-- `\(\hat{\delta} = \mathbb{E}(Y_i | D_i = 1) - \mathbb{E}(Y_i | D_i = 0)\)`
+&lt;img src="lecture_5_fr_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
 
-**Implémentation sur `R`**: 
-- Balancing Tests: 
-- Estimation de l'effet du traitement: `lm(y ~ D, data = data)`
+
+
+---
+background-color: #fbe6ec
+# Solution : Angrist and Krueger (1991)
+
+3) Régressez le salaire sur le nombre d'années d'études. Interprétez
+
+.pull-left[
+
+``` r
+ols = lm(lnw ~ s, data = ak91)
+summary(ols)
+```
+
+```
+## 
+## Call:
+## lm(formula = lnw ~ s, data = ak91)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -8.7540 -0.2367  0.0726  0.3318  4.6357 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 4.9951823  0.0044644  1118.9   &lt;2e-16 ***
+## s           0.0708510  0.0003386   209.2   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.6378 on 329507 degrees of freedom
+## Multiple R-squared:  0.1173,	Adjusted R-squared:  0.1173 
+## F-statistic: 4.378e+04 on 1 and 329507 DF,  p-value: &lt; 2.2e-16
+```
+]
+
+--
+
+.pull-right[
+- Estimate OLS sûrement biaisé
+- Ability corrélée positivement à l'éducation et salaire `\(\implies\)` *downward bias*
+]
+
+---
+background-color: #fbe6ec
+# Solution : Angrist and Krueger (1991)
+
+4) Régressez le nombre d'années d'études sur la dummy Né au Q4. Interprétez
+
+.pull-left[
+
+``` r
+fs = lm(s ~ q4, data = ak91 %&gt;% mutate(q4 = (qob == 4)))
+summary(fs)
+```
+
+```
+## 
+## Call:
+## lm(formula = s ~ q4, data = ak91 %&gt;% mutate(q4 = (qob == 4)))
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -12.8394  -0.8394  -0.7473   2.2527   7.2527 
+## 
+## Coefficients:
+##             Estimate Std. Error  t value Pr(&gt;|t|)    
+## (Intercept) 12.74731    0.00658 1937.396  &lt; 2e-16 ***
+## q4TRUE       0.09212    0.01328    6.935 4.07e-12 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3.281 on 329507 degrees of freedom
+## Multiple R-squared:  0.0001459,	Adjusted R-squared:  0.0001429 
+## F-statistic: 48.09 on 1 and 329507 DF,  p-value: 4.069e-12
+```
+]
+
+.pull-right[
+- FS statistiquement sognificative! `\(\implies\)` **We have a first stage!!** 
+- F-stat &gt; 10!
+]
+
+---
+background-color: #fbe6ec
+# Solution : Angrist and Krueger (1991)
+
+
+5) Régressez le salaire sur la dummy Né au Q4. Interprétez.
+
+
+``` r
+rf = lm(lnw ~ q4, data = ak91 %&gt;% mutate(q4 = (qob == 4)))
+summary(rf)
+```
+
+```
+## 
+## Call:
+## lm(formula = lnw ~ q4, data = ak91 %&gt;% mutate(q4 = (qob == 4)))
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -8.2469 -0.2631  0.0542  0.3580  4.6338 
+## 
+## Coefficients:
+##             Estimate Std. Error  t value Pr(&gt;|t|)    
+## (Intercept) 5.898272   0.001361 4332.898   &lt;2e-16 ***
+## q4TRUE      0.006813   0.002748    2.479   0.0132 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.6788 on 329507 degrees of freedom
+## Multiple R-squared:  1.865e-05,	Adjusted R-squared:  1.562e-05 
+## F-statistic: 6.146 on 1 and 329507 DF,  p-value: 0.01317
+```
+
+---
+background-color: #fbe6ec
+# Solution : Angrist and Krueger (1991)
+
+6) Calculer l'estimateur 2SLS
+  - 1) à la main
+
+
+``` r
+# 1) On stocke les prédictions de la FS 
+pred_fs = predict(fs)
+
+# 2) On régresse l'outcome sur la prédiction de première étape
+ss = lm(ak91$lnw ~ pred_fs)
+summary(ss)
+```
+
+```
+## 
+## Call:
+## lm(formula = ak91$lnw ~ pred_fs)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -8.2469 -0.2631  0.0542  0.3580  4.6338 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  4.95549    0.38097  13.008   &lt;2e-16 ***
+## pred_fs      0.07396    0.02983   2.479   0.0132 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.6788 on 329507 degrees of freedom
+## Multiple R-squared:  1.865e-05,	Adjusted R-squared:  1.562e-05 
+## F-statistic: 6.146 on 1 and 329507 DF,  p-value: 0.01317
+```
+
+---
+background-color: #fbe6ec
+# Solution : Angrist and Krueger (1991)
+
+6) Calculer l'estimateur 2SLS
+  - 2) avec la commande `iv_robust`
+
+
+``` r
+ss_b = iv_robust(lnw ~ s | q4, data = ak91 %&gt;% mutate(q4 = (qob == 4)))
+
+summary(ss_b)
+```
+
+```
+## 
+## Call:
+## iv_robust(formula = lnw ~ s | q4, data = ak91 %&gt;% mutate(q4 = (qob == 
+##     4)))
+## 
+## Standard error type:  HC2 
+## 
+## Coefficients:
+##             Estimate Std. Error t value  Pr(&gt;|t|) CI Lower CI Upper     DF
+## (Intercept)  4.95549    0.35774   13.85 1.267e-43  4.25434   5.6567 329507
+## s            0.07396    0.02801    2.64 8.289e-03  0.01905   0.1289 329507
+## 
+## Multiple R-squared:  0.1171 ,	Adjusted R-squared:  0.1171 
+## F-statistic:  6.97 on 1 and 329507 DF,  p-value: 0.008289
+```
+
+---
+# IV and RCT avec *imperfect compliance*
+
+## Example 2: Women in STEM
+
+On cherche (encore et toujours!) à connaître l'effet des études ( `\(D_i\)` ) sur le salaire ( `\(Y_i\)` )
+  - Plus précisément, on s'intéresse à l'effet d'aller en CPGE **STEM**
+
+Inspiré de &lt;span style="color:#dd0747"&gt;**Breda, Grenet, Monnet et Van Effenterre (2023)**&lt;/span&gt;
+
+**Motivation**: les filles sont sous-représentées dans les filières scientifiques alors même qu'elles sont douées en maths
+  - Implications à LT sur le salaire 
+  - &lt;span style="color:#dd0747"&gt;Problème: aller en CPGE n'est pas random &lt;/span&gt;
+
+**Solution**: Intervention randomisée
+- interventions en classes tirées aléatoirement de femmes scientifiques (*Role Models*) pour déconstruire les stéréotypes de genre dans les sciences et pousser les filles à s’orienter dans les filières scientifiques
+
+
+---
+# IV and RCT avec *imperfect compliance*
+
+## Example 2: Women in STEM
+
+
+`\(\implies\)` **Notre instrument = assignation aléatoire à ce programme**
+  - corrélé avec le choix d'aller en CPGE (+3,5 pts ou +30% d'après Breda, Grenet, Monnet et Van Effenterre (2023))
+  - Hypothèse: n'affecte le salaire que via l'effet sur la probabilité d'aller en CPGE
+
+--
+
+Si on estime le modèle en forme réduite, `\(\text{Salaire_i} = \alpha + \beta \text{Traîté}_i + W_i + \varepsilon_i\)`, où `\(D_i = 1\)` si l'individu `\(i\)` est assigné au programme, que représente `\(\beta\)`?
+
+--
+
+`\(\beta\)` représente la différence de salaire moyen des filles assignées au programme par rapport à celles qui n'ont pas bénéficié de l'intervention
+  - on dit que `\(\beta\)` est l'**Intention To Treat (ITT)**
+
+---
+# IV and RCT avec *imperfect compliance*
+
+## Example 2: Women in STEM
+
+**Problème**: imperfect compliance
+- toutes les filles assignées à l'intervention ne vont pas aller en CPGE (= *never-takers*), donc l'effet est en quelques sortes dilué
+- certaines filles non assignées au traitement vont aller en CPGE (= *always-takers*)
+`\(\implies\)` l'estimateur ne donne pas vraiment l'effet moyen de la CPGE sur le salaire puisque toutes les personnes traitées ne vont pas aller en CPGE
+
+--
+
+**Solution**: mesurer l'effet de la CPGE uniquement pour les filles qui ont changé d'avis grâce à l'intervention (=*Compliers*)
+  - `\(\beta\)` est alors le Local Average Treatment Effect (LATE), où `\(LATE = \frac{\text{ITT}}{\text{Proportion de Compliers}}\)`
+
+---
+# IV and RCT avec *imperfect compliance*
+
+## Example 2: Women in STEM
+
+Pour résumer:
+
+**Estimation de l'ITT (Intention-to-Treat)**
+
+On régresse le salaire sur l’assignation pour voir l’effet moyen de l’assignation sur le salaire (*Reduced-Form*):
+`itt_model &lt;- lm(salaire ~ Assignation, data = data)`
+
+**Estimation du LATE (Local Average Treatment Effect)**
+
+On fait une estimation 2SLS:
+
+`iv_model &lt;- iv_robust(salaire ~ CPGE | Assignation, data = data)`
 
 
 
@@ -191,6 +678,13 @@ background-color: #f2c394
 
 [Mastering Metrics R Code](https://jrnold.github.io/masteringmetrics/quarter-of-birth-and-returns-to-schooling.html)    
 [Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/07-instrumental_variables)    
+[Instrumental Variables, Edward Rubin](https://raw.githack.com/edrubin/EC525S19/master/NotesLecture/08IV/08IV.html#1)           
+[Instrumental Variables - Applications, Florian Oswald](https://raw.githack.com/edrubin/EC525S19/master/NotesLecture/08IV/08IV.html#1)        
+
+
+
+
+
 
 
     </textarea>

@@ -1,0 +1,747 @@
+---
+title: "Homework"
+format: pdf
+editor: visual
+#encoding: UTF-8
+---
+
+# Partie I : Traitement de la variable salaire
+
+### Question 1
+
+```{r}
+# Charger les données
+data <- readRDS("/Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Homework/data/eec_t1_2017_simulated_wage.rds")
+
+# Créer un histogramme avec ggplot2
+library(ggplot2)
+ggplot(data, aes(x = wage)) +
+  geom_histogram(binwidth = 100, color = "black", fill = "skyblue") +
+  labs(
+    title = "Distribution du salaire net mensuel",
+    x = "Salaire net mensuel (EUR)",
+    y = "Fréquence"
+  ) +
+  theme_minimal()
+
+#on voit un message d'erreur. Celui-ci est lié à des données manquantes. Vérifions cela : 
+summary(data$wage)
+```
+
+En effet, on remarque qu'il y a plus de 70000 NA. On pourrait les filtrer avec la fonction filter et is.na, mais ces NA ne posent pas nécessairement problème dans le déroulé du programme, car ils ne sont automatiquement pas pris en compte.
+
+### Question 2
+
+Il y a une multitude de problèmes liés aux données brutes :
+
+```{=tex}
+\begin{enumerate}
+    \item Présence de valeurs aberrantes (outliers) :
+    Certaines valeurs de salaire peuvent être extrêmement élevées ou basses par rapport à la majorité des observations, ce qui peut biaiser les résultats (par exemple, la moyenne et les coefficients estimés dans un modèle économétrique).
+    \item Données manquantes :
+    Les salaires non renseignés ou manquants peuvent réduire la taille de l’échantillon utilisable et entraîner une perte de puissance statistique.
+    \item Hétéroscédasticité :
+    Les salaires plus élevés sont souvent associés à une plus grande variabilité. Cela viole l’hypothèse d’homoscédasticité des erreurs en économétrie.
+\end{enumerate}
+```
+Concernant le problème principal des valeurs extrêmes, les solutions pourraient être les suivantes :
+
+```{=tex}
+\begin{enumerate}
+    \item Remplacer les valeurs extrêmes (par exemple, les 1\% les plus élevés et les plus faibles) par des percentiles spécifiques (comme le 99e ou le 1er). Cela limite l’impact des outliers sans les supprimer complètement.
+    \item Appliquer le logarithme des salaires pour réduire l’asymétrie et stabiliser la variance (utilisé dans de nombreux modèles économétriques). Cela peut être particulièrement utile pour les salaires qui suivent une loi exponentielle.
+\end{enumerate}
+```
+### Question 3
+
+```{r}
+# Calculer les percentiles de la variable "wage" dans la base de données
+percentiles <- quantile(data$wage, probs = seq(0, 1, 0.01), na.rm = TRUE)
+
+# Extraire et stocker la valeur du 99ème percentile
+q_99 <- percentiles["99%"]
+```
+
+Le 99ème percentile est égal à `{r} q_99`. Cette valeur représente le salaire en dessous duquel se trouvent 99 % des individus. Ici en l'occurence, cela signifie que **99 % des salaires sont inférieurs ou égaux à `{r} round(q_99,2)`EUR**. Cette valeur est utile pour identifier les outliers (les 1 % les plus élevés).
+
+### Question 4
+
+```{r}
+library(tidyverse)
+
+# Créer la variable wage_winsor en remplaçant les salaires supérieurs à q_99
+data <- data %>%
+  mutate(wage_winsor = ifelse(wage > q_99, q_99, wage))
+
+# Vérifier les premières lignes pour s'assurer que la variable est créée
+head(data)
+
+# Créer un histogramme pour la variable wage_winsor
+ggplot(data, aes(x = wage_winsor)) +
+  geom_histogram(binwidth = 100, color = "black", fill = "lightgreen") +
+  labs(
+    title = "Distribution du salaire net mensuel après winsorisation",
+    x = "Salaire net mensuel (wage_winsor, EUR)",
+    y = "Fréquence"
+  ) +
+  theme_minimal()
+
+```
+
+Avant la winsorisation, la distribution des salaires pouvait être influencée par des valeurs très élevées (outliers), ce qui rendait l’analyse moins robuste. De plus, le fait de devoir afficher **toutes** les valeurs rendait l'histogramme sur une plage très étendue, alors que les valeurs les plus intéressantes seraient regroupés. On y voyait donc "moins clair". Après la winsorisation, les salaires supérieurs au 99ème percentile ont été remplacés par la valeur du 99ème percentile, ce qui a réduit l’impact des outliers sans les supprimer complètement.\
+La distribution est devenue plus stable et moins influencée par les extrêmes.\
+**Le premier graphique montrait une distribution très asymétrique avec des salaires extrêmes qui allongent la queue droite, rendant l’analyse sensible aux valeurs aberrantes. Après winsorisation, comme le montre le graphique ci-dessus, ces valeurs extrêmes sont remplacées par le 99ème percentile, ce qui réduit leur impact. La distribution devient ainsi plus représentative et adaptée aux analyses.**
+
+### Question 5
+
+```{r}
+# Ajouter la variable log_wage_winsor (logarithme naturel de wage_winsor)
+data <- data %>%
+  mutate(log_wage_winsor = log(wage_winsor))
+
+# Créer un histogramme de la distribution de log_wage_winsor
+ggplot(data, aes(x = log_wage_winsor)) +
+  geom_histogram(binwidth = 0.1, color = "black", fill = "orange") +
+  labs(
+    title = "Distribution du logarithme du salaire net mensuel (winsorisé)",
+    x = "Logarithme du salaire net mensuel",
+    y = "Fréquence"
+  ) +
+  theme_minimal()
+```
+
+On voit que la distribution du logarithme du salaire net mensuel (winsorisé) est beaucoup plus symétrique et se rapproche d’une distribution normale.\
+Cette transformation réduit donc en effet l’impact des écarts extrêmes et stabilise la variance (ce qui semble, encore une fois idéal pour les modèles économétriques). Elle permet également une meilleure interprétation des écarts proportionnels entre les salaires.
+
+# Partie II : Statistiques descriptives
+
+## A) Diplôme
+
+### Question 6
+
+Il s'agit d'abord de filtrer pour ne garder que les individus de 30 ans ou plus.
+
+```{r}
+# Filtrer pour les individus de 30 ans ou plus
+data_filtered <- data %>%
+  filter(AGE5 >= 30)
+```
+
+Ensuite, ajoutons des libellés lisibles pour les classes d'âge et les diplômes.
+
+```{r}
+data_filtered <- data_filtered %>%
+  mutate(
+    AGE5_LABEL = factor(AGE5, levels = c(30, 40, 50, 60), 
+                        labels = c("30-39 ans", "40-49 ans", "50-59 ans", "60 ans et plus")),
+    DIPLOME_LABEL = factor(DIP11, levels = c(10, 11, 30, 31, 33, 41, 42, 50, 60, 70, 71),
+                           labels = c("Licence et plus", "Écoles niveau licence", "DEUG", "BTS/DUT", 
+                                      "Paramédical/social", "Bac général", "Bac techno/professionnel", 
+                                      "CAP/BEP", "Brevet des collèges", "Certificat d'études", "Sans diplôme"))
+  )
+```
+
+Maintenant, créons le graphique.
+
+```{r}
+ggplot(data_filtered, aes(x = AGE5_LABEL, fill = DIPLOME_LABEL)) +
+  geom_bar(position = "fill", color = "black") +
+  labs(
+    title = "Répartition des niveaux de diplôme par classe d'âge (30 ans et plus)",
+    x = "Classe d'âge",
+    y = "Proportion",
+    fill = "Niveau de diplôme"
+  ) +
+  theme_minimal()
+```
+
+Ce graphique montre la répartition des niveaux de diplôme par cclasse d'âge pour les individus de 30 ans et plus.\
+- **Sans diplômes :** La proportion d'individus sans diplôme (rose) augmente significativement avec l'âge, passant d'une proportion faible chez les plus jeunes à une part élevée (quasiment un quart) chez les plus âgées. Cela pourrait refléter une amélioration générael de l'accès à l'éducation dans les générations récentes.\
+- **Diplômes supérieurs :** Les niveaux de diplômes élevés (comme "Licence et plus" en rouge clair, et "Écoles niveau licence" en orange) sont plus fréquents chez les jeunes géénrations, et augmentent avec l'âge.\
+- **Diplômes intermédiaires :** Les diplômes techniques ou professionnels (CAP/BEP, Bac technologique/professionnel, ...) gardent une proportion relativement stable.
+
+De manière générale, on observe une tendance baissiaire avec l'âge de la proportion des plus hauts niveaux de diplômes, et une tendance haussiaire avec l'âge de la proportion des plus "bas" niveaux de diplômes.
+
+### Question 7
+
+Selon le dictionnaire, les diplômes correspondant à un niveau "au moiins égal au Bac" incluent les catégories 42 (Bac technologique/professionnel) et tous les niveaux de diplômes supérieurs.\
+La **première étape** va donc être de créer la variable `at_least_bac` :
+
+```{r}
+data <- data %>%
+  mutate(at_least_bac= ifelse(DIP11 <= 42, 1, 0))
+```
+
+Ensuite, on va rajouter dans la variable `data_filtred` la nouvelle variable `at_least_bac` et les libellés pour le sexe (on avait déjà rajouté les libellés pour les tranches d'âge précedemment).
+
+```{r}
+data_filtered <- data_filtered %>%
+  mutate(at_least_bac= ifelse(DIP11 <= 42, 1, 0),
+    SEXE_LABEL = factor(SEXE, levels = c(1, 2), labels = c("Homme", "Femme"))
+  )
+```
+
+Maintenant, calculons la proportion d'individus ayant au moins le Bac par genre et par tranche d'âge.
+
+```{r}
+prop_bac <- data_filtered %>%
+  group_by(AGE5_LABEL, SEXE_LABEL) %>%
+  summarise(
+    prop_at_least_bac = mean(at_least_bac, na.rm = TRUE)
+  )
+```
+
+Finalement, passons à la représentation graphique :
+
+```{r}
+ggplot(prop_bac, aes(x = AGE5_LABEL, y = prop_at_least_bac, fill = SEXE_LABEL)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Proportion d'individus ayant au moins le Bac par genre et tranche d'âge",
+    x = "Tranche d'âge",
+    y = "Proportion d'au moins Bac",
+    fill = "Genre"
+  ) +
+  theme_minimal()
+```
+
+Le graphique montre la proportion d’individus ayant un diplôme au moins égal au Bac par genre pour chaque tranche d’âge :\
+**• 30-39 ans :**\
+Les femmes ont une proportion plus élevée que les hommes, avec une différence marquée. Cela pourrait refléter une amélioration récente de l’accès à l’éducation pour les femmes.\
+**• 40-49 ans :**\
+Les proportions hommes/femmes se rapprochent, mais les femmes conservent une légère avance.\
+**• 50-59 ans :**\
+Les hommes et les femmes ont des proportions presque égales, indiquant une convergence progressive dans cette tranche d’âge.\
+**• 60 ans et plus :**\
+Les hommes ont une proportion légèrement plus élevée que les femmes, ce qui peut s’expliquer par des inégalités historiques d’accès à l’éducation pour les générations plus âgées.
+
+**Conclusion :** Le graphique illustre une **tendance générationnelle** : les jeunes femmes (30-39 ans) dépassent les hommes en termes de niveau d’éducation, tandis que dans les générations plus âgées, les hommes ont historiquement eu un avantage. Cela reflète une **évolution sociétale** en faveur de l’accès des femmes à l’éducation dans les décennies récentes.
+
+## B) Participation au marché du travail
+
+### Question 8
+
+La variable ACTEU correspond à l'activité principale.\
+Rajoutons d'abord des libellés pour ACTEU, genre et tranche d'âge dans `data`.
+
+```{r}
+data <- data %>%
+  mutate(
+    ACTEU_LABEL = factor(ACTEU, levels = c(1, 2, 3, 4),
+                         labels = c("Actif occupé", "Chômeur", "Inactif retraité", "Inactif autre")),
+    SEXE_LABEL = factor(SEXE, levels = c(1, 2), labels = c("Homme", "Femme")),
+    AGE5_LABEL = factor(AGE5, levels = c(30, 40, 50, 60),
+                        labels = c("30-39 ans", "40-49 ans", "50-59 ans", "60 ans et plus"))
+  )
+```
+
+Ensuite, calculons la distribution par genre, tranche d'âge, et combinaison.
+
+```{r}
+distribution_acteu <- data %>%
+  group_by(SEXE_LABEL, AGE5_LABEL, ACTEU_LABEL) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(SEXE_LABEL, AGE5_LABEL) %>%
+  mutate(proportion = count / sum(count))
+```
+
+Puis finalement, représentons graphiquement la distribution. Un barplot empulé pourrait être pertinent pour montrer la répartution de l'activité principale pour chaque tranche d'âge, séparément pour les hommes et les femmes.
+
+```{r}
+ggplot(distribution_acteu, aes(x = AGE5_LABEL, y = proportion, fill = ACTEU_LABEL)) +
+  geom_bar(stat = "identity", position = "fill") +
+  facet_wrap(~ SEXE_LABEL) +
+  labs(
+    title = "Répartition de l'activité principale par genre et tranche d'âge",
+    x = "Tranche d'âge",
+    y = "Proportion",
+    fill = "Activité principale"
+  ) +
+  theme_minimal()
+```
+
+Nous pouvons voir plusieurs choses :\
+**1. Participation active :**\
+Les **hommes** présentent une proportion plus élevée d’actifs occupés dans toutes les tranches d’âge par rapport aux femmes.\
+**2. Retraite :**\
+Les **femmes** ont une proportion légèrement plus élevée d’inactivité non liée à la retraite, ce qui peut refléter des responsabilités familiales ou des choix liés aux conditions d’emploi.\
+Néanmoins, dans les **tranches d’âge élevées (50-59 ans et 60 ans et plus)**, la proportion d’inactifs retraités est à peu près similaire entre les hommes et les femmes.\
+Cela semble cohérent, car on peut supposer qu'à partir d'un certain âge, le départ à la retraite ne dépend plus du sexe, mais uniquement de l'âge. **3. Chômage :**\
+Les proportions semblent à peu près similaires chez les hommes et les femmes. Néanmoins, cette proportion semble supérieur chez les hommes dans la tranche d'âge 60 ans et plus. Cela pourrait indiquer une tendance selon laquelle les femmes pourraient aller plus tôt à la retraite par rapport aux hommes, qui, arrivés à un certain âge, sont chômeurs car recherchent du travail mais n'en trouvent pas.
+
+**Conclusion :**
+
+La participation des femmes au marché du travail reste inférieure à celle des hommes en général. De plus, arrivé à un certain âge (au delà de 60 ans), bien que les proportions de personnes ne travaillant pas (retraités + chômeurs) sont à peu près égales entre les deux sexe, chez les femmes, la proportion de retraités est supérieure à celle des hommes, alors que c'est l'inverse pour la proportion de chômeurs.\
+Cela reflète des inégalités persistantes dans l’accès à l’emploi, influencées par des facteurs sociaux et économiques.
+
+### Question 9
+
+De nombreux facteurs déterminent la participation des femmes au marché du travail.\
+D'abord, on pourrait citer les facteurs socio-économiques et culturels notamment. Aujourd'hui, de nombreuses analyses et études montrent que les femmes exercent souvent un "double travail" : celui qu'elle exerce, et tout ce qui attrait au domicile et à la vie familiale : les tâches domestiques, la garde d'enfants, etc....\
+Ce double travail pourrait être un facteur de découragement professionnel et d'épuisement, et pourrait donc inciter les femmes à être "inactives".\
+Ensuite, l'éducation joue un rôle clé dans la participation des femmes (et des hommes aussi) dans le marché du travail. On sait aussi que les femmes ont eu, historiquement, des difficultés d'accès à l'éducation (dans d'autres pays du monde, cette difficulté est toujours d'actualité, comme en Afghanistan par exemple). Encore aujourd'hui, dans certaines sociétés ou communautés, les attentes sociales peuvent limiter l'accès des femmes aux marché du travail. Ainsi, ces facteurs historique et social, mélé à la corrélation entre le diplôme et le fait de travailler, pourrait influencer la participation des femmes dans le marché du travail.\
+Ainsi, on pourrait, par hypothèse, dire que les facteurs influant la participation des femmes au marché du travail seraient les suivants : l'âge, le diplôme obtenu, le fait d'avoir des enfants, d'être marié.
+
+## C) Rémunération
+
+### Question 10
+
+Créons la variable `quotité`. Cette variable prend la valeur `1` directement si `TPPRED = 1` (car l'individu est donc en temps plein).\
+Les autres catégories sont déterminés par `TXTPPRED` (car dans le cas où l'individu n'est pas en temps plein, `TPPRED` est toujours égale à `2`).
+
+```{r}
+data$quotité <- with(data, ifelse(TPPRED == 1, 1,  # Si l'individu est en Temps complet (TPPRED=1), quotité prendra la valeur 1.
+                           ifelse(TPPRED == 2 & TXTPPRED == 5, 2,  # Si l'individu n'est pas en temps plein (TPPRED=2), et qu'il est à plus de 80% (TXTPPRED=5), quotité prendra la valeur 2. 
+                           ifelse(TPPRED == 2 & TXTPPRED == 4, 3,  # 80% pile
+                           ifelse(TPPRED == 2 & TXTPPRED == 3, 4,  # Entre 50 et 80%
+                           ifelse(TPPRED == 2 & TXTPPRED == 2, 5,  # Mi-temps (50% pile)
+                           ifelse(TPPRED == 2 & TXTPPRED == 1, 6,  # Moins d'un mi-temps
+                           ifelse(TPPRED == 2 & TXTPPRED == 9, NA, # Non renseigné
+                           NA))))))))
+```
+
+### Question 11
+
+Filtrons d'abord les NAs en créant une nouvelle variable `data_quotite` qui ne les prend pas en compte.
+
+```{r}
+data_quotite <- data[!is.na(data$quotité) & !is.na(data$ENFRED) & !is.na(data$SEXE), ]
+```
+
+Faisons d'abord l'analyse globale de la quotité en fonction de la présence d'enfants.
+
+```{r}
+quotite_table <- table(data_quotite$quotité, data_quotite$ENFRED)
+quotite_table
+```
+
+Procédons maintenant à l'analyse séparée par genre
+
+```{r}
+quotite_by_gender <- table(data_quotite$quotité, data_quotite$ENFRED, data_quotite$SEXE)
+quotite_by_gender
+```
+
+Pour le **graphique global**, on a cela :
+
+```{r}
+# Graphique global
+ggplot(data_quotite, aes(x = as.factor(quotité), fill = as.factor(ENFRED))) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Répartition de la quotité selon la présence d'enfants",
+    x = "Quotité de temps de travail",
+    y = "Proportion",
+    fill = "Enfants (1=Oui, 2=Non)"
+  ) +
+  theme_minimal()
+```
+
+On constate que pour les travailleurs à **temps plein** (`quotité = 1`), une proportion un tout petit peu plus importante d'individus **avec enfants** est représentée.\
+Pour les catégories à temps partiel(`quotité ≥ 2`) ça varie. Jusqu'à un temps partiel à 80%, on voit une tendance baissière de la proportion d'individus n'ayant pas d'enfants (au fur et à mesure qu'on travaille moins, et ce jusqu'à 80%, on a tendance à voir une proportion d'individus avec enfants de plus en plus forte.\
+À partir d'un temps partiel inférieur à 80%, et pour tous les contrats plus faibles, on observe la tendance inverse (une proportion d'individus sans enfants de plus en plus grande).\
+Environ deux tiers des travailleurs avec un contrat inférieur à un mi-temps n'ont pas d'enfants.\
+Quasiment trois quart des individus avec un contrats à 80% ont des enfants.\
+Cela semble étrange, étant donné qu'on pourrait croire que les individus ayant des temps partiels de plus en plus faibles choisissent ce type de contrat car ils ont des enfants.
+
+Pour le **graphique séparé par genre**, on a cela :
+
+```{r}
+# Graphique par genre (facettes hommes/femmes)
+ggplot(data_quotite, aes(x = as.factor(quotité), fill = as.factor(ENFRED))) +
+  geom_bar(position = "fill") +
+  facet_wrap(~ SEXE, labeller = labeller(SEXE = c("1" = "Hommes", "2" = "Femmes"))) +
+  labs(
+    title = "Répartition de la quotité par genre et présence d'enfants",
+    x = "Quotité de temps de travail",
+    y = "Proportion",
+    fill = "Enfants (1=Oui, 2=Non)"
+  ) +
+  theme_minimal()
+```
+
+Ici, on voit que la tendance est différente pour les hommes et pour les femmes.\
+En effet, pour les hommes, plus le contrat est élevé (beaucoup d'heures par semaine), plus la proportion d'hommes avec un enfant est forte.
+
+Pour les femmes, on voit qu'il n'y a pas de tendance linéaire. La tendance est quasiment la même que dans le graphique général (pas séparé en fonction du sexe).\
+On pourrait expliquer la ressemblance entre le graphique général et le graphique des femmes par le fait que les femmes auraient une supériorité numérique dans les contrats à temps partiels. Ainsi, les contrats à temps partiel chez les hommes n'influeraient que très peu le graphique général concernant tous les contrats à temps partiels.
+
+### Question 12
+
+Filtrons d'abord pour enlever les NAs et les CSP nulles:
+
+```{r}
+data_csp <- data_filtered[!is.na(data_filtered$CSP) & data_filtered$CSP != 0, ]
+```
+
+Vérifions la répartition des genre par le CSP pour voir s'il n'y a pas de problème apparent.
+
+```{r}
+table(data_csp$CSP, data_csp$SEXE)
+```
+
+Tout à l'air bon.
+
+Passons maintenant au calcul de la proportion des hommes et des femmes dans chaque CSP.
+
+```{r}
+csp_gender_distribution <- data_csp %>%
+  group_by(CSP, SEXE) %>%
+  summarise(count = n(), .groups = 'drop') %>%
+  mutate(percentage = count / sum(count) * 100)
+
+csp_gender_distribution
+```
+
+Passons donc à la représentation graphique.
+
+```{r}
+# Visualisation de la répartition des genres par CSP
+ggplot(csp_gender_distribution, aes(x = as.factor(CSP), y = percentage, fill = as.factor(SEXE))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Répartition par genre dans les CSP",
+    x = "Catégories Socio-Professionnelles (CSP)",
+    y = "Proportion (%)",
+    fill = "Genre (1=Homme, 2=Femme)"
+  ) +
+  theme_minimal()
+```
+
+On observe plusieurs choses. D'abord, la répartition est très inégale entre les deux sexes.\
+Par exemple, les **femmes** dominent les catégories socio-professionnelles suivantes : **Professions intermédiaires de la santé et du travail social** (CSP 43) ; **Employés civils et agents de service de la fonction publique** (CSP 52) ; **Personnels des services directs aux particuliers** (CSP 56).\
+Les hommes, quant à eux, dominent les CSP suivantes : **Artisans** (CSP 21) ; **Ingénieurs et cadres techniques d'entreprise** (CSP 38) ; **Ouvriers qualifiés de type artisanal** (CSP 63).
+
+Cette répartition reflète la **segmentation de genre** sur le marché du travail, où les femmes sont souvent concentrées dans des professions liées aux services et aux soins, tandis que les hommes sont plus présents dans des secteurs techniques et industriels.\
+Ces différences pourraient s'expliquer par les normes culturelles et sociales influençant les choix de carrière, ou bien les contraintes liées à la conciliation vie porfessionnelle / personnelle.
+
+### Question 13
+
+Commençons d'abord par le calcul de la moyenne du log du salaire winsorisé par CSP et de la proportion de femmes.
+
+```{r}
+csp_summary <- data_csp %>% #on reprend data_csp car c'était là où on avait filtré pour ne garder que les CSPs définies et non nulles.
+  group_by(CSP) %>%
+  summarise(
+    mean_log_wage_winsor = mean(log_wage_winsor, na.rm = TRUE),  # Moyenne du log salaire
+    proportion_femmes = mean(SEXE == 2, na.rm = TRUE)  # SEXE = 2 pour les femmes
+  ) %>%
+  arrange(desc(proportion_femmes))  # Trier par proportion de femmes pour analyse
+```
+
+On a donc le *dataframe* suivant :
+
+```{r}
+csp_summary
+```
+
+Exportons maintenant ce dataframe au format CSV.
+
+```{r}
+write.csv(csp_summary, "csp_summary.csv", row.names = FALSE)
+```
+
+Passons désormais à la visualisation de la proportion de femmes par CSP.
+
+```{r}
+ggplot(csp_summary, aes(x = as.factor(CSP), y = proportion_femmes * 100)) +
+  geom_bar(stat = "identity", fill = "lightblue") +
+  labs(
+    title = "Proportion de femmes par CSP",
+    x = "Catégorie Socio-Professionnelle (CSP)",
+    y = "Proportion de femmes (%)"
+  ) +
+  theme_minimal()
+```
+
+Quant à la moyenne du log du salaire winsorisé par CSP, là voici ci-dessous :
+
+```{r}
+ggplot(csp_summary, aes(x = as.factor(CSP), y = mean_log_wage_winsor)) +
+  geom_bar(stat = "identity", fill = "lightgreen") +
+  labs(
+    title = "Moyenne du log du salaire winsorisé par CSP",
+    x = "Catégorie Socio-Professionnelle (CSP)",
+    y = "Log du salaire mensuel net winsorisé"
+  ) +
+  theme_minimal()
+```
+
+On remarque que les CSP composés majoritairement de femmes sont souvent celles qui ont un salaire moyen plus faible. En effet, on remarque une corrélation entre le fait d'être dans une CSP composée majoritairement de femmes et de toucher un revenu moyen faible par rapport aux autres CSP.\
+Par exemple, on remarque que les CSP composés majoritairement de femmes sont les suivantes : **Employés civils et agents de service de la fonction publique** ; **Employés administratifs d'entreprise** ; **Employés de commerce** ; **Personnels des services directs aux particuliers** (*respectivement les CSP 52, 54, 55 et 56*). Par ailleurs, si on se réfère au deuxième graphique montrant la moyenne du salaire logarithmique, on remarque que ces mêmes CSP font en fait partie des moins rémunératrices.\
+*A contrario*, on remarque que les CSP les plus rémunératrices en moyenne (Les **chefs d'entreprise de 10 salariés ou plus**, **cadres administratifs et commerciaux d'entreprise**, et **Ingénieurs et cadres techniques d'entreprise**, *avec respectivement les CSP n°23, 37, 38*) font partie des CSP composés de manière très faible par des femmes. Par exemple, seulement **moins d'un quart des Chefs d'entreprise de 10 salariés ou plus (CSP 23) sont des femmes**.
+
+# Partie III : Analyse économétrique
+
+### Question 14
+
+Créons la variable `femme`, qui vaut 1 si l'individu est unne femme, et 0 si non.
+
+```{r}
+data_csp <- data_csp %>%
+  mutate(femme = factor(ifelse(SEXE == 2, 1, 0)))
+```
+
+Créons maintenant la variable `CSP_r`.
+
+```{r}
+# Transformation
+data_csp <- data_csp %>%
+  mutate(CSP_r = ifelse(CSP == 23, 
+                        3,   # Si CSP == 23, attribuer la valeur 3
+                        as.numeric(substr(CSP, 1, 1))))  # Sinon, garder le premier chiffre
+
+# Vérification du résultat
+head(data_csp)
+```
+
+Vérifions rapidement le résultat :
+
+```{r}
+table(data_csp$femme)
+table(data_csp$SEXE)
+```
+
+Ça correspond bien donc c'est bon.\
+Quant à la variable `CSP_r` :
+
+```{r}
+table(data_csp$CSP_r)
+table(data_csp$CSP)
+```
+
+On peut vérifier en additionnant pour chaque premier chiffre de CSP : c'est tout bon !
+
+### Question 15
+
+```{r}
+# Filtrer les individus ayant un contrat CDI (1) ou CDD (2)
+data_reg <- data_csp %>%
+  filter(CONTRA %in% c(1, 2)) %>%   # Filtre sur le type de contrat (CDI et CDD)
+  filter(CSP_r != 0) %>%            # Exclure CSP_r = 0
+  group_by(CSP) %>%
+  filter(n() >= 30) %>%              # Garder uniquement les CSP avec au moins 30 individus
+  ungroup() %>%
+  filter(HHCE >= 1)                  # Temps de travail d'au moins une heure par semaine
+
+# Nombre d'observations après filtrage :
+nrow(data_reg)
+
+# Vérification des proportions de chaque CSP_r dans le nouvel ensemble de données
+table(data_reg$CSP_r)
+
+# Exportation des données pour analyse ultérieure
+write.csv(data_reg, "data_reg.csv", row.names = FALSE)
+
+# Visualisation de la distribution des individus par CSP_r
+ggplot(data_reg, aes(x = as.factor(CSP_r))) +
+  geom_bar(fill = "lightblue") +
+  labs(
+    title = "Distribution des individus dans data_reg par CSP_r",
+    x = "CSP_r",
+    y = "Nombre d'individus"
+  ) +
+  theme_minimal()
+```
+
+On voit que les seules CSP restantes sont celles qui commencent par un 3(+la CSP 23), un 4, un 5 ou un 6.\
+Cela pourrait paraître étrange, mais c'est en fait cohérent étant donnée qu'o a filtré pour ne garder que les individus en CDD ou CDI, et les CSP 11, 12, 13, 21 et 22 sont en fait, par définition, des **indépendants**.
+
+### Question 16
+
+Pour calculer l'écart du salaire moyen entre hommes et femmes, il faut d'abord calculer les salaires moyens de ces deux sexes.
+
+```{r}
+salaire_moyen_par_genre <- data_reg %>%
+  group_by(femme) %>%
+  summarise(mean_wage_winsor = mean(wage_winsor, na.rm = TRUE))
+
+#Extraction des valeurs pour chaque sexe :
+salaire_hommes <- salaire_moyen_par_genre$mean_wage_winsor[salaire_moyen_par_genre$femme == 0]
+salaire_femmes <- salaire_moyen_par_genre$mean_wage_winsor[salaire_moyen_par_genre$femme == 1]
+```
+
+Ainsi, les hommes gagnent en moyenne `{r} round(salaire_hommes,2)`EUR, et les femmes `{r} round(salaire_femmes,2)`EUR.
+
+Pour calculer l'écart du salaire moyen en niveau absolu, il suffit de faire la différence des deux salaires moyens :
+
+```{r}
+ecart_absolu <- salaire_hommes - salaire_femmes
+```
+
+Les hommes gagnent donc, en moyenne, `{r} round(ecart_absolu,2)`EUR de plus que les femmes.
+
+Et enfin, pour calculer cet écart en pourcentage, il suffit de faire le calcul suivant :
+
+$\frac{salaire\_hommes - salaire\_femmes}{salaire\_homme} * 100$
+
+On peut directement mettre au numérateur `ecart_absolu`.
+
+```{r}
+ecart_pourcentage <- (ecart_absolu / salaire_hommes) * 100
+```
+
+Les hommes gagnent, en moyenne, `{r} round(ecart_pourcentage,2)`% de plus que les femmes.
+
+### Question 17
+
+α représente la valeur moyenne du logarithme du salaire pour les hommes (c'est la référence).\
+β correspond à l'écart salarial moyen entre hommes et femmes en logarithme. Afin d'obtenir l'écart en pourcentage, il faudra appliquer la transformation exponentielle.
+
+```{r}
+# Estimation du modèle de régression
+model <- lm(log_wage_winsor ~ femme, data = data_reg)
+
+# Résumé des résultats du modèle
+summary(model)
+
+# Extraire et afficher les coefficients
+coefficients <- summary(model)$coefficients
+alpha <- coefficients[1, 1]  # Intercept (alpha)
+beta <- coefficients[2, 1]   # Coefficient de la variable femme (beta)
+```
+
+Calculons l'effet en pourcentage :
+
+```{r}
+effet_pourcentage <- (exp(beta) - 1) * 100
+```
+
+Le coefficient alpha (l'intercept) est égal à `{r} round(alpha, 3)`.\
+Le coefficient beta (écart femmes-hommes) est égal à `{r} round(beta, 3)`.\
+L'écart de salaire moyen entre femmes et hommes est de `{r} round(effet_pourcentage, 2)`.
+
+Faisons une représentation graphique pour mieux visualiser la relation entre `log_wage_winsor` et le fait d'être une femme.
+
+```{r}
+ggplot(data_reg, aes(x = femme, y = log_wage_winsor)) +
+  geom_boxplot(aes(fill = femme)) +
+  labs(
+    title = "Distribution du salaire (log) par genre",
+    x = "Genre (Homme = 0, Femme = 1)",
+    y = "Log du salaire mensuel winsorisé"
+  ) +
+  theme_minimal()
+```
+
+β n'est pas nécessairement causal. En effet, la variable `femme` peut être corrélée avec d'autres facteurs non observés et qui n'ont pas été contrôlés (l'expérience, le niveau de formation, le secteur d'activité, ...). Ainsi, on pourrait donc avoir un biais de variable omise.
+
+### Question 18
+
+Créons les 2 nouvelles variables : salaire horaire winsorisé (`hwage_winsor`) et son logarithme (`log_hwage_winsor`) :
+
+```{r}
+data_reg <- data_reg %>%
+  mutate(hwage_winsor = wage_winsor / (HHCE * 4.33),  # Conversion en salaire horaire, car dans un mois, il y a en moyenne 4,33 semaines.
+         log_hwage_winsor = log(hwage_winsor))        # Log du salaire horaire
+
+# Vérification des nouvelles colonnes
+summary(data_reg$hwage_winsor)
+summary(data_reg$log_hwage_winsor)
+```
+
+Calculons maintenant le salaire horaire moyen par genre :
+
+```{r}
+salaire_horaire_moyen_par_genre <- data_reg %>%
+  group_by(femme) %>%
+  summarise(mean_hwage_winsor = mean(hwage_winsor, na.rm = TRUE))
+
+salaire_horaire_moyen_par_genre
+```
+
+Calculons maitenant l'écart en niveau absolu et en pourcentage, avec la même méthode qu'à la question 16 :
+
+```{r}
+# Extraction des salaires horaires moyens pour hommes et femmes
+salaire_horaire_hommes <- salaire_horaire_moyen_par_genre$mean_hwage_winsor[salaire_horaire_moyen_par_genre$femme == 0]
+salaire_horaire_femmes <- salaire_horaire_moyen_par_genre$mean_hwage_winsor[salaire_horaire_moyen_par_genre$femme == 1]
+
+# Calcul de l'écart en niveau absolu
+ecart_salaire_horaire_absolu <- salaire_horaire_hommes - salaire_horaire_femmes
+
+# Calcul de l'écart en pourcentage
+ecart_salaire_horaire_pourcentage <- (ecart_salaire_horaire_absolu / salaire_horaire_hommes) * 100
+```
+
+Salaire horaire moyen des hommes: `{r} salaire_horaire_hommes`EUR.\
+Salaire horaire moyen des femmes `{r} salaire_horaire_femmes`EUR.\
+Écart de salaire horaire (absolu) `{r} round(ecart_salaire_horaire_absolu, 2)`EUR.\
+Écart de salaire horaire (en pourcentage): `{r} round(ecart_salaire_horaire_pourcentage, 2)`%.
+
+Comparons ces résultats avec l'écart de salaire mensuel (question 16):
+
+L'écart de salaire horaire en pourcentage est `{r} ifelse(ecart_salaire_horaire_pourcentage > ecart_pourcentage, "supérieur", "inférieur")` à l'écart de salaire mensuel, ce qui suggère que les `{r} ifelse(ecart_salaire_horaire_pourcentage > ecart_pourcentage, "hommes", "femmes")` travaillent en moyenne moins d'heures que les `{r} ifelse(ecart_salaire_horaire_pourcentage > ecart_pourcentage, "femmes", "hommes")`.
+
+### Question 19
+
+Afin d'essayer de **réduire le biais de variable omise**, il faut ajouter des **variables de contrôles**, qui sont susceptibles d'expliquer une partie de l'écart entre les sexes.\
+Comme variables de contrôle, on pourrait prendre l'âge (`{r} AGE5`), le niveau de diplôme (`{r} DIP11`), le type de contrat (`{r} CONTRA`), la catégorie socio-professionnelle (`{r} CSP_r`), le temps de travail (`{r} HHCE`), et la présence d'enfants (`{r} ENFRED`).\
+Dès lors, le modèle serait sous la forme suivante :\
+`{tex} $$ \log(\text{Salaire horaire Winsorisé}) = \alpha + \beta_1 \text{Femme} + \beta_2 \text{Âge} + \beta_3 \text{Diplôme} + \beta_4 \text{Contrat} + \beta_5 \text{CSP}_r + \beta_6 \text{Heures travaillées} + \beta_7 \text{Présence d'enfants} + \varepsilon $$`
+
+Faisons donc cette régression :
+
+```{r}
+# Estimation du modèle avec variables de contrôle
+model_ameliore <- lm(log_hwage_winsor ~ femme + AGE5 + DIP11 + CONTRA + CSP_r + HHCE + ENFRED, data = data_reg)
+
+# Résumé des résultats du modèle amélioré
+summary(model_ameliore)
+```
+
+Comparons maintenant les coefficients, en calculant la variation du beta :
+
+```{r}
+#Comparaison des coefficients de la variable femme
+beta_initial <- summary(model)$coefficients["femme1", "Estimate"]
+beta_ameliore <- summary(model_ameliore)$coefficients["femme1", "Estimate"]
+
+#Variation de beta
+variation_beta <- (beta_initial - beta_ameliore) / beta_initial * 100
+```
+
+Ainsi, on a donc : Coefficient beta initial (sans contrôle) :`{r} round(beta_initial, 2)`.\
+Coefficient beta après contrôle : `{r} round(beta_ameliore, 2)`.\
+Après après ajout des variables de contrôles, on a un écart de `{r} round(variation_beta, 2)`%.
+
+Ainsi, `{r} ifelse (variation_beta > 0, "L'ajout des variables de contrôle a réduit l'écart de salaire moyen entre les genres, indiquant qu'une partie des différences est due aux caractéristiques observables", "L'écart de salaire reste inchangé/est plus fort après contrôle des caractéristiques observables, suggérant qu'il existe des facteurs non observés influençant les différences salariales")`.
+
+### Question 20
+
+Pour dire que le beta estimé à la question 19 est causal, il faut faire des tests de significativité. On a directement les résultats de ces tests avec le tableau de régression.
+
+Pour la variable toutes les variables, le *p-values* sont très faible (\<2e-16). Ces *p-values* indiquent donc une **relation significative au seuil de 1% entre les co-variables et le logarithme salaire winsorisé**.\
+Par ailleurs, les R2 et R2 ajustés sont tous deux égaux à environ 0,74. Cela veut donc dire que **le modèle explique 74% de la variance du logarithme du salaire winsorisé**. Ainsi, on peut dire que les variables explicatives du modèle capturent une grande partie des différences observées dans le salaire.\
+Néanmoins, on ne peut pas conclure sur la causalité simplement avec ces informations. En effet, il peut toujours y avoir des problèmes d'endogénéité, des biais de variables omises ou d'auto-sélection.
+
+# Partie IV : Décomposition d'Oaxaca-Blinder
+
+### Question 21
+
+La seconde partie de l'équation est la composante **inexpliquée** de l'écart salarial. En effet, on parle de composante **inexpliquée** car la différence causée par cette partie de l'équation n'est pas dûe aux différences observables dans les caractéristiques des individus (âge, diplôme, secteur d'activité, ...).\
+Elle peut mettre en lumière les inégalités persistantes sur le marché du travail. Souvent, elle indique qu'à caractéristiques comparables, les femmes perçoivent un salaire inférieur à celui des hommes.
+
+### Question 22
+
+D'abord, installons et chargons la bibliothèque nécessaire.
+
+```{r}
+#install.packages(oaxaca)
+#library(oaxaca)
+```
+
+Faisons maintenant la décomposition.
+
+```{r}
+#Décomposition Oaxaca-Blinder
+#decomp <- oaxaca(
+#  formula = log_hwage_winsor ~ AGE5 + DIP11 + CSP_r + CONTRA + HHCE + ENFRED | femme,
+#  data = data_reg,
+#)
+# Résumé des résultats
+#summary(decomp)
+
+# Visualisation des composantes expliquée et inexpliquée
+#plot.oaxaca(decomp, components = c("explained", "unexplained"), col = c("lightblue", "pink"))
+```

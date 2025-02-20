@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Regression Discontinuity Design (RDD)</title>
+    <title>Variables Instrumentales (IV)</title>
     <meta charset="utf-8" />
     <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2024-10-24" />
+    <meta name="date" content="2025-01-20" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
@@ -17,7 +17,7 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# Regression Discontinuity Design (RDD)
+# Variables Instrumentales (IV)
 ]
 .subtitle[
 ## Pratiques de la Recherche en Économie
@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Florentine Oliveira
 ]
 .date[
-### 2024-10-24
+### 2025-01-20
 ]
 
 ---
@@ -37,253 +37,172 @@ class: center, middle, inverse, title-slide
 layout: true
 
 
----
-# 1. Intuition
-
-De nombreux traitements sont définis selon une **règle/un seuil**. 
-
-Par exemple:
-- le revenu à partir duquel un individu peut bénéficier d'une prestation sociale
-- l'âge d'entrée à l'école, âge légal pour avoir droit de vote, consommer de l'alcool (majorité)
-- moyenne au bac requise pour pouvoir candidater à certaines écoles
-
-
-La régression sur discontinuité, ou ***Regression Discontinuity Design***, exploite ce(s) seuil(s) pour estimer l'effet causal du traitement.
-
-Intuition: **exogeneité locale**
-- les individus proches du seuil sont raisonnablement comparables
-- cependant ceux au dessus du seuil sont traîtés alors que ceux en dessous ne le sont pas
-- la discontinuité crée une **quasi-expérience** au voisinage du seuil de discontinuité 
-  - autour du seuil, l'allocation au traitement est *as good as random*
-
-
----
-# 1. Intuition
-
-### Formellement
-
-Si l'on revient au framework des outcomes potentiels:
-
-`$$Y_i = Y_{1i} D_i + Y_{0i}(1-D_i)$$`
-&lt;span style="color:#33B8FF"&gt; ***Running/Forcing variable***&lt;/span&gt;: variable sur laquelle s'applique le critère de traitement.
 
 
 
----
-# 2. Sharp RDD
 
-## 2.1. Définition de l'estimateur
 
-La probabilité pour l'individu `\(i\)` d'être traîté passe de 0 à 1 au seuil de discontinuité `\(c\)`:
 
-`$$D_i = \mathbb{1}\{X_i \ge c\}$$`
-&lt;span style="color:#9933FF"&gt; **Hypothèse d'identification: `\(\color{#9933FF}{\mathbb{E}(Y_{1i} | X_i = x)}\)` et `\(\color{#9933FF}{\mathbb{E}(Y_{0i} | X_i = x)}\)` sont continues en `\(\color{#9933FF}{x}\)`**&lt;/span&gt; 
 
-L'estimateur de l'effet causal du traitement `\(D_i\)` sur `\(Y_i\)` revient alors à comparer la moyenne de l'outcome `\(Y_i\)` de part et d'autre du seuil `\(c\)`:
 
-`$$\begin{align} \tau_{\text{RDD}}^{\text{sharp}} &amp;= \underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(Y_i | X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(Y_i | X_i = x) \\  &amp;= \underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(\color{#dd0747}{Y_{1i}} | X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(\color{#dd0747}{Y_{0i}} | X_i = x) \end{align}$$`
 
-L'estimateur `\(\tau_{\text{RDD}}^{\text{sharp}}\)` est un estimateur local de l'effet moyen du traitement (***LATE***).
+
 
 
 
 
 ---
-# 2. Sharp RDD
+# Selection sur les non-observables
 
-## 2.2. En pratique
+Les méthodes d'identification basées sur la **selection sur les observables** supposent que l'on peut supprimer le biais de sélection au traitement `\(D_i\)` en contrôlant par des variables observables `\(X_i\)`. L'hypothèse d'identification sous-jacente:
 
+`$$\{Y_{0i}, Y_{1i}\} \perp D_i|X_i$$`
 
-&lt;span style="color:#33B8FF"&gt; ***Bandwith***&lt;/span&gt;: .
+Les méthodes d'identification basées sur la **sélection sur les non-observables** supposent que l'on peut utiliser seulement la "bonne variation" de `\(D_i\)`, que l'on appelle `\(Z_i\)`, et l'utiliser pour estimer l'effet de `\(D_i\)` sur `\(Y_i\)`. Cela permet par ailleurs de supprimer tout biais de sélection (en supprimant la "mauvaise" variation de `\(D_i\)`). L'hypothèse d'identification devient double: 
+
+`$$\{Y_{0i}, Y_{1i}\} \perp Z_i$$`     
+
+`$$Cov(Z_i, D_i) \neq 0$$`
+
+---
+# Intuition
+
+La méthode des variables instrumentales permet d'isoler la "bonne variation" de D, c'est à dire celle qui est correlée avec Y, de la mauvaise variation, c'est à dire celle qui est correlée avec u et rend la variable D endogène. 
+
+Comment? Au moyen d'une variable observable Z, correlée avec D mais pas avec u.
+
+&lt;span style="color:#9933FF"&gt; Formellement: `\(\color{#9933FF}{(Y_{1i}, Y_{0i}) \perp D_i}\)` &lt;/span&gt;
 
 
 ---
-# 2. Sharp RDD
+# Hypothèses d'identification
 
-## 2.3. Example 1
+&lt;span style="color:#9933FF"&gt; **Relevance:**&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt;Intuition: l'instrument et la variable endogène sont corrélés&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt; Formellement,  `\(\color{#9933FF}{Cov(D_i, Z_i) \neq 0}\)` &lt;/span&gt; 
 
-&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
 
-**Motivation**:
-- Peu d'évidence sur les effets du congé maternité rémunéré sur la santé mentale des mères... alors même que c'est la première jsutification de l'existence de ce congé
-- Effet ambigü:
-  - Effets positifs si l'emploi augmente le stress ou réduit le temps que la femme consacre à s'occuper d'elle-même et à se remettre des effets physiques de l'accouchement   
-  - Effets négatifs si cela permet à la mère d'avoir davantage d'interractions sociales et cela augmente le revenu
+&lt;img src="imgs/relevance.png" width="60%" style="display: block; margin: auto;" /&gt;
 
-**Contexte**:
-- Introduction d'un congé payé maternité en Norvège, au 1er Juillet 1977
-  - avant la réforme, aucun congé rémunéré; seulement 12 semaines de congé non rémunérés
-  - après la réforme:  4 mois de congés payés et à 12 mois de congés non rénumérés
-  
-  
-**Question de recherche**: quel effet l'introduction du congé payé a t-elle eu sur la santé mentale des mères ?
-  
 ---
-# 2. Sharp RDD
+# Hypothèses d'identification
 
-## 2.3. Example 1
+&lt;span style="color:#9933FF"&gt;L'instrument est **as-good-as-random:**&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt;Intuition: l'instrument est distribué aléatoirement &lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt; Formellement,  `\(\color{#9933FF}{Cov(Z_i, \varepsilon_i) = 0}\)` &lt;/span&gt; 
 
-&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
+&lt;img src="imgs/as-good-as-random.png" width="60%" style="display: block; margin: auto;" /&gt;
 
-**Question**: pourquoi ne peut-on pas simplement comparer la santé mentale moyenne des mères ayant recours au congé maternité et celle des mères n'y ayant pas recours?
+---
+# Hypothèses d'identification
+
+&lt;span style="color:#9933FF"&gt; **Exclusion restriction:**&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt;Intuition: l'instrument affecte `\(\color{#9933FF}{Y}\)` **uniquement via** `\(\color{#9933FF}{D}\)` &lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt; Formellement,  `\(\color{#9933FF}{Cov(Z_i, \varepsilon_i) = 0}\)` &lt;/span&gt; 
+
+&lt;img src="imgs/exclusion.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+
+
+`$$\begin{align} Cov(Y_i, Z_i) &amp;= Cov(\alpha + \beta Z_i + \varepsilon_i, Z_i) \\ &amp;= \beta Cov(D_i, Z_i) + \underbrace{Cov(\varepsilon_i, Z_i)}_{=0}\end{align}$$`
+Donc, `\(\beta\)` est identifié: 
+
+$$ \beta = \frac{Cov(Y_i, Z_i)}{Cov(D_i, Z_i)} $$
+---
+# Lien avec 
+
+
+---
+# Quatres modèles
+
+**Modèle avec variable endogène**: 
+- `\(Y_i = \alpha + \beta D_i + \varepsilon_i\)`
+
+
+**First Stage**: régression de la &lt;span style="color:#e07126"&gt;**variable endogène**&lt;/span&gt; sur l'&lt;span style="color:#9e5188"&gt;**instrument**&lt;/span&gt; 
+- `\(\color{#e07126}{D_i} = \alpha + \gamma \color{#9e5188}{Z_i} + \epsilon_i\)`
+
+**Second Stage**: régression de l'outcome d'intérêt sur les &lt;span style="color:#199c2c"&gt;**valeurs prédites en *first stage* **&lt;/span&gt; 
+- `\(Y_i = \alpha + \beta \color{#199c2c}{\hat{D_i}} + \varepsilon_i\)`
+
+**Reduced Form**: régression de l'outcome sur l'&lt;span style="color:#9e5188"&gt;**instrument**&lt;/span&gt; 
+- `\(Y_i = \mu + \pi \color{#9e5188}{Z_i} + \nu_i\)`
+
+
+---
+background-color: #f19bb5
+# Application: Angrist and Krueger (1991)
+
+**Question de Recherche**: quel est l'effet causal du niveau d'études sur le salaire?
 
 --
 
-**Endogeneité**
-- certaines caractéristiques inobservables peuvent affecter à la fois le recours au congé maternité et la santé mentale des mères
-- causalité inversée: si la santé mentale des mères impacte le recours au congé maternité
-
-
----
-# 2. Sharp RDD
-
-## 2.3. Example 1
-
-&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
-
-**Stratégie d'identification**: Regression Discontinuity Design!!
-
-**Question**: quelle est la running variable? quel est le seuil? 
+**Question**: pourquoi ne peut-on pas simplement comparer le salaire de deux individus ayant un niveau de diplôme différent?      
 
 --
-- Date de naissance de l'enfant
-- 1er juillet 1977
-
-Les mères ayant accouché de leur enfant **avant le 1er juillet 1977** ne bénéficient pas de l'introduction du congé maternité rémunéré. Celles ayant accouché **le 1er juillet 1977 ou après** peuvent en bénéficier.
-
-
+**Biais de sélection/OVB**: 
+- les individus ayant de meilleures capacités ou davantage de motivation ont tendance à poursuivre leurs études plus longtemps et par ailleurs cela peut également avoir un impact sur leur salaire
+- Problème: on n'observe pas la motivation ni les capacités (ie. ces variables sont dans `\(u\)`)
+  - donc estimate biaisé 
+  
 ---
-# 2. Sharp RDD
+background-color: #f19bb5
+# Application: Angrist and Krueger (1991)
 
-## 2.3. Example 1
+Angrist et Krueger proposent un instrument pour le niveau d'éducation: **le trimestre de naissance** (Quarter of Birth, QOB):
 
-&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
-
-**Stratégie d'identification**: Regression Discontinuity Design!!
-
-**Question**: quelles sont les hypothèses d'identification?
-
---
-- **Pas de manipulation de la running variable**: ici, cela signifie que les mères ne peuvent pas stratégiquement choisir d'accoucher avant ou après le 1er juillet 1977   
-- **Continuité de la running variable au point de discontinuité**: ici, cela signifie que le nombre de naissances est continu au point de discontinuité    
-
----
-# 2. Sharp RDD
-
-## 2.3. Example 1
-
-&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
-
-.pull-left[
-&lt;img src="imgs/bütikofer_et_al_2021_eligibility.png" width="100%" style="display: block; margin: auto;" /&gt;
-]
-
-.pull-right[
-&lt;img src="imgs/bütikofer_et_al_2021_births.png" width="100%" style="display: block; margin: auto;" /&gt;
-]
-
-
----
-# 2. Sharp RDD
-
-## 2.3. Example 1
-
-&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
-
-.center[
-&lt;img src="imgs/bütikofer_et_al_2021_covariates.png" width="45%" style="display: block; margin: auto;" /&gt;
-]
-
----
-# 2. Sharp RDD
-
-## 2.3. Example 1
-
-&lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
-
-&lt;div style="display: flex; justify-content: space-around;"&gt;
-
-  &lt;img src="imgs/bütikofer_et_al_2021_bmi.png" alt="Image 1" style="width: 30%;"&gt;
-  &lt;img src="imgs/bütikofer_et_al_2021_blood_pressure.png" alt="Image 2" style="width: 30%;"&gt;
-  &lt;img src="imgs/bütikofer_et_al_2021_index.png" alt="Image 3" style="width: 30%;"&gt;
-
-&lt;/div&gt;
-
----
-# 2. Sharp RDD
-
-## 2.3. Example 2
-
-&lt;span style="color:#dd0747"&gt;**Canaan, S. (2022)** &lt;/span&gt;. *Parental leave, household specialization and children’s well-being*. Labour Economics.
-
-  - Impact de l'allongement de la durée du congé parental en France en 1994: allocation mensuelle pouvant aller jusqu'aux trois ans de l'enfant
-    - avant réforme, parents éligibles à partir du 3ème enfant
-    - après la réforme, parents éligibles à partir du 2ème enfant 
-    - `\(\simeq\)` augmentation de la durée du congé parental de 3 ans   
-    
-  - Effets :
-    - Négatifs sur l'emploi des mères: éloignées plus longtemps du marché du travail et baisse du salaire 
-    - Négatifs la spécialization des tâches au sein du ménage: les hommes ne prennent pas ce congé parental et travaillent davantage
-    - Négatifs sur le développement verbal des enfants
+**Contexte**
+- Aux USA,
+  - entrée à l'école l'année des 6 ans
+  - école olbligatoire jusqu'à 16 ans
+  
 
 
 
 
 ---
-# 3. Fuzzy RDD
+background-color: #f19bb5
+
+[Angrist Data Archive](https://economics.mit.edu/people/faculty/josh-angrist/angrist-data-archive)
 
 
+
+---
+
+
+&lt;img src="lecture_6_fr_files/figure-html/unnamed-chunk-2-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+background-color: #d7e2d8
+# Recap: Variables Instrumentales
+
+**Data**: Données expérimentales
+
+&lt;span style="color:#9933FF"&gt;**Hypothèse d'identification**:  &lt;/span&gt;
+- &lt;span style="color:#9933FF"&gt; Intuition: allocation aléatoire du statut de traitement &lt;/span&gt;
+- &lt;span style="color:#9933FF"&gt; Formellement: `\(\color{#9933FF}{(Y_{1i}, Y_{0i}) \perp D_i}\)` &lt;/span&gt;
+
+**Modèle**: pour tout individu `\(i\)`,
+`$$Y_i = \alpha + \delta D_i + \varepsilon$$`
+
+**Estimateur de l'effet du traitement**:
+- Différence entre l'outcome moyen du groupe des individus traîtés et celui du groupe de contrôle
+- `\(\hat{\delta} = \mathbb{E}(Y_i | D_i = 1) - \mathbb{E}(Y_i | D_i = 0)\)`
+
+**Implémentation sur `R`**: 
+- Balancing Tests: 
+- Estimation de l'effet du traitement: `lm(y ~ D, data = data)`
 
 
 
 ---
 # Sources
 
-[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/06-regression_discontinuity)    
-
-
-
----
-
-## Introduction to RDD
-- RDD exploits a threshold-based assignment rule for treatment.
-- Often used when treatment is assigned based on a continuous variable.
-- Observations close to the threshold are comparable.
-
----
-
-## Key Assumptions
-- **Continuity assumption**: The potential outcomes would be smooth in the absence of treatment.
-- **No manipulation**: No strategic behavior around the threshold.
-
----
-
-## Estimation Methods
-- Compare outcomes just below and above the threshold.
-- Local linear regression is commonly used.
-
----
-
-## Sharp vs. Fuzzy RDD
-- **Sharp RDD**: Treatment is perfectly assigned at the threshold.
-- **Fuzzy RDD**: Probability of treatment increases at the threshold but is not guaranteed.
-
----
-
-## Common Pitfalls
-- Misspecification of the functional form.
-- Data manipulation around the cutoff.
-- Incorrect bandwidth choice.
-
----
-
-## Practical Applications
-- Educational interventions, social programs, and political studies.
-
----
-
-## Conclusion
-- RDD provides causal estimates in a non-experimental setting when correctly implemented.
+[Mastering Metrics R Code](https://jrnold.github.io/masteringmetrics/quarter-of-birth-and-returns-to-schooling.html)    
+[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/07-instrumental_variables)    
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

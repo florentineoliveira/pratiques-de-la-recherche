@@ -65,7 +65,7 @@ Calculez les percentiles du salaire mensuel net (*hint: utiliser la fonction `qu
 
 ```{r, include = F}
 
-q_99 = quantile(data$wage, seq(0,1,0.01), na.rm = T)[100] # 7534.073 
+q_99 = quantile(data$wage, seq(0,1,0.01), na.rm = T)[100] # 7485.299 
 ```
 
 
@@ -133,7 +133,9 @@ data %>%
   theme_bw()
 
 ```
-
+2 phénomènes:
+- *massification scolaire*:
+- *stratification scolaire*:
 
 ### Question 7 (1pt):
 - Créez une nouvelle variable `at_least_bac` qui vaut 1 si l'individu a un diplôme au moins égal au Bac, 0 sinon.
@@ -225,7 +227,7 @@ round(prop.table(table(data$quotité, data$ENFRED), margin = 2), 2)
 
 round(prop.table(table(data$quotité[data$SEXE == 1], data$ENFRED[data$SEXE == 1]), margin = 2), 2)
 
-round(prop.table(table(data$quotité[data$SEXE == 2], data$ENFRED[data$SEXE == 2]), margin = 1), 2)
+round(prop.table(table(data$quotité[data$SEXE == 2], data$ENFRED[data$SEXE == 2]), margin = 2), 2)
 ```
 
 ### Question 12 (1pt):
@@ -306,9 +308,20 @@ Créez le dataframe `data_reg` à partir de `data` qui comprend uniquement les o
 
 ```{r, include = F}
 
+#data_reg = data %>% 
+#  filter(AGE5 != 15,
+#         CONTRA %in% c(1,2),
+#         ! (CSP_r %in% c(0,1)),
+#         HHCE > 0) %>% 
+#  group_by(CSP) %>% 
+#  mutate(n = n()) %>% 
+#  ungroup() %>% 
+#  filter(n>30)
+
+
 data_reg = data %>% 
   filter(AGE5 != 15,
-         STATUTR %in% c(1,4,5),
+         STATUTR %in% c(4,5),
          ! (CSP_r %in% c(0,1)),
          HHCE > 0) %>% 
   group_by(CSP) %>% 
@@ -321,16 +334,15 @@ data_reg = data %>%
 ### Question 16 (1pt):
 Calculez l'écart du salaire moyen entre hommes et femmes (en niveau et en pourcentage, en utilisant le salaire mensuel net winsorisé). 
 
-```{r, include = F}
-gap_perc = mean(data_reg$wage_winsor[data_reg$femme == 1], na.rm = T)/mean(data_reg$wage_winsor[data_reg$femme == 0], na.rm = T)
+```{r, include = T}
+gap_perc = (mean(data_reg$wage_winsor[data_reg$femme == 1], na.rm = T)-mean(data_reg$wage_winsor[data_reg$femme == 0], na.rm = T))/mean(data_reg$wage_winsor[data_reg$femme == 0], na.rm = T)
 
-gap_euros = (mean(data_reg$wage_winsor[data_reg$femme == 1], na.rm = T) - mean(data_reg$wage_winsor[data_reg$femme == 0], na.rm = T)) / mean(data_reg$wage_winsor[data_reg$femme == 0], na.rm = T)
+gap_euros = (mean(data_reg$wage_winsor[data_reg$femme == 1], na.rm = T) - mean(data_reg$wage_winsor[data_reg$femme == 0], na.rm = T))
 
 mean(data_reg$wage_winsor[data_reg$SEXE==1], na.rm = T)
 mean(data_reg$wage_winsor[data_reg$SEXE==2], na.rm = T)
 
-mean(data_reg$log_wage_winsor[data_reg$femme == 0], na.rm = T)
-mean(data_reg$log_wage_winsor[data_reg$femme == 1], na.rm = T)
+mean(data_reg$log_wage_winsor[data_reg$femme == 1], na.rm = T)-mean(data_reg$log_wage_winsor[data_reg$femme == 0], na.rm = T)
 
 ```
 
@@ -338,7 +350,7 @@ mean(data_reg$log_wage_winsor[data_reg$femme == 1], na.rm = T)
 ### Question 17 (2pt):
 Estimez le modèle $log(\text{Salaire mensuel Winsorisé}) = \alpha + \beta \text{Femme} + \varepsilon$. Que représentent $\alpha$ et $\beta$? Peut-on dire que $\beta$ est causal?
 
-```{r, include = F}
+```{r, include = T}
 reg = lm(log_wage_winsor ~ femme, data = data_reg)
 summary(reg)
 ```
@@ -348,7 +360,7 @@ summary(reg)
 - Créez la variable salaire (winsorisé) **horaire** et son log, que vous nommerez `hwage_winsor` et `log_hwage_winsor` (*hint: utiliser la variable `HHCE`, le nombre d'heures travaillées en moyenne **par semaine** dans l'emploi principal*)
 - Quel est maintenant l'écart de salaire moyen entre femmes et hommes? Comment se compare-t-il à l'écart de salaire calculé en question 16 et comment expliquez-vous cette différence? 
 
-```{r, include = F}
+```{r, include = T}
 data_reg$hwage_winsor = data_reg$wage_winsor/(data_reg$HHCE*151.67/35)
 data_reg$log_hwage_winsor = log(data_reg$hwage_winsor) 
 
@@ -402,7 +414,7 @@ Décrivez ce que mesure la seconde partie de l'équation (2)? Pourquoi parle t-o
 Installez et chargez le package `oaxaca`^[https://cran.r-project.org/web/packages/oaxaca/vignettes/oaxaca.pdf]. Utilisez la fonction `oaxaca` pour réaliser une décomposition d'Oaxaca-Blinder en deux parties. Que peut-on conclure sur les écarts de rémunération salariale entre femmes et hommes? Vous pourrez vous référer à la documentation du package disponible en ligne et vous aider d'un graphique pour interpréter les résultats.
 
 
-```{r, include = F}
+```{r, include = T}
 library(oaxaca)
 
 oaxaca = oaxaca(log_hwage_winsor ~ -1 + as.factor(AGE5) + as.factor(CSP_r) + as.factor(DIP11) + as.factor(ANCENTR4)  | femme , data = data_reg)

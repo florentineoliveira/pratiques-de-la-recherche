@@ -1,5 +1,5 @@
 /* Style général avec la police Cabin */
-body, h1, h2, h3, th, td {
+body, h1, h2, h3, th, td, button {
     font-family: 'Cabin', sans-serif;
     color: black;
 }
@@ -89,4 +89,33 @@ td a:hover {
 /* Liens désactivés */
 td span {
     color: grey;
+}
+
+
+/* Réinitialiser complètement tous les styles par défaut */
+button {
+  all: unset; /* Réinitialise tous les styles par défaut */
+  appearance: none; /* Supprime le style natif des boutons */
+  -webkit-appearance: none; /* Compatible avec Safari et Chrome */
+  -moz-appearance: none; /* Compatible avec Firefox */
+  display: inline-block; /* Comportement de bouton */
+  box-sizing: border-box; /* Pour que padding et bordures soient inclus */
+}
+
+/* Personnalisation complète pour les boutons inline */
+button.inline {
+  background-color: #EE83A3 !important; /* Couleur de fond rose clair */
+  color: #FAFAFA !important;           /* Texte blanc */
+  padding: 5px 10px !important;        /* Taille compacte */
+  font-size: 14px !important;          /* Taille du texte */
+  font-family: 'Cabin', sans-serif !important; /* Police Cabin */
+  border: none !important;             /* Pas de bordure */
+  border-radius: 4px !important;       /* Coins arrondis */
+  cursor: pointer !important;          /* Main au survol */
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Légère ombre */
+  text-align: center !important;
+}
+
+button.inline:hover {
+  background-color: #DD0747 !important; /* Couleur rose foncé au survol */
 }
