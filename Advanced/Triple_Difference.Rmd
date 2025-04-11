@@ -1,0 +1,193 @@
+---
+title: "Triple Difference"
+subtitle: "Modèle économétrique et interprétation"
+author: "Florentine Oliveira"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ['metropolis', 'metropolis-fonts', 'custom.css']
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r setup, include = FALSE, warning = FALSE, message = FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  dev = "svg",
+  cache = TRUE,
+  fig.align = "center"
+  #fig.width = 11,
+  #fig.height = 5
+)
+
+# Load packages
+library(tidyverse)
+library(pander)
+library(ggthemes)
+library(gapminder)
+library(emo)
+library(countdown)
+library(xaringanthemer)
+library(xaringanExtra)
+library(sf)
+
+
+
+style_xaringan( 
+  title_slide_background_color = "#dd0747",
+  title_slide_text_color = "white",
+  text_color = "black",
+  header_color = "#dd0747",
+  text_bold_color = "#dd0747",
+  text_slide_number_color = "black",
+  code_inline_background_color = "#e0e1df",
+  base_font_size = "24px",
+  text_font_family = "Palatino",
+  header_font_family = "Palatino",
+  header_h1_font_size = "45px",
+  header_h2_font_size = "35px",
+  header_h3_font_size = "28px",
+  inverse_background_color = "#f8cdda",
+  inverse_text_color = "black",
+  inverse_header_color = "#dd0747")
+
+# Theme with only x and y axis ans names
+theme_minimum = theme_bw() + 
+  theme(
+  text = element_text(family = "Palatino"),
+  line = element_blank(),  # Masquer toutes les lignes par défaut
+  rect = element_blank(),  # Masquer tous les rectangles par défaut
+  axis.line = element_line(color = "black"),  # Afficher les lignes des axes
+  axis.ticks = element_blank(),  # Masquer les ticks des axes
+  plot.title = element_blank(),  # Masquer le titre du graphique
+  panel.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"), # Masquer le fond du panneau
+  panel.grid.major = element_blank(),  # Masquer la grille principale
+  panel.grid.minor = element_blank(),  # Masquer la grille secondaire
+  plot.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"), # Masquer le fond du graphique
+  legend.position = "none"  # Masquer la légende
+)
+
+# A blank theme for ggplot
+theme_empty = theme_bw() + 
+  theme(
+  text = element_text(family = "Palatino"),
+  line = element_blank(),  # Masquer toutes les lignes par défaut
+  rect = element_blank(),  # Masquer tous les rectangles par défaut
+  axis.line = element_line(color = "black"),  # Afficher les lignes des axes
+  axis.ticks = element_blank(),  # Masquer les ticks des axes
+  axis.text = element_blank(),  # Masquer les étiquettes des axes
+  axis.title = element_text(size = 12),  # Afficher les titres des axes
+  plot.title = element_blank(),  # Masquer le titre du graphique
+  panel.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"), # Masquer le fond du panneau
+  panel.grid.major = element_blank(),  # Masquer la grille principale
+  panel.grid.minor = element_blank(),  # Masquer la grille secondaire
+  plot.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"), # Masquer le fond du graphique
+  legend.position = "none"  # Masquer la légende
+)
+
+
+```
+
+layout: true
+
+---
+# 1. DiD vs DDD
+
+.pull-left[
+**Setting DiD**:
+- deux groupes: l'un traité, l'autre non
+- deux périodes: avant et après traitement
+]
+.pull-right[
+**Estimateur DiD**: 
+
+(Différence traités Avant/après) - (Différence contrôles avant/après)
+]
+
+--
+
+&nbsp;
+
+<span style="color:#dd0747">**Pourquoi/quand introduire une troisième différence?** </span>
+
+--
+
+- lorsque le groupe de contrôle n'est pas vraiment comparable     
+- les groupes sont touchés différemment par un même choc 
+- existence pre-trends   
+
+
+---
+# Modèle et estimateur
+
+**Setting DDD**:
+- un groupe de traitement ( $D_i = 1$ ) et un groupe de contrôle ( $D_i = 0$ )
+- deux périodes, avant ( $Post = 0$ ) et après traitement ( $Post = 1$ )
+- deux groupes F ( $G=0$ ) et G ( $G=1$ )
+
+&nbsp;
+
+$$\begin{align} y_{igt} &= \beta_0 + \beta_1 D_i + \beta_2 G_g + \beta_3 Post_t + \beta_4 (D_i \times G_g) + \beta_5 (G_g \times Post_t) + \beta_6 (D_i \times Post_t) \\ & \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;+ \color{#dd0747}{\beta_7} (D_i \times G_g \times Post_t) + \varepsilon_{igt}\end{align}$$
+
+La DDD:
+- introduit une troisième dimension d’hétérogénéité (ex. sexe, secteur, région) pour corriger les biais structurels possibles
+- <span style="color:#9933FF"> **Hypothèse d'identification**: l'outcome relatif du groupe F et du groupe G du groupe de traitement évolue de la même manière que l'outcome relatif du groupe F et du groupe G u groupe de contrôle, en l'absence de traitement. (NB: $\neq$ deux hypothèses de tendances parallèles) </span> 
+- Effet DDD = (DiD dans le groupe F) − (DiD dans le groupe G)
+- agit comme un "placebo": si le traitement n'a pas d'effet, alors la différence entre les deux effets DiD doit être nulle
+
+
+
+---
+# Interprétation
+
+
+$\beta_0$ : moyenne de l'outcome dans le groupe de contrôle dans le groupe F
+
+$\beta_1$ : différence traité et contrôle dans le groupe F, avant
+
+$\beta_2$ : différence entre groupe F et groupe G, dans le groupe de contrôle, avant
+
+$\beta_3$ : différence avant/après dans le groupe de contrôle du groupe F
+
+$\beta_4$ : différence traité/contrôle dans le groupe G, avant
+
+$\beta_5$ : différence avant/après dans le groupe G dans le groupe de contrôle
+
+$\beta_6$ : effet du traitement dans le groupe F (DiD) (donc $\beta_6 + \beta_7$ est l'effet du traitement dans le groupe G)
+
+$\beta_7$ : effet causal du traitement qui mesure la différence de l'effet du traitement dans les deux groupes
+
+
+
+
+
+
+
+---
+# Interprétation
+
+$\mathbb{E}(Y | D_i = 0, G = 0, Post = 0) = \beta_0$ 
+
+$\mathbb{E}(Y | D_i = 1, G = 0, Post = 0) = \beta_0 + \beta_1$ 
+
+$\mathbb{E}(Y | D_i = 0, G = 1, Post = 0) = \beta_0 + \beta_2$ 
+
+$\mathbb{E}(Y | D_i = 0, G = 0, Post = 1) = \beta_0 + \beta_3$ 
+
+$\mathbb{E}(Y | D_i = 1, G = 1, Post = 0) = \beta_0 + \beta_1 + \beta_2 + \beta_4$ 
+
+$\mathbb{E}(Y | D_i = 0, G = 1, Post = 1) = \beta_0 + \beta_2 + \beta_3 + \beta_5$ 
+
+$\mathbb{E}(Y | D_i = 1, G = 0, Post = 1) = \beta_0 + \beta_1 + \beta_3 + \beta_6$ 
+
+$\mathbb{E}(Y | D_i = 1, G = 1, Post = 1) = \beta_0 + \beta_2 + \beta_3 + \beta_4 + \beta_5 + \beta_6 + \beta_7$ 
+
+
+
+

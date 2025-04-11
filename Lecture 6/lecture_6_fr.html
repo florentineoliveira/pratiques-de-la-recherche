@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Variables Instrumentales (IV)</title>
+    <title>Méthode des Doubles Différences (DiD)</title>
     <meta charset="utf-8" />
     <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2025-01-20" />
+    <meta name="date" content="2025-04-11" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="libs/countdown/countdown.css" rel="stylesheet" />
-    <script src="libs/countdown/countdown.js"></script>
     <link rel="stylesheet" href="custom.css" type="text/css" />
   </head>
   <body>
@@ -17,7 +15,7 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# Variables Instrumentales (IV)
+# Méthode des Doubles Différences (DiD)
 ]
 .subtitle[
 ## Pratiques de la Recherche en Économie
@@ -26,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### Florentine Oliveira
 ]
 .date[
-### 2025-01-20
+### 2025-04-11
 ]
 
 ---
@@ -36,173 +34,322 @@ class: center, middle, inverse, title-slide
 
 layout: true
 
+---
+
+
+&amp;nbsp;
+
+- Les méthodes abordées précédemment (régression OLS simple, variable instrumentale) concernaient des données en **coupe instantanée** (*cross-section*) ou des échantillons répétés dans le temps (*repeated cross-section*) sans suivi individuel
+
+&amp;nbsp;
+
+- Cette séance: données de panel   
+  - Effets fixes individus (très rapidement)   
+  - Méthode des doubles différences   
+
+
+---
+# Données de Pannel et Effet Fixe Individu
+
+Dans un jeu de données de panel, on observe:
+- de multiples observations `\(t\)` (année, trimestre, etc)
+- pour de multiples individus ( `\(i\)` )
+
+Le modèle de régression devient alors, pour tout &lt;span style="color:#27b072"&gt;individu&lt;/span&gt; `\(\color{#27b072}{i}\)` et &lt;span style="color:#9e5188"&gt;période&lt;/span&gt; `\(\color{#9e5188}{t}\)`:
+
+`$$y_{\color{#27b072}{i} \color{#9e5188}{t}} = \alpha + \beta D_{\color{#27b072}{i} \color{#9e5188}{t}} + \varepsilon_{\color{#27b072}{i} \color{#9e5188}{t}}$$`
+### Effet fixe
+
+
+En incluant un **effet fixe** dans notre modèle de régression, on contrôle par tous les facteurs individuels **constants au cours du temps**, à la fois observables et non-observables.
+
+  `\(\implies\)` on n'utilise plus la variation entre les unités d'observations, les `\(i\)` (*between*), mais la variation intra-individuelle (variation d'un même individu dans le temps, *within*).
+
+Le modèle s'écrit:
+`$$y_{it} = \alpha + \beta D_{it} + \color{#dd0747}\alpha_{\color{#27b072}{i}} +  \varepsilon_{it}$$`
+
+---
+# Données de Pannel et Effet Fixe Individu
+
+&amp;nbsp;
+  
+Exemple: quel est l'effet de la taille de la ville sur le salaire (*urban wage premium*)? 
+
+--
+
+Pourquoi ne peut-on pas déduire l'effet de la taille de la ville en comparant le salaire des individus qui vivent en ville au salaire des individus qui vivent dans des zones peu densément peuplées?
+
+--
+
+**Endogeneous sorting**: le lieu d'habitation n'est pas aléatoire (eg: les individus les plus diplômés choisissent souvent de vivre dans de grandes villes!)
+
+--
+
+**Solution**: Effet fixe individu! Cela veut dire que l'on exploite pour l'identification la variation au sein d'un individu, autrement dit uniquement sur les individus qui sont amenés à déménager (*movers*).
+
+--
+
+**Problème**: les effets fixes individu ne nous permettent pas de contrôler pour les caractéristiques des individus qui varient dans le temps...
+
+
+---
+# Méthode des Doubles Différences
+
+&amp;nbsp;
+
+- Méthode des doubles-différences s'appuie sur des **expériences naturelles**, i.e. une politique ou un changement institutionnel qui induit un traitement pour un groupe donné à un moment précis
+
+&amp;nbsp;
+
+- Contrairement aux "vraies expériences" où les groupes de contrôle et de traitement sont constitués par assignation aléatoire, les groupes sont déterminées par le changement de politique particulier.
+
+&amp;nbsp;
+
+- Les données de panel et la méthode des DiD permettent de tenir compte de cette sélection sur des caractéristiques non-observables, du moment que ces **caractéristiques sont constantes dans le temps**
 
 
 
+---
+# 1. Intuition
+
+&amp;nbsp;
 
 
+Si, avant la mise en place du traitement, le groupe d'individus traités et contrôles diffèrent, cela est probablement dû à des éléments non observés (biais de sélection)
 
+  `\(\implies\)` on utilise cette différence pré-traitement comme référence pour "corriger" le biais initial
 
+&amp;nbsp;
 
+--
 
+On compare donc la différence entre les deux groupes (première différence), avant et après traitement (deuxième différence).
 
+  - en soustrayant la différence initiale, on obtient l'effet 'net' du traitement
+  
+&amp;nbsp;
 
+  
+Cela suppose que l’**hypothèse de tendance parallèle** est valable: en l’absence de politique, l’écart entre les deux groupes serait resté constant dans le temps.
 
 
 
 
 ---
-# Selection sur les non-observables
+# Estimation  
 
-Les méthodes d'identification basées sur la **selection sur les observables** supposent que l'on peut supprimer le biais de sélection au traitement `\(D_i\)` en contrôlant par des variables observables `\(X_i\)`. L'hypothèse d'identification sous-jacente:
+Supposons qu'il y a:      
+- `\(t\)` périodes `\(\in \{1,T\}\)`   
+- un groupe d'individus `\(i \in [\![1;n]\!]\)` traités `\(D_i = 1\)`, et non traités `\(D_i = 0\)`   
+- les individus sont traités en `\(t=1\)`   
 
-`$$\{Y_{0i}, Y_{1i}\} \perp D_i|X_i$$`
+&amp;nbsp;
 
-Les méthodes d'identification basées sur la **sélection sur les non-observables** supposent que l'on peut utiliser seulement la "bonne variation" de `\(D_i\)`, que l'on appelle `\(Z_i\)`, et l'utiliser pour estimer l'effet de `\(D_i\)` sur `\(Y_i\)`. Cela permet par ailleurs de supprimer tout biais de sélection (en supprimant la "mauvaise" variation de `\(D_i\)`). L'hypothèse d'identification devient double: 
+Le modèle s'écrit: 
 
-`$$\{Y_{0i}, Y_{1i}\} \perp Z_i$$`     
+`$$Y_{it} = \alpha + \color{#dd0747}{\beta_{DiD}} (D_i \times Post_{t}) + \delta D_i + \eta Post_t + \varepsilon_{it}$$`
+Généralisation d'un modèle à plusieurs périodes et traitement (et traitement pouvant être staggered - *event-study*):
 
-`$$Cov(Z_i, D_i) \neq 0$$`
+`$$Y_{it} = \alpha + \sum_{t=1}^T \color{#dd0747}{\beta^{TWFE}_t} D_{it}  + \gamma_i + \eta_t + \varepsilon_{it}$$`
 
----
-# Intuition
 
-La méthode des variables instrumentales permet d'isoler la "bonne variation" de D, c'est à dire celle qui est correlée avec Y, de la mauvaise variation, c'est à dire celle qui est correlée avec u et rend la variable D endogène. 
-
-Comment? Au moyen d'une variable observable Z, correlée avec D mais pas avec u.
-
-&lt;span style="color:#9933FF"&gt; Formellement: `\(\color{#9933FF}{(Y_{1i}, Y_{0i}) \perp D_i}\)` &lt;/span&gt;
-
+NB: pour la généralisation: TWFE et discussions récentes autour des estimateurs DiD.
 
 ---
-# Hypothèses d'identification
+# Hypothèse d'identification
 
-&lt;span style="color:#9933FF"&gt; **Relevance:**&lt;/span&gt; 
-- &lt;span style="color:#9933FF"&gt;Intuition: l'instrument et la variable endogène sont corrélés&lt;/span&gt; 
-- &lt;span style="color:#9933FF"&gt; Formellement,  `\(\color{#9933FF}{Cov(D_i, Z_i) \neq 0}\)` &lt;/span&gt; 
-
-
-&lt;img src="imgs/relevance.png" width="60%" style="display: block; margin: auto;" /&gt;
-
----
-# Hypothèses d'identification
-
-&lt;span style="color:#9933FF"&gt;L'instrument est **as-good-as-random:**&lt;/span&gt; 
-- &lt;span style="color:#9933FF"&gt;Intuition: l'instrument est distribué aléatoirement &lt;/span&gt; 
-- &lt;span style="color:#9933FF"&gt; Formellement,  `\(\color{#9933FF}{Cov(Z_i, \varepsilon_i) = 0}\)` &lt;/span&gt; 
-
-&lt;img src="imgs/as-good-as-random.png" width="60%" style="display: block; margin: auto;" /&gt;
-
----
-# Hypothèses d'identification
-
-&lt;span style="color:#9933FF"&gt; **Exclusion restriction:**&lt;/span&gt; 
-- &lt;span style="color:#9933FF"&gt;Intuition: l'instrument affecte `\(\color{#9933FF}{Y}\)` **uniquement via** `\(\color{#9933FF}{D}\)` &lt;/span&gt; 
-- &lt;span style="color:#9933FF"&gt; Formellement,  `\(\color{#9933FF}{Cov(Z_i, \varepsilon_i) = 0}\)` &lt;/span&gt; 
-
-&lt;img src="imgs/exclusion.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;span style="color:#9933FF"&gt; **Parallel trends**&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt;En l'absence de traitement, l'outcome moyen des individus traités aurait évolué de la même manière que celui des individus non traités&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt; Formellement,&lt;/span&gt;  `\(\color{#9933FF}{\underbrace{\mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 1 ]}_{\text{Changement de Y(0) pour les traités}}  =  \underbrace{ \mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 0]}_{\text{Changement de Y(0) pour les contrôles}}}\)` 
+- &lt;span style="color:#9933FF"&gt; Ou encore,&lt;/span&gt;  `\(\color{#9933FF}{\underbrace{\mathbb{E}[Y_{i2}(0) | D_i = 1 ] - \mathbb{E}[Y_{i2}(0) | D_i = 0 ]}_{\text{Biais de sélection en période 2}}  =  \underbrace{\mathbb{E}[Y_{i1}(0) | D_i = 1 ] - \mathbb{E}[Y_{i1}(0) | D_i = 0 ]}_{\text{Biais de sélection en période 1}}}\)` 
 
 
----
+&lt;span style="color:#9933FF"&gt; **Absence d'anticipation**&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt;Le traitement n'a pas d'effet causal avant qu'il ne soit implanté&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt; Formellement,&lt;/span&gt;  `\(\color{#9933FF}{Y_{i1}(1) = Y_{i1}(0)}\)` 
 
 
-
-`$$\begin{align} Cov(Y_i, Z_i) &amp;= Cov(\alpha + \beta Z_i + \varepsilon_i, Z_i) \\ &amp;= \beta Cov(D_i, Z_i) + \underbrace{Cov(\varepsilon_i, Z_i)}_{=0}\end{align}$$`
-Donc, `\(\beta\)` est identifié: 
-
-$$ \beta = \frac{Cov(Y_i, Z_i)}{Cov(D_i, Z_i)} $$
----
-# Lien avec 
-
-
----
-# Quatres modèles
-
-**Modèle avec variable endogène**: 
-- `\(Y_i = \alpha + \beta D_i + \varepsilon_i\)`
-
-
-**First Stage**: régression de la &lt;span style="color:#e07126"&gt;**variable endogène**&lt;/span&gt; sur l'&lt;span style="color:#9e5188"&gt;**instrument**&lt;/span&gt; 
-- `\(\color{#e07126}{D_i} = \alpha + \gamma \color{#9e5188}{Z_i} + \epsilon_i\)`
-
-**Second Stage**: régression de l'outcome d'intérêt sur les &lt;span style="color:#199c2c"&gt;**valeurs prédites en *first stage* **&lt;/span&gt; 
-- `\(Y_i = \alpha + \beta \color{#199c2c}{\hat{D_i}} + \varepsilon_i\)`
-
-**Reduced Form**: régression de l'outcome sur l'&lt;span style="color:#9e5188"&gt;**instrument**&lt;/span&gt; 
-- `\(Y_i = \mu + \pi \color{#9e5188}{Z_i} + \nu_i\)`
 
 
 ---
 background-color: #f19bb5
-# Application: Angrist and Krueger (1991)
+# Application: Card and Krueger (1994)
 
-**Question de Recherche**: quel est l'effet causal du niveau d'études sur le salaire?
+
+**Question de Recherche**: quel est l'effet causal d'une augmentation du salaire minimum sur le taux d'emploi?
+
+--
+
+**Question**: pourquoi ne peut-on pas simplement comparer le taux de chômage de deux états ayant des niveaux de salaire minimum différents?      
 
 --
 
-**Question**: pourquoi ne peut-on pas simplement comparer le salaire de deux individus ayant un niveau de diplôme différent?      
-
---
 **Biais de sélection/OVB**: 
-- les individus ayant de meilleures capacités ou davantage de motivation ont tendance à poursuivre leurs études plus longtemps et par ailleurs cela peut également avoir un impact sur leur salaire
-- Problème: on n'observe pas la motivation ni les capacités (ie. ces variables sont dans `\(u\)`)
-  - donc estimate biaisé 
-  
----
-background-color: #f19bb5
-# Application: Angrist and Krueger (1991)
 
-Angrist et Krueger proposent un instrument pour le niveau d'éducation: **le trimestre de naissance** (Quarter of Birth, QOB):
-
-**Contexte**
-- Aux USA,
-  - entrée à l'école l'année des 6 ans
-  - école olbligatoire jusqu'à 16 ans
   
+--
+
+&lt;span style="color:#dd0747"&gt;**Angrist et Krueger (1994)**&lt;/span&gt;
+- expérience naturelle: augmentation du salaire minimum dans le New Jersey au 1er Avril 1992 de \$4,25 à \$5,05 par heure
+- focus sur l'industrie des fast-foods
+- comparaison avec l'état de Pennsylvanie
+
+
 
 
 
 
 ---
 background-color: #f19bb5
+# Application: Card and Krueger (1994)
 
-[Angrist Data Archive](https://economics.mit.edu/people/faculty/josh-angrist/angrist-data-archive)
+1) Importez les données sur `R`et stockez dans `df`. Créer les variables:
+  - `fte_before` (équivalent temps-plein)  `= empft + nmgrs + (0.5*emppt)`  
+  - `fte_after = empft2 + nmgrs2 + (0.5*emppt2)`  
+  - Ré-encoder `state` de pour que ce soit égal à Pennsylvanie si state = 0 et New Jersey si state = 1  
+  
+2) Pourquoi s'intéresser à l'industrie des fast-food, et à quel effet s'attend-t-on?  
+  
+3) Calculer le nombre moyen d'employés en équivalent temps-plein par store dans chaque état, avant et après la réforme, et l'évolution de cette moyenne. Interpréter.
+
+4) Calculer la différence de changement d'heures entre New Jersey et Pennsylvanie. Interprétez.
+
+5) Proposez un modèle économétrique qui estime l'effet du traitement.
+
+
+  
+
+---
+background-color: #fbe6ec
+# Solution : Card and Krueger (1994)
+
+1) Importez les données sur `R`et stockez dans `df`. Créer les variables:
+  - `fte_before` (équivalent temps-plein)  `= empft + nmgrs + (0.5*emppt)`
+  - `fte_after = empft2 + nmgrs2 + (0.5*emppt2)`
+  - Ré-encoder `state` de pour que sa valeur soit "Pennsylvanie" si state = 0 et "New Jersey" si state = 1
+
+
+
+``` r
+df = readRDS("data/ck1994.rds") %&gt;% 
+  mutate(fte_before = empft + nmgrs + (0.5*emppt),
+         fte_after = empft2 + nmgrs2 + (0.5*emppt2),
+         state = ifelse(state == 0, "Pennsylvanie", "New Jersey"))
+```
+  
+---
+background-color: #fbe6ec
+# Solution : Card and Krueger (1994)
+
+2) **Pourquoi s'intéresser à l'industrie des fast-food**, et à quel effet s'attend-t-on?  
+
+--
+
+- Secteur dont une forte proportion de travailleurs est rémunérée au salaire minimum `\(\implies\)` terrain d'observation idéal pour étudier l'effet d'une augmentation du salaire minimum.
+
+--
+
+- Marché très concurrentiel: les fast-foods présentent des caractéristiques homogènes en termes de produits et de processus, ce qui permet de réduire les variations non liées au salaire minimum et d'isoler plus clairement l'effet de la politique salariale.
+
+
+---
+count:false
+background-color: #fbe6ec
+# Solution : Card and Krueger (1994)
+
+2) Pourquoi s'intéresser à l'industrie des fast-food, et **à quel effet s'attend-t-on? ** 
+
+--
+
+- Secteur dont une forte proportion de travailleurs est rémunérée au salaire minimum `\(\implies\)` terrain d'observation idéal pour étudier l'effet d'une augmentation du salaire minimum.
+
+--
+
+- Marché très concurrentiel: les fast-foods présentent des caractéristiques homogènes en termes de produits et de processus, ce qui permet de réduire les variations non liées au salaire minimum et d'isoler plus clairement l'effet de la politique salariale.
+
+--
+
+Théoriquement, on s'attend à un effet négatif:
+- une hausse du coût de la main d’œuvre `\(\implies\)` 
 
 
 
 ---
+background-color: #fbe6ec
+# Solution : Card and Krueger (1994)
+
+3) Calculer le nombre moyen d'employés en équivalent temps-plein par store dans chaque état, avant et après la réforme, et l'évolution de cette moyenne. Interpréter.
 
 
-&lt;img src="lecture_6_fr_files/figure-html/unnamed-chunk-2-1.svg" style="display: block; margin: auto;" /&gt;
+
+``` r
+df %&gt;% 
+  group_by(state) %&gt;% 
+  summarise(mean_before = mean(fte_before, na.rm = T),
+            mean_after = mean(fte_after, na.rm = T)) %&gt;% 
+  ungroup() %&gt;% 
+  mutate(diff = mean_after - mean_before)
+```
+
+```
+## # A tibble: 2 × 4
+##   state        mean_before mean_after   diff
+##   &lt;chr&gt;              &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;
+## 1 New Jersey          20.4       21.0  0.588
+## 2 Pennsylvanie        23.3       21.2 -2.17
+```
+
+---
+background-color: #fbe6ec
+# Solution : Card and Krueger (1994)
+
+4) Calculer la différence de changement d'heures entre New Jersey et Pennsylvanie. Interprétez.
+
+`0.59 − (−2.17) = 2.76`
+
+
+--
+
+5) Proposez un modèle économétrique qui estime l'effet du traitement.
+
+
+`$$FTE = \alpha + \beta \;\text{New Jersey}_{i} + \delta \; \text{Post April 1st 1992}_{t} + \gamma \;({\text{New Jersey}_i \;\times \; \text{Post April 1st 1992}_t }) + \varepsilon_{it}$$`
 
 ---
 background-color: #d7e2d8
-# Recap: Variables Instrumentales
+# Recap: Méthode des Doubles Différences
 
-**Data**: Données expérimentales
+**Data**: Données de pannel 
 
-&lt;span style="color:#9933FF"&gt;**Hypothèse d'identification**:  &lt;/span&gt;
-- &lt;span style="color:#9933FF"&gt; Intuition: allocation aléatoire du statut de traitement &lt;/span&gt;
-- &lt;span style="color:#9933FF"&gt; Formellement: `\(\color{#9933FF}{(Y_{1i}, Y_{0i}) \perp D_i}\)` &lt;/span&gt;
+&lt;span style="color:#9933FF"&gt;**Hypothèses d'identification**:  &lt;/span&gt;
+- &lt;span style="color:#9933FF"&gt; **Parallel Trends**: en l'absence du traitement, les groupes traités et contrôles auraient évolué de manière similaire ( `\(\color{#9933FF}{\mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 1 ]  =  \mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 0]}\)` ) &lt;/span&gt;
+- &lt;span style="color:#9933FF"&gt; **Absence d'anticipation**: le traitement n'a pas d'effet avant sa mise en place `\(\color{#9933FF}{Y_{i1}(1) = Y_{i1}(0)}\)` &lt;/span&gt;
 
-**Modèle**: pour tout individu `\(i\)`,
-`$$Y_i = \alpha + \delta D_i + \varepsilon$$`
+**Modèle simple à deux périodes / deux groupes** : pour tout individu `\(i\)` et période `\(t\)`,
+`$$Y_{it} = \alpha + \beta (D_i \times Post_t) + \delta D_i + \eta Post_t + \varepsilon_{it}$$`
 
-**Estimateur de l'effet du traitement**:
-- Différence entre l'outcome moyen du groupe des individus traîtés et celui du groupe de contrôle
-- `\(\hat{\delta} = \mathbb{E}(Y_i | D_i = 1) - \mathbb{E}(Y_i | D_i = 0)\)`
+**Estimateur** : Différence des différences de moyennes :  
+  `\(\hat{\beta}_{DiD} = (\bar{Y}_{\text{traités, après}} - \bar{Y}_{\text{traités, avant}}) - (\bar{Y}_{\text{contrôles, après}} - \bar{Y}_{\text{contrôles, avant}})\)`
 
-**Implémentation sur `R`**: 
-- Balancing Tests: 
-- Estimation de l'effet du traitement: `lm(y ~ D, data = data)`
 
+**Implémentation sur `R`**:  package `fixest`
+- `feols(y ~ i(post, treat, ref = 0) | FE, data = data)`
 
 
 ---
 # Sources
 
-[Mastering Metrics R Code](https://jrnold.github.io/masteringmetrics/quarter-of-birth-and-returns-to-schooling.html)    
-[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/07-instrumental_variables)    
+[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/09-difference_in_differences)      
+[Panel Data, Peter Hull](https://uc6f961a8b1db5f4e6a9d3145f01.dl.dropboxusercontent.com/cd/0/inline2/ClZISGT1gPREZxePSa6rQfr-XAhfy0Q8IVCHeATVG8f2W87LH_HjVQZ_dM0m-IZ9tOQesZZMuJwVdafQDGh9Ansuh8sy_JAtUscYNcmz_K6gqdn1WQCVYCBYrXETYtIgusmcYXIPdYYXtnS2NW36vVV3Kgz-O2qNnMEcFxRu4cVRBJoSBlFCczRsbb-8eTi-UVe7BTIfIEp-vaXZbjtQXjDnDm3SBFQMLzb_Fr1aXUE2jQaw-q9wyf_2DCulyA4tis6lNLiYw83QfYn17idCJ7-1rN91csG9usORFbrG6fwVHqou2s0_uNN-VgACuyQMr5QcPecdP7Yym527bzCZgCuOk-u6n7GCQqkp5wlmQeJS4pZDZFfrbuxRcHI6L2ZPdxg/file#)        
+[Introduction to DiD with Multiple Time Periods, Callaway and Sant'Anna](https://bcallaway11.github.io/did/articles/multi-period-did.html)       
+[Differences-in-Differences, Florian Oswald, Gustave Kennedy, Pierre Villedieu et Mylène Feuillade](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter_did/chapter_did.html#1)
+
+
+
+
+
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

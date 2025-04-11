@@ -4,12 +4,10 @@
     <title>Regression Discontinuity Design (RDD)</title>
     <meta charset="utf-8" />
     <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2025-01-20" />
+    <meta name="date" content="2025-04-11" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="libs/countdown/countdown.css" rel="stylesheet" />
-    <script src="libs/countdown/countdown.js"></script>
     <link rel="stylesheet" href="custom.css" type="text/css" />
   </head>
   <body>
@@ -26,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### Florentine Oliveira
 ]
 .date[
-### 2025-01-20
+### 2025-04-11
 ]
 
 ---
@@ -41,7 +39,7 @@ layout: true
 
 
 ---
-# 1. Intuition
+# 1. Intuition et définitions
 
 De nombreux traitements sont définis selon une **règle/un seuil**. 
 
@@ -55,13 +53,13 @@ La régression sur discontinuité, ou ***Regression Discontinuity Design***, exp
 
 Intuition: &lt;span style="color:#dd0747"&gt;**exogeneité locale**&lt;/span&gt;
 - les individus proches du seuil sont raisonnablement comparables
-- cependant ceux au dessus du seuil sont traîtés alors que ceux en dessous ne le sont pas
+- cependant ceux au-dessus du seuil sont traîtés alors que ceux en dessous ne le sont pas
 - la discontinuité crée une **quasi-expérience** au voisinage du seuil de discontinuité 
   - autour du seuil, l'allocation au traitement est *as good as random*
 
 
 ---
-# 1. Intuition
+# 1. Intuition &amp; définitions
 
 ### Formellement
 
@@ -73,60 +71,104 @@ Maintenant,
 
 `$$D_i = \mathbb{1}\{X_i \ge c\}$$`
 
-où `\(X_i\)` est appelée &lt;span style="color:#33B8FF"&gt; ***running/forcing variable***&lt;/span&gt;, c'est à dire la variable sur laquelle s'applique le critère de traitement.
+où `\(X_i\)` est appelée &lt;span style="color:#33B8FF"&gt; ***running/forcing variable***&lt;/span&gt;, c'est à dire la variable (*continue*) sur laquelle s'applique le critère de sélection dans le traitement.
 
 i.e. la probabilité pour l'individu `\(i\)` d'être traîté passe de 0 à 1 au seuil de discontinuité `\(c\)`
 
 Deux types de régressions sur discontinuité:
-- **sharp**: la probabilité de traitement devient certaine au seuil `\(c\)` (ex: )
+- **sharp**: la probabilité de traitement devient certaine au seuil `\(c\)` (ex: la consommation légale d'alcool ( `\(D_i\)` ) à partir d'un certain âge ( `\(X_i\)` ))
 - **fuzzy**: la probabilité de traitement augmente au seuil `\(c\)` mais ne passe pas nécessairement à 1 (ex:)
 
 
 ---
-# 2. Sharp RDD
+# 1. Intuition &amp; définitions
 
-## 2.1. Définition de l'estimateur
+&amp;nbsp;
 
-L'estimateur de l'effet causal du traitement `\(D_i\)` sur `\(Y_i\)` revient alors à comparer la moyenne de l'outcome `\(Y_i\)` de part et d'autre du seuil `\(c\)`:
-
-`$$\begin{align} \tau_{\text{RDD}}^{\text{sharp}} &amp;= \underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(Y_i | X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(Y_i | X_i = x) \\  &amp;= \underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(\color{#eb9b34}{Y_{1i}} | X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(\color{#aa6ff2}{Y_{0i}} | X_i = x) \end{align}$$`
-
-&lt;span style="color:#9933FF"&gt; **Hypothèse d'identification: `\(\color{#9933FF}{\mathbb{E}(Y_{1i} | X_i = x)}\)` et `\(\color{#9933FF}{\mathbb{E}(Y_{0i} | X_i = x)}\)` sont continues en `\(\color{#9933FF}{x}\)`**&lt;/span&gt; 
-
-Donc. `\(\tau_{\text{RDD}}^{\text{sharp}} =\mathbb{E}(Y_i | X_i = c) - \mathbb{E}(Y_i | X_i = c)  =  \mathbb{E}(\color{#eb9b34}{Y_{1i}} - \color{#aa6ff2}{Y_{0i}} | X_i = c)\)`
+&lt;span style="color:#33B8FF"&gt; ***Bandwith***&lt;/span&gt;: intervalle autour du seuil de discontinuité dans lequel on conserve les observations pour estimer l'effet du traitement.      
+  `\(\implies\)` Arbitrage:
+  - un bandwith trop étroit peut limiter le nombre d'observations
+  - un bandwith trop large peut inclure des observations moins comparables
 
 
+&amp;nbsp;
 
-L'estimateur `\(\tau_{\text{RDD}}^{\text{sharp}}\)` est un estimateur local de l'effet moyen du traitement (***LATE***).
+&lt;span style="color:#33B8FF"&gt; ***Forme fonctionnelle***&lt;/span&gt;: désigne la spécification de la relation entre l'outcome et la forcing variable dans le modèle de régression. Elle peut être linéaire, polynomiale, etc.
 
-**NB**: on n'a pas fait l'hypothèse ici d'assignation aléatoire du traitement `\(D_i\)` (et donc `\(X_i\)`).
+
+---
+count:false
+class: middle, center
+background-color: #dd0747
+
+# &lt;span style="color:#FAFAFA;"&gt;  2. Sharp RDD&lt;/span&gt;
 
 
 ---
 # 2. Sharp RDD
+## 2.1. Définition de l'estimateur
 
-## 2.2. Example 1
+L'estimateur de l'effet causal du traitement `\(D_i\)` sur `\(Y_i\)` revient alors à comparer la moyenne de l'outcome `\(Y_i\)` de part et d'autre du seuil `\(c\)`:
+
+`$$\begin{align} \beta_{\text{RDD}}^{\text{sharp}} &amp;= \underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(Y_i | X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(Y_i | X_i = x) \\  &amp;= \underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(\color{#9e5188}{Y_{1i}} | X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(\color{#27b072}{Y_{0i}} | X_i = x) \end{align}$$`
+
+&lt;img src="lecture_7_fr_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+# 2. Sharp RDD
+## 2.1. Définition de l'estimateur
+
+L'estimateur de l'effet causal du traitement `\(D_i\)` sur `\(Y_i\)` revient alors à comparer la moyenne de l'outcome `\(Y_i\)` de part et d'autre du seuil `\(c\)`:
+
+`$$\begin{align} \beta_{\text{RDD}}^{\text{sharp}} &amp;= \underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(Y_i | X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(Y_i | X_i = x) \\  &amp;= \underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(\color{#9e5188}{Y_{1i}} | X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(\color{#27b072}{Y_{0i}} | X_i = x) \end{align}$$`
+
+&lt;img src="lecture_7_fr_files/figure-html/unnamed-chunk-2-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+# 2. Sharp RDD
+## 2.2. Hypothèse d'identification
+
+
+&amp;nbsp;
+
+&lt;span style="color:#9933FF"&gt; **Hypothèse d'identification: `\(\color{#9933FF}{\mathbb{E}(Y_{1i} | X_i = x)}\)` et `\(\color{#9933FF}{\mathbb{E}(Y_{0i} | X_i = x)}\)` sont continues en `\(\color{#9933FF}{x}\)`**&lt;/span&gt; 
+
+Donc. `\(\beta_{\text{RDD}}^{\text{sharp}} =\mathbb{E}(Y_i | X_i = c) - \mathbb{E}(Y_i | X_i = c)  =  \mathbb{E}(\color{#eb9b34}{Y_{1i}} - \color{#aa6ff2}{Y_{0i}} | X_i = c)\)`
+
+&amp;nbsp;
+
+L'estimateur `\(\beta_{\text{RDD}}^{\text{sharp}}\)` est un estimateur local de l'effet moyen du traitement (***LATE***).
+
+**NB**: on n'a pas fait l'hypothèse ici d'assignation aléatoire du traitement `\(D_i\)` (et donc `\(X_i\)`).
+
+
+
+
+---
+# 2. Sharp RDD
+## 2.3. Exemples
 
 &lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
 
 **Motivation**:
-- Peu d'évidence sur les effets du congé maternité rémunéré sur la santé mentale des mères... alors même que c'est la première jsutification de l'existence de ce congé
-- Effet ambigü:
+- Peu d'évidence sur les effets du congé maternité rémunéré sur la santé mentale des mères... alors même que c'est la première justification de l'existence de ce congé
+- Effet ambigu:
   - Effets positifs si l'emploi augmente le stress ou réduit le temps que la femme consacre à s'occuper d'elle-même et à se remettre des effets physiques de l'accouchement   
-  - Effets négatifs si cela permet à la mère d'avoir davantage d'interractions sociales et cela augmente le revenu
+  - Effets négatifs si cela permet à la mère d'avoir davantage d'interactions sociales et cela augmente le revenu
 
 **Contexte**:
 - Introduction d'un congé payé maternité en Norvège, au 1er Juillet 1977
   - avant la réforme, aucun congé rémunéré; seulement 12 semaines de congé non rémunérés
-  - après la réforme:  4 mois de congés payés et à 12 mois de congés non rénumérés
+  - après la réforme:  4 mois de congés payés et à 12 mois de congés non rémunérés
   
   
 **Question de recherche**: quel effet l'introduction du congé payé a t-elle eu sur la santé mentale des mères ?
   
 ---
 # 2. Sharp RDD
-
-## 2.2. Example 1
+## 2.3. Exemples
 
 &lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
 
@@ -141,8 +183,7 @@ L'estimateur `\(\tau_{\text{RDD}}^{\text{sharp}}\)` est un estimateur local de l
 
 ---
 # 2. Sharp RDD
-
-## 2.2. Example 1
+## 2.3. Exemples
 
 &lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
 
@@ -159,8 +200,7 @@ Les mères ayant accouché de leur enfant **avant le 1er juillet 1977** ne bén�
 
 ---
 # 2. Sharp RDD
-
-## 2.2. Example 1
+## 2.3. Exemples
 
 &lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
 
@@ -174,8 +214,7 @@ Les mères ayant accouché de leur enfant **avant le 1er juillet 1977** ne bén�
 
 ---
 # 2. Sharp RDD
-
-## 2.2. Example 1
+## 2.3. Exemples
 
 &lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
 
@@ -190,8 +229,7 @@ Les mères ayant accouché de leur enfant **avant le 1er juillet 1977** ne bén�
 
 ---
 # 2. Sharp RDD
-
-## 2.2. Example 1
+## 2.3. Exemples
 
 &lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
 
@@ -201,8 +239,7 @@ Les mères ayant accouché de leur enfant **avant le 1er juillet 1977** ne bén�
 
 ---
 # 2. Sharp RDD
-
-## 2.2. Example 1
+## 2.3. Exemples
 
 &lt;span style="color:#dd0747"&gt;**Bütikofer, A., Riise, J., &amp; M. Skira, M. (2021)**&lt;/span&gt;. *The impact of paid maternity leave on maternal health*. AEJ: Economic Policy
 
@@ -216,8 +253,7 @@ Les mères ayant accouché de leur enfant **avant le 1er juillet 1977** ne bén�
 
 ---
 # 2. Sharp RDD
-
-## 2.2. Example 2
+## 2.3. Exemples
 
 &lt;span style="color:#dd0747"&gt;**Canaan, S. (2022)** &lt;/span&gt;. *Parental leave, household specialization and children’s well-being*. Labour Economics.
 
@@ -228,61 +264,305 @@ Les mères ayant accouché de leur enfant **avant le 1er juillet 1977** ne bén�
     
   - Effets :
     - Négatifs sur l'emploi des mères: éloignées plus longtemps du marché du travail et baisse du salaire 
-    - Négatifs la spécialization des tâches au sein du ménage: les hommes ne prennent pas ce congé parental et travaillent davantage
+    - Négatifs sur la spécialisation des tâches au sein du ménage: les hommes ne prennent pas ce congé parental et travaillent davantage
     - Négatifs sur le développement verbal des enfants
 
+---
+# 2. Sharp RDD
+## 2.4. Estimation sur `R`
+
+**Étape 1**: centrer la *running variable*
+  - `\(\tilde{X}_i = X_i - c\)`
+
+**Étape 2**: choisir le modèle à estimer
+- Linéaire avec pentes communes: `\(Y_i = \alpha + \beta D_i + \delta \tilde{X}_i + \varepsilon_i\)`
+- Linéaire avec pentes différentes: `\(Y_i = \alpha + \beta  (D_i \times  \tilde{X}_i) + \delta \tilde{X}_i + \eta D_i + \varepsilon_i\)`
+- Quadratique: `\(Y_i = \alpha + \beta D_i + \delta \tilde{X}_i + \lambda \tilde{X}_i^2 +  \eta (D_i \times  \tilde{X}_i) + \nu (D_i \times  \tilde{X}_i)^2 + \varepsilon_i\)`
+
+---
+# 2. Sharp RDD
+## 2.5. Importance de la forme fonctionnelle
+
+
+
+
+`$$Y_i = \alpha + \color{#dd0747}{\beta} D_i + \delta \tilde{X}_i + \varepsilon_i$$`
+
+&lt;img src="lecture_7_fr_files/figure-html/unnamed-chunk-7-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# 2. Sharp RDD
+## 2.5. Importance de la forme fonctionnelle
+
+
+`$$Y_i = \alpha + \color{#dd0747}{\beta} D_i + \delta \tilde{X}_i + \varepsilon_i$$`
+
+
+&lt;img src="lecture_7_fr_files/figure-html/unnamed-chunk-8-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 ---
 # 2. Sharp RDD
-
-## 2.3. En pratique
-
-
-&lt;span style="color:#33B8FF"&gt; ***Bandwith***&lt;/span&gt;: .
+## 2.5. Importance de la forme fonctionnelle
 
 
+`$$Y_i = \alpha + \color{#dd0747}{\beta} D_i + \delta \tilde{X}_i + \varepsilon_i$$`
 
+&lt;img src="lecture_7_fr_files/figure-html/unnamed-chunk-9-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 
 ---
 # 2. Sharp RDD
-
-## 2.3. En pratique: forme fonctionnelle
-
-Représentons `\(\color{#aa6ff2}{\mathop{E}\left[ \text{Y}_{0i} \mid \text{X}_{i} \right]}\)`
+## 2.5. Importance de la forme fonctionnelle
 
 
+`$$Y_i = \alpha + \color{#dd0747}{\beta} (D_i \times \tilde{X}_i) + \delta \tilde{X}_i + \eta D_i + \varepsilon_i$$`
 
-&lt;img src="lecture_7_fr_files/figure-html/s1-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture_7_fr_files/figure-html/unnamed-chunk-10-1.svg" style="display: block; margin: auto;" /&gt;
+
+
 ---
-count: false
-Let's start with `\(\color{#aa6ff2}{\mathop{E}\left[ \text{Y}_{0i} \mid \text{X}_{i} \right]}\)` and `\(\color{#eb9b34}{\mathop{E}\left[ \text{Y}_{1i} \mid \text{X}_{i} \right]}\)`.
+# 2. Sharp RDD
+## 2.5. Importance de la forme fonctionnelle
 
-&lt;img src="lecture_7_fr_files/figure-html/s2-1.svg" style="display: block; margin: auto;" /&gt;
+
+`$$Y_i = \alpha + \color{#dd0747}{\beta} (D_i \times \tilde{X}_i) + \delta \tilde{X}_i + \eta D_i + \varepsilon_i$$`
+
+&lt;img src="lecture_7_fr_files/figure-html/unnamed-chunk-11-1.svg" style="display: block; margin: auto;" /&gt;
+
+
 ---
-You only win an election if your margin of victory exceeds zero.
+# 2. Sharp RDD
+## 2.5. Importance de la forme fonctionnelle
 
-&lt;img src="lecture_7_fr_files/figure-html/s3-1.svg" style="display: block; margin: auto;" /&gt;
+
+`$$Y_i = \alpha + \beta D_i + \delta \tilde{X}_i + \lambda \tilde{X}_i^2 +  \eta (D_i \times  \tilde{X}_i) + \nu (D_i \times  \tilde{X}_i)^2 + \varepsilon_i$$`
+
+
+&lt;img src="lecture_7_fr_files/figure-html/unnamed-chunk-12-1.svg" style="display: block; margin: auto;" /&gt;
+
+
 ---
-`\(\color{#eb9b34}{\mathop{E}\left[ \text{Y}_{1i} \mid \text{X}_{i} \right]} - \color{#aa6ff2}{\mathop{E}\left[ \text{Y}_{0i} \mid \text{X}_{i} \right]}\)` .hi-"black"[at the discontinuity] gives `\(\color{#dd0747}{\tau_\text{SRD}}\)`.
+# 2. Sharp RDD
+## 2.5. Importance de la forme fonctionnelle
 
-&lt;img src="lecture_7_fr_files/figure-html/s4-1.svg" style="display: block; margin: auto;" /&gt;
+
+`$$Y_i = \alpha + \beta D_i + \delta \tilde{X}_i + \lambda \tilde{X}_i^2 +  \eta (D_i \times  \tilde{X}_i) + \nu (D_i \times  \tilde{X}_i)^2 + \varepsilon_i$$`
+
+&lt;img src="lecture_7_fr_files/figure-html/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+
 ---
+background-color: #f19bb5
+# Application: Carpenter and Dobkin (2011)
 
-Real data are a bit trickier. We must estimate `\(\color{#eb9b34}{\mathop{E}\left[ \text{Y}_{1i} \mid \text{X}_{i} \right]}\)` and `\(\color{#aa6ff2}{\mathop{E}\left[ \text{Y}_{0i} \mid \text{X}_{i} \right]}\)`.
+**Question de Recherche**: quel est l'effet causal de la consommation d'alcool sur la mortalité des jeunes?
+
+--
+
+**Question**: pourquoi ne peut-on pas simplement comparer?      
+
+--
+
+**Biais de sélection/OVB**: 
+- tout ce qui n'est pas observable et qui impacte à la fois la consommation d'alcool et la mortalité
+  
+--
+
+&lt;span style="color:#dd0747"&gt;**Carpenter and Dobkin (2011)**&lt;/span&gt;: utilisent l'âge minimum légal à partir duquel un individu est autorisé à consommer de l'alcool (MLDA: Minimum Legal Drinking Age)
+
+**Contexte**: US
+  - MLDA: 21 ans
+
+**Importer les données**:  
+
+
+``` r
+library(masteringmetrics)
+data("mlda", package = "masteringmetrics")
+```
+
+---
+background-color: #f19bb5
+# Application: Carpenter and Dobkin (2011)
+
+
+```
+## # A tibble: 6 × 19
+##   agecell   all allfitted internal internalfitted external externalfitted
+##     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;          &lt;dbl&gt;    &lt;dbl&gt;          &lt;dbl&gt;
+## 1    19.1  92.8      91.7     16.6           16.7     76.2           75.0
+## 2    19.2  95.1      91.9     18.3           16.9     76.8           75.0
+## 3    19.2  92.1      92.0     18.9           17.1     73.2           75.0
+## 4    19.3  88.4      92.2     16.1           17.3     72.3           74.9
+## 5    19.4  88.7      92.3     17.4           17.4     71.3           74.9
+## 6    19.5  90.2      92.5     17.9           17.6     72.3           74.9
+## # ℹ 12 more variables: alcohol &lt;dbl&gt;, alcoholfitted &lt;dbl&gt;, homicide &lt;dbl&gt;,
+## #   homicidefitted &lt;dbl&gt;, suicide &lt;dbl&gt;, suicidefitted &lt;dbl&gt;, mva &lt;dbl&gt;,
+## #   mvafitted &lt;dbl&gt;, drugs &lt;dbl&gt;, drugsfitted &lt;dbl&gt;, externalother &lt;dbl&gt;,
+## #   externalotherfitted &lt;dbl&gt;
+```
+
+
+---
+background-color: #f19bb5
+# Application: Carpenter and Dobkin (2011)
+
+1) Quelle est la running variable? Quel est le seuil? Quelle est l'hypothèse d'identification?
+
+2) Construisez la variable `above21` qui vaut 1 pour toutes les classes d'âge `\(\ge 21\)`
+
+3) Représenter graphiquement l'évolution **linéraire et quadratique** de la mortalité liée aux accidents de la route (variable `mva`) et de la mortalité globale (`all`) autour du seuil de discontinuité. *Hint: utilisez les commandes `geom_smooth()` de `ggplot` pour tracer des droites de régressions sur un graphique et `poly(x,2)` pour un polynôme de degré 2 de la variable `\(x\)`*.
+
+4) **Pour le prochain cours**: Estimez l'effet d'atteindre le MLDA sur la mortalité globale (linéaire avec pente identique, linéaire avec pente différente, et quadratique).
+
+
+---
+background-color: #fbe6ec
+# Solution : Carpenter and Dobkin (2011)
+
+1) Quelle est la **running variable**? Quel est le seuil? Quelle est l'hypothèse d'identification?
+
+--
+
+**Running Variable**: Age
+
+
+---
+count:false
+background-color: #fbe6ec
+# Solution : Carpenter and Dobkin (2011)
+
+1) Quelle est la running variable? Quel est le **seuil**? Quelle est l'hypothèse d'identification?
+
+
+**Running Variable**: Age
+
+--
+
+**Seuil**: 21 ans
+
+
+---
+count:false
+background-color: #fbe6ec
+# Solution : Carpenter and Dobkin (2011)
+
+1) Quelle est la running variable? Quel est le seuil? Quelle est l'**hypothèse d'identification**?
+
+
+**Running Variable**: Age
+
+
+**Seuil**: 21 ans
+
+--
+
+**Hypothèse d'identification**: Autour du seuil, l'allocation du traitement est *as good as random*, i.e. les individus autour du seuil de leur 21ème anniversaire, ne diffèrent en moyenne que de par leur accès ou on à l'alcool
 
 
 
-&lt;img src="lecture_7_fr_files/figure-html/save-gg-srd-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+background-color: #f19bb5
+# Application: Carpenter and Dobkin (2011)
+
+2) Construisez la variable `above21` qui vaut 1 pour toutes les classes d'âge `\(\ge 21\)`
 
 
+``` r
+mlda = mlda %&gt;% 
+  mutate(above21 = ifelse(agecell &gt;= 21, 1, 0))
+```
+
+
+---
+background-color: #f19bb5
+# Application: Carpenter and Dobkin (2011)
+
+
+``` r
+mlda %&gt;%
+  ggplot(aes(x = agecell, y = mva)) +
+  geom_point() +
+  geom_smooth(aes(group = above21), se = FALSE, method = "lm", formula = y ~ poly(x, 2)) +
+  geom_smooth(aes(group = above21), se = FALSE, method = "lm", formula = y ~ x, color = "black") +
+  geom_vline(xintercept = 21, color = "#dd0747", linetype = "dotted", linewidth = 1) +
+  labs(y = "Motor Vehicle Accidents Mortality rate (per 100,000)", x = "Age") +
+  theme_minimum
+```
+
+&lt;img src="lecture_7_fr_files/figure-html/unnamed-chunk-17-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+background-color: #f19bb5
+# Application: Carpenter and Dobkin (2011)
+
+
+``` r
+mlda %&gt;%
+  ggplot(aes(x = agecell, y = all)) +
+  geom_point() +
+  geom_smooth(aes(group = above21), se = FALSE, method = "lm", formula = y ~ poly(x, 2)) +
+  geom_smooth(aes(group = above21), se = FALSE, method = "lm", formula = y ~ x, color = "black") +
+  geom_vline(xintercept = 21, color = "#dd0747", linetype = "dotted", linewidth = 1) +
+  labs(y = "Mortality rate (per 100,000)", x = "Age") +
+  theme_minimum
+```
+
+&lt;img src="lecture_7_fr_files/figure-html/unnamed-chunk-18-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+count:false
+class: middle, center
+background-color: #dd0747
+
+# &lt;span style="color:#FAFAFA;"&gt;  3. Fuzzy RDD&lt;/span&gt;
 
 
 ---
 # 3. Fuzzy RDD
 
+Les **fuzzy RDD** exploitent un changement discontinu dans l'assignation au traitement `\(D_i\)` au seuil de `\(c\)`.
+
+Contrairement au *sharp* RDD où la probabilité d'être traité passe de 0 à 1 lorsque *X_i* passe le seuil de discontinuité `\(c\)`, dans un cas de *fuzzy* RDD, la probabilité de traitement est continue au voisinage de `\(c\)`: 
+
+`$$0 &lt; \underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{P}(D_i = 1 | X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{P}(D_i = 1 | X_i = x) &lt; 1$$`
+On a maintenant deux effets lorsque `\(X_i\)` franchit le seuil `\(c\)`:
+
+1. L'effet sur l'**outcome**: `\(\underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(Y_i| X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(Y_i | X_i = x)\)`
+
+2. L'effet sur la **probabilité de traitement**: `\(\underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(D_i| X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(D_i | X_i = x)\)`
+
+L'estimateur de l'effet du traitement dans le cas d'une *fuzzy* RDD est donc:
+
+$$ \beta_{\text{RDD}}^{\text{fuzzy}} = \frac{\underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(Y_i| X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(Y_i | X_i = x)}{\underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(D_i| X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(D_i | X_i = x)}$$
+---
+# 3. Fuzzy RDD
+
+
+La formule de l’estimateur nous rappelle...
+
+--
+
+Celle de l'estimateur IV! Ici, l'instrument `\(Z_i = 1\{{X_i \ge c}\}\)`!!
+
+--
+
+&amp;nbsp;
+
+&lt;span style="color:#dd0747"&gt;**Angrist, J. and Lavy, V. (1999)**&lt;/span&gt;. *Using Maimonides' rule to estimate the effect of class size on scholastic achievement*. QJE
+
+
+- Règle de Maïmonide: en Israël, règle stipulant qu’au-delà de 40 élèves par classe, l’école doit scinder la classe en deux
+  `\(\implies\)` crée une discontinuité dans la taille des classes dès que la taille des classes dépasse 40 élèves, 80 élèves, 120 élèves.
+
+- En pratique : la règle n’est pas toujours appliquée de manière stricte (certaines écoles de petite taille n’ont pas les moyens matériels de scinder la classe, d’autres peuvent décider de scinder avant d’atteindre 40 élèves)
+  `\(\implies\)` le fait d’être au-dessus du seuil de 40 élèves augmente fortement la probabilité que la classe soit effectivement scindée **mais ne passe pas de 0 à 1**
+ 
 
 ---
 background-color: #d7e2d8
@@ -291,75 +571,28 @@ background-color: #d7e2d8
 **Data**: Données observationnelles 
 
 &lt;span style="color:#9933FF"&gt;**Hypothèse d'identification**:  &lt;/span&gt;
-- &lt;span style="color:#9933FF"&gt; Intuition: allocation aléatoire du statut de traitement &lt;/span&gt;
-- &lt;span style="color:#9933FF"&gt; Formellement: `\(\color{#9933FF}{(Y_{1i}, Y_{0i}) \perp D_i}\)` &lt;/span&gt;
+- &lt;span style="color:#9933FF"&gt; Intuition: individus comparables autour du seuil de discontinuité &lt;/span&gt;
+- &lt;span style="color:#9933FF"&gt; Formellement: `\(\color{#9933FF}{\mathbb{E}(Y_{1i} | X_i = x) \text{ et } \mathbb{E}(Y_{0i} | X_i = x) \text{ sont continues en } x}\)` &lt;/span&gt;
 
-**Modèle**: pour tout individu `\(i\)`,
-`$$Y_i = \alpha + \delta D_i + \varepsilon$$`
+**Modèle Sharp RDD**: pour tout individu `\(i\)`,
+`$$Y_i = \alpha + \beta D_i + \delta \tilde{X}_i + \varepsilon_i \quad \text{où} \quad D_i = \mathbb{1}\{X_i \geq c\}$$`
 
 **Estimateur de l'effet du traitement**:
-- Différence entre l'outcome moyen du groupe des individus traîtés et celui du groupe de contrôle
-- `\(\hat{\delta} = \mathbb{E}(Y_i | D_i = 1) - \mathbb{E}(Y_i | D_i = 0)\)`
+- Différence entre les valeurs prédites juste au-dessus et juste en-dessous du seuil
+- `\(\hat{\beta}_{\text{RDD}}^{\text{sharp}} = \underset{x \rightarrow c^{+}}{\text{lim}} \mathbb{E}(Y_i | X_i = x) - \underset{x \rightarrow c^{-}}{\text{lim}} \mathbb{E}(Y_i | X_i = x)\)`
 
 **Implémentation sur `R`**: 
-- Balancing Tests: 
-- Estimation de l'effet du traitement: `lm(y ~ D, data = data)`
-
-
-
+- Visualisation d' l'outcome autour du seuil avec `ggplot`
+- Tests de manipulation: `DCdensity()` du package `rdd` (test de McCrary)
+- Estimation: `lm(y ~ D + X + I(D*X), data = data)` ou packages `rdrobust`, `rddensity`
 
 ---
 # Sources
 
-[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/06-regression_discontinuity)    
-
-
-
----
-
-## Introduction to RDD
-- RDD exploits a threshold-based assignment rule for treatment.
-- Often used when treatment is assigned based on a continuous variable.
-- Observations close to the threshold are comparable.
-
----
-
-## Key Assumptions
-- **Continuity assumption**: The potential outcomes would be smooth in the absence of treatment.
-- **No manipulation**: No strategic behavior around the threshold.
-
----
-
-## Estimation Methods
-- Compare outcomes just below and above the threshold.
-- Local linear regression is commonly used.
-
----
-
-## Sharp vs. Fuzzy RDD
-- **Sharp RDD**: Treatment is perfectly assigned at the threshold.
-- **Fuzzy RDD**: Probability of treatment increases at the threshold but is not guaranteed.
-
----
-
-## Common Pitfalls
-- Misspecification of the functional form.
-- Data manipulation around the cutoff.
-- Incorrect bandwidth choice.
-
----
-
-## Practical Applications
-- Educational interventions, social programs, and political studies.
-
----
-
-## Conclusion
-- RDD provides causal estimates in a non-experimental setting when correctly implemented.
-
-
-
-
+[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/06-regression_discontinuity)               
+[Mixtape Sessions: RDD, Scott Cunningham](https://nbviewer.org/github/Mixtape-Sessions/Causal-Inference-1/blob/main/Slides/04-RDD.pdf)           
+[Mastering Metrics: RDD](https://jrnold.github.io/masteringmetrics/mlda-regression-discontinuity.html)           
+[RDD, Edward Rubin](https://raw.githack.com/edrubin/EC607S23/master/notes-lecture/10-rd/10-rd.html#1)           
 
 
 

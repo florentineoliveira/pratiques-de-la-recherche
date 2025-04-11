@@ -1,0 +1,165 @@
+---
+title: "Difference-in-Differences with Staggered Treatment"
+subtitle: "Synthesis"
+author: "Florentine Oliveira"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ['metropolis', 'metropolis-fonts', 'custom.css']
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r setup, include = FALSE, warning = FALSE, message = FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  dev = "svg",
+  cache = TRUE,
+  fig.align = "center"
+  #fig.width = 11,
+  #fig.height = 5
+)
+
+# Load packages
+library(tidyverse)
+library(pander)
+library(ggthemes)
+library(gapminder)
+library(emo)
+library(countdown)
+library(xaringanthemer)
+library(xaringanExtra)
+library(sf)
+
+
+
+style_xaringan( 
+  title_slide_background_color = "#dd0747",
+  title_slide_text_color = "white",
+  text_color = "black",
+  header_color = "#dd0747",
+  text_bold_color = "#dd0747",
+  text_slide_number_color = "black",
+  code_inline_background_color = "#e0e1df",
+  base_font_size = "24px",
+  text_font_family = "Palatino",
+  header_font_family = "Palatino",
+  header_h1_font_size = "45px",
+  header_h2_font_size = "35px",
+  header_h3_font_size = "28px",
+  inverse_background_color = "#f8cdda",
+  inverse_text_color = "black",
+  inverse_header_color = "#dd0747")
+
+# Theme with only x and y axis ans names
+theme_minimum = theme_bw() + 
+  theme(
+  text = element_text(family = "Palatino"),
+  line = element_blank(),  # Masquer toutes les lignes par défaut
+  rect = element_blank(),  # Masquer tous les rectangles par défaut
+  axis.line = element_line(color = "black"),  # Afficher les lignes des axes
+  axis.ticks = element_blank(),  # Masquer les ticks des axes
+  plot.title = element_blank(),  # Masquer le titre du graphique
+  panel.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"), # Masquer le fond du panneau
+  panel.grid.major = element_blank(),  # Masquer la grille principale
+  panel.grid.minor = element_blank(),  # Masquer la grille secondaire
+  plot.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"), # Masquer le fond du graphique
+  legend.position = "none"  # Masquer la légende
+)
+
+# A blank theme for ggplot
+theme_empty = theme_bw() + 
+  theme(
+  text = element_text(family = "Palatino"),
+  line = element_blank(),  # Masquer toutes les lignes par défaut
+  rect = element_blank(),  # Masquer tous les rectangles par défaut
+  axis.line = element_line(color = "black"),  # Afficher les lignes des axes
+  axis.ticks = element_blank(),  # Masquer les ticks des axes
+  axis.text = element_blank(),  # Masquer les étiquettes des axes
+  axis.title = element_text(size = 12),  # Afficher les titres des axes
+  plot.title = element_blank(),  # Masquer le titre du graphique
+  panel.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"), # Masquer le fond du panneau
+  panel.grid.major = element_blank(),  # Masquer la grille principale
+  panel.grid.minor = element_blank(),  # Masquer la grille secondaire
+  plot.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"), # Masquer le fond du graphique
+  legend.position = "none"  # Masquer la légende
+)
+
+
+```
+
+layout: true
+
+---
+# 1. Reminder: Canonical 2x2 case
+
+We consider the following setting:
+- two periods $t = 1,2$
+- units $i$ belong ether to the treated group ( $D_i = 1$ ) or to the control group ( $D_i = 0$ )
+- treated group receives a treatment between $t=1$ and $t=2$, control group remains untreated in bith periods
+
+<span style="color:#dd0747">Fundamental problem of causal inference: we only observe</span> $\color{#dd0747}{Y_{it} = Y_{it}(1) D_{it} + Y_{it} (0) (1- D_{it})}$ 
+
+**Challenge for identification**: we never observe the potential outcome of the treated group absent of the treatment in the second period.
+
+
+---
+# 1. Reminder: Canonical 2x2 case
+
+.center[<span style="color:#9933FF"> **Identifiying Assumptions**</span> ]
+
+<span style="color:#9933FF"> **Parallel trends**</span> 
+- <span style="color:#9933FF"> The average outcome for the treated and control groups would have evolved in parallel if tratment had not occured. Said differently, parallel trends allow for selection into treatment as logn as it is the same in both periods.</span> 
+- <span style="color:#9933FF"> Formally,</span>  $\color{#9933FF}{\underbrace{\mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 1 ]}_{\text{Changement de Y(0) pour les traités}}  =  \underbrace{ \mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 0]}_{\text{Changement de Y(0) pour les contrôles}}}$ 
+- <span style="color:#9933FF"> Or, equivalently,</span>  $\color{#9933FF}{\underbrace{\mathbb{E}[Y_{i2}(0) | D_i = 1 ] - \mathbb{E}[Y_{i2}(0) | D_i = 0 ]}_{\text{Selection bias in period 2}}  =  \underbrace{\mathbb{E}[Y_{i1}(0) | D_i = 1 ] - \mathbb{E}[Y_{i1}(0) | D_i = 0 ]}_{\text{Selection bias in period 1}}}$ 
+
+
+<span style="color:#9933FF"> **No anticipation**</span> 
+- <span style="color:#9933FF">The treatment has no causal effect before its implementation</span> 
+- <span style="color:#9933FF"> Formally,</span>  $\color{#9933FF}{Y_{i1}(1) = Y_{i1}(0)}$ 
+
+
+---
+# 1. Reminder: Canonical 2x2 case
+
+Under the parallel trend and no anticipation assumptions, the Average Treatment Effect on the Treated (ATT) is:
+
+$$\hat{\beta}_{DiD} = \left( \overline{Y}_{t=2, D=1} - \overline{Y}_{t=1, D=1} \right) - \left( \overline{Y}_{t=2, D=0} - \overline{Y}_{t=1, D=0} \right)$$
+
+
+---
+# 2. TWFE equivalence with DiD Estimator
+
+Although $\hat{\beta}_{DiD}$ can be computed by hand, another solution to consistently estimate it is through a Two-Way-Fixed-Effect (TWFE) regression specification:
+
+$$Y_{it} = \beta \left(\mathbb{1}\{1 = 2\} * D_{it} \right) + \alpha_i + \phi_t + \varepsilon_{it}$$
+---
+# 3. Generalized model with staggered treatment
+
+Now consider that:
+- there ate $T$ periods indexed by $t=1,...,T$
+- units receive the treatment for at any $t>1$
+- $D_{it} = 1$ if unit $i$ is treated in period $t$
+- $G_{i} = min\{t, D{it} = 1 \}$ is the earliest period at which $i$ is treated. If $i$ is never treated, then $G_i = \infty$
+- treatment is an absorbing state; i.e. once a unit is treated it remains treated till $T$. Formally, $ D_{it} = 1 \;\;\;\forall t \ge G_i $
+
+
+<span style="color:#9933FF"> **Parallel trends**: in the counterfactual where treatment had not occured, the average outcomes for all adoption groups would have evolved parallel</span>
+- <span style="color:#9933FF"> Formally,</span>  $\color{#9933FF}{\mathbb{E}\left[Y_{it}(\infty) - Y_{it'}(\infty)\; | G_i = g \right] = \mathbb{E}\left[Y_{it}(\infty) - Y_{it'}(\infty)\; | G_i = g' \right]}$, $\color{#9933FF}{\forall \; t \neq t'}$ <span style="color:#9933FF">and</span> $\color{#9933FF}{g \neq g'}$ 
+
+
+
+---
+# 4. Issue with TWFE in staggered treatment setting
+
+
+
+---
+# 5. New estimators
+

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Difference-in-Differences with Staggered Treatment</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Florentine Oliveira" />
+    <meta name="date" content="2025-03-19" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Difference-in-Differences with Staggered Treatment
+]
+.subtitle[
+## Synthesis
+]
+.author[
+### Florentine Oliveira
+]
+.date[
+### 2025-03-19
+]
+
+---
+
+
+
+
+layout: true
+
+---
+# 1. Reminder: Canonical 2x2 case
+
+We consider the following setting:
+- two periods `\(t = 1,2\)`
+- units `\(i\)` belong ether to the treated group ( `\(D_i = 1\)` ) or to the control group ( `\(D_i = 0\)` )
+- treated group receives a treatment between `\(t=1\)` and `\(t=2\)`, control group remains untreated in bith periods
+
+&lt;span style="color:#dd0747"&gt;Fundamental problem of causal inference: we only observe&lt;/span&gt; `\(\color{#dd0747}{Y_{it} = Y_{it}(1) D_{it} + Y_{it} (0) (1- D_{it})}\)` 
+
+**Challenge for identification**: we never observe the potential outcome of the treated group absent of the treatment in the second period.
+
+
+---
+# 1. Reminder: Canonical 2x2 case
+
+.center[&lt;span style="color:#9933FF"&gt; **Identifiying Assumptions**&lt;/span&gt; ]
+
+&lt;span style="color:#9933FF"&gt; **Parallel trends**&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt; The average outcome for the treated and control groups would have evolved in parallel if tratment had not occured. Said differently, parallel trends allow for selection into treatment as logn as it is the same in both periods.&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt; Formally,&lt;/span&gt;  `\(\color{#9933FF}{\underbrace{\mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 1 ]}_{\text{Changement de Y(0) pour les traités}}  =  \underbrace{ \mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 0]}_{\text{Changement de Y(0) pour les contrôles}}}\)` 
+- &lt;span style="color:#9933FF"&gt; Or, equivalently,&lt;/span&gt;  `\(\color{#9933FF}{\underbrace{\mathbb{E}[Y_{i2}(0) | D_i = 1 ] - \mathbb{E}[Y_{i2}(0) | D_i = 0 ]}_{\text{Selection bias in period 2}}  =  \underbrace{\mathbb{E}[Y_{i1}(0) | D_i = 1 ] - \mathbb{E}[Y_{i1}(0) | D_i = 0 ]}_{\text{Selection bias in period 1}}}\)` 
+
+
+&lt;span style="color:#9933FF"&gt; **No anticipation**&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt;The treatment has no causal effect before its implementation&lt;/span&gt; 
+- &lt;span style="color:#9933FF"&gt; Formally,&lt;/span&gt;  `\(\color{#9933FF}{Y_{i1}(1) = Y_{i1}(0)}\)` 
+
+
+---
+# 1. Reminder: Canonical 2x2 case
+
+Under the parallel trend and no anticipation assumptions, the Average Treatment Effect on the Treated (ATT) is:
+
+`$$\hat{\beta}_{DiD} = \left( \overline{Y}_{t=2, D=1} - \overline{Y}_{t=1, D=1} \right) - \left( \overline{Y}_{t=2, D=0} - \overline{Y}_{t=1, D=0} \right)$$`
+
+
+---
+# 2. TWFE equivalence with DiD Estimator
+
+Although `\(\hat{\beta}_{DiD}\)` can be computed by hand, another solution to consistently estimate it is through a Two-Way-Fixed-Effect (TWFE) regression specification:
+
+`$$Y_{it} = \beta \left(\mathbb{1}\{1 = 2\} * D_{it} \right) + \alpha_i + \phi_t + \varepsilon_{it}$$`
+---
+# 3. Generalized model with staggered treatment
+
+Now consider that:
+- there ate `\(T\)` periods indexed by `\(t=1,...,T\)`
+- units receive the treatment for at any `\(t&gt;1\)`
+- `\(D_{it} = 1\)` if unit `\(i\)` is treated in period `\(t\)`
+- `\(G_{i} = min\{t, D{it} = 1 \}\)` is the earliest period at which `\(i\)` is treated. If `\(i\)` is never treated, then `\(G_i = \infty\)`
+- treatment is an absorbing state; i.e. once a unit is treated it remains treated till `\(T\)`. Formally, $ D_{it} = 1 \;\;\;\forall t \ge G_i $
+
+
+&lt;span style="color:#9933FF"&gt; **Parallel trends**: in the counterfactual where treatment had not occured, the average outcomes for all adoption groups would have evolved parallel&lt;/span&gt;
+- &lt;span style="color:#9933FF"&gt; Formally,&lt;/span&gt;  `\(\color{#9933FF}{\mathbb{E}\left[Y_{it}(\infty) - Y_{it'}(\infty)\; | G_i = g \right] = \mathbb{E}\left[Y_{it}(\infty) - Y_{it'}(\infty)\; | G_i = g' \right]}\)`, `\(\color{#9933FF}{\forall \; t \neq t'}\)` &lt;span style="color:#9933FF"&gt;and&lt;/span&gt; `\(\color{#9933FF}{g \neq g'}\)` 
+
+
+
+---
+# 4. Issue with TWFE in staggered treatment setting
+
+
+
+---
+# 5. New estimators
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
