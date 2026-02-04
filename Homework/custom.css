@@ -21,7 +21,7 @@
 
 .remark-slide-content {
   background-color: #FAFAFA;
-  border-top: 80px solid #dd0747;
+  border-top: 80px solid #FAFAFA;
   font-size: 20px;
   font-weight: 300;
   line-height: 1.5;
@@ -35,6 +35,7 @@
 .inverse {
   background-color: #dd0747;
   text-shadow: none;
+  border-top: 80px solid #dd0747;
 }
 
 /* Removes colored bar from top of the slide resulting in a clear slide */
@@ -44,9 +45,9 @@
 
 h1 {
   font-weight: normal;
-  margin-top: -95px;
+  margin-top: -75px;
   margin-left: -00px;
-  color: #FAFAFA;
+  color: #dd0747;
 }
 
 h2, h3, h4 {
@@ -302,28 +303,52 @@ hr, .mline h1::after {
 }
 
 
-/* Styles personnalisés pour les boutons inline */
-button.inline {
-  background-color: #EE83A3 !important; /* Fond rose clair */
-  color: #FAFAFA !important;           /* Texte blanc */
-  padding: 5px 10px !important;        /* Taille compacte */
-  font-size: 14px !important;          /* Taille du texte */
-  font-family: 'Cabin', sans-serif; /* Police Cabin (si applicable) */
-  border: none !important;             /* Supprime les bordures */
-  border-radius: 4px !important;       /* Coins arrondis */
-  cursor: pointer !important;          /* Main au survol */
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Légère ombre */
-  text-align: center !important;
-}
-
-/* Styles pour le survol */
-button.inline:hover {
-  background-color: #DD0747 !important; /* Fond rose foncé au survol */
+.definition-box {
+  background-color: #cde8f8;
+  border-left: 4px solid #4682b4;
+  padding: 0.001em 0.8em;
+  margin-top: 0.5em;
+  border-radius: 2px;
 }
 
 
-.kable-table {
-  margin-left: auto;
-  margin-right: auto;
-  width: auto !important;
+.theorem-box {
+  background-color: #f8cdda;
+  border-left: 4px solid #e07b91;
+  padding: 0.001em 0.8em;
+  margin-top: 0.5em;
+  border-radius: 5px;
 }
+
+.inverse.remark-slide-content {
+  border-top: none !important;
+}
+
+/* Supprimer le bandeau blanc en haut pour les slides avec la classe clearinverse */
+.clearinverse.remark-slide-content {
+  border-top: 0 !important;
+  padding-top: 1em !important;  /* tu peux adapter ici si tu veux plus ou moins d'espace */
+}
+
+.text-purple {
+  color: #6f42c1;
+}
+
+.text-orange {
+  color: #fd7e14;
+}
+
+.text-green {
+  color: #28a745;
+}
+
+.text-grey {
+  color: grey;
+}
+
+
+.text-jourdan {
+  color: #dd0747;
+}
+
+

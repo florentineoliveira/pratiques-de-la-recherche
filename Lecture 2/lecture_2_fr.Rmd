@@ -1,8 +1,8 @@
 ---
 title: "LaTeX et R Markdown"
 subtitle: "Pratiques de la Recherche en Économie"
-author: "Florentine Oliveira"
-date: "`r Sys.Date()`"
+author: "Florentine Oliveira-Roux"
+date: "18 Novembre 2025"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -102,6 +102,11 @@ theme_empty = theme_bw() +
   legend.position = "none"  # Masquer la légende
 )
 
+#npx decktape \
+# --url-load-timeout=60000 --page-load-timeout=60000 --buffer-timeout=60000 \
+# --chrome-arg="--disable-web-security" --chrome-arg="--allow-file-access-from-files" \
+# "file:///Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Lecture 2/lecture_2_fr.html" \
+# "/Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Lecture 2/lecture_2_fr.pdf"
 
 ```
 
@@ -137,7 +142,7 @@ Les articles académiques en économie empirique suivent un format très **stand
 
 - **Mise en page**: 
   - Word est moins adapté aux documents longs et complexes
-  - $\LaTeX$ et R Markdown permettent un contrôle plus précis et **automatisé** de la mise en page et la typographie 
+  - $\LaTeX$ et R Markdown permettent un contrôle plus précis et **automatisé** de la mise en page et de la typographie 
 
 - **Gestion des références et bibliographies**: gestion de la bibliographie automatisée et directement intégrée sur $\LaTeX$ et R Markdown  
 
@@ -206,22 +211,28 @@ Les articles académiques en économie empirique suivent un format très **stand
 layout: false
 class: center, middle, inverse
 
-# 1. Overleaf
+# <span style="color:#FAFAFA;">1. Overleaf</span>
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">1.1. Présentation</span>
+
 
 ---
 background-image: url(imgs/Overleaf_Logo.png)
-background-position: 95% 10%
-background-size: 7%
+background-position: 90% 0%
+background-size: 10%
 
-# 1. Overleaf
-
-## 1.1. Présentation
+# Définition
 
 &nbsp;
 
 - Selon le site internet d'Overleaf,   
 
-  - "an online $\LaTeX$ editor that's easy to use. No installation, real-time collaboration, version control, hundreds of LaTeX templates, and more."
+  - *"an online $\LaTeX$ editor that's easy to use. No installation, real-time collaboration, version control, hundreds of LaTeX templates, and more."*
   
   
 - **Éditeur Latex** en ligne, collaboratif en temps réel  
@@ -232,18 +243,21 @@ background-size: 7%
 ---
 # Interface
 
-```{r interface, echo=FALSE, out.width="100%"}
+```{r interface, echo=FALSE, out.width="95%"}
 knitr::include_graphics("imgs/preview.png")
 ```
 
 Console, compilation fichier PDF, téléchargement, collaboration, fichiers, structure du document
 
 ---
-# 1. Overleaf
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
 
-## 1.2. Structure de base d'un document
+# <span style="color:#dd0747;">1.2. Structure de base d'un document</span>
 
-**Préambule**
+---
+# Préambule
 
 Le préambule est la partie du document LaTeX avant la commande `\begin{document}`. Il inclut:
 
@@ -264,9 +278,7 @@ Le préambule est la partie du document LaTeX avant la commande `\begin{document
 
 
 ---
-# 1. Overleaf
-
-## 1.2. Structure de base d'un document
+# Aperçu texte brut et document compilé
 
 
 ```{r structure, echo=FALSE, out.width="90%"}
@@ -275,17 +287,21 @@ knitr::include_graphics("imgs/overleaf1.png")
 
 
 ---
-# 1. Overleaf
-## 1.3. Formatage du texte : saut de ligne
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
 
+# <span style="color:#dd0747;">1.3. Formatage du texte</span>
+
+---
+# Saut de ligne
 ```{r saut ligne, echo=FALSE, out.width="90%"}
 knitr::include_graphics("imgs/overleaf2.png")
 ```
 
 
 ---
-# 1. Overleaf
-## 1.3. Formatage du texte : indentation
+# Indentation
 
 ```{r identation, echo=FALSE, out.width="90%"}
 knitr::include_graphics("imgs/overleaf3.png")
@@ -293,32 +309,37 @@ knitr::include_graphics("imgs/overleaf3.png")
 
 
 ---
-# 1. Overleaf
-## 1.3. Formatage du texte : section et sous-section
+# Section et sous-section
 
 ```{r sections, echo=FALSE, out.width="90%"}
 knitr::include_graphics("imgs/overleaf4.png")
 ```
 
 ---
-# 1. Overleaf
-## 1.3. Formatage du texte : texte en italique, gras et couleur
+# Texte en italique, gras et couleur
 
 ```{r formattage texte, echo=FALSE, out.width="90%"}
 knitr::include_graphics("imgs/overleaf5.png")
 ```
 
 ---
-# 1. Overleaf
-## 1.3. Formatage du texte : listes à puces et numerotées
+# Listes à puces et numerotées
 
 ```{r listes a puces et numerottees, echo=FALSE, out.width="90%"}
 knitr::include_graphics("imgs/overleaf6.png")
 ```
 
+
 ---
-# 1. Overleaf
-## 1.4. Math mode
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">1.4. Mode Maths</span>
+
+
+---
+# Fonctionnement et principaux opérateurs
 
 Pour écrire une équation, il suffit de mettre l'expression mathématique entre `$...$`.
 
@@ -350,17 +371,21 @@ Pour des équations centrées et numérotées, utilisez l'environnement `equatio
 **NB2: Pour ne pas numéroter les équations de l'environnement `equation`, utiliser `\begin{equation*}` au lieu de `\begin{equation}`**
 
 ---
-# 1. Overleaf
-## 1.4. Math mode
+# Aperçu mode maths
 
 ```{r maths, echo=FALSE, out.width="90%"}
 knitr::include_graphics("imgs/mathmode.png")
 ```
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">1.5. Images</span>
 
 ---
-# 1. Overleaf
-## 1.5. Figures et Subfigures
+# Figures et Subfigures
 
 Pour insérer une figure, on utilise l'environnement `figure`.
 
@@ -375,8 +400,7 @@ Plusieurs éléments:
 
 
 ---
-# 1. Overleaf
-## 1.5. **Figures** et Subfigures
+# **Figures** et Subfigures
 
 ```{r figure, echo=FALSE, out.width="90%"}
 knitr::include_graphics("imgs/figure.png")
@@ -384,18 +408,22 @@ knitr::include_graphics("imgs/figure.png")
 
 
 ---
-# 1. Overleaf
-## 1.5. Figures et **Subfigures**
+# Figures et **Subfigures**
 
 ```{r subfigure, echo=FALSE, out.width="90%"}
 knitr::include_graphics("imgs/sufigure.png")
 ```
 
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">1.6. Bibliographie</span>
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Packages
 
 Il existe différents packages qui permettent de mettre en page automatiquement une bibliographie et gérer les citations dans le corps du texte: `biblatex`, `natbib`.  
 
@@ -410,8 +438,7 @@ Quatre éléments indispensables:
 `r emo::ji("rotating_light")` **Seules les références citées dans le texte apparaîtront dans la bibliographie**
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Comment ajouter des références bibliographiques ?
 
 1) Chercher le code de la référence souhaitée en ligne (par ex sur Google Scholar) $\rightarrow$ Cliquer sur **Citer** 
 
@@ -421,8 +448,7 @@ knitr::include_graphics("imgs/cite1.png")
 
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Comment ajouter des références bibliographiques ?
 
 1) Chercher le code de la référence souhaitée en ligne (par ex sur Google Scholar) $\rightarrow$ Cliquer sur **BibTex**
 
@@ -431,8 +457,7 @@ knitr::include_graphics("imgs/cite2.png")
 ```
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Comment ajouter des références bibliographiques ?
 
 2) Copier le code de la citation
 
@@ -441,8 +466,7 @@ knitr::include_graphics("imgs/cite3.png")
 ```
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Comment ajouter des références bibliographiques ?
 
 3) Créer un fichier `.bib`
 
@@ -451,8 +475,7 @@ knitr::include_graphics("imgs/bibfile.png")
 ```
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Comment ajouter des références bibliographiques ?
 
 4) Coller le code de la citation
 
@@ -462,8 +485,7 @@ knitr::include_graphics("imgs/bibfilecontent.png")
 
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Comment ajouter des références bibliographiques ?
 
 5) Citer des références et afficher la bibliographie
 
@@ -473,8 +495,14 @@ knitr::include_graphics("imgs/renducitation.png")
 
 
 ---
-# 1. Overleaf
-## 1.6. **Commentaires**, compilation et téléchargement du fichier
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">1.7. Divers</span>
+
+---
+# **Commentaires**, compilation et téléchargement
 
 Pour ajouter un commentaire au texte, utiliser `%` suivi du commentaire en fin de ligne de code. 
 
@@ -483,8 +511,7 @@ knitr::include_graphics("imgs/comment.png")
 ```
 
 ---
-# 1. Overleaf
-## 1.6. Commentaires, **compilation** et téléchargement du fichier
+# Commentaires, **compilation** et téléchargement
 
 Pour visualiser un apperçu du fichier pdf suite à chaque modification apportée au document, cliquer sur **Recompile**
 
@@ -494,8 +521,7 @@ knitr::include_graphics("imgs/recompile.png")
 
 
 ---
-# 1. Overleaf
-## 1.6. Commentaires, compilation et **téléchargement du fichier**
+# Commentaires, compilation et **téléchargement**
 
 Pour télécharger le document, cliquer sur le bouton **Download PDF**
 
@@ -503,9 +529,17 @@ Pour télécharger le document, cliquer sur le bouton **Download PDF**
 knitr::include_graphics("imgs/save.png")
 ```
 
+
 ---
-# 1. Overleaf
-## 1.7. Avantages et inconvénients
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">1.8. Avantages et inconvénients</span>
+
+
+---
+# Avantages et inconvénients
 
 &nbsp;
 
@@ -523,20 +557,30 @@ knitr::include_graphics("imgs/save.png")
 
 
 
+
 ---
 layout: false
 class: center, middle, inverse
 
-# 2. R Markdown
+# <span style="color:#FAFAFA;">2. R Markdown</span>
+
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.1. Présentation</span>
 
 
 ---
 background-image: url(imgs/rmdlogo.png)
-background-position: 95% 10%
-background-size: 7%
+background-position: 95% 0%
+background-size: 10%
 
-# 2. R Markdown
-## 2.1. Présentation
+# Présentation
+
+&nbsp;
 
 &nbsp;
 
@@ -546,9 +590,18 @@ background-size: 7%
 .footnote[
 [1]: https://book.utilitr.org/03_Fiches_thematiques/Fiche_rmarkdown.html
 ]
+
+
 ---
-# 2. R Markdown
-## 2.2. Structure de base d'un document
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.2. Structure de base d'un document</span>
+
+
+---
+# Structure
 
 Un document `R Markdown` comprend deux parties:
 - l'en-tête, ou **YAML header** qui définit le titre, le(s) auteur(s), et le format du document
@@ -568,9 +621,19 @@ output: pdf_document
   - de blocks de code, appelés `chunks`
 
 ---
-# 2. R Markdown
- 
-## 2.3. Syntaxe `markdown` : sections et sous-sections
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.3. Syntaxe `markdown`</span>
+
+
+---
+# Sections et sous-sections
+
+&nbsp;
+
+&nbsp;
 
 Les sections et sous-sections peuvent-être facilement crées à l'aide de titres de différents niveaux: 
 
@@ -581,9 +644,11 @@ Les sections et sous-sections peuvent-être facilement crées à l'aide de titre
 
 
 ---
-# 2. R Markdown
- 
-## 2.3. Syntaxe `markdown` : texte en italique et gras
+# Texte en italique et gras
+
+&nbsp;
+
+&nbsp;
 
 Pour écrire un mot en *italique*, il faut encadrer le mot de `*`: `*italique*`  
 
@@ -592,9 +657,11 @@ Pour écrire un mot en **gras**, il faut encadrer le mot de `**`: `**gras**`
 Pour écrire un mot en ***gras italique***, il faut encadrer le mot de `***`: `***gras italique***`
 
 ---
-# 2. R Markdown
- 
-## 2.3. Syntaxe `markdown` : listes à puces
+# Listes à puces
+
+&nbsp;
+
+&nbsp;
 
 Pour créer une liste à puces, il suffit de précéder chaque élément d'un `-`:
 
@@ -610,15 +677,19 @@ Pour créer une liste à puces, il suffit de précéder chaque élément d'un `-
 knitr::include_graphics("imgs/rmd.png")
 ```
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.4. Code `Chunks`</span>
 
 
 ---
-# 2. R Markdown
- 
-## 2.4. Code `Chunks`
+# Usage
 
 
-Le code contenu dans un document `R Markdown` est contenu dans des *chunks* délimités par des balises: ` ``` `.
+Le code contenu dans un document `R Markdown` est contenu dans des *chunks* délimités par des balises: ` ``` `
 
 Chaque chunk a la structure suivante:
 
@@ -635,11 +706,7 @@ knitr::include_graphics("imgs/chunk.png")
 ```
 
 ---
-# 2. R Markdown
- 
-## 2.4. Code `Chunks`
-
-### Chunk options
+# Chunk options
 
 &nbsp;
 
@@ -654,11 +721,7 @@ knitr::include_graphics("imgs/chunk.png")
 
 
 ---
-# 2. R Markdown
- 
-## 2.4. Code `Chunks`
-
-### Chunk options pour les figures
+# Chunk options pour les figures
 
 &nbsp;
 
@@ -670,11 +733,15 @@ knitr::include_graphics("imgs/chunk.png")
 | `out.width`                   |           | Redimensionne la taille de l'output (eg "50%")  |
 
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.5. Figures</span>
 
 ---
-# 2. R Markdown
-
-### 2.5. Figures
+# Différents types de figures
 
 Au sein d'un document `R Markdown`, il est possible d'ajouter:
 
@@ -691,8 +758,17 @@ knitr::include_graphics("imgs/chunk.png")
 knitr::include_graphics("imgs/include_graphics.png")
 ```
 
+
 ---
-# 2.6. Bibliographie
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.6. Bibliographie</span>
+
+
+---
+# Méthode
 
 Comme sur Overleaf, il est possible d'ajouter une bibligraphie à votre document `R Markdown`     
 
@@ -716,7 +792,15 @@ Dans le corps du texte, pour renvoyer à une référence, il faut utiliser la co
 Par exemple, `@kleven2019children`.
 
 ---
-# 2.7. Avantages et inconvénients
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.7. Avantages et Inconvénients</span>
+
+
+---
+# Avantages et inconvénients
 
 &nbsp;
 

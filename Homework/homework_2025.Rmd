@@ -1,0 +1,455 @@
+---
+title: "Devoir Maison"
+author: "Pratiques de la Recherche en Économie, CPES3"
+date: "3 Décembre 2025"
+output: pdf_document
+---
+
+```{r, setup, include = F}
+library(tidyverse)
+library(RColorBrewer)
+library(ivreg)
+```
+
+# Consignes
+
+- Le DM est à rendre le 8 Janvier 2026 avant 23h59
+- Le rendu consistera en un fichier pdf qui contiendra vos réponses (au format nom_prenom.pdf) et un script `R` (au format nom_prenom.R ou nom_prenom.Rmd)
+- Vous pouvez le faire seul/seule ou en binôme 
+- Veillez à commenter votre code
+- La base de données à utiliser est `simulated_sibling_data.rds`, téléchargeable sur le Moodle
+- Veillez à respecter à la lettre le nom des dataframes et variables suggéré. **1 point sera retiré au DM si cette consigne n'est pas respectée.**
+
+# Données
+
+Les données ont été construites à partir de distributions empiriques de différentes variables issues de l’enquête *Formation et Qualification Professionnelle (FQP)* de l’INSEE, qui n’est malheureusement pas disponible en open data. Elles ont été **entièrement simulées** de manière à se rapprocher des distributions marginales et des dépendances entre variables observées dans l’enquête. **Cependant, la simulation reste approximative et les ordres de grandeur ne correspondent pas exactement aux valeurs observées dans l’enquête réelle.**      
+
+Le dictionnaire des variables se trouve page 5.
+
+
+## Objectif de ce DM
+
+L'objectif de ce DM est de quantifier l'importance de la taille de la fratrie sur la réussite scolaire.
+
+\newpage
+
+
+# Partie 1: Nettoyage de données (7pts)
+
+Cette première partie vise à nettoyer et préparer les données en vue des analyses descriptives et économétriques des parties suivantes.   
+
+
+Importez sur `R` la base de données que vous nommerez `df`.
+
+```{r, include = F}
+data = readRDS("data/simulated_sibling_data.rds")
+```
+
+### Question 1 (5pts):
+Créez les variables suivantes:      
+- `cohorte` qui regroupe les années de naissance en cohortes de 5 ans (par exemple : "1945-1949", etc).   
+- `femme`, une dummy égale à 1 si l'individu est une femme, 0 sinon.          
+- `rang_naissance` qui indique le rang de naissance de chaque individu au sein de sa fratrie (1 pour l'aîné, 2 pour le deuxième enfant, etc.).                  
+- `elder`, une dummy égale à 1 si l'individu est l'aîné de sa fratrie, 0 sinon.          
+- `cohorte_aine` qui indique la cohorte de naissance de l'aîné pour chaque fratrie.        
+- `taille_fratrie` qui indique le nombre d'enfants au sein de chaque fratrie.       
+- `plus_de_2`, une dummy égale à 1 si la fratrie comprend 3 enfants ou plus, 0 sinon.      
+- `compo_genre` qui décrit la composition par sexe des deux premiers enfants de chaque fratrie. Cette variable prend quatre valeurs possibles: "FF" (deux filles), "MM" (deux garçons), "FM" (fille puis garçon), ou "MF" (garçon puis fille).     
+
+### Question 2 (0,5pt): 
+Recodez les variables `mother_cs` et `father_cs` en remplaçant les codes numériques (1 à 6) par les labels des catégories socioprofessionnelles correspondantes.
+
+```{r, include = F}
+data = data %>% 
+  mutate(
+    cohorte = case_when( # 0,5
+      birth_year %in% 1945:1949 ~ "1945-1949",
+      birth_year %in% 1950:1954 ~ "1950-1954",
+      birth_year %in% 1955:1959 ~ "1955-1959",
+      birth_year %in% 1960:1964 ~ "1960-1964",
+      birth_year %in% 1965:1969 ~ "1965-1969",
+      birth_year %in% 1970:1974 ~ "1970-1974",
+      birth_year %in% 1975:1979 ~ "1975-1979",
+      birth_year %in% 1980:1984 ~ "1980-1984",
+      birth_year %in% 1985:1989 ~ "1985-1989",
+      TRUE ~ NA_character_
+    ),
+    mother_cs = recode(as.character(mother_cs), # 0,25
+                       "1" = "Agriculteur",
+                       "2" = "Artisan", 
+                       "3" = "Cadre",
+                       "4" = "Profession intermédiaire",
+                       "5" = "Employé",
+                       "6" = "Ouvrier"),
+    father_cs = recode(as.character(father_cs), # 0,25
+                       "1" = "Agricultrice",
+                       "2" = "Artisan",
+                       "3" = "Cadre", 
+                       "4" = "Profession intermédiaire",
+                       "5" = "Employée",
+                       "6" = "Ouvrière"),
+    femme = ifelse(sexe == 2, 1, 0)
+  ) %>% 
+  group_by(family_id) %>% 
+  arrange(birth_year) %>% 
+  mutate(
+    rang_naissance = row_number(), # 0,5 group_by, 0,5 arrange, 0,5 row_number, total= 1,5
+    cohorte_aine = first(cohorte), # 0,5
+    taille_fratrie = n(), # 0,5
+    plus_de_2 = ifelse(taille_fratrie > 2, 1, 0), # 0,5
+    compo_genre = case_when( # 0,5
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 1 ~ "MM",
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 2 ~ "FF",
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 2 ~ "MF",
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 1 ~ "FM"
+    )
+  ) %>% 
+  ungroup() %>% 
+  mutate(elder = ifelse(rang_naissance == 1, 1, 0))
+  
+  
+```
+
+### Question 3 (1,5pt): 
+
+- Représentez la distribution de la taille de la fratrie. Commentez.
+- Supprimer les fratries dont la taille fait parti des 1% plus élevées.
+
+```{r, include = F}
+ggplot(data, aes(x = taille_fratrie)) +
+  geom_histogram() +
+  labs(x = "Taille de Fratrie", y = "Fréquence") +
+  theme_bw()
+
+top1 = quantile(data$taille_fratrie, 0.99)
+
+data = data %>% 
+  filter(taille_fratrie < top1)
+```
+
+
+&nbsp;
+
+&nbsp;
+
+# Partie 2: Statistiques Descriptives (8pts)
+
+Cette partie a pour objectif d'explorer les données et comprendre les déterminants du niveau de diplôme.
+
+## Partie A: Taille de la fratrie
+
+### Question 4 (0,5pt): 
+Représentez graphiquement l'évolution de la taille de la fratrie selon la cohorte de naissance de l'aîné. Commentez.
+
+```{r, include = F}
+
+data %>% 
+  filter(rang_naissance == 1) %>% 
+  group_by(cohorte_aine) %>% 
+  summarise(mean_family_size = mean(taille_fratrie, na.rm = T)) %>% 
+  ggplot(aes(x = cohorte_aine, y = mean_family_size)) +
+  geom_point() +
+  geom_line(group = 1) +
+  labs(x = "Cohorte de naissance de l'aîné", y = "Taille moyenne fratrie") +
+  theme_bw()
+
+```
+
+
+### Question 5 (1pt):
+Représentez graphiquement l'évolution de la part de fratries de 3 enfants ou plus selon la cohorte de naissance de l'aîné en distinguant les quatre configurations possibles du genre des deux aînés. Commentez.
+
+```{r, include = F}
+
+data %>% 
+  filter(rang_naissance == 1) %>% # Attention à bien prendre cela en compte
+  group_by(cohorte_aine, compo_genre) %>% 
+  summarise(mean_family_size = mean(plus_de_2, na.rm = TRUE)) %>% 
+  ggplot(aes(
+    x = cohorte_aine, 
+    y = mean_family_size, 
+    color = compo_genre, 
+    group = compo_genre
+  )) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "Genre des deux aînés",
+    labels = c(
+      "FF" = "Deux filles",
+      "FM" = "Fille puis garçon",
+      "MF" = "Garçon puis fille",
+      "MM" = "Deux garçons"
+    )
+  ) +
+  labs(
+    x = "Cohorte de naissance de l'aîné",
+    y = "Taille moyenne de la fratrie"
+  ) +
+  theme_bw()
+
+```
+
+
+### Question 6 (1,5pt):
+
+Représentez l'évolution de la taille moyenne des fratries selon la PCS du père. Selon vous, quelles raisons peuvent expliquer la différence de fécondité entre les différents groupes sociaux et son évolution?
+
+
+```{r, include = F}
+
+data %>% 
+  filter(rang_naissance == 1) %>% 
+  group_by(cohorte_aine, father_cs) %>% 
+  summarise(mean_family_size = mean(taille_fratrie, na.rm = TRUE)) %>% 
+  ggplot(aes(
+    x = cohorte_aine, 
+    y = mean_family_size, 
+    color = father_cs, 
+    group = father_cs
+  )) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "PCS du père" ) +
+  labs(
+    x = "Cohorte de naissance de l'aîné",
+    y = "Taille moyenne de la fratrie"
+  ) +
+  theme_bw()
+
+
+```
+
+
+
+&nbsp;
+
+
+
+## Partie B: Origine sociale 
+
+### Question 7 (2pts): 
+
+Représentez l'évolution du niveau de diplôme moyen selon la CSP de la mère, en ne conservant que les individus ayant un niveau de diplôme connu. Commentez.
+
+```{r, include = F}
+
+data %>% 
+  filter(!is.na(dipl)) %>% 
+  group_by(cohorte, mother_cs) %>% 
+  summarise(mean_dipl = mean(dipl, na.rm = TRUE)) %>% 
+  ggplot(aes(
+    x = cohorte, 
+    y = mean_dipl, 
+    color = mother_cs, 
+    group = mother_cs
+  )) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "PCS de la mère" ) +
+  labs(
+    x = "Cohorte de naissance",
+    y = "Niveau de diplôme moyen"
+  ) +
+  theme_bw()
+
+
+```
+
+&nbsp;
+
+## Partie C: Caractéristiques individuelles
+
+### Question 8 (2pts): 
+
+Représentez graphiquement le niveau de diplôme moyen selon le rang de naissance, en ne conservant que les rangs jusqu'à 5 maximum et les individus ayant un niveau de diplôme connu. Commentez. Selon vous, quels mécanismes peuvent expliquer cela?
+
+```{r, include = F}
+
+data %>%
+  filter(rang_naissance <= 5,
+         !is.na(dipl)) %>%
+  group_by(rang_naissance, dipl) %>%
+  summarise(n = n()) %>%
+  group_by(rang_naissance) %>%
+  mutate(proportion = n / sum(n)) %>%
+  ggplot(aes(x = factor(rang_naissance), y = proportion, fill = factor(dipl))) +
+  geom_col(position = "stack") +
+  scale_fill_brewer(palette = "Paired", name = "Diplôme", 
+                    labels = c("1" = "Aucun diplôme", 
+                                  "2" = "Diplôme inférieur\nau Baccalauréat", 
+                                  "3" = "Baccalauréat", 
+                                  "4" = "Bac+2", 
+                                  "5" = "> Bac+2")) +
+  labs(x = "Rang de naissance", 
+       y = "Proportion",
+       fill = "Niveau de diplôme",
+       title = "Distribution des diplômes selon le rang de naissance") +
+  scale_y_continuous(labels = scales::percent) +
+  theme_bw()
+
+```
+
+
+
+### Question 9 (1pt):
+
+Représentez graphiquement l'évolution du niveau de diplôme moyen par cohorte de naissance selon le sexe. Commentez.
+
+```{r, include = F}
+data %>% 
+  filter(!is.na(dipl)) %>% 
+  group_by(cohorte, sexe) %>% 
+  summarise(mean_dipl = mean(dipl, na.rm = TRUE)) %>% 
+  ggplot(aes(
+    x = cohorte, 
+    y = mean_dipl, 
+    color = sexe, 
+    group = sexe
+  )) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "Genre",
+    labels = c("1"="Homme", "2"= "Femme")) +
+  labs(
+    x = "Cohorte de naissance",
+    y = "Niveau de diplôme moyen"
+  ) +
+  theme_bw()
+```  
+
+
+
+&nbsp;    
+
+&nbsp;
+
+
+
+# Partie 3: Analyse Économétrique (11pts)
+
+Cette analyse économétrique explore les déterminants du niveau de diplôme.
+
+### Question 10 (1pt):
+
+Selon vous, la taille de la fratrie a t-elle un effet positif, négatif, ou nul sur le niveau de diplôme? Pourquoi?
+
+### Question 11 (1,5pt):
+- Régressez le niveau de diplôme sur la taille de fratrie. Vous nommerez ce modèle `reg1`.
+- Régressez le niveau de diplôme sur la dummy `plus_de_2`. Vous nommerez ce modèle `reg2`.
+- Dans les deux cas, que représentent $\hat{\alpha}$ et $\hat{\beta}$? Peut-on dire que $\hat{\beta}$ représente l'effet causal de la taille de la fratrie sur le niveau de diplôme? Pourquoi?
+
+```{r, include = F}
+
+reg1 = lm(dipl ~ taille_fratrie, data = data)
+summary(reg1)
+
+reg2 = lm(dipl ~ plus_de_2, data = data)
+summary(reg2)
+```  
+
+
+### Question 12 (1,5pt): 
+
+Ajoutez le fait d'être une femme, l'aîné ainsi que la cohorte de naissance dans le modèle précédemment estimé (`reg1`), que vous nommerez `reg3`. Commentez.
+
+```{r, include = F}
+reg3 = lm(dipl ~ taille_fratrie + femme + elder + cohorte, data = data)
+summary(reg3)
+```  
+
+
+### Question 13 (1pt):
+
+Ajoutez la catégorie socio-professionnelle du père et de la mère dans le modèle précédent que vous nommerez `reg4`. Que constatez-vous?
+
+```{r, include = F}
+
+reg4 = lm(dipl ~ taille_fratrie + femme + elder + cohorte + father_cs + mother_cs, data = data)
+summary(reg4)
+```  
+
+### Question 14 (1pt):
+
+Régressez le niveau de diplôme sur l'interaction entre `femme` et `elder` ainsi que la taille de la fratrie et la CSP des parents. Nommez ce modèle `reg5`. Commentez.
+
+```{r, include = F}
+
+reg5 = lm(dipl ~ taille_fratrie + femme*elder + cohorte + father_cs + mother_cs, data = data)
+summary(reg5)
+
+```  
+
+
+### Question 15 (1pt): 
+
+Reprenez le modèle de la question 13 en remplaçant `elder` par le rang de naissance et nommez-le `reg6`. Commentez.
+
+```{r, include = F}
+
+reg6 = lm(dipl ~ taille_fratrie + femme + as.factor(rang_naissance) + cohorte + father_cs + mother_cs, data = data)
+summary(reg6)
+
+```
+
+### Question 16 (2pts): 
+
+- Régressez la taille de la fratrie sur la variable `compo_genre`, le fait d'être une femme, l'aîné, la cohorte de naissance et la PCS des parents. Nommez ce modèle `reg7`. Commentez uniquement les effets observés de la variable `compo_genre`.
+- En utilisant la fonction `ivreg` du package du même nom, estimez l'effet de la taille de la fratrie en utilisant comme instrument `compo_genre` et nommez ce modèle `reg8`. Commentez.
+
+```{r, include = F}
+
+reg7 = lm(taille_fratrie ~ compo_genre + femme + elder + cohorte + mother_cs + father_cs, data = data)
+summary(reg7)
+
+reg8 = ivreg(dipl ~ taille_fratrie + femme + elder + cohorte + father_cs + mother_cs | compo_genre + femme + elder + cohorte + father_cs + mother_cs, data = data)
+summary(reg8)
+
+```  
+
+
+### Question 17 (2pts): 
+
+Selon-vous, le modèle précédent permet-il d'estimer l'effet causal de la taille de la fratrie sur le niveau de diplôme?
+
+
+\newpage
+
+
+# Dictionnaire des variables
+
+| Nom | Variable | Description |
+|-----|----------|-------------|
+| Identifiant famille | `family_id` | Identifiant unique de la fratrie |
+| | | | 
+| Année de naissance | `birth_year` | Année de naissance de l'individu  |
+| | | | 
+| Sexe | `sexe` | Sexe de l'individu |
+|  |  | 1 = Garçon |
+|  |  |  2 = Fille |
+| | | | 
+| CSP du père | `father_cs` | Catégorie socioprofessionnelle du père|
+| | | 1: Agriculteur 
+| | | 2: Artisan |
+| | | 3: Cadre |
+| | | 4: Profession intermédiaire |
+| | | 5: Employé |
+| | | 6: Ouvrier |
+| | | | 
+| CSP de la mère | `mother_cs` | Catégorie socioprofessionnelle de la mère |
+| | | 1 à 6, mêmes modalités |
+| | | | 
+| Diplôme | `dipl` | Niveau de diplôme |
+| | | 1: Aucun diplôme |
+| | | 2: Diplôme < Baccalauréat |
+| | | 3: Baccalauréat |
+| | | 4: Bac+2 |
+| | | 5: > Bac+2 |
+

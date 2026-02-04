@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Correction Homework</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Florentine Oliveira-Roux" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="libs/countdown/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Correction Homework
+]
+.subtitle[
+## Pratiques de la Recherche en Économie
+]
+.author[
+### Florentine Oliveira-Roux
+]
+.date[
+### 3 Février 2026
+]
+
+---
+
+
+
+
+layout: true
+
+---
+count: false
+layout: false
+class: center, middle, inverse
+
+# &lt;span style="color:#FAFAFA;"&gt;Partie 1: Nettoyage de données (7pts)&lt;/span&gt;
+
+&lt;span style="color:#FAFAFA;"&gt;Cette première partie vise à nettoyer et préparer les données en vue des analyses descriptives et économétriques des parties suivantes.&lt;/span&gt;   
+
+
+---
+# Import données
+
+Importez sur `R` la base de données que vous nommerez `df`.
+
+
+
+
+---
+# Question 1 (5pts):
+
+.pull-left[
+Créez les variables suivantes:      
+- `cohorte` qui regroupe les années de naissance en cohortes de 5 ans (par exemple : "1945-1949", etc).   
+- `femme`, une dummy égale à 1 si l'individu est une femme, 0 sinon.          
+
+&lt;span style="color:#dd0747;"&gt;**NB: en deux bouts de code séparés pour que cela rentre sur les slides mais tout grouper en une seule fois!**&lt;/span&gt;
+
+]
+
+.pull-right[
+
+``` r
+df = df %&gt;% 
+  mutate(
+    cohorte = case_when( # 0,5
+      birth_year %in% 1945:1949 ~ "1945-1949",
+      birth_year %in% 1950:1954 ~ "1950-1954",
+      birth_year %in% 1955:1959 ~ "1955-1959",
+      birth_year %in% 1960:1964 ~ "1960-1964",
+      birth_year %in% 1965:1969 ~ "1965-1969",
+      birth_year %in% 1970:1974 ~ "1970-1974",
+      birth_year %in% 1975:1979 ~ "1975-1979",
+      birth_year %in% 1980:1984 ~ "1980-1984",
+      birth_year %in% 1985:1989 ~ "1985-1989",
+      TRUE ~ NA_character_
+    ),
+    femme = ifelse(sexe == 2, 1, 0)) 
+```
+]
+
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+Créez les variables suivantes:      
+- `cohorte` **qui regroupe les années de naissance en cohortes de 5 ans (par exemple : "1945-1949", etc).**   
+- `femme`, une dummy égale à 1 si l'individu est une femme, 0 sinon.          
+
+&lt;span style="color:#dd0747;"&gt;**NB: en deux bouts de code séparés pour que cela rentre sur les slides mais tout grouper en une seule fois!**&lt;/span&gt;
+
+]
+
+.pull-right[
+
+``` r
+df = df %&gt;% 
+* mutate(
+*   cohorte = case_when(
+*     birth_year %in% 1945:1949 ~ "1945-1949",
+*     birth_year %in% 1950:1954 ~ "1950-1954",
+*     birth_year %in% 1955:1959 ~ "1955-1959",
+*     birth_year %in% 1960:1964 ~ "1960-1964",
+*     birth_year %in% 1965:1969 ~ "1965-1969",
+*     birth_year %in% 1970:1974 ~ "1970-1974",
+*     birth_year %in% 1975:1979 ~ "1975-1979",
+*     birth_year %in% 1980:1984 ~ "1980-1984",
+*     birth_year %in% 1985:1989 ~ "1985-1989",
+*     TRUE ~ NA_character_
+*   ),
+    femme = ifelse(sexe == 2, 1, 0)) 
+```
+]
+
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+Créez les variables suivantes:      
+- `cohorte` qui regroupe les années de naissance en cohortes de 5 ans (par exemple : "1945-1949", etc).   
+- `femme`, **une dummy égale à 1 si l'individu est une femme, 0 sinon.**          
+
+&lt;span style="color:#dd0747;"&gt;**NB: en deux bouts de code séparés pour que cela rentre sur les slides mais tout grouper en une seule fois!**&lt;/span&gt;
+
+]
+
+.pull-right[
+
+``` r
+df = df %&gt;% 
+  mutate(
+    cohorte = case_when( # 0,5
+      birth_year %in% 1945:1949 ~ "1945-1949",
+      birth_year %in% 1950:1954 ~ "1950-1954",
+      birth_year %in% 1955:1959 ~ "1955-1959",
+      birth_year %in% 1960:1964 ~ "1960-1964",
+      birth_year %in% 1965:1969 ~ "1965-1969",
+      birth_year %in% 1970:1974 ~ "1970-1974",
+      birth_year %in% 1975:1979 ~ "1975-1979",
+      birth_year %in% 1980:1984 ~ "1980-1984",
+      birth_year %in% 1985:1989 ~ "1985-1989",
+      TRUE ~ NA_character_
+    ),
+*   femme = ifelse(sexe == 2, 1, 0))
+```
+]
+
+
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+- `rang_naissance` **qui indique le rang de naissance de chaque individu au sein de sa fratrie (1 pour l'aîné, 2 pour le deuxième enfant, etc.).**                  
+- `elder`, une dummy égale à 1 si l'individu est l'aîné de sa fratrie, 0 sinon.          
+- `cohorte_aine` qui indique la cohorte de naissance de l'aîné pour chaque fratrie.        
+- `taille_fratrie` qui indique le nombre d'enfants au sein de chaque fratrie.       
+- `plus_de_2`, une dummy égale à 1 si la fratrie comprend 3 enfants ou plus, 0 sinon.      
+- `compo_genre` qui décrit la composition par sexe des deux premiers enfants de chaque fratrie. Cette variable prend quatre valeurs possibles: "FF" (deux filles), "MM" (deux garçons), "FM" (fille puis garçon), ou "MF" (garçon puis fille).     
+]
+
+.pull-right[
+
+``` r
+df = df %&gt;% 
+* group_by(family_id) %&gt;%
+* arrange(birth_year) %&gt;%
+* mutate(
+*   rang_naissance = row_number(),
+    cohorte_aine = first(cohorte), # 0,5
+    taille_fratrie = n(), # 0,5
+    plus_de_2 = ifelse(taille_fratrie &gt; 2, 1, 0), # 0,5
+    compo_genre = case_when( # 0,5
+      sexe[rang_naissance == 1] == 1 &amp; sexe[rang_naissance == 2] == 1 ~ "MM",
+      sexe[rang_naissance == 1] == 2 &amp; sexe[rang_naissance == 2] == 2 ~ "FF",
+      sexe[rang_naissance == 1] == 1 &amp; sexe[rang_naissance == 2] == 2 ~ "MF",
+      sexe[rang_naissance == 1] == 2 &amp; sexe[rang_naissance == 2] == 1 ~ "FM"
+    )
+  ) %&gt;% 
+  ungroup() %&gt;% 
+  mutate(elder = ifelse(rang_naissance == 1, 1, 0))
+```
+]
+
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+- `rang_naissance` qui indique le rang de naissance de chaque individu au sein de sa fratrie (1 pour l'aîné, 2 pour le deuxième enfant, etc.).                  
+- `elder`, **une dummy égale à 1 si l'individu est l'aîné de sa fratrie, 0 sinon.**          
+- `cohorte_aine` qui indique la cohorte de naissance de l'aîné pour chaque fratrie.        
+- `taille_fratrie` qui indique le nombre d'enfants au sein de chaque fratrie.       
+- `plus_de_2`, une dummy égale à 1 si la fratrie comprend 3 enfants ou plus, 0 sinon.      
+- `compo_genre` qui décrit la composition par sexe des deux premiers enfants de chaque fratrie. Cette variable prend quatre valeurs possibles: "FF" (deux filles), "MM" (deux garçons), "FM" (fille puis garçon), ou "MF" (garçon puis fille).     
+]
+
+.pull-right[
+
+``` r
+df = df %&gt;% 
+  group_by(family_id) %&gt;% 
+  arrange(birth_year) %&gt;% 
+  mutate(
+    rang_naissance = row_number(), # 0,5 group_by, 0,5 arrange, 0,5 row_number, total= 1,5
+    cohorte_aine = first(cohorte), # 0,5
+    taille_fratrie = n(), # 0,5
+    plus_de_2 = ifelse(taille_fratrie &gt; 2, 1, 0), # 0,5
+    compo_genre = case_when( # 0,5
+      sexe[rang_naissance == 1] == 1 &amp; sexe[rang_naissance == 2] == 1 ~ "MM",
+      sexe[rang_naissance == 1] == 2 &amp; sexe[rang_naissance == 2] == 2 ~ "FF",
+      sexe[rang_naissance == 1] == 1 &amp; sexe[rang_naissance == 2] == 2 ~ "MF",
+      sexe[rang_naissance == 1] == 2 &amp; sexe[rang_naissance == 2] == 1 ~ "FM"
+    )
+  ) %&gt;% 
+  ungroup() %&gt;% 
+* mutate(elder = ifelse(rang_naissance == 1, 1, 0))
+```
+]
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+- `rang_naissance` qui indique le rang de naissance de chaque individu au sein de sa fratrie (1 pour l'aîné, 2 pour le deuxième enfant, etc.).                  
+- `elder`, une dummy égale à 1 si l'individu est l'aîné de sa fratrie, 0 sinon.          
+- `cohorte_aine` **qui indique la cohorte de naissance de l'aîné pour chaque fratrie.**        
+- `taille_fratrie` qui indique le nombre d'enfants au sein de chaque fratrie.       
+- `plus_de_2`, une dummy égale à 1 si la fratrie comprend 3 enfants ou plus, 0 sinon.      
+- `compo_genre` qui décrit la composition par sexe des deux premiers enfants de chaque fratrie. Cette variable prend quatre valeurs possibles: "FF" (deux filles), "MM" (deux garçons), "FM" (fille puis garçon), ou "MF" (garçon puis fille).     
+]
+
+.pull-right[
+
+``` r
+df = df %&gt;% 
+  group_by(family_id) %&gt;% 
+  arrange(birth_year) %&gt;% 
+  mutate(
+    rang_naissance = row_number(), # 0,5 group_by, 0,5 arrange, 0,5 row_number, total= 1,5
+*   cohorte_aine = first(cohorte),
+    taille_fratrie = n(), # 0,5
+    plus_de_2 = ifelse(taille_fratrie &gt; 2, 1, 0), # 0,5
+    compo_genre = case_when( # 0,5
+      sexe[rang_naissance == 1] == 1 &amp; sexe[rang_naissance == 2] == 1 ~ "MM",
+      sexe[rang_naissance == 1] == 2 &amp; sexe[rang_naissance == 2] == 2 ~ "FF",
+      sexe[rang_naissance == 1] == 1 &amp; sexe[rang_naissance == 2] == 2 ~ "MF",
+      sexe[rang_naissance == 1] == 2 &amp; sexe[rang_naissance == 2] == 1 ~ "FM"
+    )
+  ) %&gt;% 
+  ungroup() %&gt;% 
+  mutate(elder = ifelse(rang_naissance == 1, 1, 0))
+```
+]
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+- `rang_naissance` qui indique le rang de naissance de chaque individu au sein de sa fratrie (1 pour l'aîné, 2 pour le deuxième enfant, etc.).                  
+- `elder`, une dummy égale à 1 si l'individu est l'aîné de sa fratrie, 0 sinon.          
+- `cohorte_aine` qui indique la cohorte de naissance de l'aîné pour chaque fratrie.        
+- `taille_fratrie` **qui indique le nombre d'enfants au sein de chaque fratrie.**       
+- `plus_de_2`, une dummy égale à 1 si la fratrie comprend 3 enfants ou plus, 0 sinon.      
+- `compo_genre` qui décrit la composition par sexe des deux premiers enfants de chaque fratrie. Cette variable prend quatre valeurs possibles: "FF" (deux filles), "MM" (deux garçons), "FM" (fille puis garçon), ou "MF" (garçon puis fille).     
+]
+
+.pull-right[
+
+``` r
+df = df %&gt;% 
+  group_by(family_id) %&gt;% 
+  arrange(birth_year) %&gt;% 
+  mutate(
+    rang_naissance = row_number(), # 0,5 group_by, 0,5 arrange, 0,5 row_number, total= 1,5
+    cohorte_aine = first(cohorte), # 0,5
+*   taille_fratrie = n(),
+    plus_de_2 = ifelse(taille_fratrie &gt; 2, 1, 0), # 0,5
+    compo_genre = case_when( # 0,5
+      sexe[rang_naissance == 1] == 1 &amp; sexe[rang_naissance == 2] == 1 ~ "MM",
+      sexe[rang_naissance == 1] == 2 &amp; sexe[rang_naissance == 2] == 2 ~ "FF",
+      sexe[rang_naissance == 1] == 1 &amp; sexe[rang_naissance == 2] == 2 ~ "MF",
+      sexe[rang_naissance == 1] == 2 &amp; sexe[rang_naissance == 2] == 1 ~ "FM"
+    )
+  ) %&gt;% 
+  ungroup() %&gt;% 
+  mutate(elder = ifelse(rang_naissance == 1, 1, 0))
+```
+]
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+- `rang_naissance` qui indique le rang de naissance de chaque individu au sein de sa fratrie (1 pour l'aîné, 2 pour le deuxième enfant, etc.).                  
+- `elder`, une dummy égale à 1 si l'individu est l'aîné de sa fratrie, 0 sinon.          
+- `cohorte_aine` qui indique la cohorte de naissance de l'aîné pour chaque fratrie.        
+- `taille_fratrie` qui indique le nombre d'enfants au sein de chaque fratrie.       
+- `plus_de_2`, **une dummy égale à 1 si la fratrie comprend 3 enfants ou plus, 0 sinon.**     
+- `compo_genre` qui décrit la composition par sexe des deux premiers enfants de chaque fratrie. Cette variable prend quatre valeurs possibles: "FF" (deux filles), "MM" (deux garçons), "FM" (fille puis garçon), ou "MF" (garçon puis fille).     
+]
+
+.pull-right[
+
+``` r
+df = df %&gt;% 
+  group_by(family_id) %&gt;% 
+  arrange(birth_year) %&gt;% 
+  mutate(
+    rang_naissance = row_number(), # 0,5 group_by, 0,5 arrange, 0,5 row_number, total= 1,5
+    cohorte_aine = first(cohorte), # 0,5
+    taille_fratrie = n(), # 0,5
+*   plus_de_2 = ifelse(taille_fratrie &gt; 2, 1, 0),
+    compo_genre = case_when( # 0,5
+      sexe[rang_naissance == 1] == 1 &amp; sexe[rang_naissance == 2] == 1 ~ "MM",
+      sexe[rang_naissance == 1] == 2 &amp; sexe[rang_naissance == 2] == 2 ~ "FF",
+      sexe[rang_naissance == 1] == 1 &amp; sexe[rang_naissance == 2] == 2 ~ "MF",
+      sexe[rang_naissance == 1] == 2 &amp; sexe[rang_naissance == 2] == 1 ~ "FM"
+    )
+  ) %&gt;% 
+  ungroup() %&gt;% 
+  mutate(elder = ifelse(rang_naissance == 1, 1, 0))
+```
+]
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+- `rang_naissance` qui indique le rang de naissance de chaque individu au sein de sa fratrie (1 pour l'aîné, 2 pour le deuxième enfant, etc.).                  
+- `elder`, une dummy égale à 1 si l'individu est l'aîné de sa fratrie, 0 sinon.          
+- `cohorte_aine` qui indique la cohorte de naissance de l'aîné pour chaque fratrie.        
+- `taille_fratrie` qui indique le nombre d'enfants au sein de chaque fratrie.       
+- `plus_de_2`, une dummy égale à 1 si la fratrie comprend 3 enfants ou plus, 0 sinon.      
+- `compo_genre` **qui décrit la composition par sexe des deux premiers enfants de chaque fratrie. Cette variable prend quatre valeurs possibles: "FF" (deux filles), "MM" (deux garçons), "FM" (fille puis garçon), ou "MF" (garçon puis fille).**     
+]
+
+.pull-right[
+
+``` r
+df = df %&gt;% 
+  group_by(family_id) %&gt;% 
+  arrange(birth_year) %&gt;% 
+  mutate(
+    rang_naissance = row_number(), # 0,5 group_by, 0,5 arrange, 0,5 row_number, total= 1,5
+    cohorte_aine = first(cohorte), # 0,5
+    taille_fratrie = n(), # 0,5
+    plus_de_2 = ifelse(taille_fratrie &gt; 2, 1, 0), # 0,5
+*   compo_genre = case_when( # 0,5
+*     sexe[rang_naissance == 1] == 1 &amp; sexe[rang_naissance == 2] == 1 ~ "MM",
+*     sexe[rang_naissance == 1] == 2 &amp; sexe[rang_naissance == 2] == 2 ~ "FF",
+*     sexe[rang_naissance == 1] == 1 &amp; sexe[rang_naissance == 2] == 2 ~ "MF",
+*     sexe[rang_naissance == 1] == 2 &amp; sexe[rang_naissance == 2] == 1 ~ "FM"
+*   )
+* ) %&gt;%
+  ungroup() %&gt;% 
+  mutate(elder = ifelse(rang_naissance == 1, 1, 0))
+```
+]
+
+
+
+
+---
+# Question 2 (0,5pt): 
+
+Recodez les variables `mother_cs` et `father_cs` en remplaçant les codes numériques (1 à 6) par les labels des catégories socioprofessionnelles correspondantes.
+
+
+``` r
+df = df %&gt;% 
+  mutate(
+    father_cs = recode(as.character(father_cs), # 0,25
+                       "1" = "Agriculteur",
+                       "2" = "Artisan", 
+                       "3" = "Cadre",
+                       "4" = "Profession intermédiaire",
+                       "5" = "Employé",
+                       "6" = "Ouvrier"),
+    mother_cs = recode(as.character(mother_cs), # 0,25
+                       "1" = "Agricultrice",
+                       "2" = "Artisan",
+                       "3" = "Cadre", 
+                       "4" = "Profession intermédiaire",
+                       "5" = "Employée",
+                       "6" = "Ouvrière")) 
+```
+
+
+---
+# Question 3 (1,5pt): 
+
+- Représentez la distribution de la taille de la fratrie. Commentez.
+- Supprimer les fratries dont la taille fait parti des 1% plus élevées.
+
+
+---
+count: false
+# Question 3 (1,5pt): 
+
+- **Représentez la distribution de la taille de la fratrie. Commentez.**
+- Supprimer les fratries dont la taille fait parti des 1% plus élevées.
+
+.pull-left[
+
+``` r
+*df_fratries = df %&gt;%
+* select(family_id, taille_fratrie) %&gt;%
+* distinct()
+
+*ggplot(df_fratries, aes(x = taille_fratrie)) +
+* geom_histogram() +
+* labs(x = "Taille de Fratrie", y = "Fréquence") +
+* theme_bw()
+
+top1 = quantile(df_fratries$taille_fratrie, 0.99)
+
+df = df %&gt;% 
+  filter(taille_fratrie &lt; top1)
+```
+]
+
+.pull-right[
+&lt;img src="homework_2025_correction_files/figure-html/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
+]
+---
+count: false
+# Question 3 (1,5pt): 
+
+- Représentez la distribution de la taille de la fratrie. Commentez.
+- **Supprimer les fratries dont la taille fait parti des 1% plus élevées.**
+
+.pull-left[
+
+``` r
+df_fratries = df %&gt;% 
+  select(family_id, taille_fratrie) %&gt;% 
+  distinct()
+
+ggplot(df_fratries, aes(x = taille_fratrie)) +
+  geom_histogram() +
+  labs(x = "Taille de Fratrie", y = "Fréquence") +
+  theme_bw()
+
+*top1 = quantile(df_fratries$taille_fratrie, 0.99)
+
+*df = df %&gt;%
+* filter(taille_fratrie &lt; top1)
+```
+]
+
+
+.pull-right[
+&lt;img src="homework_2025_correction_files/figure-html/unnamed-chunk-15-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+---
+count: false
+layout: false
+class: center, middle, inverse
+
+# &lt;span style="color:#FAFAFA;"&gt;Partie 2: Statistiques Descriptives (8pts)&lt;/span&gt;
+
+&lt;span style="color:#FAFAFA;"&gt;Cette partie a pour objectif d'explorer les données et comprendre les déterminants du niveau de diplôme.&lt;/span&gt;   
+
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;Partie A: Taille de la fratrie&lt;/span&gt;
+
+
+---
+# Question 4 (0,5pt): 
+
+Représentez graphiquement l'évolution de la taille de la fratrie selon la cohorte de naissance de l'aîné. Commentez.
+
+.pull-left[
+
+``` r
+df %&gt;% 
+  filter(rang_naissance == 1) %&gt;% 
+  group_by(cohorte_aine) %&gt;% 
+  summarise(mean_family_size = mean(taille_fratrie, na.rm = T)) %&gt;% 
+  ggplot(aes(x = cohorte_aine, y = mean_family_size)) +
+  geom_point() +
+  geom_line(group = 1) +
+  labs(x = "Cohorte de naissance de l'aîné", y = "Taille moyenne fratrie") +
+  theme_bw()
+```
+]
+
+.pull-right[
+&lt;img src="homework_2025_correction_files/figure-html/unnamed-chunk-17-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+🚨 Attention à ne garder qu'une observation par fratrie!
+---
+# Question 5 (1pt):
+
+Représentez graphiquement l'évolution de la part de fratries de 3 enfants ou plus selon la cohorte de naissance de l'aîné en distinguant les quatre configurations possibles du genre des deux aînés. Commentez.
+
+.pull-left[
+
+``` r
+df %&gt;% 
+  filter(rang_naissance == 1) %&gt;% # Attention à bien prendre cela en compte
+  group_by(cohorte_aine, compo_genre) %&gt;% 
+  summarise(mean_family_size = mean(plus_de_2, na.rm = TRUE)) %&gt;% 
+  ggplot(aes(x = cohorte_aine, y = mean_family_size, 
+             color = compo_genre, group = compo_genre)) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "Genre des deux aînés",
+    labels = c(
+      "FF" = "Deux filles",
+      "FM" = "Fille puis garçon",
+      "MF" = "Garçon puis fille",
+      "MM" = "Deux garçons")) +
+  labs(x = "Cohorte de naissance de l'aîné",
+       y = "Part de fratries de 3 enfants ou plus") +
+  theme_bw()
+```
+]
+
+.pull-right[
+&lt;img src="homework_2025_correction_files/figure-html/unnamed-chunk-19-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+# Question 6 (1,5pt):
+
+Représentez l'évolution de la taille moyenne des fratries selon la PCS du père. Selon vous, quelles raisons peuvent expliquer la différence de fécondité entre les différents groupes sociaux et son évolution?
+
+.pull-left[
+
+``` r
+df %&gt;% 
+  filter(rang_naissance == 1) %&gt;% 
+  group_by(cohorte_aine, father_cs) %&gt;% 
+  summarise(mean_family_size = mean(taille_fratrie, na.rm = TRUE)) %&gt;% 
+  ggplot(aes(x = cohorte_aine, y = mean_family_size, 
+             color = father_cs, group = father_cs)) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "PCS du père" ) +
+  labs(x = "Cohorte de naissance de l'aîné",
+       y = "Taille moyenne de la fratrie"
+  ) +
+  theme_bw()
+```
+]
+
+.pull-right[
+&lt;img src="homework_2025_correction_files/figure-html/unnamed-chunk-21-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;Partie B: Origine sociale&lt;/span&gt;
+
+
+---
+# Question 7 (2pts): 
+
+Représentez l'évolution du niveau de diplôme moyen selon la CSP de la mère, en ne conservant que les individus ayant un niveau de diplôme connu. Commentez.
+
+.pull-left[
+
+``` r
+df %&gt;% 
+  filter(!is.na(dipl)) %&gt;% 
+  group_by(cohorte, mother_cs) %&gt;% 
+  summarise(mean_dipl = mean(dipl, na.rm = TRUE)) %&gt;% 
+  ggplot(aes(x = cohorte, y = mean_dipl, 
+             color = mother_cs, group = mother_cs)) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "PCS de la mère" ) +
+  labs(x = "Cohorte de naissance",
+       y = "Niveau de diplôme moyen") +
+  theme_bw()
+```
+]
+
+.pull-right[
+&lt;img src="homework_2025_correction_files/figure-html/unnamed-chunk-23-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;Partie C: Caractéristiques individuelles&lt;/span&gt;
+
+
+---
+# Question 8 (2pts): 
+
+Représentez graphiquement le niveau de diplôme moyen selon le rang de naissance, en ne conservant que les rangs jusqu'à 5 maximum et les individus ayant un niveau de diplôme connu. Commentez. Selon vous, quels mécanismes peuvent expliquer cela?
+
+.pull-left[
+
+``` r
+df %&gt;%
+  filter(rang_naissance &lt;= 5,
+         !is.na(dipl)) %&gt;%
+  group_by(rang_naissance, dipl) %&gt;%
+  summarise(n = n()) %&gt;%
+  group_by(rang_naissance) %&gt;%
+  mutate(proportion = n / sum(n)) %&gt;%
+  ggplot(aes(x = factor(rang_naissance), y = proportion, fill = factor(dipl))) +
+  geom_col(position = "stack") +
+  scale_fill_brewer(palette = "Paired", name = "Diplôme", 
+                    labels = c("1" = "Aucun diplôme", 
+                                  "2" = "Diplôme inférieur\nau Baccalauréat", 
+                                  "3" = "Baccalauréat", 
+                                  "4" = "Bac+2", 
+                                  "5" = "&gt; Bac+2")) +
+  labs(x = "Rang de naissance", 
+       y = "Proportion",
+       fill = "Niveau de diplôme",
+       title = "Distribution des diplômes selon le rang de naissance") +
+  scale_y_continuous(labels = scales::percent) +
+  theme_bw()
+```
+]
+
+.pull-right[
+&lt;img src="homework_2025_correction_files/figure-html/unnamed-chunk-25-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Question 9 (1pt):
+
+Représentez graphiquement l'évolution du niveau de diplôme moyen par cohorte de naissance selon le sexe. Commentez.
+
+.pull-left[
+
+``` r
+df %&gt;% 
+  filter(!is.na(dipl)) %&gt;% 
+  group_by(cohorte, sexe) %&gt;% 
+  summarise(mean_dipl = mean(dipl, na.rm = TRUE)) %&gt;% 
+  ggplot(aes(x = cohorte, y = mean_dipl, 
+             color = sexe, group = sexe)) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "Genre",
+    labels = c("1"="Homme", "2"= "Femme")) +
+  labs(x = "Cohorte de naissance",
+       y = "Niveau de diplôme moyen") +
+  theme_bw()
+```
+]
+
+.pull-right[
+&lt;img src="homework_2025_correction_files/figure-html/unnamed-chunk-27-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+count: false
+layout: false
+class: center, middle, inverse
+
+# &lt;span style="color:#FAFAFA;"&gt;Partie 3: Analyse Économétrique (11pts)&lt;/span&gt;
+
+&lt;span style="color:#FAFAFA;"&gt;Cette analyse économétrique explore les déterminants du niveau de diplôme.&lt;/span&gt;   
+
+---
+# Question 10 (1pt):
+
+Selon vous, la taille de la fratrie a t-elle un effet positif, négatif, ou nul sur le niveau de diplôme? Pourquoi?
+
+---
+# Question 11 (1,5pt):
+- Régressez le niveau de diplôme sur la taille de fratrie. Vous nommerez ce modèle `reg1`.
+- Régressez le niveau de diplôme sur la dummy `plus_de_2`. Vous nommerez ce modèle `reg2`.
+- Dans les deux cas, que représentent `\(\hat{\alpha}\)` et `\(\hat{\beta}\)`? Peut-on dire que `\(\hat{\beta}\)` représente l'effet causal de la taille de la fratrie sur le niveau de diplôme? Pourquoi?
+
+
+``` r
+reg1 = lm(dipl ~ taille_fratrie, data = df)
+summary(reg1)
+```
+
+```
+## 
+## Call:
+## lm(formula = dipl ~ taille_fratrie, data = df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.31243 -0.87189 -0.09216  0.68757  2.34839 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)     3.752979   0.012134  309.29   &lt;2e-16 ***
+## taille_fratrie -0.220273   0.004105  -53.67   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.137 on 85163 degrees of freedom
+##   (103 observations deleted due to missingness)
+## Multiple R-squared:  0.03271,	Adjusted R-squared:  0.0327 
+## F-statistic:  2880 on 1 and 85163 DF,  p-value: &lt; 2.2e-16
+```
+
+``` r
+reg2 = lm(dipl ~ plus_de_2, data = df)
+summary(reg2)
+```
+
+```
+## 
+## Call:
+## lm(formula = dipl ~ plus_de_2, data = df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.31785 -0.95755  0.04245  0.68215  2.04245 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  3.317850   0.005555  597.33   &lt;2e-16 ***
+## plus_de_2   -0.360297   0.007824  -46.05   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.142 on 85163 degrees of freedom
+##   (103 observations deleted due to missingness)
+## Multiple R-squared:  0.0243,	Adjusted R-squared:  0.02429 
+## F-statistic:  2121 on 1 and 85163 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+count: false
+# Question 11 (1,5pt):
+- **Régressez le niveau de diplôme sur la taille de fratrie. Vous nommerez ce modèle `reg1`.**
+- Régressez le niveau de diplôme sur la dummy `plus_de_2`. Vous nommerez ce modèle `reg2`.
+- Dans les deux cas, que représentent `\(\hat{\alpha}\)` et `\(\hat{\beta}\)`? Peut-on dire que `\(\hat{\beta}\)` représente l'effet causal de la taille de la fratrie sur le niveau de diplôme? Pourquoi?
+
+
+``` r
+*reg1 = lm(dipl ~ taille_fratrie, data = df)
+summary(reg1)
+```
+
+```
+## 
+## Call:
+## lm(formula = dipl ~ taille_fratrie, data = df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.31243 -0.87189 -0.09216  0.68757  2.34839 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)     3.752979   0.012134  309.29   &lt;2e-16 ***
+## taille_fratrie -0.220273   0.004105  -53.67   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.137 on 85163 degrees of freedom
+##   (103 observations deleted due to missingness)
+## Multiple R-squared:  0.03271,	Adjusted R-squared:  0.0327 
+## F-statistic:  2880 on 1 and 85163 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+count: false
+# Question 11 (1,5pt):
+- Régressez le niveau de diplôme sur la taille de fratrie. Vous nommerez ce modèle `reg1`.
+- **Régressez le niveau de diplôme sur la dummy `plus_de_2`. Vous nommerez ce modèle `reg2`.**
+- Dans les deux cas, que représentent `\(\hat{\alpha}\)` et `\(\hat{\beta}\)`? Peut-on dire que `\(\hat{\beta}\)` représente l'effet causal de la taille de la fratrie sur le niveau de diplôme? Pourquoi?
+
+
+``` r
+*reg2 = lm(dipl ~ plus_de_2, data = df)
+summary(reg2)
+```
+
+```
+## 
+## Call:
+## lm(formula = dipl ~ plus_de_2, data = df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.31785 -0.95755  0.04245  0.68215  2.04245 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  3.317850   0.005555  597.33   &lt;2e-16 ***
+## plus_de_2   -0.360297   0.007824  -46.05   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.142 on 85163 degrees of freedom
+##   (103 observations deleted due to missingness)
+## Multiple R-squared:  0.0243,	Adjusted R-squared:  0.02429 
+## F-statistic:  2121 on 1 and 85163 DF,  p-value: &lt; 2.2e-16
+```
+
+
+---
+count: false
+# Question 11 (1,5pt):
+- Régressez le niveau de diplôme sur la taille de fratrie. Vous nommerez ce modèle `reg1`.
+- Régressez le niveau de diplôme sur la dummy `plus_de_2`. Vous nommerez ce modèle `reg2`.
+- **Dans les deux cas, que représentent `\(\hat{\alpha}\)` et `\(\hat{\beta}\)`? Peut-on dire que `\(\hat{\beta}\)` représente l'effet causal de la taille de la fratrie sur le niveau de diplôme? Pourquoi?**
+
+.pull-left[
+
+```
+##                  Estimate  Std. Error   t value Pr(&gt;|t|)
+## (Intercept)     3.7529785 0.012134077 309.29245        0
+## taille_fratrie -0.2202729 0.004104537 -53.66571        0
+```
+]
+
+.pull-right[
+
+```
+##               Estimate  Std. Error   t value Pr(&gt;|t|)
+## (Intercept)  3.3178504 0.005554502 597.32637        0
+## plus_de_2   -0.3602965 0.007823850 -46.05105        0
+```
+]
+
+
+---
+# Question 12 (1,5pt): 
+
+Ajoutez le fait d'être une femme, l'aîné ainsi que la cohorte de naissance dans le modèle précédemment estimé (`reg1`), que vous nommerez `reg3`. Commentez.
+
+
+``` r
+reg3 = lm(dipl ~ taille_fratrie + femme + elder + cohorte, data = df)
+summary(reg3)$coefficients
+```
+
+```
+##                     Estimate  Std. Error    t value      Pr(&gt;|t|)
+## (Intercept)       3.15069381 0.019786255 159.236487  0.000000e+00
+## taille_fratrie   -0.19262139 0.004075047 -47.268506  0.000000e+00
+## femme             0.17376695 0.007530153  23.076152 1.847406e-117
+## elder             0.17772660 0.008028901  22.135856 2.889803e-108
+## cohorte1950-1954  0.09620064 0.017811983   5.400894  6.648653e-08
+## cohorte1955-1959  0.15039841 0.017217896   8.735005  2.479539e-18
+## cohorte1960-1964  0.25878125 0.016979848  15.240493  2.233512e-52
+## cohorte1965-1969  0.35762224 0.017100432  20.913052  7.146752e-97
+## cohorte1970-1974  0.61404121 0.017486228  35.115704 3.254311e-268
+## cohorte1975-1979  0.84382368 0.018821059  44.834018  0.000000e+00
+## cohorte1980-1984  0.90656076 0.022549126  40.203810  0.000000e+00
+## cohorte1985-1989  0.92565969 0.037983631  24.369963 1.001889e-130
+```
+
+---
+# Question 13 (1pt):
+
+Ajoutez la catégorie socio-professionnelle du père et de la mère dans le modèle précédent que vous nommerez `reg4`. Que constatez-vous?
+
+
+``` r
+reg4 = lm(dipl ~ taille_fratrie + femme + elder + cohorte + father_cs + mother_cs, data = df)
+summary(reg4)$coefficients
+```
+
+```
+##                                       Estimate  Std. Error     t value
+## (Intercept)                        2.685226425 0.023328476 115.1050929
+## taille_fratrie                    -0.145921630 0.003626647 -40.2359620
+## femme                              0.172687306 0.006649850  25.9686020
+## elder                              0.180400937 0.007090294  25.4433659
+## cohorte1950-1954                   0.094565202 0.015730883   6.0114364
+## cohorte1955-1959                   0.153926456 0.015206225  10.1225953
+## cohorte1960-1964                   0.255318376 0.014996212  17.0255248
+## cohorte1965-1969                   0.362324427 0.015102776  23.9905847
+## cohorte1970-1974                   0.624452874 0.015443584  40.4344530
+## cohorte1975-1979                   0.844202869 0.016623121  50.7848597
+## cohorte1980-1984                   0.902384714 0.019917041  45.3071668
+## cohorte1985-1989                   0.956064488 0.033546963  28.4992857
+## father_csArtisan                   0.265097159 0.014627416  18.1233081
+## father_csCadre                     0.834919389 0.013021732  64.1173831
+## father_csEmployé                  -0.008228766 0.017322788  -0.4750255
+## father_csOuvrier                  -0.306764688 0.013063573 -23.4824494
+## father_csProfession intermédiaire  0.274814602 0.014122972  19.4586946
+## mother_csArtisan                   0.132103549 0.016291678   8.1086520
+## mother_csCadre                     0.660077249 0.015214576  43.3845299
+## mother_csEmployée                  0.006783013 0.012119651   0.5596707
+## mother_csOuvrière                 -0.251509260 0.013462195 -18.6826334
+## mother_csProfession intermédiaire  0.457957010 0.013918964  32.9016600
+##                                        Pr(&gt;|t|)
+## (Intercept)                        0.000000e+00
+## taille_fratrie                     0.000000e+00
+## femme                             4.248404e-148
+## elder                             2.854706e-142
+## cohorte1950-1954                   1.846317e-09
+## cohorte1955-1959                   4.526208e-24
+## cohorte1960-1964                   6.805359e-65
+## cohorte1965-1969                  9.213755e-127
+## cohorte1970-1974                   0.000000e+00
+## cohorte1975-1979                   0.000000e+00
+## cohorte1980-1984                   0.000000e+00
+## cohorte1985-1989                  8.232652e-178
+## father_csArtisan                   2.867468e-73
+## father_csCadre                     0.000000e+00
+## father_csEmployé                   6.347700e-01
+## father_csOuvrier                  1.504471e-121
+## father_csProfession intermédiaire  3.750834e-84
+## mother_csArtisan                   5.185782e-16
+## mother_csCadre                     0.000000e+00
+## mother_csEmployée                  5.757056e-01
+## mother_csOuvrière                  9.813891e-78
+## mother_csProfession intermédiaire 6.350141e-236
+```
+
+---
+# Question 14 (1pt):
+
+Régressez le niveau de diplôme sur l'interaction entre `femme` et `elder` ainsi que la taille de la fratrie et la CSP des parents. Nommez ce modèle `reg5`. Commentez.
+
+
+``` r
+reg5 = lm(dipl ~ taille_fratrie + femme*elder + cohorte + father_cs + mother_cs, data = df)
+summary(reg5)$coefficients
+```
+
+```
+##                                       Estimate  Std. Error     t value
+## (Intercept)                        2.672444518 0.023482672 113.8049602
+## taille_fratrie                    -0.145867973 0.003626213 -40.2259796
+## femme                              0.197959736 0.008541508  23.1762056
+## elder                              0.212864568 0.009884103  21.5360531
+## cohorte1950-1954                   0.094552712 0.015728924   6.0113911
+## cohorte1955-1959                   0.153884729 0.015204333  10.1211103
+## cohorte1960-1964                   0.255425890 0.014994361  17.0347966
+## cohorte1965-1969                   0.362209167 0.015100914  23.9859095
+## cohorte1970-1974                   0.624421225 0.015441662  40.4374374
+## cohorte1975-1979                   0.844255782 0.016621054  50.7943588
+## cohorte1980-1984                   0.902712220 0.019914681  45.3289813
+## cohorte1985-1989                   0.956632803 0.033543001  28.5195951
+## father_csArtisan                   0.265095072 0.014625593  18.1254234
+## father_csCadre                     0.834817992 0.013020128  64.1174961
+## father_csEmployé                  -0.008248555 0.017320631  -0.4762272
+## father_csOuvrier                  -0.306900941 0.013061977 -23.4957488
+## father_csProfession intermédiaire  0.274736592 0.014121223  19.4555812
+## mother_csArtisan                   0.132145274 0.016289651   8.1122225
+## mother_csCadre                     0.659923963 0.015212716  43.3797599
+## mother_csEmployée                  0.006713847 0.012118150   0.5540324
+## mother_csOuvrière                 -0.251532485 0.013460519 -18.6866852
+## mother_csProfession intermédiaire  0.458314914 0.013917437  32.9309857
+## femme:elder                       -0.064137261 0.013607120  -4.7135075
+##                                        Pr(&gt;|t|)
+## (Intercept)                        0.000000e+00
+## taille_fratrie                     0.000000e+00
+## femme                             1.845543e-118
+## elder                             1.346191e-102
+## cohorte1950-1954                   1.846832e-09
+## cohorte1955-1959                   4.595333e-24
+## cohorte1960-1964                   5.811333e-65
+## cohorte1965-1969                  1.030158e-126
+## cohorte1970-1974                   0.000000e+00
+## cohorte1975-1979                   0.000000e+00
+## cohorte1980-1984                   0.000000e+00
+## cohorte1985-1989                  4.636181e-178
+## father_csArtisan                   2.759714e-73
+## father_csCadre                     0.000000e+00
+## father_csEmployé                   6.339138e-01
+## father_csOuvrier                  1.102424e-121
+## father_csProfession intermédiaire  3.984652e-84
+## mother_csArtisan                   5.035724e-16
+## mother_csCadre                     0.000000e+00
+## mother_csEmployée                  5.795582e-01
+## mother_csOuvrière                  9.099245e-78
+## mother_csProfession intermédiaire 2.446051e-236
+## femme:elder                        2.438732e-06
+```
+
+
+---
+# Question 15 (1pt): 
+
+Reprenez le modèle de la question 13 en remplaçant `elder` par le rang de naissance et nommez-le `reg6`. Commentez.
+
+
+``` r
+reg6 = lm(dipl ~ taille_fratrie + femme + as.factor(rang_naissance) + cohorte + father_cs + mother_cs, data = df)
+summary(reg6)$coefficients
+```
+
+```
+##                                       Estimate  Std. Error     t value
+## (Intercept)                        2.735928852 0.023379414 117.0229880
+## taille_fratrie                    -0.101560758 0.004333799 -23.4345813
+## femme                              0.172327233 0.006636269  25.9674858
+## as.factor(rang_naissance)2        -0.141402283 0.007543564 -18.7447573
+## as.factor(rang_naissance)3        -0.268904951 0.011042638 -24.3515144
+## as.factor(rang_naissance)4        -0.372482501 0.017498372 -21.2866940
+## as.factor(rang_naissance)5        -0.577816070 0.030139688 -19.1712693
+## cohorte1950-1954                   0.104350488 0.015717076   6.6393068
+## cohorte1955-1959                   0.169204456 0.015202156  11.1302935
+## cohorte1960-1964                   0.273257451 0.015000539  18.2165091
+## cohorte1965-1969                   0.382143792 0.015113031  25.2857148
+## cohorte1970-1974                   0.649030032 0.015470566  41.9525708
+## cohorte1975-1979                   0.872904223 0.016659840  52.3957149
+## cohorte1980-1984                   0.933886842 0.019947779  46.8165824
+## cohorte1985-1989                   1.002899194 0.033571661  29.8733859
+## father_csArtisan                   0.265357271 0.014597385  18.1784120
+## father_csCadre                     0.834493278 0.012995140  64.2157959
+## father_csEmployé                  -0.008598753 0.017286961  -0.4974126
+## father_csOuvrier                  -0.306458590 0.013036943 -23.5069360
+## father_csProfession intermédiaire  0.274543891 0.014093856  19.4796865
+## mother_csArtisan                   0.132650757 0.016258072   8.1590707
+## mother_csCadre                     0.660323436 0.015183227  43.4903224
+## mother_csEmployée                  0.007337128 0.012094722   0.6066388
+## mother_csOuvrière                 -0.251327800 0.013434366 -18.7078275
+## mother_csProfession intermédiaire  0.458499977 0.013890373  33.0084701
+##                                        Pr(&gt;|t|)
+## (Intercept)                        0.000000e+00
+## taille_fratrie                    4.600641e-121
+## femme                             4.372743e-148
+## as.factor(rang_naissance)2         3.073197e-78
+## as.factor(rang_naissance)3        1.566927e-130
+## as.factor(rang_naissance)4        2.757106e-100
+## as.factor(rang_naissance)5         9.573066e-82
+## cohorte1950-1954                   3.170458e-11
+## cohorte1955-1959                   9.352269e-29
+## cohorte1960-1964                   5.280570e-74
+## cohorte1965-1969                  1.520059e-140
+## cohorte1970-1974                   0.000000e+00
+## cohorte1975-1979                   0.000000e+00
+## cohorte1980-1984                   0.000000e+00
+## cohorte1985-1989                  4.473443e-195
+## father_csArtisan                   1.055597e-73
+## father_csCadre                     0.000000e+00
+## father_csEmployé                   6.188994e-01
+## father_csOuvrier                  8.486085e-122
+## father_csProfession intermédiaire  2.494383e-84
+## mother_csArtisan                   3.421644e-16
+## mother_csCadre                     0.000000e+00
+## mother_csEmployée                  5.440923e-01
+## mother_csOuvrière                  6.131217e-78
+## mother_csProfession intermédiaire 1.958910e-237
+```
+
+---
+# Question 16 (2pts): 
+
+- **Régressez la taille de la fratrie sur la variable `compo_genre`, le fait d'être une femme, l'aîné, la cohorte de naissance et la PCS des parents. Nommez ce modèle `reg7`. Commentez uniquement les effets observés de la variable `compo_genre`.**
+- En utilisant la fonction `ivreg` du package du même nom, estimez l'effet de la taille de la fratrie en utilisant comme instrument `compo_genre` et nommez ce modèle `reg8`. Commentez.
+
+
+``` r
+reg7 = lm(taille_fratrie ~ compo_genre + femme + elder + cohorte + mother_cs + father_cs, data = df)
+summary(reg7)$coefficients
+```
+
+```
+##                                       Estimate  Std. Error     t value
+## (Intercept)                        3.170076447 0.020826957 152.2102582
+## compo_genreFM                     -0.126057932 0.009280820 -13.5826286
+## compo_genreMF                     -0.127317803 0.009313872 -13.6696962
+## compo_genreMM                     -0.022558162 0.010531356  -2.1419997
+## femme                             -0.013442102 0.007522922  -1.7868192
+## elder                             -0.429746679 0.006522572 -65.8860784
+## cohorte1950-1954                   0.015178480 0.014835647   1.0231087
+## cohorte1955-1959                   0.041988830 0.014340201   2.9280503
+## cohorte1960-1964                   0.010926505 0.014142713   0.7725891
+## cohorte1965-1969                  -0.018782468 0.014243214  -1.3186960
+## cohorte1970-1974                  -0.075318340 0.014562776  -5.1719769
+## cohorte1975-1979                  -0.121553097 0.015671864  -7.7561354
+## cohorte1980-1984                  -0.152664056 0.018777488  -8.1301638
+## cohorte1985-1989                  -0.004994784 0.031640333  -0.1578613
+## mother_csArtisan                   0.007167621 0.015364707   0.4664991
+## mother_csCadre                    -0.018966913 0.014348981  -1.3218300
+## mother_csEmployée                 -0.040421301 0.011429035  -3.5367203
+## mother_csOuvrière                 -0.035191841 0.012695927  -2.7719001
+## mother_csProfession intermédiaire -0.038912626 0.013126963  -2.9643282
+## father_csArtisan                  -0.187860546 0.013780225 -13.6326182
+## father_csCadre                    -0.152150445 0.012270628 -12.3995647
+## father_csEmployé                  -0.041145041 0.016336509  -2.5185945
+## father_csOuvrier                   0.090047884 0.012317374   7.3106400
+## father_csProfession intermédiaire -0.173147310 0.013307162 -13.0115883
+##                                       Pr(&gt;|t|)
+## (Intercept)                       0.000000e+00
+## compo_genreFM                     5.615984e-42
+## compo_genreMF                     1.708290e-42
+## compo_genreMM                     3.219633e-02
+## femme                             7.397027e-02
+## elder                             0.000000e+00
+## cohorte1950-1954                  3.062593e-01
+## cohorte1955-1959                  3.411852e-03
+## cohorte1960-1964                  4.397677e-01
+## cohorte1965-1969                  1.872743e-01
+## cohorte1970-1974                  2.321533e-07
+## cohorte1975-1979                  8.852247e-15
+## cohorte1980-1984                  4.344106e-16
+## cohorte1985-1989                  8.745665e-01
+## mother_csArtisan                  6.408595e-01
+## mother_csCadre                    1.862283e-01
+## mother_csEmployée                 4.053436e-04
+## mother_csOuvrière                 5.574224e-03
+## mother_csProfession intermédiaire 3.034286e-03
+## father_csArtisan                  2.838358e-42
+## father_csCadre                    2.818621e-35
+## father_csEmployé                  1.178424e-02
+## father_csOuvrier                  2.681949e-13
+## father_csProfession intermédiaire 1.144660e-38
+```
+
+---
+# Question 16 (2pts): 
+
+- Régressez la taille de la fratrie sur la variable `compo_genre`, le fait d'être une femme, l'aîné, la cohorte de naissance et la PCS des parents. Nommez ce modèle `reg7`. Commentez uniquement les effets observés de la variable `compo_genre`.
+- **En utilisant la fonction `ivreg` du package du même nom, estimez l'effet de la taille de la fratrie en utilisant comme instrument `compo_genre` et nommez ce modèle `reg8`. Commentez.**
+
+
+``` r
+reg8 = ivreg(dipl ~ taille_fratrie + femme + elder + cohorte + father_cs + mother_cs | compo_genre + femme + elder + cohorte + father_cs + mother_cs, data = df)
+summary(reg8)$coefficients
+```
+
+```
+##                                       Estimate  Std. Error     t value
+## (Intercept)                        2.954547930 0.178887350  16.5162485
+## taille_fratrie                    -0.232900482 0.057391416  -4.0581065
+## femme                              0.172396767 0.006675017  25.8271669
+## elder                              0.142869553 0.025718127   5.5552083
+## cohorte1950-1954                   0.095999140 0.015812149   6.0712266
+## cohorte1955-1959                   0.157505263 0.015438433  10.2021535
+## cohorte1960-1964                   0.256220970 0.015058516  17.0150217
+## cohorte1965-1969                   0.360792197 0.015187258  23.7562432
+## cohorte1970-1974                   0.618058503 0.016057575  38.4901525
+## cohorte1975-1979                   0.833754579 0.018042524  46.2105290
+## cohorte1980-1984                   0.889335284 0.021753388  40.8826110
+## cohorte1985-1989                   0.956239158 0.033660285  28.4085283
+## father_csArtisan                   0.248827649 0.018171040  13.6936384
+## father_csCadre                     0.821863213 0.015640615  52.5467313
+## father_csEmployé                  -0.011699499 0.017530822  -0.6673674
+## father_csOuvrier                  -0.298772557 0.014124710 -21.1524730
+## father_csProfession intermédiaire  0.259966427 0.017216475  15.0998639
+## mother_csArtisan                   0.132608280 0.016349995   8.1106008
+## mother_csCadre                     0.658255271 0.015312956  42.9868183
+## mother_csEmployée                  0.003238799 0.012382457   0.2615635
+## mother_csOuvrière                 -0.254751409 0.013675274 -18.6286143
+## mother_csProfession intermédiaire  0.454589827 0.014140821  32.1473439
+##                                        Pr(&gt;|t|)
+## (Intercept)                        3.491435e-61
+## taille_fratrie                     4.951629e-05
+## femme                             1.617722e-146
+## elder                              2.781069e-08
+## cohorte1950-1954                   1.274714e-09
+## cohorte1955-1959                   2.003086e-24
+## cohorte1960-1964                   8.137468e-65
+## cohorte1965-1969                  2.410871e-124
+## cohorte1970-1974                  2.430803e-321
+## cohorte1975-1979                   0.000000e+00
+## cohorte1980-1984                   0.000000e+00
+## cohorte1985-1989                  1.066270e-176
+## father_csArtisan                   1.229874e-42
+## father_csCadre                     0.000000e+00
+## father_csEmployé                   5.045393e-01
+## father_csOuvrier                   4.716047e-99
+## father_csProfession intermédiaire  1.892286e-51
+## mother_csArtisan                   5.103341e-16
+## mother_csCadre                     0.000000e+00
+## mother_csEmployée                  7.936586e-01
+## mother_csOuvrière                  2.685159e-77
+## mother_csProfession intermédiaire 2.171781e-225
+## attr(,"df")
+## [1] 85143
+## attr(,"nobs")
+## [1] 85165
+```
+
+
+---
+# Question 17 (2pts): 
+
+Selon-vous, le modèle précédent permet-il d'estimer l'effet causal de la taille de la fratrie sur le niveau de diplôme?
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false,
+  "ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

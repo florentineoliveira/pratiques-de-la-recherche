@@ -1,12 +1,12 @@
 ---
 title: "`R`efresher"
 subtitle: "Pratiques de la Recherche en Économie"
-author: "Florentine Oliveira"
-date: "`r Sys.Date()`"
+author: "Florentine Oliveira-Roux"
+date: "4 Novembre 2025"
 output:
   xaringan::moon_reader:
     lib_dir: libs
-    css:  ['metropolis', 'metropolis-fonts', 'custom.css']
+    css: ['metropolis', 'metropolis-fonts', 'custom.css']
     nature:
       highlightStyle: github
       highlightLines: true
@@ -104,21 +104,24 @@ theme_empty = theme_bw() +
 )
 
 
+#npx decktape \
+#  --url-load-timeout=60000 --page-load-timeout=60000 --buffer-timeout=60000 \
+#  --chrome-arg="--disable-web-security" --chrome-arg="--allow-file-access-from-files" \
+#  "file:///Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Lecture 1/lecture_1_fr.html" \
+#  "/Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Lecture 1/lecture_1_fr.pdf"
+
 ```
 
 layout: true
 
 
 ---
-
-<link rel="shortcut icon" href="#" />
-
-# About me
+# Pour me contacter
 
 &nbsp;
 
 
-Doctorante en Économie à PSE en 3ème année
+Doctorante en Économie à PSE en 4ème année
 
 Champs de recherche: économie de la famille, de l'éducation, du travail
 
@@ -164,15 +167,15 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
 ### Semestre 1
 
 1. Séance 1 (aujourd'hui): Rappels de `R` 
-2. Séance 2 (12/11/2024): $\LaTeX$ et R Markdown
-3. Séance 3 (19/12/2024): Régressions Linéaires et Causalité
+2. Séance 2 (18/11/2025): $\LaTeX$ et R Markdown
+3. Séance 3 (02/12/2025): Régressions Linéaires et Causalité
 
 ### Semestre 2
-4. Séance 4 (04/02/2025): Variables de Contrôle et Matching
-5. Séance 5 (18/02/2025): Méthode des Variables Instrumentales
-6. Séance 6 (11/03/2025): Méthode des Doubles-Différences (DiD)
-7. Séance 7 (25/03/2025): Regression Discontinuity Design (RDD)
-8. Séance 8 (08/04/2025): Q & A
+4. Séance 4 (TBC - 03/02/2026): Variables de Contrôle et Matching
+5. Séance 5 (TBC - 17/02/2026): Méthode des Variables Instrumentales
+6. Séance 6 (TBC - 03/03/2026): Méthode des Doubles-Différences (DiD)
+7. Séance 7 (TBC - 17/03/2026): Regression Discontinuity Design (RDD)
+8. Séance 8 (TBC - 31/03/2026): Q & A
 
 
 ---
@@ -180,11 +183,13 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
 
 ## DM
 
+.center[
 **Objectif**: manipulation de données sur `R`, intuition, quelques régressions
 
 À faire seul(e) ou à deux
 
-**À rendre pour le 10 Janvier 23h59**
+**À rendre pour le 4 Janvier 2026 à 23h59 maximum**
+]
 
 &nbsp;
 
@@ -196,9 +201,9 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
 
 &nbsp;
 
-1. La recherche en économie empirique
+<span style="color:#dd0747;">**1. La recherche en économie empirique**</span>
 
-2. `R`: Rappels 
+<span style="color:#dd0747;">**2. `R`: Rappels**</span>
 
   2.1. Définition, usages, interface  
   2.2. Projet `R`   
@@ -208,9 +213,13 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
   2.6. Maps
   
 ---
-# 1. La recherche en économie empirique
+layout: false
+class: center, middle, inverse
 
-### Qu'est-ce que la recherche en économie empirique?
+# <span style="color:#FAFAFA;">1. La recherche en économie empirique</span>
+  
+---
+# Qu'est-ce que la recherche en économie empirique?
 
 - Répondre à des **questions de recherche** pour apprendre sur les comportements humains, l'efficacité des poliques publiques, ...   
 
@@ -231,9 +240,7 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
   - Quel est l'effet de la densité de population **sur** les salaires?
 
 ---
-# 1. La recherche en économie empirique
-
-### Qu'est-ce que la recherche en économie empirique?
+# Qu'est-ce que la recherche en économie empirique?
 
 - Répondre à des **questions de recherche** pour apprendre sur les comportements humains, l'efficacité des poliques publiques, ...
 
@@ -247,18 +254,24 @@ $\implies$ pour pouvoir réaliser votre **mémoire** !
 - ... et des données!
 
 
-- `R` est un logiciel qui permet de réaliser ces analyses descriptives et empiriques.
+- `R` est un logiciel qui permet de réaliser ces analyses descriptives et empiriques
 
 ---
 layout: false
 class: center, middle, inverse
 
-# 2. `R`: rappels
+# <span style="color:#FAFAFA;">2. `R`: rappels</span>
+
 
 ---
-# 2. `R`: rappels
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
 
-## 2.1. Définition, usages, interface
+# <span style="color:#dd0747;">2.1. Définition, usage, interface</span>
+
+---
+# Définition
 
 
 - D'après le site internet de `R` : *R is a free software environment for statistical computing and graphics.*
@@ -279,16 +292,16 @@ class: center, middle, inverse
 
 
 ---
-### Popularité de `R`<sup>1</sup>
+# Popularité de `R`<sup>1</sup>
 
 .pull-left[
-```{r popularity scholar, echo=FALSE, out.width="90%"}
+```{r popularity scholar, echo=FALSE, out.width="95%"}
 knitr::include_graphics("imgs/popularity_datascientist.jpg")
 ```
 ]
 
 .pull-right[
-```{r popularity data, echo=FALSE, out.width="80%"}
+```{r popularity data, echo=FALSE, out.width="85%"}
 knitr::include_graphics("imgs/popularity_scholar.png")
 ```
 ]
@@ -298,25 +311,30 @@ knitr::include_graphics("imgs/popularity_scholar.png")
 ]
 
 ---
-# 2. `R`: rappels
+# Interface
 
-## 2.1. Définition, usages, interface
-
-```{r interface, echo=FALSE, out.width="70%"}
+```{r interface, echo=FALSE, out.width="80%"}
 knitr::include_graphics("imgs/interface.png")
 ```
 
 
 ---
-# 2. `R`: rappels
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
 
-## 2.2. Projet `R`
+# <span style="color:#dd0747;">2.2. Projet `R`</span>
+
+
+
+---
+# Projet `R`
 
 Les projets `R` permettent une meilleure organisation de votre travail.
 
 .pull-left[
-```{r rproj, echo=FALSE, out.width="50%"}
-knitr::include_graphics("imgs/rproj.jpeg")
+```{r rproj, echo=FALSE, out.width="70%"}
+knitr::include_graphics("imgs/rproj.png")
 ```
 ]
 
@@ -330,29 +348,42 @@ knitr::include_graphics("imgs/rproj.jpeg")
 
 
 ---
-background-color: #f19bb5
+class: clearinverse
+background-color:  #f19bb5
+
+&nbsp;
+
 # Application: créer votre projet `R`
 
-`r countdown(minutes = 3, top = 0)`
 
 .pull-left[
-```{r application rproj , echo=FALSE, out.width="70%"}
-knitr::include_graphics("imgs/rproj_sans_fond.png")
+```{r application rproj , echo=FALSE, out.width="80%"}
+knitr::include_graphics("imgs/rproj_app.png")
 ```
 ]
 
 .pull-right[
-- Créer un projet R pour la Lecture 1 en respectant cette structure
 
-- Créer un nouveau script R, enregistré dans le dossier lecture_1
+&nbsp;
+
+&nbsp;
+
+- Créer un projet R pour le TD en respectant cette structure
+
+- Créer un nouveau script R dans le dossier Lecture 1/scripts, appelé lecture_1
 ]
 
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.3. Importer des données</span>
+
 
 ---
-# 2. `R`: rappels
-
-## 2.3. Importer des données
+# Importer des données au format externes
 
 **Format .csv:**
 
@@ -373,9 +404,7 @@ knitr::include_graphics("imgs/rproj_sans_fond.png")
   - `read_excel()`  
   
 ---
-# 2. `R`: rappels
-
-## 2.3. Importer des données
+# Importer des données R
 
 &nbsp;
 
@@ -387,15 +416,24 @@ knitr::include_graphics("imgs/rproj_sans_fond.png")
 
 **Conseil**: à la fin du script de cleaning, enregistrer le ou les data.frames nettoyés en format `.RDS` avec la fonction `saveRDS()` et importer ces données nettoyées dans le script sur lequel vous ferez toutes vos analyses.
   
+
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.4. Manipulation des données avec `dplyr`</span>
+
+
+
   
 ---
 background-image: url(imgs/dplyr_logo.png)
 background-position: 90% 10%
 background-size: 15%
 
-# 2. `R`: rappels
-
-## 2.4. Manipulation des données avec `dplyr`
+# Package `dplyr`
 
 
 Principal package pour la manipulation de données : `dplyr`
@@ -415,11 +453,9 @@ $$\text{data.frame} \;\; \underbrace{\text{%>%}}_{\text{pipe}} \;\; \text{functi
 
 
 ---
-# 2. `R`: rappels
+# Opérateurs 
 
-## 2.4. Manipulation des données avec `dplyr`
-
-### Opérateurs 
+&nbsp;
 
 &nbsp;
 
@@ -444,7 +480,11 @@ $$\text{data.frame} \;\; \underbrace{\text{%>%}}_{\text{pipe}} \;\; \text{functi
 ]
 
 ---
-background-color: #f19bb5
+class: clearinverse
+background-color:  #f19bb5
+
+&nbsp;
+
 # Application : Titanic
 
 Ce jeu de données fournit des informations sur le sort des passagers du paquebot « Titanic », résumées en fonction du statut économique (class), du sexe, de l'âge et de la survie.
@@ -458,10 +498,13 @@ head(titanic)
 ```
 
 ---
-background-color: #f19bb5
+class: clearinverse
+background-color:  #f19bb5
+
+&nbsp;
+
 # Application : Titanic
 
-`r countdown(minutes = 5, top = 0)`
 
 &nbsp;
 
@@ -473,7 +516,10 @@ background-color: #f19bb5
 3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par Classe x Sexe et ordonner par ordre décroissant
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
 # Solution : Titanic
 
 1) Calculer le taux de survie par classe, par sexe, et par âge
@@ -488,8 +534,12 @@ titanic %>%
 ```
 
 ---
-background-color: #fbe6ec
 count: false
+class: clearinverse
+background-color: #fbe6ec
+
+&nbsp; 
+
 # Solution : Titanic
 
 1) Calculer le taux de survie par classe, par sexe, et par âge
@@ -504,7 +554,11 @@ titanic %>%
 ```
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
+
 # Solution : Titanic
 
 1) Calculer le taux de survie par classe, par sexe, et par âge
@@ -520,7 +574,11 @@ titanic %>%
 
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
+
 # Solution : Titanic
 
 1) Calculer le taux de survie par classe, par sexe, et par âge
@@ -536,7 +594,11 @@ titanic %>%
 
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
+
 # Solution : Titanic
 
 2) Créer une variable `passenger` qui vaut 1 si l'individu n'est pas un membre d'équipage (*crew*), 0 si c'est un membre d'équipage
@@ -554,10 +616,14 @@ titanic %>%
 
 ```
 
-**Conseil**: utiliser `case_when` quand il y a plus d'une condition.
+**Conseil**: utiliser `case_when` quand il y a plus d'une condition
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
+
 # Solution : Titanic
 
 3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par Classe x Sexe et ordonner par ordre décroissant
@@ -574,7 +640,10 @@ titanic %>%
 
 ---
 count: false
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
 # Solution : Titanic
 
 3) Créer une table qui résume, **pour les adultes uniquement**, le taux de survie par Classe x Sexe et ordonner par ordre décroissant
@@ -591,7 +660,11 @@ titanic %>%
 
 ---
 count: false
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
+
 # Solution : Titanic
 
 3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par **Classe x Sexe** et ordonner par ordre décroissant
@@ -608,7 +681,10 @@ titanic %>%
 
 ---
 count: false
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
 # Solution : Titanic
 
 3) Créer une table qui résume, pour les adultes uniquement, le **taux de survie** par Classe x Sexe et ordonner par ordre décroissant
@@ -626,7 +702,10 @@ titanic %>%
 
 ---
 count: false
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
 # Solution : Titanic
 
 3) Créer une table qui résume, pour les adultes uniquement, le taux de survie par Classe x Sexe et **ordonner par ordre décroissant**
@@ -643,9 +722,7 @@ titanic %>%
 
 
 ---
-# 2. `R`: rappels
-
-## 2.4. Manipulation des données avec `dplyr`
+# Jointures
 
 .center[
 ```{r datasets joints , echo=FALSE, out.width="40%"}
@@ -665,9 +742,7 @@ knitr::include_graphics("imgs/datasets.png")
 
 
 ---
-# 2. `R`: rappels
-
-## 2.4. Manipulation des données avec `dplyr`
+# Jointures
 
 ### Binding joints 
 
@@ -690,9 +765,7 @@ knitr::include_graphics("imgs/bindrows.jpeg")
 
 
 ---
-# 2. `R`: rappels
-
-## 2.4. Manipulation des données avec `dplyr`
+# Jointures
 
 ### Binding joints 
 
@@ -715,9 +788,7 @@ knitr::include_graphics("imgs/bindcols.jpeg")
 
 
 ---
-# 2. `R`: rappels
-
-## 2.4. Manipulation des données avec `dplyr`
+# Jointures
 
 ### Mutating joints 
 
@@ -742,9 +813,7 @@ knitr::include_graphics("imgs/left_joint.jpeg")
 
 
 ---
-# 2. `R`: rappels
-
-## 2.4. Manipulation des données avec `dplyr`
+# Jointures
 
 ### Mutating joints 
 
@@ -767,9 +836,7 @@ knitr::include_graphics("imgs/right_joint.jpeg")
 
 
 ---
-# 2. `R`: rappels
-
-## 2.4. Manipulation des données avec `dplyr`
+# Jointures
 
 ### Mutating joints 
 
@@ -792,9 +859,7 @@ knitr::include_graphics("imgs/inner_joint.jpeg")
 
 
 ---
-# 2. `R`: rappels
-
-## 2.4. Manipulation des données avec `dplyr`
+# Jointures
 
 ### Mutating joints 
 
@@ -819,9 +884,7 @@ knitr::include_graphics("imgs/full_joint.jpeg")
 
 
 ---
-# 2. `R`: rappels
-
-## 2.4. Manipulation des données avec `dplyr`
+# Différents formats de base de données
 
 ### Formats wide et long
 
@@ -840,9 +903,7 @@ knitr::include_graphics("imgs/longer.png")
        
  
 ---
-# 2. `R`: rappels
-
-## 2.4. Manipulation des données avec `dplyr`
+# Différents formats de base de données
 
 ### Formats wide et long
 
@@ -858,7 +919,10 @@ knitr::include_graphics("imgs/wider.png")
 
 
 ---
-background-color: #f19bb5
+class: clearinverse
+background-color: #f19bb5 
+
+&nbsp; 
 # Application : Législatives 2024 
 
 &nbsp;
@@ -878,7 +942,10 @@ Les bases de *données des résultats aux élections sont en format wide*:
 
 
 ---
-background-color: #f19bb5
+class: clearinverse
+background-color: #f19bb5 
+
+&nbsp; 
 # Application : Législatives 2024 
 
 `r emo::ji("rotating_light")` **Encodage du libellé des circonscriptions**
@@ -903,7 +970,10 @@ head(pop_2019)[1:4,]
 **Variables Clés**: `Libellé.département` qui comprend uniquement le nom du département, et `Libellé.circonscription` qui contient uniquement le numéro de la circonscription.
 
 ---
-background-color: #f19bb5
+class: clearinverse
+background-color: #f19bb5 
+
+&nbsp; 
 # Application : Législatives 2024 
 
 `r emo::ji("rotating_light")` **Encodage du libellé des circonscriptions**
@@ -929,7 +999,10 @@ $$\underbrace{ \text{gsub}}_{\text{remplace}}( \underbrace{ \text{"\\\D"}}_{\sub
 
 
 ---
-background-color: #f19bb5
+class: clearinverse
+background-color: #f19bb5 
+
+&nbsp; 
 # Application : Législatives 2024 
 
 `r emo::ji("rotating_light")` **Encodage du libellé des circonscriptions**
@@ -949,10 +1022,12 @@ unique(pop_2019$Libellé.circonscription.législative)
 $$\underbrace{ \text{separate}}_{\text{sépare}}( \underbrace{ \text{"Circonscriptions"}}_{\substack{\text{les caractères de la} \\ \text{variable Circonscriptions}}}  , \underbrace{\text{into = c("A", "B")}}_{ \substack{ \text{en deux chaînes de caractères} \\ \text{qui définissent ces deux variables}}},  \underbrace{\text{ sep = ", "}}_{\substack{\text{la séparation étant} \\ \text{faite à l'endroit de} \\ \text{la virgule}}})$$
 
 ---
-background-color: #f19bb5
+class: clearinverse
+background-color: #f19bb5 
+
+&nbsp; 
 # Application : Législatives 2024 
 
-`r countdown(minutes = 10, top = 0)`
 
 1) Importer les données (nommer les dataframes `resultats_t1`, `resultats_t2` et `pop_2019`)
 
@@ -973,7 +1048,10 @@ background-color: #f19bb5
 
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
 # Solution
 
 1) Importer les données
@@ -1000,7 +1078,10 @@ pop_2019 = pop_2019 %>%
 ```
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
 # Solution
 
 3) Reformatter `resultats_t1` et `resultats_t2`  en format long
@@ -1026,7 +1107,10 @@ resultats_t1_long = resultats_t1 %>%
 
 ---
 count: false
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
 # Solution
 
 3) Reformatter `resultats_t1` et `resultats_t2`  en format long
@@ -1054,7 +1138,10 @@ resultats_t1_long = resultats_t1 %>%
 
 ---
 count: false
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
 # Solution
 
 3) Reformatter `resultats_t1` et `resultats_t2`  en format long
@@ -1083,7 +1170,10 @@ resultats_t1_long = resultats_t1 %>%
 
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
 # Solution
 
 3) Reformatter `resultats_t1` et `resultats_t2`  en format long
@@ -1104,7 +1194,10 @@ resultats_t2_long = resultats_t2 %>%
 
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp; 
 # Solution
 
 5) Ajouter les observations de `resultats_t2` à `resultats_t1` et stocker le tout dans `resultats`      
@@ -1121,22 +1214,29 @@ resultats = bind_rows(resultats_t1_long, resultats_t2_long) %>%
 ```
 
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.5. Visualisation des données avec `ggplot2`</span>
+
+
 
 ---
 background-image: url(imgs/ggplot2_logo.png)
-background-position: 95% 5%
-background-size: 10%
+background-position: 90% 10%
+background-size: 15%
 
-# 2. `R`: rappels
-
-## 2.5. Visualisation des données avec `ggplot2`
+# Package `ggplot2`
 
  &nbsp;
 
-`ggplot2` est un package `R` qui permet de **visualiser des données** sous forme de graphiques.    
+`ggplot2` est un package `R` qui permet de **visualiser des données** sous forme de graphiques    
 
-Afin de *chaîner* des opérations, c'est à dire d'**ajouter des couches au graphique, on utilise les `+`**
- (l'équivalent de ` %>% ` avec `dplyr`).   
+Afin de *chaîner* des opérations, c'est à dire d'**ajouter des couches au graphique,**
+
+**on utilise les `+`** (l'équivalent de ` %>% ` avec `dplyr`)   
  
  
 Pour consturire n'importe quel graphique, il faut:
@@ -1154,11 +1254,9 @@ ggplot(data,
 
 
 ---
-# 2. `R`: rappels
+# Principales fonctions 
 
-## 2.5. Visualisation des données avec `ggplot2`
-
-### Principales fonctions 
+&nbsp;
 
 - `ggplot()` : Initialiser un graphique en spécifiant les données et les aesthetics    
 
@@ -1176,11 +1274,7 @@ ggplot(data,
 
 
 ---
-# 2. `R`: rappels
-
-## 2.5. Visualisation des données avec `ggplot2`
-
-### Variable _discrète_
+# Variable _discrète_
 
 .pull-left[
 ```{r , echo = T, eval = F}
@@ -1210,11 +1304,7 @@ resultats %>%
 
 ---
 count: false
-# 2. `R`: rappels
-
-## 2.5. Visualisation des données avec `ggplot2`
-
-### Variable _discrète_
+# Variable _discrète_
 
 .pull-left[
 ```{r , echo = T, eval = F}
@@ -1251,11 +1341,7 @@ resultats %>%
 ]
 
 ---
-# 2. `R`: rappels
-
-## 2.5. Visualisation des données avec `ggplot2`
-
-### Variable _discrète_
+# Variable _discrète_
 
 .pull-left[
 ```{r , echo = T, eval = F}
@@ -1286,11 +1372,7 @@ resultats %>%
 ]
 
 ---
-# 2. `R`: rappels
-
-## 2.5. Visualisation des données avec `ggplot2`
-
-### Variable _continue_
+# Variable _continue_
 
 .pull-left[
 ```{r , echo = T, eval = F}
@@ -1323,11 +1405,7 @@ resultats %>%
 
 
 ---
-# 2. `R`: rappels
-
-## 2.5. Visualisation des données avec `ggplot2`
-
-### `facet_wrap`
+# `facet_wrap`
 
 .pull-left[
 ```{r , echo = T, eval = F}
@@ -1366,13 +1444,17 @@ resultats %>%
 ]
 
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.6. Visualisation des données spaciales</span>
+
+
 
 ---
-# 2. `R`: rappels
-
-## 2.6. Visualisation des données spaciales
-
-### Format de cartes et données
+# Format de cartes et données
 
 
 ```{r format cartes, echo=FALSE, out.width="75%"}
@@ -1386,11 +1468,7 @@ Très bonne référence: [Géomatique sur R](https://rcarto.github.io/geomatique
 
 ---
 count:false
-# 2. `R`: rappels
-
-## 2.6. Visualisation des données spaciales
-
-### Format de cartes et données
+# Format de cartes et données
 
 ```{r sf, echo=FALSE, out.width="75%"}
 knitr::include_graphics("imgs/sf.png")
@@ -1401,14 +1479,10 @@ Très bonne référence: [Géomatique sur R](https://rcarto.github.io/geomatique
 
 ---
 background-image: url(imgs/sflogo.png)
-background-position: 95% 10%
+background-position: 97% 10%
 background-size: 15%
 
-# 2. `R`: rappels
-
-## 2.6. Visualisation des données spaciales
-
-**Package `sf`**
+# Package `sf`
 
 
 **Shapefile**: format de fichier géospatial utilisé pour représenter des entités géographiques
@@ -1452,11 +1526,7 @@ head(map[ , -c(5,6)],3)
 
 
 ---
-# 2. `R`: rappels
-
-## 2.6. Visualisation des données spaciales
-
-**Réaliser une carte en 3 étapes**
+# Réaliser une carte en 3 étapes
 
 1. Importer les données    
   - Le jeu de données qui contient l'information à visualiser   
@@ -1471,10 +1541,13 @@ head(map[ , -c(5,6)],3)
  
 
 ---
+class: clearinverse
 background-color: #f19bb5
+
+&nbsp; 
+
 # Application: carte résultats législatives
 
-`r countdown(minutes = 10, top = 0)`
 
 **Importer les données**     
 1) Importer `france-circonscriptions-legislatives-2012.shp`, que vous stockerez dans `maps`      
@@ -1491,8 +1564,10 @@ background-color: #f19bb5
 *NB: ne pas sélectionner les départements 971, 972, 973, 974, 975, 976, 986, 987, 988, ZX, ZZ qui correspondent aux DROM et qui ne sont pas sur ce fond de carte*      
 
 ---
-
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
 # Solution
 
 **Importer les données**     
@@ -1515,7 +1590,10 @@ map = st_read("data/france-circonscriptions-legislatives-2012.shp", quiet = TRUE
 
 ---
 count: false
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
 # Solution
 
 **Importer les données**     
@@ -1537,7 +1615,10 @@ map = st_read("data/france-circonscriptions-legislatives-2012.shp", quiet = TRUE
 
 ---
 count: false
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
 # Solution
 
 **Importer les données**     
@@ -1558,7 +1639,10 @@ map = st_read("data/france-circonscriptions-legislatives-2012.shp", quiet = TRUE
 
 ---
 count: false
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
 # Solution
 
 **Importer les données**     
@@ -1580,8 +1664,10 @@ map = st_read("data/france-circonscriptions-legislatives-2012.shp", quiet = TRUE
 
 
 ---
-
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
 # Solution
 
 **Joindre les bases de données**         
@@ -1598,8 +1684,10 @@ resultats_map = resultats %>%
 
 
 ---
-
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
 # Solution
 
 **Réaliser une carte**       
@@ -1625,7 +1713,10 @@ ggplot(resultats_map %>% filter(! (Code.département %in% c("971", "972", "973",
 ```
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
 # Solution
 
 
@@ -1660,7 +1751,7 @@ ggplot(resultats_map %>% filter(! (Code.département %in% c("971", "972", "973",
 layout: false
 class: center, middle, inverse
 
-# Miscellaneous
+# <span style="color:#FAFAFA;">Miscellaneous</span>
 
 ---
 name: bestfriend
@@ -1757,7 +1848,7 @@ L'apprentissage de `R` est long et fastidieux, mais les rendements sont croissan
 layout: false
 class: center, middle, inverse
 
-# Appendix
+# <span style="color:#FAFAFA;">Appendix</span>
 
 ---
 # Cheatsheets

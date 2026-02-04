@@ -1,7 +1,7 @@
 ---
 title: "Variables de contrôle et matching"
 subtitle: "Pratiques de la Recherche en Économie"
-author: "Florentine Oliveira"
+author: "Florentine Oliveira-Roux"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -93,16 +93,23 @@ theme_empty = theme_bw() +
 )
 
 
+#npx decktape \
+# --url-load-timeout=60000 --page-load-timeout=60000 --buffer-timeout=60000 \
+# --chrome-arg="--disable-web-security" --chrome-arg="--allow-file-access-from-files" \
+# "file:///Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Lecture 4/lecture_4_fr.html" \
+# "/Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Lecture 4/lecture_4_fr.pdf"
+
 ```
 
 layout: true
 
 ---
-count:false
-class: middle, center
-background-color: #dd0747
+count: false
+layout: false
+class: center, middle, inverse
 
-# <span style="color:#FAFAFA;"> Reminder </span>
+# <span style="color:#FAFAFA;">Reminder</span>
+
 ---
 
 L'objectif est d'estimer l'effet d'un **traitement** $D$ sur une variable d'**outcome** $Y$.
@@ -150,17 +157,26 @@ Dans 0,00001% des cas, il est possible de comparer l'outcome moyen des individus
 
 3. Causalité
 
+
+
+---
+count: false
+layout: false
+class: center, middle, inverse
+
+# <span style="color:#FAFAFA;"> 1. Modèle de régression linéaire multivarié</span>
+
+
 ---
 count:false
-class: middle, center
-background-color: #dd0747
+class: middle, center,  clearinverse
+background-color:  #f8cdda
 
-# <span style="color:#FAFAFA;">  1. Modèle de régression linéaire multivarié </span>
+# <span style="color:#dd0747;">1.1. Biais de variable omise (OVB)</span>
 
 
 ---
-# 1. Modèle de régression linéaire multivarié
-## 1.1. Biais de variable omise (OVB)
+# Biais de variable omise (OVB)
 
 Notre modèle de base s'écrit   
 \begin{equation}
@@ -192,8 +208,7 @@ Donc $D_i$ est corrêlé à $\varepsilon_i$, ou dit autrement $\mathbb{E}(\varep
 
 
 ---
-# 1. Modèle de régression linéaire multivarié
-## 1.1. Biais de variable omise (OVB)
+# Biais de variable omise (OVB)
 
 
 On a le modèle 
@@ -212,8 +227,7 @@ où $\pi$ est le coefficient de la régression de $W_i$ sur $D_i$ ( $W_i = \lamb
 
 
 ---
-# 1. Modèle de régression linéaire multivarié
-## 1.1. Biais de variable omise (OVB)
+# Biais de variable omise (OVB)
 
 **Exemple tiré du DM**
 
@@ -286,10 +300,17 @@ modelsummary(list("   Log(Wage)   "= no_control,"   Women   "= women,"   Log(Wag
 ```
 
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">1.2. Hypothèses du modèle multivarié</span>
+
+
 
 ---
-#  1. Modèle de régression linéaire multivarié
-## 1.2. Hypothèses du modèle multivarié
+# Hypothèses du modèle multivarié
 
 
 $\color{#9933FF}{H_1}$ Linéarité: le modèle est linéaire dans les paramètres: $\color{#9933FF}{\frac{\partial y_i}{\partial x_{ik}} = \beta_k}$,  $\color{#9933FF}{\forall k =1, ..., K}$
@@ -313,8 +334,7 @@ $\color{#9933FF}{H_5}$ Les erreurs $\varepsilon_i$ sont sphériques: $\color{#99
 
 
 ---
-#  1. Modèle de régression linéaire multivarié
-## 1.2. Hypothèses du modèle multivarié
+# Hypothèses du modèle multivarié
 
 L'hypothèse d'indépendance conditionnelle, ou <span style="color:#9933FF">***Conditional Independance Assumption (CIA)***</span>, aussi appelée sélection sur les observables, indique que:
 - conditionellement à des variables explicatives $W_i$, les outcomes potentiels $\{Y_{0i}, Y_{1i}\}$ sont indépendants du traitement $D_i$
@@ -328,11 +348,16 @@ $$\{Y_{0i}, Y_{1i}\} \perp D_i \color{#dd0747}{|W_i}$$
 On a donc: $$\begin{align} \text{Biais de Sélection} &= \mathbb{E}(Y_{0i} |  \color{#dd0747}{W_i}, D_i = 1) - \mathbb{E}(Y_{0i} |  \color{#dd0747}{W_i}, D_i = 0) \\ &= \mathbb{E}(Y_{0i} | \color{#dd0747}{W_i}) -  \mathbb{E}(Y_{0i} | \color{#dd0747}{W_i}) \\ &= 0 \end{align}$$
 
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">1.3. Estimateur dans le cas multivarié</span>
 
 ---
 name:estimateur
-#  1. Modèle de régression linéaire multivarié
-## 1.3. Estimateur dans le cas multivarié
+# Estimateur dans le cas multivarié
 
 
 L'estimateur MCO dans le cas multivarié s'écrit:
@@ -345,10 +370,16 @@ $$\hat{\beta} = (X'X)^{-1} X'Y$$
 
 C'est toujours l'estimateur *BLUE*: **B**est **L**inear **U**nbiased **E**stimator
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">1.4 Bonnes et mauvaises variables de contrôle</span>
+
 
 ---
-#  1. Modèle de régression linéaire multivarié
-## 1.4 Bonnes et mauvaises variables de contrôle
+# "Bonnes" variables de contrôle
 
 Une *bonne* variable de contrôle doit:   
 - contribuer à **expliquer la variable dépendante** 
@@ -365,10 +396,7 @@ Si elles satisfont ces conditions, les variables de contrôle permettent:
 
 ---
 name: badcontrol
-#  1. Modèle de régression linéaire multivarié
-## 1.4 Bonnes et mauvaises variables de contrôle
-
-Une *mauvaise* variable de contrôle est:
+# Mauvaises variables de contrôle
 
 Une <span style="color:#33B8FF"> **variable non pertinente** </span> est une variable qui ne contribue pas à expliquer l'outcome.
 - le paramètre estimé sera donc nul `r emo::ji("neutral_face")`
@@ -386,9 +414,15 @@ Un <span style="color:#33B8FF"> **mauvais contrôle** (*bad control*)</span> est
 - l'estimateur peut être biaisé `r emo::ji("crying_face")`
 
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">1.5 Coefficient de détermination (R2)</span>
 
 ---
-# 1.5 Coefficient de détermination (R2)
+# Coefficient de détermination (R2)
 
 Le coefficient de détermination, ou $R^2$, informe sur la **qualité** de la régression linéaire, i.e. la **part de la variance de l'outcome expliquée par les $X$**. 
 
@@ -401,22 +435,27 @@ NB: le $R^2$
   - comparer les $R^2$ ajustés lorsqu'on compare différents modèles
   - $R^2_{adj} = 1 - (1 - R^2) \frac{N - 1}{N-K-1}$
 - est spécifique à un sample
-- est très informatif pour faire de la prédiction mais n'informe en rien sur la causalité 
+- est très informatif pour faire de la prédiction mais <span style="color:#dd0747">**n'informe en rien sur la causalité**</span> 
 
+
+---
+count: false
+layout: false
+class: center, middle, inverse
+
+# <span style="color:#FAFAFA;"> 2. Matching</span>
 
 
 ---
 count:false
-class: middle, center
-background-color: #dd0747
+class: middle, center,  clearinverse
+background-color:  #f8cdda
 
-# <span style="color:#FAFAFA;">  2. Matching </span>
-
+# <span style="color:#dd0747;">2.1. Intuition</span>
 
 
 ---
-# 2. Matching
-## 2.1. Intuition
+# Intuition
 
 Lorsque l'on **contrôle** par des observables $W$, on peut avoir de l'*imbalance* (Ho, Imai, King,Stuart, 2007, Political Analysis)
   
@@ -426,14 +465,9 @@ knitr::include_graphics("imgs/matching1.png")
 ```
 
   
-  
-  
-  
-  
 ---
 count:false
-# 2. Matching
-## 2.1. Intuition
+# Intuition
 
 Lorsque l'on **contrôle** par des observables $W$, on peut avoir de l'*imbalance* (Ho, Imai, King,Stuart, 2007, Political Analysis)
   
@@ -443,8 +477,7 @@ knitr::include_graphics("imgs/matching2.png")
   
 ---
 count:false
-# 2. Matching
-## 2.1. Intuition
+# Intuition
 
 Lorsque l'on **contrôle** par des observables $W$, on peut avoir de l'*imbalance* (Ho, Imai, King,Stuart, 2007, Political Analysis)
   
@@ -454,8 +487,7 @@ knitr::include_graphics("imgs/matching3.png")
 
 ---
 count:false
-# 2. Matching
-## 2.1. Intuition
+# Intuition
 
 Lorsque l'on **contrôle** par des observables $W$, on peut avoir de l'*imbalance* (Ho, Imai, King,Stuart, 2007, Political Analysis)
   
@@ -465,8 +497,7 @@ knitr::include_graphics("imgs/matching4.png")
 
 ---
 count:false
-# 2. Matching
-## 2.1. Intuition
+# Intuition
 
 Lorsque l'on **contrôle** par des observables $W$, on peut avoir de l'*imbalance* (Ho, Imai, King,Stuart, 2007, Political Analysis)
   
@@ -476,8 +507,7 @@ knitr::include_graphics("imgs/matching5.png")
 
 ---
 count:false
-# 2. Matching
-## 2.1. Intuition
+# Intuition
 
 Lorsque l'on **contrôle** par des observables $W$, on peut avoir de l'*imbalance* (Ho, Imai, King,Stuart, 2007, Political Analysis)
   
@@ -488,10 +518,9 @@ knitr::include_graphics("imgs/matching6.png")
 
 ---
 count:false
-# 2. Matching
-## 2.1. Intuition
+# Intuition
 
-Lorsque l'on **contrôle** par des observables $W$, on peut avoir de l'*imbalance* (Ho, Imai, King,Stuart, 2007, Political Analysis)
+Lorsque l'on **contrôle** par des observables $W$, on peut avoir de l'*imbalance* (Ho, Imai, King, Stuart, 2007, Political Analysis)
 
 ```{r, echo=FALSE, out.width="55%"}
 knitr::include_graphics("imgs/matching7.png")
@@ -595,12 +624,20 @@ ggsave("p6.png", plot = p6)
 
 ```
 
+
 ---
-# 2. Matching
-## 2.2. Méthodes de matching
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.2. Méthodes de matching</span>
+
+
+---
+# Méthodes de matching
 
 Les estimateurs de *matching* construisent artificiellement un **groupe** d'individus non traîtés qui a les mêmes caractéristiques que le groupe d'individus traités
-  - Assure un support commun des variables explicatives
+  - Assure un **support commun** des variables explicatives
   
 Différents méthodes/algorithmes de matching:
 - Matching exact: on cherche les individus *strictement identiques* (très restrictif!)
@@ -613,17 +650,18 @@ Inconvénients:
 - certaines observations n'ont pas de match: on estime l'effet de traitement lorsque c'est "faisable"
 
 
----
-count:false
-class: middle, center
-background-color: #dd0747
-
-# <span style="color:#FAFAFA;">  3. Causalité </span>
-
-
 
 ---
-# 3. Causalité
+count: false
+layout: false
+class: center, middle, inverse
+
+# <span style="color:#FAFAFA;">3. Causalité</span>
+
+
+
+---
+# Causalité
 
 
 Les méthodes de **matching** sont des méthodes d'identification qui reposent sur la CIA, c'est à dire que la sélection dans le traitement est uniquement liée à des variables **observables** $X$. 
@@ -642,7 +680,11 @@ En réalité, il s'agit d'une **hypothèse d'identification très forte**:
 
 
 ---
-background-color: #d7e2d8
+class: clearinverse
+background-color:  #d7e2d8
+
+&nbsp;
+
 # Recap: OLS 
 
 <span style="color:#9933FF">**Hypothèse d'identification: CIA**</span>
@@ -658,7 +700,7 @@ background-color: #d7e2d8
 **Implémentation sur `R`**: 
 - `lm` pour estimer les paramètres du modèle
 - `summary` pour afficher le résultat de l'estimation
-- `coeftest`, argument `vcov = vcovHC(fit, type = 'HC0')` pour obtenir des se robustes à l'hétéroscédasticité
+- `coeftest`, argument `vcov = vcovHC(fit, type = 'HC1')` pour obtenir des se robustes à l'hétéroscédasticité
 - `stargazer` ou `modelsummary` pour exporter les résultats en une table $\LaTeX$
 
 
@@ -671,11 +713,11 @@ background-color: #d7e2d8
 
 
 ---
-count:false
-class: middle, center
-background-color: #dd0747
+count: false
+layout: false
+class: center, middle, inverse
 
-# <span style="color:#FAFAFA;">  Annexe </span>
+# <span style="color:#FAFAFA;">Annexe</span>
 
 
 

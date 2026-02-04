@@ -1,0 +1,1090 @@
+---
+title: "Correction Homework"
+subtitle: "Pratiques de la Recherche en Économie"
+author: "Florentine Oliveira-Roux"
+date: "3 Février 2026"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ['metropolis', 'metropolis-fonts', 'custom.css']
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r setup, include = FALSE, warning = FALSE, message = FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  dev = "svg",
+  cache = TRUE,
+  fig.align = "center"
+  #fig.width = 11,
+  #fig.height = 5
+)
+
+# Load packages
+library(tidyverse)
+library(pander)
+library(ggthemes)
+library(gapminder)
+library(emo)
+library(countdown)
+library(xaringanthemer)
+library(xaringanExtra)
+library(sf)
+library(ivreg)
+
+# countdown style
+countdown(
+  color_border              = "#dd0747",
+  color_text                = "black",
+  color_running_background  = "#dd0747",
+  color_running_text        = "white",
+  color_finished_background = "white",
+  color_finished_text       = "#dd0747",
+  color_finished_border     = "#dd0747",
+  font_size = "2em" 
+)
+
+
+style_xaringan( 
+  title_slide_background_color = "#dd0747",
+  title_slide_text_color = "white",
+  text_color = "black",
+  header_color = "#dd0747",
+  text_bold_color = "#dd0747",
+  text_slide_number_color = "black",
+  code_inline_background_color = "#e0e1df",
+  base_font_size = "24px",
+  text_font_family = "Palatino",
+  header_font_family = "Palatino",
+  header_h1_font_size = "45px",
+  header_h2_font_size = "35px",
+  header_h3_font_size = "28px",
+  inverse_background_color = "#f8cdda",
+  inverse_text_color = "black",
+  inverse_header_color = "#dd0747")
+
+# Theme with only x and y axis ans names
+theme_minimum = theme_bw() + 
+  theme(
+  text = element_text(family = "Palatino"),
+  line = element_blank(),  # Masquer toutes les lignes par défaut
+  rect = element_blank(),  # Masquer tous les rectangles par défaut
+  axis.line = element_line(color = "black"),  # Afficher les lignes des axes
+  axis.ticks = element_blank(),  # Masquer les ticks des axes
+  plot.title = element_blank(),  # Masquer le titre du graphique
+  panel.background = element_blank(),  # Masquer le fond du panneau
+  panel.grid.major = element_blank(),  # Masquer la grille principale
+  panel.grid.minor = element_blank(),  # Masquer la grille secondaire
+  plot.background = element_blank(),  # Masquer le fond du graphique
+  legend.position = "none"  # Masquer la légende
+)
+
+# A blank theme for ggplot
+theme_empty = theme_bw() + 
+  theme(
+  text = element_text(family = "Palatino"),
+  line = element_blank(),  # Masquer toutes les lignes par défaut
+  rect = element_blank(),  # Masquer tous les rectangles par défaut
+  axis.line = element_line(color = "black"),  # Afficher les lignes des axes
+  axis.ticks = element_blank(),  # Masquer les ticks des axes
+  axis.text = element_blank(),  # Masquer les étiquettes des axes
+  axis.title = element_text(size = 12),  # Afficher les titres des axes
+  plot.title = element_blank(),  # Masquer le titre du graphique
+  panel.background = element_blank(),  # Masquer le fond du panneau
+  panel.grid.major = element_blank(),  # Masquer la grille principale
+  panel.grid.minor = element_blank(),  # Masquer la grille secondaire
+  plot.background = element_blank(),  # Masquer le fond du graphique
+  legend.position = "none"  # Masquer la légende
+)
+
+#npx decktape \
+# --url-load-timeout=60000 --page-load-timeout=60000 --buffer-timeout=60000 \
+# --chrome-arg="--disable-web-security" --chrome-arg="--allow-file-access-from-files" \
+# "file:///Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Homework/homework_2025_correction.html" \
+# "/Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Homework/homework_2025_correction.pdf"
+
+```
+
+layout: true
+
+---
+count: false
+layout: false
+class: center, middle, inverse
+
+# <span style="color:#FAFAFA;">Partie 1: Nettoyage de données (7pts)</span>
+
+<span style="color:#FAFAFA;">Cette première partie vise à nettoyer et préparer les données en vue des analyses descriptives et économétriques des parties suivantes.</span>   
+
+
+---
+# Import données
+
+Importez sur `R` la base de données que vous nommerez `df`.
+
+```{r, include = F}
+df = readRDS("/Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Homework/data/simulated_sibling_data.rds")
+```
+
+
+---
+# Question 1 (5pts):
+
+.pull-left[
+Créez les variables suivantes:      
+- `cohorte` qui regroupe les années de naissance en cohortes de 5 ans (par exemple : "1945-1949", etc).   
+- `femme`, une dummy égale à 1 si l'individu est une femme, 0 sinon.          
+
+<span style="color:#dd0747;">**NB: en deux bouts de code séparés pour que cela rentre sur les slides mais tout grouper en une seule fois!**</span>
+
+]
+
+.pull-right[
+```{r, include = T, message = F, warning = F}
+df = df %>% 
+  mutate(
+    cohorte = case_when( # 0,5
+      birth_year %in% 1945:1949 ~ "1945-1949",
+      birth_year %in% 1950:1954 ~ "1950-1954",
+      birth_year %in% 1955:1959 ~ "1955-1959",
+      birth_year %in% 1960:1964 ~ "1960-1964",
+      birth_year %in% 1965:1969 ~ "1965-1969",
+      birth_year %in% 1970:1974 ~ "1970-1974",
+      birth_year %in% 1975:1979 ~ "1975-1979",
+      birth_year %in% 1980:1984 ~ "1980-1984",
+      birth_year %in% 1985:1989 ~ "1985-1989",
+      TRUE ~ NA_character_
+    ),
+    femme = ifelse(sexe == 2, 1, 0)) 
+  
+  
+```
+]
+
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+Créez les variables suivantes:      
+- `cohorte` **qui regroupe les années de naissance en cohortes de 5 ans (par exemple : "1945-1949", etc).**   
+- `femme`, une dummy égale à 1 si l'individu est une femme, 0 sinon.          
+
+<span style="color:#dd0747;">**NB: en deux bouts de code séparés pour que cela rentre sur les slides mais tout grouper en une seule fois!**</span>
+
+]
+
+.pull-right[
+```{r, include = T, message = F, warning = F}
+df = df %>% 
+  mutate( #<<
+    cohorte = case_when( #<<
+      birth_year %in% 1945:1949 ~ "1945-1949", #<<
+      birth_year %in% 1950:1954 ~ "1950-1954", #<<
+      birth_year %in% 1955:1959 ~ "1955-1959", #<<
+      birth_year %in% 1960:1964 ~ "1960-1964", #<<
+      birth_year %in% 1965:1969 ~ "1965-1969", #<<
+      birth_year %in% 1970:1974 ~ "1970-1974", #<<
+      birth_year %in% 1975:1979 ~ "1975-1979", #<<
+      birth_year %in% 1980:1984 ~ "1980-1984", #<<
+      birth_year %in% 1985:1989 ~ "1985-1989", #<<
+      TRUE ~ NA_character_ #<<
+    ), #<<
+    femme = ifelse(sexe == 2, 1, 0)) 
+  
+  
+```
+]
+
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+Créez les variables suivantes:      
+- `cohorte` qui regroupe les années de naissance en cohortes de 5 ans (par exemple : "1945-1949", etc).   
+- `femme`, **une dummy égale à 1 si l'individu est une femme, 0 sinon.**          
+
+<span style="color:#dd0747;">**NB: en deux bouts de code séparés pour que cela rentre sur les slides mais tout grouper en une seule fois!**</span>
+
+]
+
+.pull-right[
+```{r, include = T, message = F, warning = F}
+df = df %>% 
+  mutate(
+    cohorte = case_when( # 0,5
+      birth_year %in% 1945:1949 ~ "1945-1949",
+      birth_year %in% 1950:1954 ~ "1950-1954",
+      birth_year %in% 1955:1959 ~ "1955-1959",
+      birth_year %in% 1960:1964 ~ "1960-1964",
+      birth_year %in% 1965:1969 ~ "1965-1969",
+      birth_year %in% 1970:1974 ~ "1970-1974",
+      birth_year %in% 1975:1979 ~ "1975-1979",
+      birth_year %in% 1980:1984 ~ "1980-1984",
+      birth_year %in% 1985:1989 ~ "1985-1989",
+      TRUE ~ NA_character_
+    ),
+    femme = ifelse(sexe == 2, 1, 0)) #<<
+  
+  
+```
+]
+
+
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+- `rang_naissance` **qui indique le rang de naissance de chaque individu au sein de sa fratrie (1 pour l'aîné, 2 pour le deuxième enfant, etc.).**                  
+- `elder`, une dummy égale à 1 si l'individu est l'aîné de sa fratrie, 0 sinon.          
+- `cohorte_aine` qui indique la cohorte de naissance de l'aîné pour chaque fratrie.        
+- `taille_fratrie` qui indique le nombre d'enfants au sein de chaque fratrie.       
+- `plus_de_2`, une dummy égale à 1 si la fratrie comprend 3 enfants ou plus, 0 sinon.      
+- `compo_genre` qui décrit la composition par sexe des deux premiers enfants de chaque fratrie. Cette variable prend quatre valeurs possibles: "FF" (deux filles), "MM" (deux garçons), "FM" (fille puis garçon), ou "MF" (garçon puis fille).     
+]
+
+.pull-right[
+```{r, include = T, message = F, warning = F}
+df = df %>% 
+  group_by(family_id) %>%  #<< 
+  arrange(birth_year) %>%  #<< 
+  mutate( #<< 
+    rang_naissance = row_number(),  #<< 
+    cohorte_aine = first(cohorte), # 0,5
+    taille_fratrie = n(), # 0,5
+    plus_de_2 = ifelse(taille_fratrie > 2, 1, 0), # 0,5
+    compo_genre = case_when( # 0,5
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 1 ~ "MM",
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 2 ~ "FF",
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 2 ~ "MF",
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 1 ~ "FM"
+    )
+  ) %>% 
+  ungroup() %>% 
+  mutate(elder = ifelse(rang_naissance == 1, 1, 0))
+  
+  
+```
+]
+
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+- `rang_naissance` qui indique le rang de naissance de chaque individu au sein de sa fratrie (1 pour l'aîné, 2 pour le deuxième enfant, etc.).                  
+- `elder`, **une dummy égale à 1 si l'individu est l'aîné de sa fratrie, 0 sinon.**          
+- `cohorte_aine` qui indique la cohorte de naissance de l'aîné pour chaque fratrie.        
+- `taille_fratrie` qui indique le nombre d'enfants au sein de chaque fratrie.       
+- `plus_de_2`, une dummy égale à 1 si la fratrie comprend 3 enfants ou plus, 0 sinon.      
+- `compo_genre` qui décrit la composition par sexe des deux premiers enfants de chaque fratrie. Cette variable prend quatre valeurs possibles: "FF" (deux filles), "MM" (deux garçons), "FM" (fille puis garçon), ou "MF" (garçon puis fille).     
+]
+
+.pull-right[
+```{r, include = T, message = F, warning = F}
+df = df %>% 
+  group_by(family_id) %>% 
+  arrange(birth_year) %>% 
+  mutate(
+    rang_naissance = row_number(), # 0,5 group_by, 0,5 arrange, 0,5 row_number, total= 1,5
+    cohorte_aine = first(cohorte), # 0,5
+    taille_fratrie = n(), # 0,5
+    plus_de_2 = ifelse(taille_fratrie > 2, 1, 0), # 0,5
+    compo_genre = case_when( # 0,5
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 1 ~ "MM",
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 2 ~ "FF",
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 2 ~ "MF",
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 1 ~ "FM"
+    )
+  ) %>% 
+  ungroup() %>% 
+  mutate(elder = ifelse(rang_naissance == 1, 1, 0)) #<<
+  
+  
+```
+]
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+- `rang_naissance` qui indique le rang de naissance de chaque individu au sein de sa fratrie (1 pour l'aîné, 2 pour le deuxième enfant, etc.).                  
+- `elder`, une dummy égale à 1 si l'individu est l'aîné de sa fratrie, 0 sinon.          
+- `cohorte_aine` **qui indique la cohorte de naissance de l'aîné pour chaque fratrie.**        
+- `taille_fratrie` qui indique le nombre d'enfants au sein de chaque fratrie.       
+- `plus_de_2`, une dummy égale à 1 si la fratrie comprend 3 enfants ou plus, 0 sinon.      
+- `compo_genre` qui décrit la composition par sexe des deux premiers enfants de chaque fratrie. Cette variable prend quatre valeurs possibles: "FF" (deux filles), "MM" (deux garçons), "FM" (fille puis garçon), ou "MF" (garçon puis fille).     
+]
+
+.pull-right[
+```{r, include = T, message = F, warning = F}
+df = df %>% 
+  group_by(family_id) %>% 
+  arrange(birth_year) %>% 
+  mutate(
+    rang_naissance = row_number(), # 0,5 group_by, 0,5 arrange, 0,5 row_number, total= 1,5
+    cohorte_aine = first(cohorte), #<< 
+    taille_fratrie = n(), # 0,5
+    plus_de_2 = ifelse(taille_fratrie > 2, 1, 0), # 0,5
+    compo_genre = case_when( # 0,5
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 1 ~ "MM",
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 2 ~ "FF",
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 2 ~ "MF",
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 1 ~ "FM"
+    )
+  ) %>% 
+  ungroup() %>% 
+  mutate(elder = ifelse(rang_naissance == 1, 1, 0))
+  
+  
+```
+]
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+- `rang_naissance` qui indique le rang de naissance de chaque individu au sein de sa fratrie (1 pour l'aîné, 2 pour le deuxième enfant, etc.).                  
+- `elder`, une dummy égale à 1 si l'individu est l'aîné de sa fratrie, 0 sinon.          
+- `cohorte_aine` qui indique la cohorte de naissance de l'aîné pour chaque fratrie.        
+- `taille_fratrie` **qui indique le nombre d'enfants au sein de chaque fratrie.**       
+- `plus_de_2`, une dummy égale à 1 si la fratrie comprend 3 enfants ou plus, 0 sinon.      
+- `compo_genre` qui décrit la composition par sexe des deux premiers enfants de chaque fratrie. Cette variable prend quatre valeurs possibles: "FF" (deux filles), "MM" (deux garçons), "FM" (fille puis garçon), ou "MF" (garçon puis fille).     
+]
+
+.pull-right[
+```{r, include = T, message = F, warning = F}
+df = df %>% 
+  group_by(family_id) %>% 
+  arrange(birth_year) %>% 
+  mutate(
+    rang_naissance = row_number(), # 0,5 group_by, 0,5 arrange, 0,5 row_number, total= 1,5
+    cohorte_aine = first(cohorte), # 0,5
+    taille_fratrie = n(), #<< 
+    plus_de_2 = ifelse(taille_fratrie > 2, 1, 0), # 0,5
+    compo_genre = case_when( # 0,5
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 1 ~ "MM",
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 2 ~ "FF",
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 2 ~ "MF",
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 1 ~ "FM"
+    )
+  ) %>% 
+  ungroup() %>% 
+  mutate(elder = ifelse(rang_naissance == 1, 1, 0))
+  
+  
+```
+]
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+- `rang_naissance` qui indique le rang de naissance de chaque individu au sein de sa fratrie (1 pour l'aîné, 2 pour le deuxième enfant, etc.).                  
+- `elder`, une dummy égale à 1 si l'individu est l'aîné de sa fratrie, 0 sinon.          
+- `cohorte_aine` qui indique la cohorte de naissance de l'aîné pour chaque fratrie.        
+- `taille_fratrie` qui indique le nombre d'enfants au sein de chaque fratrie.       
+- `plus_de_2`, **une dummy égale à 1 si la fratrie comprend 3 enfants ou plus, 0 sinon.**     
+- `compo_genre` qui décrit la composition par sexe des deux premiers enfants de chaque fratrie. Cette variable prend quatre valeurs possibles: "FF" (deux filles), "MM" (deux garçons), "FM" (fille puis garçon), ou "MF" (garçon puis fille).     
+]
+
+.pull-right[
+```{r, include = T, message = F, warning = F}
+df = df %>% 
+  group_by(family_id) %>% 
+  arrange(birth_year) %>% 
+  mutate(
+    rang_naissance = row_number(), # 0,5 group_by, 0,5 arrange, 0,5 row_number, total= 1,5
+    cohorte_aine = first(cohorte), # 0,5
+    taille_fratrie = n(), # 0,5
+    plus_de_2 = ifelse(taille_fratrie > 2, 1, 0), #<< 
+    compo_genre = case_when( # 0,5
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 1 ~ "MM",
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 2 ~ "FF",
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 2 ~ "MF",
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 1 ~ "FM"
+    )
+  ) %>% 
+  ungroup() %>% 
+  mutate(elder = ifelse(rang_naissance == 1, 1, 0))
+  
+  
+```
+]
+---
+count: false
+# Question 1 (5pts):
+
+.pull-left[
+- `rang_naissance` qui indique le rang de naissance de chaque individu au sein de sa fratrie (1 pour l'aîné, 2 pour le deuxième enfant, etc.).                  
+- `elder`, une dummy égale à 1 si l'individu est l'aîné de sa fratrie, 0 sinon.          
+- `cohorte_aine` qui indique la cohorte de naissance de l'aîné pour chaque fratrie.        
+- `taille_fratrie` qui indique le nombre d'enfants au sein de chaque fratrie.       
+- `plus_de_2`, une dummy égale à 1 si la fratrie comprend 3 enfants ou plus, 0 sinon.      
+- `compo_genre` **qui décrit la composition par sexe des deux premiers enfants de chaque fratrie. Cette variable prend quatre valeurs possibles: "FF" (deux filles), "MM" (deux garçons), "FM" (fille puis garçon), ou "MF" (garçon puis fille).**     
+]
+
+.pull-right[
+```{r, include = T, message = F, warning = F}
+df = df %>% 
+  group_by(family_id) %>% 
+  arrange(birth_year) %>% 
+  mutate(
+    rang_naissance = row_number(), # 0,5 group_by, 0,5 arrange, 0,5 row_number, total= 1,5
+    cohorte_aine = first(cohorte), # 0,5
+    taille_fratrie = n(), # 0,5
+    plus_de_2 = ifelse(taille_fratrie > 2, 1, 0), # 0,5
+    compo_genre = case_when( # 0,5 #<<
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 1 ~ "MM", #<<
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 2 ~ "FF", #<<
+      sexe[rang_naissance == 1] == 1 & sexe[rang_naissance == 2] == 2 ~ "MF", #<<
+      sexe[rang_naissance == 1] == 2 & sexe[rang_naissance == 2] == 1 ~ "FM" #<<
+    ) #<<
+  ) %>%  #<<
+  ungroup() %>% 
+  mutate(elder = ifelse(rang_naissance == 1, 1, 0))
+  
+  
+```
+]
+
+
+
+
+---
+# Question 2 (0,5pt): 
+
+Recodez les variables `mother_cs` et `father_cs` en remplaçant les codes numériques (1 à 6) par les labels des catégories socioprofessionnelles correspondantes.
+
+```{r, include = T}
+df = df %>% 
+  mutate(
+    father_cs = recode(as.character(father_cs), # 0,25
+                       "1" = "Agriculteur",
+                       "2" = "Artisan", 
+                       "3" = "Cadre",
+                       "4" = "Profession intermédiaire",
+                       "5" = "Employé",
+                       "6" = "Ouvrier"),
+    mother_cs = recode(as.character(mother_cs), # 0,25
+                       "1" = "Agricultrice",
+                       "2" = "Artisan",
+                       "3" = "Cadre", 
+                       "4" = "Profession intermédiaire",
+                       "5" = "Employée",
+                       "6" = "Ouvrière")) 
+  
+```
+
+
+---
+# Question 3 (1,5pt): 
+
+- Représentez la distribution de la taille de la fratrie. Commentez.
+- Supprimer les fratries dont la taille fait parti des 1% plus élevées.
+
+
+---
+count: false
+# Question 3 (1,5pt): 
+
+- **Représentez la distribution de la taille de la fratrie. Commentez.**
+- Supprimer les fratries dont la taille fait parti des 1% plus élevées.
+
+.pull-left[
+```{r, echo = T, eval = F}
+
+df_fratries = df %>% #<<
+  select(family_id, taille_fratrie) %>% #<<
+  distinct() #<<
+
+ggplot(df_fratries, aes(x = taille_fratrie)) + #<<
+  geom_histogram() + #<<
+  labs(x = "Taille de Fratrie", y = "Fréquence") + #<<
+  theme_bw() #<<
+
+top1 = quantile(df_fratries$taille_fratrie, 0.99)
+
+df = df %>% 
+  filter(taille_fratrie < top1)
+```
+]
+
+.pull-right[
+```{r, echo = F, eval = T, fig.dim = c(6, 5)}
+
+df_fratries = df %>% # 0,5
+  select(family_id, taille_fratrie) %>% 
+  distinct()
+
+ggplot(df_fratries, aes(x = taille_fratrie)) + # 0,5
+  geom_histogram() +
+  labs(x = "Taille de Fratrie", y = "Fréquence") +
+  theme_bw()
+
+top1 = quantile(df_fratries$taille_fratrie, 0.99) #<<
+
+df = df %>% #<<
+  filter(taille_fratrie < top1) # 0,5? 
+```
+]
+---
+count: false
+# Question 3 (1,5pt): 
+
+- Représentez la distribution de la taille de la fratrie. Commentez.
+- **Supprimer les fratries dont la taille fait parti des 1% plus élevées.**
+
+.pull-left[
+```{r, echo = T, eval = F}
+
+df_fratries = df %>% 
+  select(family_id, taille_fratrie) %>% 
+  distinct()
+
+ggplot(df_fratries, aes(x = taille_fratrie)) +
+  geom_histogram() +
+  labs(x = "Taille de Fratrie", y = "Fréquence") +
+  theme_bw()
+
+top1 = quantile(df_fratries$taille_fratrie, 0.99) #<<
+
+df = df %>% #<<
+  filter(taille_fratrie < top1) #<<
+```
+]
+
+
+.pull-right[
+```{r, echo = F, eval = T, fig.dim = c(6, 5)}
+
+ggplot(df %>% 
+         select(family_id, taille_fratrie) %>% 
+         distinct(), 
+       aes(x = taille_fratrie)) +
+  geom_histogram() +
+  labs(x = "Taille de Fratrie", y = "Fréquence") +
+  theme_bw()
+
+top1 = quantile(df$taille_fratrie, 0.99) #<<
+
+df = df %>% #<<
+  filter(taille_fratrie < top1) #<<
+```
+]
+
+---
+count: false
+layout: false
+class: center, middle, inverse
+
+# <span style="color:#FAFAFA;">Partie 2: Statistiques Descriptives (8pts)</span>
+
+<span style="color:#FAFAFA;">Cette partie a pour objectif d'explorer les données et comprendre les déterminants du niveau de diplôme.</span>   
+
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">Partie A: Taille de la fratrie</span>
+
+
+---
+# Question 4 (0,5pt): 
+
+Représentez graphiquement l'évolution de la taille de la fratrie selon la cohorte de naissance de l'aîné. Commentez.
+
+.pull-left[
+```{r, echo = T, eval = F}
+
+df %>% 
+  filter(rang_naissance == 1) %>% 
+  group_by(cohorte_aine) %>% 
+  summarise(mean_family_size = mean(taille_fratrie, na.rm = T)) %>% 
+  ggplot(aes(x = cohorte_aine, y = mean_family_size)) +
+  geom_point() +
+  geom_line(group = 1) +
+  labs(x = "Cohorte de naissance de l'aîné", y = "Taille moyenne fratrie") +
+  theme_bw()
+
+```
+]
+
+.pull-right[
+```{r, echo = F, eval = T, fig.dim = c(6, 5)}
+df %>% 
+  filter(rang_naissance == 1) %>% 
+  group_by(cohorte_aine) %>% 
+  summarise(mean_family_size = mean(taille_fratrie, na.rm = T)) %>% 
+  ggplot(aes(x = cohorte_aine, y = mean_family_size)) +
+  geom_point() +
+  geom_line(group = 1) +
+  labs(x = "Cohorte de naissance de l'aîné", y = "Taille moyenne fratrie") +
+  theme_bw()
+```
+]
+
+`r emo::ji("rotating_light")` Attention à ne garder qu'une observation par fratrie!
+---
+# Question 5 (1pt):
+
+Représentez graphiquement l'évolution de la part de fratries de 3 enfants ou plus selon la cohorte de naissance de l'aîné en distinguant les quatre configurations possibles du genre des deux aînés. Commentez.
+
+.pull-left[
+```{r, echo = T, eval = F}
+
+df %>% 
+  filter(rang_naissance == 1) %>% # Attention à bien prendre cela en compte
+  group_by(cohorte_aine, compo_genre) %>% 
+  summarise(mean_family_size = mean(plus_de_2, na.rm = TRUE)) %>% 
+  ggplot(aes(x = cohorte_aine, y = mean_family_size, 
+             color = compo_genre, group = compo_genre)) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "Genre des deux aînés",
+    labels = c(
+      "FF" = "Deux filles",
+      "FM" = "Fille puis garçon",
+      "MF" = "Garçon puis fille",
+      "MM" = "Deux garçons")) +
+  labs(x = "Cohorte de naissance de l'aîné",
+       y = "Part de fratries de 3 enfants ou plus") +
+  theme_bw()
+
+```
+]
+
+.pull-right[
+```{r, echo = F, eval = T, fig.dim = c(6, 5)}
+
+df %>% 
+  filter(rang_naissance == 1) %>% # Attention à bien prendre cela en compte
+  group_by(cohorte_aine, compo_genre) %>% 
+  summarise(mean_family_size = mean(plus_de_2, na.rm = TRUE)) %>% 
+  ggplot(aes(x = cohorte_aine, y = mean_family_size, 
+    color = compo_genre, group = compo_genre)) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "Genre des deux aînés",
+    labels = c(
+      "FF" = "Deux filles",
+      "FM" = "Fille puis garçon",
+      "MF" = "Garçon puis fille",
+      "MM" = "Deux garçons")) +
+  labs(x = "Cohorte de naissance de l'aîné",
+       y = "Part de fratries de 3 enfants ou plus") +
+  theme_bw()
+
+```
+]
+
+
+---
+# Question 6 (1,5pt):
+
+Représentez l'évolution de la taille moyenne des fratries selon la PCS du père. Selon vous, quelles raisons peuvent expliquer la différence de fécondité entre les différents groupes sociaux et son évolution?
+
+.pull-left[
+```{r, echo = T, eval = F}
+
+df %>% 
+  filter(rang_naissance == 1) %>% 
+  group_by(cohorte_aine, father_cs) %>% 
+  summarise(mean_family_size = mean(taille_fratrie, na.rm = TRUE)) %>% 
+  ggplot(aes(x = cohorte_aine, y = mean_family_size, 
+             color = father_cs, group = father_cs)) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "PCS du père" ) +
+  labs(x = "Cohorte de naissance de l'aîné",
+       y = "Taille moyenne de la fratrie"
+  ) +
+  theme_bw()
+
+
+```
+]
+
+.pull-right[
+```{r, echo = F, eval = T, fig.dim = c(6, 5)}
+
+df %>% 
+  filter(rang_naissance == 1) %>% 
+  group_by(cohorte_aine, father_cs) %>% 
+  summarise(mean_family_size = mean(taille_fratrie, na.rm = TRUE)) %>% 
+  ggplot(aes(
+    x = cohorte_aine, 
+    y = mean_family_size, 
+    color = father_cs, 
+    group = father_cs
+  )) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "PCS du père" ) +
+  labs(
+    x = "Cohorte de naissance de l'aîné",
+    y = "Taille moyenne de la fratrie"
+  ) +
+  theme_bw()
+
+
+```
+]
+
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">Partie B: Origine sociale</span>
+
+
+---
+# Question 7 (2pts): 
+
+Représentez l'évolution du niveau de diplôme moyen selon la CSP de la mère, en ne conservant que les individus ayant un niveau de diplôme connu. Commentez.
+
+.pull-left[
+```{r, echo = T, eval = F}
+
+df %>% 
+  filter(!is.na(dipl)) %>% 
+  group_by(cohorte, mother_cs) %>% 
+  summarise(mean_dipl = mean(dipl, na.rm = TRUE)) %>% 
+  ggplot(aes(x = cohorte, y = mean_dipl, 
+             color = mother_cs, group = mother_cs)) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "PCS de la mère" ) +
+  labs(x = "Cohorte de naissance",
+       y = "Niveau de diplôme moyen") +
+  theme_bw()
+
+
+```
+]
+
+.pull-right[
+```{r, echo = F, eval = T, fig.dim = c(6, 5)}
+
+df %>% 
+  filter(!is.na(dipl)) %>% 
+  group_by(cohorte, mother_cs) %>% 
+  summarise(mean_dipl = mean(dipl, na.rm = TRUE)) %>% 
+  ggplot(aes(
+    x = cohorte, 
+    y = mean_dipl, 
+    color = mother_cs, 
+    group = mother_cs
+  )) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "PCS de la mère" ) +
+  labs(
+    x = "Cohorte de naissance",
+    y = "Niveau de diplôme moyen"
+  ) +
+  theme_bw()
+
+
+```
+]
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">Partie C: Caractéristiques individuelles</span>
+
+
+---
+# Question 8 (2pts): 
+
+Représentez graphiquement le niveau de diplôme moyen selon le rang de naissance, en ne conservant que les rangs jusqu'à 5 maximum et les individus ayant un niveau de diplôme connu. Commentez. Selon vous, quels mécanismes peuvent expliquer cela?
+
+.pull-left[
+```{r, echo = T, eval = F}
+
+df %>%
+  filter(rang_naissance <= 5,
+         !is.na(dipl)) %>%
+  group_by(rang_naissance, dipl) %>%
+  summarise(n = n()) %>%
+  group_by(rang_naissance) %>%
+  mutate(proportion = n / sum(n)) %>%
+  ggplot(aes(x = factor(rang_naissance), y = proportion, fill = factor(dipl))) +
+  geom_col(position = "stack") +
+  scale_fill_brewer(palette = "Paired", name = "Diplôme", 
+                    labels = c("1" = "Aucun diplôme", 
+                                  "2" = "Diplôme inférieur\nau Baccalauréat", 
+                                  "3" = "Baccalauréat", 
+                                  "4" = "Bac+2", 
+                                  "5" = "> Bac+2")) +
+  labs(x = "Rang de naissance", 
+       y = "Proportion",
+       fill = "Niveau de diplôme",
+       title = "Distribution des diplômes selon le rang de naissance") +
+  scale_y_continuous(labels = scales::percent) +
+  theme_bw()
+
+```
+]
+
+.pull-right[
+```{r, echo = F, eval = T, fig.dim = c(6, 5)}
+df %>%
+  filter(rang_naissance <= 5,
+         !is.na(dipl)) %>%
+  group_by(rang_naissance, dipl) %>%
+  summarise(n = n()) %>%
+  group_by(rang_naissance) %>%
+  mutate(proportion = n / sum(n)) %>%
+  ggplot(aes(x = factor(rang_naissance), y = proportion, fill = factor(dipl))) +
+  geom_col(position = "stack") +
+  scale_fill_brewer(palette = "Paired", name = "Diplôme", 
+                    labels = c("1" = "Aucun diplôme", 
+                                  "2" = "Diplôme inférieur\nau Baccalauréat", 
+                                  "3" = "Baccalauréat", 
+                                  "4" = "Bac+2", 
+                                  "5" = "> Bac+2")) +
+  labs(x = "Rang de naissance", 
+       y = "Proportion",
+       fill = "Niveau de diplôme",
+       title = "Distribution des diplômes selon le rang de naissance") +
+  scale_y_continuous(labels = scales::percent) +
+  theme_bw()
+
+```
+]
+
+---
+# Question 9 (1pt):
+
+Représentez graphiquement l'évolution du niveau de diplôme moyen par cohorte de naissance selon le sexe. Commentez.
+
+.pull-left[
+```{r, echo = T, eval = F}
+df %>% 
+  filter(!is.na(dipl)) %>% 
+  group_by(cohorte, sexe) %>% 
+  summarise(mean_dipl = mean(dipl, na.rm = TRUE)) %>% 
+  ggplot(aes(x = cohorte, y = mean_dipl, 
+             color = sexe, group = sexe)) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "Genre",
+    labels = c("1"="Homme", "2"= "Femme")) +
+  labs(x = "Cohorte de naissance",
+       y = "Niveau de diplôme moyen") +
+  theme_bw()
+```  
+]
+
+.pull-right[
+```{r, echo = F, eval = T, fig.dim = c(6, 5)}
+df %>% 
+  filter(!is.na(dipl)) %>% 
+  group_by(cohorte, sexe) %>% 
+  summarise(mean_dipl = mean(dipl, na.rm = TRUE)) %>% 
+  ggplot(aes(x = cohorte, y = mean_dipl, 
+             color = sexe, group = sexe)) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(
+    palette = "Paired",
+    name = "Genre",
+    labels = c("1"="Homme", "2"= "Femme")) +
+  labs(x = "Cohorte de naissance",
+       y = "Niveau de diplôme moyen") +
+  theme_bw()
+
+```
+]
+
+
+---
+count: false
+layout: false
+class: center, middle, inverse
+
+# <span style="color:#FAFAFA;">Partie 3: Analyse Économétrique (11pts)</span>
+
+<span style="color:#FAFAFA;">Cette analyse économétrique explore les déterminants du niveau de diplôme.</span>   
+
+---
+# Question 10 (1pt):
+
+Selon vous, la taille de la fratrie a t-elle un effet positif, négatif, ou nul sur le niveau de diplôme? Pourquoi?
+
+---
+# Question 11 (1,5pt):
+- Régressez le niveau de diplôme sur la taille de fratrie. Vous nommerez ce modèle `reg1`.
+- Régressez le niveau de diplôme sur la dummy `plus_de_2`. Vous nommerez ce modèle `reg2`.
+- Dans les deux cas, que représentent $\hat{\alpha}$ et $\hat{\beta}$? Peut-on dire que $\hat{\beta}$ représente l'effet causal de la taille de la fratrie sur le niveau de diplôme? Pourquoi?
+
+```{r, include = T}
+
+reg1 = lm(dipl ~ taille_fratrie, data = df)
+summary(reg1)
+
+reg2 = lm(dipl ~ plus_de_2, data = df)
+summary(reg2)
+```  
+
+---
+count: false
+# Question 11 (1,5pt):
+- **Régressez le niveau de diplôme sur la taille de fratrie. Vous nommerez ce modèle `reg1`.**
+- Régressez le niveau de diplôme sur la dummy `plus_de_2`. Vous nommerez ce modèle `reg2`.
+- Dans les deux cas, que représentent $\hat{\alpha}$ et $\hat{\beta}$? Peut-on dire que $\hat{\beta}$ représente l'effet causal de la taille de la fratrie sur le niveau de diplôme? Pourquoi?
+
+```{r, include = T, message = F, warning = F}
+
+reg1 = lm(dipl ~ taille_fratrie, data = df) #<<
+summary(reg1)
+
+```  
+
+---
+count: false
+# Question 11 (1,5pt):
+- Régressez le niveau de diplôme sur la taille de fratrie. Vous nommerez ce modèle `reg1`.
+- **Régressez le niveau de diplôme sur la dummy `plus_de_2`. Vous nommerez ce modèle `reg2`.**
+- Dans les deux cas, que représentent $\hat{\alpha}$ et $\hat{\beta}$? Peut-on dire que $\hat{\beta}$ représente l'effet causal de la taille de la fratrie sur le niveau de diplôme? Pourquoi?
+
+```{r, include = T, message = F, warning = F}
+
+reg2 = lm(dipl ~ plus_de_2, data = df) #<<
+summary(reg2)
+```  
+
+
+---
+count: false
+# Question 11 (1,5pt):
+- Régressez le niveau de diplôme sur la taille de fratrie. Vous nommerez ce modèle `reg1`.
+- Régressez le niveau de diplôme sur la dummy `plus_de_2`. Vous nommerez ce modèle `reg2`.
+- **Dans les deux cas, que représentent $\hat{\alpha}$ et $\hat{\beta}$? Peut-on dire que $\hat{\beta}$ représente l'effet causal de la taille de la fratrie sur le niveau de diplôme? Pourquoi?**
+
+.pull-left[
+```{r, include = T, echo = F}
+
+summary(reg1)$coefficients
+
+```
+]
+
+.pull-right[
+```{r, include = T, echo = F}
+
+summary(reg2)$coefficients
+```  
+]
+
+
+---
+# Question 12 (1,5pt): 
+
+Ajoutez le fait d'être une femme, l'aîné ainsi que la cohorte de naissance dans le modèle précédemment estimé (`reg1`), que vous nommerez `reg3`. Commentez.
+
+```{r, include = T, echo = T, message = F, warning = F}
+reg3 = lm(dipl ~ taille_fratrie + femme + elder + cohorte, data = df)
+summary(reg3)$coefficients
+```  
+
+---
+# Question 13 (1pt):
+
+Ajoutez la catégorie socio-professionnelle du père et de la mère dans le modèle précédent que vous nommerez `reg4`. Que constatez-vous?
+
+```{r, include = T, echo = T, message = F, warning = F}
+
+reg4 = lm(dipl ~ taille_fratrie + femme + elder + cohorte + father_cs + mother_cs, data = df)
+summary(reg4)$coefficients
+```  
+
+---
+# Question 14 (1pt):
+
+Régressez le niveau de diplôme sur l'interaction entre `femme` et `elder` ainsi que la taille de la fratrie et la CSP des parents. Nommez ce modèle `reg5`. Commentez.
+
+```{r, include = T, echo = T, message = F, warning = F}
+
+reg5 = lm(dipl ~ taille_fratrie + femme*elder + cohorte + father_cs + mother_cs, data = df)
+summary(reg5)$coefficients
+
+```  
+
+
+---
+# Question 15 (1pt): 
+
+Reprenez le modèle de la question 13 en remplaçant `elder` par le rang de naissance et nommez-le `reg6`. Commentez.
+
+```{r, echo = T, message = F, warning = F}
+
+reg6 = lm(dipl ~ taille_fratrie + femme + as.factor(rang_naissance) + cohorte + father_cs + mother_cs, data = df)
+summary(reg6)$coefficients
+
+```
+
+---
+# Question 16 (2pts): 
+
+- **Régressez la taille de la fratrie sur la variable `compo_genre`, le fait d'être une femme, l'aîné, la cohorte de naissance et la PCS des parents. Nommez ce modèle `reg7`. Commentez uniquement les effets observés de la variable `compo_genre`.**
+- En utilisant la fonction `ivreg` du package du même nom, estimez l'effet de la taille de la fratrie en utilisant comme instrument `compo_genre` et nommez ce modèle `reg8`. Commentez.
+
+```{r, include = T, echo = T, message = F, warning = F}
+
+reg7 = lm(taille_fratrie ~ compo_genre + femme + elder + cohorte + mother_cs + father_cs, data = df)
+summary(reg7)$coefficients
+```
+
+---
+# Question 16 (2pts): 
+
+- Régressez la taille de la fratrie sur la variable `compo_genre`, le fait d'être une femme, l'aîné, la cohorte de naissance et la PCS des parents. Nommez ce modèle `reg7`. Commentez uniquement les effets observés de la variable `compo_genre`.
+- **En utilisant la fonction `ivreg` du package du même nom, estimez l'effet de la taille de la fratrie en utilisant comme instrument `compo_genre` et nommez ce modèle `reg8`. Commentez.**
+
+```{r, include = T, echo = T, message = F, warning = F}
+
+reg8 = ivreg(dipl ~ taille_fratrie + femme + elder + cohorte + father_cs + mother_cs | compo_genre + femme + elder + cohorte + father_cs + mother_cs, data = df)
+summary(reg8)$coefficients
+
+```  
+
+
+---
+# Question 17 (2pts): 
+
+Selon-vous, le modèle précédent permet-il d'estimer l'effet causal de la taille de la fratrie sur le niveau de diplôme?
+
+
+
+

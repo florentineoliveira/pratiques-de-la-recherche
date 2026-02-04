@@ -3,8 +3,7 @@
   <head>
     <title>LaTeX et R Markdown</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2025-01-07" />
+    <meta name="author" content="Florentine Oliveira-Roux" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
@@ -23,10 +22,10 @@ class: center, middle, inverse, title-slide
 ## Pratiques de la Recherche en Économie
 ]
 .author[
-### Florentine Oliveira
+### Florentine Oliveira-Roux
 ]
 .date[
-### 2025-01-07
+### 18 Novembre 2025
 ]
 
 ---
@@ -66,7 +65,7 @@ Les articles académiques en économie empirique suivent un format très **stand
 
 - **Mise en page**: 
   - Word est moins adapté aux documents longs et complexes
-  - `\(\LaTeX\)` et R Markdown permettent un contrôle plus précis et **automatisé** de la mise en page et la typographie 
+  - `\(\LaTeX\)` et R Markdown permettent un contrôle plus précis et **automatisé** de la mise en page et de la typographie 
 
 - **Gestion des références et bibliographies**: gestion de la bibliographie automatisée et directement intégrée sur `\(\LaTeX\)` et R Markdown  
 
@@ -135,22 +134,28 @@ Les articles académiques en économie empirique suivent un format très **stand
 layout: false
 class: center, middle, inverse
 
-# 1. Overleaf
+# &lt;span style="color:#FAFAFA;"&gt;1. Overleaf&lt;/span&gt;
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;1.1. Présentation&lt;/span&gt;
+
 
 ---
 background-image: url(imgs/Overleaf_Logo.png)
-background-position: 95% 10%
-background-size: 7%
+background-position: 90% 0%
+background-size: 10%
 
-# 1. Overleaf
-
-## 1.1. Présentation
+# Définition
 
 &amp;nbsp;
 
 - Selon le site internet d'Overleaf,   
 
-  - "an online `\(\LaTeX\)` editor that's easy to use. No installation, real-time collaboration, version control, hundreds of LaTeX templates, and more."
+  - *"an online `\(\LaTeX\)` editor that's easy to use. No installation, real-time collaboration, version control, hundreds of LaTeX templates, and more."*
   
   
 - **Éditeur Latex** en ligne, collaboratif en temps réel  
@@ -161,16 +166,19 @@ background-size: 7%
 ---
 # Interface
 
-&lt;img src="imgs/preview.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="imgs/preview.png" width="95%" style="display: block; margin: auto;" /&gt;
 
 Console, compilation fichier PDF, téléchargement, collaboration, fichiers, structure du document
 
 ---
-# 1. Overleaf
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
 
-## 1.2. Structure de base d'un document
+# &lt;span style="color:#dd0747;"&gt;1.2. Structure de base d'un document&lt;/span&gt;
 
-**Préambule**
+---
+# Préambule
 
 Le préambule est la partie du document LaTeX avant la commande `\begin{document}`. Il inclut:
 
@@ -191,49 +199,56 @@ Le préambule est la partie du document LaTeX avant la commande `\begin{document
 
 
 ---
-# 1. Overleaf
-
-## 1.2. Structure de base d'un document
+# Aperçu texte brut et document compilé
 
 
 &lt;img src="imgs/overleaf1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 ---
-# 1. Overleaf
-## 1.3. Formatage du texte : saut de ligne
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
 
+# &lt;span style="color:#dd0747;"&gt;1.3. Formatage du texte&lt;/span&gt;
+
+---
+# Saut de ligne
 &lt;img src="imgs/overleaf2.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 ---
-# 1. Overleaf
-## 1.3. Formatage du texte : indentation
+# Indentation
 
 &lt;img src="imgs/overleaf3.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 ---
-# 1. Overleaf
-## 1.3. Formatage du texte : section et sous-section
+# Section et sous-section
 
 &lt;img src="imgs/overleaf4.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 ---
-# 1. Overleaf
-## 1.3. Formatage du texte : texte en italique, gras et couleur
+# Texte en italique, gras et couleur
 
 &lt;img src="imgs/overleaf5.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 ---
-# 1. Overleaf
-## 1.3. Formatage du texte : listes à puces et numerotées
+# Listes à puces et numerotées
 
 &lt;img src="imgs/overleaf6.png" width="90%" style="display: block; margin: auto;" /&gt;
 
+
 ---
-# 1. Overleaf
-## 1.4. Math mode
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;1.4. Mode Maths&lt;/span&gt;
+
+
+---
+# Fonctionnement et principaux opérateurs
 
 Pour écrire une équation, il suffit de mettre l'expression mathématique entre `$...$`.
 
@@ -265,15 +280,19 @@ Pour des équations centrées et numérotées, utilisez l'environnement `equatio
 **NB2: Pour ne pas numéroter les équations de l'environnement `equation`, utiliser `\begin{equation*}` au lieu de `\begin{equation}`**
 
 ---
-# 1. Overleaf
-## 1.4. Math mode
+# Aperçu mode maths
 
 &lt;img src="imgs/mathmode.png" width="90%" style="display: block; margin: auto;" /&gt;
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;1.5. Images&lt;/span&gt;
 
 ---
-# 1. Overleaf
-## 1.5. Figures et Subfigures
+# Figures et Subfigures
 
 Pour insérer une figure, on utilise l'environnement `figure`.
 
@@ -288,23 +307,26 @@ Plusieurs éléments:
 
 
 ---
-# 1. Overleaf
-## 1.5. **Figures** et Subfigures
+# **Figures** et Subfigures
 
 &lt;img src="imgs/figure.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 ---
-# 1. Overleaf
-## 1.5. Figures et **Subfigures**
+# Figures et **Subfigures**
 
 &lt;img src="imgs/sufigure.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;1.6. Bibliographie&lt;/span&gt;
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Packages
 
 Il existe différents packages qui permettent de mettre en page automatiquement une bibliographie et gérer les citations dans le corps du texte: `biblatex`, `natbib`.  
 
@@ -319,8 +341,7 @@ Quatre éléments indispensables:
 🚨 **Seules les références citées dans le texte apparaîtront dans la bibliographie**
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Comment ajouter des références bibliographiques ?
 
 1) Chercher le code de la référence souhaitée en ligne (par ex sur Google Scholar) `\(\rightarrow\)` Cliquer sur **Citer** 
 
@@ -328,32 +349,28 @@ Quatre éléments indispensables:
 
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Comment ajouter des références bibliographiques ?
 
 1) Chercher le code de la référence souhaitée en ligne (par ex sur Google Scholar) `\(\rightarrow\)` Cliquer sur **BibTex**
 
 &lt;img src="imgs/cite2.png" width="80%" style="display: block; margin: auto;" /&gt;
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Comment ajouter des références bibliographiques ?
 
 2) Copier le code de la citation
 
 &lt;img src="imgs/cite3.png" width="80%" style="display: block; margin: auto;" /&gt;
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Comment ajouter des références bibliographiques ?
 
 3) Créer un fichier `.bib`
 
 &lt;img src="imgs/bibfile.png" width="75%" style="display: block; margin: auto;" /&gt;
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Comment ajouter des références bibliographiques ?
 
 4) Coller le code de la citation
 
@@ -361,8 +378,7 @@ Quatre éléments indispensables:
 
 
 ---
-# 1. Overleaf
-## 1.5 Bibliographie
+# Comment ajouter des références bibliographiques ?
 
 5) Citer des références et afficher la bibliographie
 
@@ -370,16 +386,21 @@ Quatre éléments indispensables:
 
 
 ---
-# 1. Overleaf
-## 1.6. **Commentaires**, compilation et téléchargement du fichier
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;1.7. Divers&lt;/span&gt;
+
+---
+# **Commentaires**, compilation et téléchargement
 
 Pour ajouter un commentaire au texte, utiliser `%` suivi du commentaire en fin de ligne de code. 
 
 &lt;img src="imgs/comment.png" width="75%" style="display: block; margin: auto;" /&gt;
 
 ---
-# 1. Overleaf
-## 1.6. Commentaires, **compilation** et téléchargement du fichier
+# Commentaires, **compilation** et téléchargement
 
 Pour visualiser un apperçu du fichier pdf suite à chaque modification apportée au document, cliquer sur **Recompile**
 
@@ -387,16 +408,23 @@ Pour visualiser un apperçu du fichier pdf suite à chaque modification apporté
 
 
 ---
-# 1. Overleaf
-## 1.6. Commentaires, compilation et **téléchargement du fichier**
+# Commentaires, compilation et **téléchargement**
 
 Pour télécharger le document, cliquer sur le bouton **Download PDF**
 
 &lt;img src="imgs/save.png" width="75%" style="display: block; margin: auto;" /&gt;
 
+
 ---
-# 1. Overleaf
-## 1.7. Avantages et inconvénients
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;1.8. Avantages et inconvénients&lt;/span&gt;
+
+
+---
+# Avantages et inconvénients
 
 &amp;nbsp;
 
@@ -414,20 +442,30 @@ Pour télécharger le document, cliquer sur le bouton **Download PDF**
 
 
 
+
 ---
 layout: false
 class: center, middle, inverse
 
-# 2. R Markdown
+# &lt;span style="color:#FAFAFA;"&gt;2. R Markdown&lt;/span&gt;
+
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;2.1. Présentation&lt;/span&gt;
 
 
 ---
 background-image: url(imgs/rmdlogo.png)
-background-position: 95% 10%
-background-size: 7%
+background-position: 95% 0%
+background-size: 10%
 
-# 2. R Markdown
-## 2.1. Présentation
+# Présentation
+
+&amp;nbsp;
 
 &amp;nbsp;
 
@@ -437,9 +475,18 @@ background-size: 7%
 .footnote[
 [1]: https://book.utilitr.org/03_Fiches_thematiques/Fiche_rmarkdown.html
 ]
+
+
 ---
-# 2. R Markdown
-## 2.2. Structure de base d'un document
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;2.2. Structure de base d'un document&lt;/span&gt;
+
+
+---
+# Structure
 
 Un document `R Markdown` comprend deux parties:
 - l'en-tête, ou **YAML header** qui définit le titre, le(s) auteur(s), et le format du document
@@ -459,9 +506,19 @@ output: pdf_document
   - de blocks de code, appelés `chunks`
 
 ---
-# 2. R Markdown
- 
-## 2.3. Syntaxe `markdown` : sections et sous-sections
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;2.3. Syntaxe `markdown`&lt;/span&gt;
+
+
+---
+# Sections et sous-sections
+
+&amp;nbsp;
+
+&amp;nbsp;
 
 Les sections et sous-sections peuvent-être facilement crées à l'aide de titres de différents niveaux: 
 
@@ -472,9 +529,11 @@ Les sections et sous-sections peuvent-être facilement crées à l'aide de titre
 
 
 ---
-# 2. R Markdown
- 
-## 2.3. Syntaxe `markdown` : texte en italique et gras
+# Texte en italique et gras
+
+&amp;nbsp;
+
+&amp;nbsp;
 
 Pour écrire un mot en *italique*, il faut encadrer le mot de `*`: `*italique*`  
 
@@ -483,9 +542,11 @@ Pour écrire un mot en **gras**, il faut encadrer le mot de `**`: `**gras**`
 Pour écrire un mot en ***gras italique***, il faut encadrer le mot de `***`: `***gras italique***`
 
 ---
-# 2. R Markdown
- 
-## 2.3. Syntaxe `markdown` : listes à puces
+# Listes à puces
+
+&amp;nbsp;
+
+&amp;nbsp;
 
 Pour créer une liste à puces, il suffit de précéder chaque élément d'un `-`:
 
@@ -499,15 +560,19 @@ Pour créer une liste à puces, il suffit de précéder chaque élément d'un `-
  
 &lt;img src="imgs/rmd.png" width="90%" style="display: block; margin: auto;" /&gt;
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;2.4. Code `Chunks`&lt;/span&gt;
 
 
 ---
-# 2. R Markdown
- 
-## 2.4. Code `Chunks`
+# Usage
 
 
-Le code contenu dans un document `R Markdown` est contenu dans des *chunks* délimités par des balises: ` ``` `.
+Le code contenu dans un document `R Markdown` est contenu dans des *chunks* délimités par des balises: ` ``` `
 
 Chaque chunk a la structure suivante:
 
@@ -522,11 +587,7 @@ Exemple:
 &lt;img src="imgs/chunk.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
-# 2. R Markdown
- 
-## 2.4. Code `Chunks`
-
-### Chunk options
+# Chunk options
 
 &amp;nbsp;
 
@@ -541,11 +602,7 @@ Exemple:
 
 
 ---
-# 2. R Markdown
- 
-## 2.4. Code `Chunks`
-
-### Chunk options pour les figures
+# Chunk options pour les figures
 
 &amp;nbsp;
 
@@ -557,11 +614,15 @@ Exemple:
 | `out.width`                   |           | Redimensionne la taille de l'output (eg "50%")  |
 
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;2.5. Figures&lt;/span&gt;
 
 ---
-# 2. R Markdown
-
-### 2.5. Figures
+# Différents types de figures
 
 Au sein d'un document `R Markdown`, il est possible d'ajouter:
 
@@ -574,8 +635,17 @@ Au sein d'un document `R Markdown`, il est possible d'ajouter:
 
 &lt;img src="imgs/include_graphics.png" width="70%" style="display: block; margin: auto;" /&gt;
 
+
 ---
-# 2.6. Bibliographie
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;2.6. Bibliographie&lt;/span&gt;
+
+
+---
+# Méthode
 
 Comme sur Overleaf, il est possible d'ajouter une bibligraphie à votre document `R Markdown`     
 
@@ -599,7 +669,15 @@ Dans le corps du texte, pour renvoyer à une référence, il faut utiliser la co
 Par exemple, `@kleven2019children`.
 
 ---
-# 2.7. Avantages et inconvénients
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# &lt;span style="color:#dd0747;"&gt;2.7. Avantages et Inconvénients&lt;/span&gt;
+
+
+---
+# Avantages et inconvénients
 
 &amp;nbsp;
 
@@ -632,10 +710,10 @@ Par exemple, `@kleven2019children`.
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false,
-"ratio": "16:9"
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false,
+  "ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

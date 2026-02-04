@@ -1,7 +1,7 @@
 ---
 title: "Variables Instrumentales (IV)"
 subtitle: "Pratiques de la Recherche en Économie"
-author: "Florentine Oliveira"
+author: "Florentine Oliveira-Roux"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -102,6 +102,13 @@ theme_empty = theme_bw() +
   legend.position = "none"  # Masquer la légende
 )
 
+
+
+#npx decktape \
+# --url-load-timeout=60000 --page-load-timeout=60000 --buffer-timeout=60000 \
+# --chrome-arg="--disable-web-security" --chrome-arg="--allow-file-access-from-files" \
+# "file:///Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Lecture 5/lecture_5_fr.html" \
+# "/Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Lecture 5/lecture_5_fr.pdf"
 
 ```
 

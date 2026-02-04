@@ -1,8 +1,8 @@
 ---
 title: "Régressions Linéaires et Causalité"
 subtitle: "Pratiques de la Recherche en Économie"
-author: "Florentine Oliveira"
-date: "`r Sys.Date()`"
+author: "Florentine Oliveira-Roux"
+date: "2 Décembre 2025"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -109,6 +109,14 @@ theme_empty = theme_bw() +
   legend.position = "none"  # Masquer la légende
 )
 
+
+
+#npx decktape \
+# --url-load-timeout=60000 --page-load-timeout=60000 --buffer-timeout=60000 \
+# --chrome-arg="--disable-web-security" --chrome-arg="--allow-file-access-from-files" \
+# "file:///Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Lecture 3/lecture_3_fr.html" \
+# "/Users/florentineoliveira/Desktop/Teaching/CPES/pratiques-de-la-recherche/Lecture 3/lecture_3_fr.pdf"
+
 ```
 
 
@@ -175,18 +183,25 @@ layout: true
   
 
 
+---
+count: false
+layout: false
+class: center, middle, inverse
+
+# <span style="color:#FAFAFA;">1. Rappels: Régression linéaire simple</span>
+
+
 
 ---
 count:false
-class: middle, center
-background-color: #dd0747
+class: middle, center,  clearinverse
+background-color:  #f8cdda
 
-# <span style="color:#FAFAFA;">  1. Rappels: Régression linéaire simple </span>
+# <span style="color:#dd0747;">1.1. Interprétation géométrique</span>
+
 
 ---
-# 1. Rappels: Régression linéaire simple 
-
-## 1.1. Interprétation géométrique   
+# Relation linéaire  
 
 La régression linéaire simple est une méthode statistique permettant de trouver une relation **linéaire** entre
 
@@ -204,15 +219,13 @@ $$y_i = \beta_0 + \beta_1x_i + \varepsilon_i$$
 
 
 ---
-# 1. Rappels: Régression linéaire simple   
-
-## 1.1. Interprétation géométrique   
+# Visualisation   
 
 On considère l'échantillon suivant
 
 --
 
-```{R, nuage, echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
+```{R, nuage, echo = F, dev = "svg", fig.width = 12, fig.height = 6}
 ggplot(data = df_simulation, aes(x = x, y = y)) +
   geom_point(size = 3, color = "black", alpha = 0.9) +
   scale_x_continuous(limits = c(-1,8)) +
@@ -223,14 +236,11 @@ ggplot(data = df_simulation, aes(x = x, y = y)) +
 
 ---
 count: false
-# 1. Rappel: Régression linéaire simple   
-
-## 1.1. Interprétation géométrique   
+# Visualisation    
 
 Pour toute droite $\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x$,
 
-```{R, nuage et droite, echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
-
+```{R, nuage et droite, echo = F, dev = "svg",  fig.width = 12, fig.height = 6}
 # Define a function
 y_hat <- function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
@@ -256,13 +266,11 @@ ggplot(data = df_simulation, aes(x = x, y = y)) +
 
 ---
 count: false
-# 1. Rappel: Régression linéaire simple   
-
-## 1.1. Interprétation géométrique   
+# Visualisation    
 
 Pour toute droite $\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x$, on peut calculer les erreurs: $\varepsilon_i = y_i - \tilde{y}_i$
 
-```{R, nuage et droite et point y2, echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
+```{R, nuage et droite et point y2, echo = F, dev = "svg",  fig.width = 12, fig.height = 6}
 
 ggplot(data = df_simulation, aes(x = x, y = y)) +
   geom_point(size = 3, color = "black", alpha = 0.9) +
@@ -279,13 +287,11 @@ ggplot(data = df_simulation, aes(x = x, y = y)) +
 
 ---
 count: false
-# 1. Rappel: Régression linéaire simple   
-
-## 1.1. Interprétation géométrique   
+# Visualisation    
 
 Pour toute droite $\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x$, on peut calculer les erreurs: $\varepsilon_i = y_i - \tilde{y}_i$
 
-```{R, nuage et droite et point y2 et e2, echo = F, dev = "svg",  fig.width = 9, fig.height = 4.5}
+```{R, nuage et droite et point y2 et e2, echo = F, dev = "svg",   fig.width = 12, fig.height = 6}
 
 ggplot(data = df_simulation, aes(x = x, y = y)) +
     geom_point(size = 3, color = "black", alpha = 0.9) +
@@ -293,8 +299,10 @@ ggplot(data = df_simulation, aes(x = x, y = y)) +
     geom_abline(intercept = b0, slope = b1, color = "#f08b27", size = 1, alpha = 0.9) +
     geom_segment(aes(x = x_min2, xend = x_min2, y = y_min2, yend = y_hat_min2), color = "#f08b27", size = 0.5, alpha = 0.2) +
     annotate("text", x = -0.4, y = 3.2, label = "tilde(y)", parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
-    annotate("text", x = x_min2, y = y_min2 - 0.2, label = paste0("y[2]"), parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
-    annotate("text", x = x_min2 - 0.1, y = (y_min2 + y_hat_min2) / 2, label = expression(epsilon[2]), color = "#f08b27", size = 6, family = "Palatino") +
+    annotate("text", x = x_min2, y = y_min2 - 0.2, label = "y[2]", parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
+    annotate("text", x = x_min2 - 0.1, y = (y_min2 + y_hat_min2) / 2, label = "epsilon[2]", parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
+    #annotate("text", x = x_min2, y = y_min2 - 0.2, label = paste0("y[2]"), parse = TRUE, color = "#f08b27", size = 6, family = "Palatino") +
+    #annotate("text", x = x_min2 - 0.1, y = (y_min2 + y_hat_min2) / 2, label = expression(epsilon[2]), color = "#f08b27", size = 6, family = "Palatino") +
     scale_x_continuous(limits = c(-1,8)) +
     scale_y_continuous(limits = c(0.5,7)) +
     theme_empty
@@ -303,13 +311,11 @@ ggplot(data = df_simulation, aes(x = x, y = y)) +
 
 ---
 count: false
-# 1. Rappel: Régression linéaire simple   
-
-## 1.1. Interprétation géométrique   
+# Visualisation    
 
 Pour toute droite $\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x$, on peut calculer les erreurs: $\varepsilon_i = y_i - \tilde{y}_i$
 
-```{R, nuage et droite et toutes erreurs, echo = F, dev = "svg",  fig.width = 9, fig.height = 4.5}
+```{R, nuage et droite et toutes erreurs, echo = F, dev = "svg", fig.width = 12, fig.height = 6}
 
 ggplot(data = df_simulation, aes(x = x, y = y)) +
     geom_point(size = 3, color = "black", alpha = 0.9) +
@@ -324,14 +330,11 @@ ggplot(data = df_simulation, aes(x = x, y = y)) +
 
 ---
 count: false
-# 1. Rappel: Régression linéaire simple   
-
-## 1.1. Interprétation géométrique   
+# Visualisation  
 
 Pour toute droite $\tilde{y} = \tilde{\beta_0} + \tilde{\beta_1} x$, on peut calculer les erreurs: $\varepsilon_i = y_i - \tilde{y}_i$
 
-```{R, nuage et autre droite et toutes erreurs , echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
-
+```{R, nuage et autre droite et toutes erreurs , echo = F, dev = "svg",  fig.width = 12, fig.height = 6}
 b0 <- 5
 b1 <- -0.2
 
@@ -349,13 +352,11 @@ ggplot(data = df_simulation, aes(x = x, y = y)) +
 
 ---
 count: false
-# 1. Rappel: Régression linéaire simple   
-
-## 1.1. Interprétation géométrique   
+# Visualisation     
 
 SCE = $\left(\sum \varepsilon_i^2\right)$: les erreurs importantes sont davantage pénalisées
 
-```{R, penalties, echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
+```{R, penalties, echo = F, dev = "svg",  fig.width = 12, fig.height = 6}
 
 df_simulation = df_simulation %>%
   mutate(y_hat = y_hat(x, b0, b1),
@@ -376,13 +377,11 @@ ggplot(data = df_simulation, aes(x = x, y = y)) +
 
 ---
 count: false
-# 1. Rappel: Régression linéaire simple   
-
-## 1.1. Interprétation géométrique   
+# Visualisation     
 
 L'estimateur des MCO (*OLS*) calcule $\hat{\beta_0}$ et $\hat{\beta_1}$ qui **<span style="color:#dd0747;">minimisent la SCE</span>**.
 
-```{R, mco penalties, echo = F, dev = "svg", fig.width = 9, fig.height = 4.5}
+```{R, mco penalties, echo = F, dev = "svg",  fig.width = 12, fig.height = 6}
 # Define a function
 y_hat <- function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
@@ -408,13 +407,11 @@ ggplot(data = df_simulation, aes(x = x, y = y)) +
 
 ---
 count: false
-# 1. Rappel: Régression linéaire simple   
-
-## 1.1. Interprétation géométrique   
+# Visualisation     
 
 L'estimateur des MCO (*OLS*) calcule $\hat{\beta_0}$ et $\hat{\beta_1}$ qui **<span style="color:#dd0747;">minimisent la SCE</span>**.
 
-```{R, mco, echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+```{R, mco, echo = F, dev = "svg",  fig.width = 12, fig.height = 6}
 
 ggplot(data = df_simulation, aes(x = x, y = y)) +
     annotate("text", x = -0.4, y = 2, label = "hat(y)", parse = TRUE, color = "#dd0747", size = 6, family = "Palatino") +
@@ -426,11 +423,18 @@ ggplot(data = df_simulation, aes(x = x, y = y)) +
     theme_empty 
 ```
 
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">1.2. Formule de l'estimateur MCO dans le cas univarié</span>
+
+
 ---
 name: OLS
-# 1. Rappel: Régression linéaire simple   
-
-##  1.2. Formule de l'estimateur MCO dans le cas univarié  
+# Estimateur MCO dans le cas univarié  
 
 L'estimateur des MCO calcule $\hat{\beta_0}$ et $\hat{\beta_1}$ qui minimmise la Somme des Carrés des Erreurs (SCE, ou *Sum of Squared Errors*) : 
 
@@ -438,18 +442,26 @@ $$\min_{\hat{\beta_0},\, \hat{\beta_1}} \text{SCE} =\sum_{i=1}^N \varepsilon _i^
 On obtient, dans le cas univarié:
 
 .center[
-$\hat{\beta_0} = \overline{y} - \hat{\beta} \overline{x}$ 
+$\hat{\beta_0} = \overline{y} - \hat{\beta_1} \overline{x}$ 
 
 $\hat{\beta_1} = \dfrac{Cov(x,y)}{Var(x)}$
 ]
 
 [Maths modèle univarié](#derivation)
 
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">1.3. Hypothèses</span>
+
+
+
 ---
 name:hypothesis
-# 1. Rappel: Régression linéaire simple   
-
-## 1.3. Hypothèses
+# Hypothèses
 
 <span style="color:#9933FF"> $\color{#9933FF}{H_1}$ **Linéarité**</span>: le modèle est linéaire dans les paramètres
   - Formellement, $\color{#9933FF}{\frac{\partial y_i}{\partial x_{ik}} = \beta_k}$,  $\color{#9933FF}{\forall k =1, ..., K}$
@@ -472,9 +484,7 @@ name:hypothesis
 
 ---
 name: hypothesis2
-# 1. Rappel: Régression linéaire simple   
-
-## 1.3. Hypothèses
+# Hypothèses
 
   
 <span style="color:#9933FF"> $\color{#9933FF}{H_5}$ **Les erreurs $\varepsilon_i$ sont sphériques** </span>:
@@ -491,12 +501,16 @@ name: hypothesis2
 <span style="color:#dd0747">**Sous ces hypothèses, l'estimateur des MCO est BLUE (Best Linear Unbiased Estimator)**</span> (cf démonstrations faites en cours).
 
 
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">1.4. Implémentation sur `R`</span>
 
 
 ---
-# 1. Rappel: Régression linéaire simple   
-
-## 1.4. Implémentation sur `R`
+# Commandes/fonctions `R`
 
 - Calcul de la variance empirique
 
@@ -520,259 +534,273 @@ lm(variable dépendante ~  variable indépendante, data = data.frame)
 
 
 ---
-background-color: #f19bb5
-# Application 
+class: clearinverse
+background-color:  #f19bb5
 
-### Projet R
+&nbsp;
 
-.pull-left[
-```{r rproj, echo=FALSE, out.width="80%"}
-knitr::include_graphics("imgs/rproj.png")
-```
-]
+# Application
 
-.pull-right[
-**Mise à jour structure projet `R`**:
-- un seul projet pour l'ensemble du TD
-- un dossier par TD
-]
-
-
----
-background-color: #f19bb5
-# Application 
-
-### Taille de la fratrie et performances scolaires
+### Performances scolaires et salaire
 
 `r countdown(minutes = 5, top = 0)`
 
 **Cleaning** 
 
 
-1) Importer la base de données `simulated_data_black_et_al_2005.rds` que vous nommerez `df`
+1) Importer la base de données `eec_t1_2017_simulated_wage.rds` que vous nommerez `df`
 
 2) Effectuer les opérations ne nettoyage de données suivantes:
-  - ne conserver que les enfants âgés d'au moins 25 ans
-  - ne conserver que les enfants dont la mère avait entre 16 et 49 ans à leur naissance
-  - ne conserver que les familles pour lesquelles le nombre d'observations au sein de la famille est égale à la taille de la fratrie
+  - ne conserver que les enfants âgés d'au moins 30 ans (*hint: utiliser la variable `AGE5`*)
+  - créer la variable `log_wage`, le log du salaire net mensuel winsorisé
+  - créer la variable `educ`, à partir de `DIP11` en la recodant de 1 (pas de diplôme) à 10 (doctorat), en regroupant les diplômes de niveau équivalent (*hint: utiliser le DM de l'année dernière pour vérifier l'intitulé du niveau de diplôme*)
 
-
----
-background-color: #f19bb5
-# Application 
-
-### Taille de la fratrie et performances scolaires
-
-`r countdown(minutes = 10, top = 0)`
 
 **Intuition** 
 
-3) Selon vous, quelle est la relation entre **taille de la fratrie** et **performances scolaires** ?
+3) Selon vous, quelle est la relation entre **salaire** et **performances scolaires** ?
+
+
+---
+class: clearinverse
+background-color:  #f19bb5
+
+&nbsp;
+
+# Application
+
+### Performances scolaires et salaire
+
+`r countdown(minutes = 5, top = 0)`
 
 
 **Sur `R`: se familiariser avec les données**
 
+4) Représenter le nuage de points qui définit la relation entre le **salaire** (log winsorisé) et **le niveau de diplôme** en ne gardant uniquement le valeurs de `log_wage` positives et les valeurs d'`educ` non manquantes
 
-4) Calculer quelques statistiques descriptives de la **taille de la fratrie** (`family_size`) et du **nombre d'années d'études** (`education`):  
-  - moyenne, écart-type, corrélation entre les deux variables
-
-5) Représenter le nuage de points qui définit la relation entre **taille de la fratrie** et **nombre d'années d'études**
-
-6) Calculer les estimateurs de $\beta_0$ et $\beta_1$ du modèle $\text{Nb Années études} = \beta_0 + \beta_1 \text{Taille Fratrie} + \varepsilon$, à la main et directement via la fonction `lm`
+5) Calculer les estimateurs de $\beta_0$ et $\beta_1$ du modèle $\text{Wage} = \beta_0 + \beta_1 \text{Educ} + \varepsilon$, à la main et directement via la fonction `lm` en ne gardant uniquement le valeurs de `log_wage positives` et les valeurs d'`educ` non manquantes
 
 
 ---
-background-color: #fbe6ec
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
+
 # Solution
 
 ### Cleaning
 
-1) Importer la base de données `simulated_data_black_et_al_2005.rds` que vous nommerez `data`
+1) Importer la base de données `eec_t1_2017_simulated_wage.rds` que vous nommerez `df`
 
 
 ```{r, echo=T, eval = T}
 # Import data
-df = readRDS("data/simulated_data_black_et_al_2005.rds") 
+df = readRDS("data/eec_t1_2017_simulated_wage.rds")
 ```
 
---
+---
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
+
+# Solution
+
 
 2) Effectuer les opérations ne nettoyage de données suivantes:
-  - ne conserver que les enfants âgés d'au moins 25 ans
-  - ne conserver que les enfants dont la mère avait entre 16 et 49 ans à leur naissance
-  - ne conserver que les familles pour lesquelles le nombre d'observations au sein de la famille est égale à la taille de la fratrie
+  - ne conserver que les enfants âgés d'au moins 30 ans (*hint: utiliser la variable `AGE5`*)
+  - créer la variable `log_wage`, le log du salaire net mensuel winsorisé
+  - créer la variable `educ`, à partir de `DIP11` en la recodant de 1 (pas de diplôme) à 10 (doctorat), en regroupant les diplômes de niveau équivalent (*hint: utiliser le DM de l'année dernière pour vérifier l'intitulé du niveau de diplôme*)
+
 
 ```{r, echo=T, eval = T}
 df = df %>% 
-  filter(age_2000 >= 25,
-         (mother_age_2000 - age_2000 <= 49) & (mother_age_2000 - age_2000 >= 16)) %>% 
-  group_by(family_id) %>% 
-  mutate(n = n()) %>% 
-  ungroup() %>% 
-  filter(family_size == n)
+  filter(AGE5 != 15) %>%  
+  mutate(log_wage = log(ifelse(wage>quantile(wage, seq(0,1,0.01), na.rm = T)[100] ,quantile(wage, seq(0,1,0.01), na.rm = T)[100], wage)),
+    educ = case_when(
+      DIP11 == "71" ~ 1,  # Sans diplôme
+      DIP11 == "70" ~ 2,  # Certificat d'Études Primaires (CEP)
+      DIP11 == "60" ~ 3,  # Brevet des collèges
+      DIP11 == "50" ~ 4,  # CAP, BEP ou équivalents
+      DIP11 %in% c("41", "42") ~ 5,  # Baccalauréat (Général, technologique, professionnel)
+      DIP11 %in% c("30", "31", "33") ~ 6,  # Niveau Bac+2 (DEUG, BTS, DUT, paramédical/social)
+      DIP11 == "11" ~ 7,  # Écoles de niveau licence et au-delà
+      DIP11 == "10" ~ 8,  # Licence (L3) et Maîtrise (M1)
+      DIP11 == "10" ~ 9,  # Master, DEA, DESS
+      DIP11 == "10" ~ 10, # Doctorat
+      TRUE ~ NA_real_  # Valeurs manquantes
+  ))
+
 ```
+ 
+ 
  
 
 
+  
 ---
-background-color: #fbe6ec
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
+
 # Solution
-
-### Cleaning
-
-1) Importer la base de données `simulated_data_black_et_al_2005.rds` que vous nommerez `df`
-
-
-```{r, echo=T, eval = F}
-# Import data
-df = readRDS("data/simulated_data_black_et_al_2005.rds") 
-```
 
 
 2) Effectuer les opérations ne nettoyage de données suivantes:
-  - **ne conserver que les enfants âgés d'au moins 25 ans**
-  - ne conserver que les enfants dont la mère avait entre 16 et 49 ans à leur naissance
-  - ne conserver que les familles pour lesquelles le nombre d'observations au sein de la famille est égale à la taille de la fratrie
+  - **ne conserver que les enfants âgés d'au moins 30 ans (*hint: utiliser la variable `AGE5`*)**
+  - créer la variable `log_wage`, le log du salaire net mensuel winsorisé
+  - créer la variable `educ`, à partir de `DIP11` en la recodant de 1 (pas de diplôme) à 10 (doctorat), en regroupant les diplômes de niveau équivalent (*hint: utiliser le DM de l'année dernière pour vérifier l'intitulé du niveau de diplôme*)
 
-```{r, echo=T, eval = F}
+
+```{r, echo=T, eval = T}
 df = df %>% 
-  filter(age_2000 >= 25, #<<
-         (mother_age_2000 - age_2000 <= 49) & (mother_age_2000 - age_2000 >= 16)) %>% 
-  group_by(family_id) %>% 
-  mutate(n = n()) %>% 
-  ungroup() %>% 
-  filter(family_size == n)
+  filter(AGE5 != 15) %>%  #<<
+  mutate(log_wage = log(ifelse(wage>quantile(wage, seq(0,1,0.01), na.rm = T)[100], quantile(wage, seq(0,1,0.01), na.rm = T)[100] ,wage)),     
+    educ = case_when(
+      DIP11 == "71" ~ 1,  # Sans diplôme
+      DIP11 == "70" ~ 2,  # Certificat d'Études Primaires (CEP)
+      DIP11 == "60" ~ 3,  # Brevet des collèges
+      DIP11 == "50" ~ 4,  # CAP, BEP ou équivalents
+      DIP11 %in% c("41", "42") ~ 5,  # Baccalauréat (Général, technologique, professionnel)
+      DIP11 %in% c("30", "31", "33") ~ 6,  # Niveau Bac+2 (DEUG, BTS, DUT, paramédical/social)
+      DIP11 == "11" ~ 7,  # Écoles de niveau licence et au-delà
+      DIP11 == "10" ~ 8,  # Licence (L3) et Maîtrise (M1)
+      DIP11 == "10" ~ 9,  # Master, DEA, DESS
+      DIP11 == "10" ~ 10, # Doctorat
+      TRUE ~ NA_real_  # Valeurs manquantes
+  ))
+
 ```
  
 
-
 ---
-count:false
-background-color: #fbe6ec
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
+
 # Solution
-
-### Cleaning
-
-1) Importer la base de données `simulated_data_black_et_al_2005.rds` que vous nommerez `df`
-
-
-```{r, echo=T, eval = F}
-# Import data
-df = readRDS("data/simulated_data_black_et_al_2005.rds") 
-```
 
 
 2) Effectuer les opérations ne nettoyage de données suivantes:
-  - ne conserver que les enfants âgés d'au moins 25 ans
-  - **ne conserver que les enfants dont la mère avait entre 16 et 49 ans à leur naissance**
-  - ne conserver que les familles pour lesquelles le nombre d'observations au sein de la famille est égale à la taille de la fratrie
+  - ne conserver que les enfants âgés d'au moins 30 ans (*hint: utiliser la variable `AGE5`*)
+  - **créer la variable `log_wage`, le log du salaire net mensuel winsorisé**
+  - créer la variable `educ`, à partir de `DIP11` en la recodant de 1 (pas de diplôme) à 10 (doctorat), en regroupant les diplômes de niveau équivalent (*hint: utiliser le DM de l'année dernière pour vérifier l'intitulé du niveau de diplôme*)
 
-```{r, echo=T, eval = F}
+
+```{r, echo=T, eval = T}
 df = df %>% 
-  filter(age_2000 >= 25,
-         (mother_age_2000 - age_2000 <= 49) & (mother_age_2000 - age_2000 >= 16)) %>% #<<
-  group_by(family_id) %>% 
-  mutate(n = n()) %>% 
-  ungroup() %>% 
-  filter(family_size == n)
+  filter(AGE5 != 15) %>%  
+  mutate(log_wage = log(ifelse(wage>quantile(wage, seq(0,1,0.01), na.rm = T)[100] ,quantile(wage, seq(0,1,0.01), na.rm = T)[100] ,wage)), #<<
+    educ = case_when(
+      DIP11 == "71" ~ 1,  # Sans diplôme
+      DIP11 == "70" ~ 2,  # Certificat d'Études Primaires (CEP)
+      DIP11 == "60" ~ 3,  # Brevet des collèges
+      DIP11 == "50" ~ 4,  # CAP, BEP ou équivalents
+      DIP11 %in% c("41", "42") ~ 5,  # Baccalauréat (Général, technologique, professionnel)
+      DIP11 %in% c("30", "31", "33") ~ 6,  # Niveau Bac+2 (DEUG, BTS, DUT, paramédical/social)
+      DIP11 == "11" ~ 7,  # Écoles de niveau licence et au-delà
+      DIP11 == "10" ~ 8,  # Licence (L3) et Maîtrise (M1)
+      DIP11 == "10" ~ 9,  # Master, DEA, DESS
+      DIP11 == "10" ~ 10, # Doctorat
+      TRUE ~ NA_real_  # Valeurs manquantes
+  ))
+
 ```
  
-
-
 ---
-count:false
-background-color: #fbe6ec
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
+
 # Solution
 
-### Cleaning
-
-1) Importer la base de données `simulated_data_black_et_al_2005.rds` que vous nommerez `df`
-
-
-```{r, echo=T, eval = F}
-# Import data
-df = readRDS("data/simulated_data_black_et_al_2005.rds") 
-```
-
-
 2) Effectuer les opérations ne nettoyage de données suivantes:
-  - ne conserver que les enfants âgés d'au moins 25 ans
-  - ne conserver que les enfants dont la mère avait entre 16 et 49 ans à leur naissance
-  - **ne conserver que les familles pour lesquelles le nombre d'observations au sein de la famille est égale à la taille de la fratrie**
+  - ne conserver que les enfants âgés d'au moins 30 ans (*hint: utiliser la variable `AGE5`*)
+  - créer la variable `log_wage`, le log du salaire net mensuel winsorisé   
+  - **créer la variable `educ`, à partir de `DIP11` en la recodant de 1 (pas de diplôme) à 10 (doctorat), en regroupant les diplômes de niveau équivalent (*hint: utiliser le DM de l'année dernière pour vérifier l'intitulé du niveau de diplôme*)**
 
-```{r, echo=T, eval = F}
+```{r, echo=T, eval = T}
 df = df %>% 
-  filter(age_2000 >= 25,
-         (mother_age_2000 - age_2000 <= 49) & (mother_age_2000 - age_2000 >= 16)) %>% 
-  group_by(family_id) %>% #<<
-  mutate(n = n()) %>% #<<
-  ungroup() %>% #<<
-  filter(family_size == n) #<<
+  filter(AGE5 != 15) %>%  
+  mutate(log_wage = log(ifelse(wage>quantile(wage, seq(0,1,0.01), na.rm = T)[100] ,quantile(wage, seq(0,1,0.01), na.rm = T)[100] ,wage)),,
+    educ = case_when(
+      DIP11 == "71" ~ 1,  # Sans diplôme #<<
+      DIP11 == "70" ~ 2,  # Certificat d'Études Primaires (CEP)  #<<
+      DIP11 == "60" ~ 3,  # Brevet des collèges #<<
+      DIP11 == "50" ~ 4,  # CAP, BEP ou équivalents #<<
+      DIP11 %in% c("41", "42") ~ 5,  # Baccalauréat (Général, technologique, professionnel) #<<
+      DIP11 %in% c("30", "31", "33") ~ 6,  # Niveau Bac+2 (DEUG, BTS, DUT, paramédical/social) #<<
+      DIP11 == "11" ~ 7,  # Écoles de niveau licence et au-delà #<<
+      DIP11 == "10" ~ 8,  # Licence (L3) et Maîtrise (M1) #<<
+      DIP11 == "10" ~ 9,  # Master, DEA, DESS #<<
+      DIP11 == "10" ~ 10, # Doctorat #<<
+      TRUE ~ NA_real_  # Valeurs manquantes #<<
+  ))
+
 ```
  
 
 
+
 ---
-background-color: #fbe6ec
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
+
 # Solution
 
 ### Intuition 
 
-3) Selon vous, quelle est la relation entre **taille de la fratrie** et **performances scolaires** ?
+3) Selon vous, quelle est la relation entre **salaire** et **performances scolaires** ?
 
 --
 
-- Relation théorique ([Becker (1960)](https://www.nber.org/system/files/chapters/c2387/c2387.pdf), [Becker and Lewis (1973)](https://www.jstor.org/stable/1840425), [Becker and Tomes (1976)](https://www.jstor.org/stable/1831106)): 
-
-  - arbitrage entre la quantité et la *qualité* des enfants au sein d'une famille.
+- Selon la théorie du capital humain, on s'attend à une relation positive entre le niveau de diplôme et le salaire
 
 --
 
-- Relations empiriques ([Black, Devereux and Salvanes (2005)](https://watermark.silverchair.com/120-2-669.pdf?token=AQECAHi208BE49Ooan9kkhW_Ercy7Dm3ZL_9Cf3qfKAc485ysgAAA2YwggNiBgkqhkiG9w0BBwagggNTMIIDTwIBADCCA0gGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMRUFpt9yUxU8Wuu4FAgEQgIIDGVcdvdpNZkmD_Fbj4_wa9HaGQTAoM2tQsF2wuRUmWvvlH23Fhxp68TwZUK_P2MpI1e4pA0PyMp-QAURQMsN_P7FcQuEoYqMkBs_7l-8reeiCLHbQYIdRAyJ7Ud-hDxSJwuZ1iqH-7kMcMtNHtrlh5JydP2Ya8p9GRWtFVmtfq4bzIbKfbqh2dI4_dv_8mVc-h8CQQxE-J7ME9RH9pw-1ZQccud0e4RCqHuVa6tR3ByEceFgsmwl1l779gZjQGoBrLm5sBLxc47Ni6bVW8_Czit3EPJjaq6vh22L8XnfsF256FHmtDgmSFUTljZ8l37VwGA4Y_4q62_k4RKJZbJft3i7_XW2eJxcfWAFTje1jjUIHi81WitYT24sisKkRmqHak6_yQFwbayocifHA23T8PfXoKqkLlDO9ewUYL83HrGsOrPHSd8JbitwP400KOWotEZVDATVqQxJhnJRa6LsVTtiYuZVcC6-PLcVSTAHPDbRF7Q_WcB4QL-0MeEorgQ-ULn_9trRFCjrs3tXlCo_6qPEvDFtAm3YAcZVVEaCcMRcwY5cnLeIL7q2gsB06txdyzGgriCrc_gMZksCy3M_V32yX8pP4RE81BP6cggKZu7BwlLzh3nOozg0AJqvC00IKcJ7k5iMhjSARFURevVtIhWz3RQ6_CAQAU5M4PfSaAnYzDHLO2FDKfnTThgJmZEYMAqUUJOXgLn4jrcE4OLXxuPLHfxdiqoAiAfhzTsTu6Wvn5x0YTaRq27_2bhw2pMXRNDotTjHQW6StxWxhlCvynLBVONRE4YKiXLN_YCXTd0FNjEyGQQRjmLbTQK6vvGgReEP2aUdB4-FarpRYU0b3DMFn6eFCUx0hdFMc2BunByvGDB8f3h5aubWaEZM4E-H-a7fIA_FE9wAORKqHd7wM1rx2x3nYVGk9k0HqHbYCyO48lAS2L5DmKUXPhH81ugVBbWCgX9EpzyLgUlloaTWnseadBr1rZBsUOUBqZ0M9gzJjtzYbqH8xvJiFtZ4Za01xveOJAv4qBp3uib9MHFtJqK1JkpQRP214aEQ)): 
-  - données norvégiennes exhaustives
-  - corrélation négative entre la taille des fratries et le nombre d'années de scolarisation moyen des enfants
+- Cette relation peut-être non-linéaire avec des rendements marginaux décroissants 
+  - l'écart de salaire entre le doctorat et le master pourrait être plus faible qu'entre le baccalauréat et le CAP)
+  
+--
+  
+- Voire des rendements hétérogènes selon les filières (un master professionnel en finance versus un master recherche en lettres)
 
+--
 
----
-background-color: #fbe6ec
-# Solution
+$\implies$ Soulève la question de savoir si le diplôme mesure réellement la productivité ou s'il sert plutôt de signal sur le marché du travail, comme le suggère la théorie du signalement de Spence
 
-
-4) Calculer quelques statistiques descriptives de la **taille de la fratrie** (`family_size`) et du **nombre d'années d'études** (`education`): 
-  - moyenne
-  - écart-type et variance
-  - corrélation entre les deux variables
-
-```{r, echo=T, eval = T}
-df %>%
-  summarise(
-    across(c(family_size, education), ~ round(mean(.), 2), .names = "mean_{.col}"),
-    across(c(family_size, education), ~ round(sd(.), 2), .names = "sd_{.col}"),
-    across(c(family_size, education), ~ round(var(.), 2), .names = "var_{.col}"),
-    correlation = cor(family_size, education, use = "complete.obs")
-  )
-```
 
 
 ---
-background-color: #fbe6ec
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
 
 # Solution 
 
-5) Représenter le nuage de points qui définit la relation entre **taille de la fratrie** et **nombre d'années d'études**
+4) Représenter le nuage de points qui définit la relation entre le **salaire** (log winsorisé) et **le niveau de diplôme** en ne gardant uniquement le valeurs de `log_wage` positives et les valeurs d'`educ` non manquantes
 
-```{r, echo=FALSE,fig.width = 8, fig.height = 5}
-g_educ = ggplot(df, aes(x = as.numeric(family_size), y = as.numeric(education))) + 
+--
+
+
+```{r, echo=FALSE,fig.width = 10, fig.height = 6}
+g_wage_educ = ggplot(df %>% filter(!is.na(educ)), aes(x = as.factor(educ), y = as.numeric(log_wage))) + 
   geom_point(size = 2, alpha = 0.5) +
-  xlim(0,8) +
-  ylim(0, 20) +
+  #xlim(0, 10) +
   labs(
-    x = "Taille de la fratrie",
-    y = "Nombre d'années d'études",
+    x = "Niveau de diplôme",
+    y = "Salaire mensuel net (log)",
     title = "") +
   theme_minimum
 
-g_educ
+g_wage_educ
 ```
 
 
@@ -794,22 +822,23 @@ g_educ
 
 
 ```{r, echo=FALSE, include = F, fig.width = 8, fig.height = 5}
-educ_avg_famsize <- df %>%
- mutate(family_size = as.numeric(family_size),
-        education = as.numeric(education)) %>% 
- group_by(family_size) %>%
- summarise(mean_educ = mean(education))
 
-g_educ_famsize = ggplot(educ_avg_famsize, aes(x = family_size, y = mean_educ)) + 
-   geom_point(size = 2) +
-   xlim(0,8) +
-   ylim(0, 20) +
+wage_avg_educ = df %>%
+ filter(log_wage > 0, !is.na(educ)) %>% 
+ group_by(educ) %>%
+ summarise(mean_wage = mean(log_wage, na.rm = TRUE))
+
+g_wage_educ_avg = ggplot(wage_avg_educ, aes(x = educ, y = mean_wage)) + 
+   geom_point(size = 3) +
+   geom_line() +
+   #xlim(0, 10) +
+   ylim(6.8,8.3) + 
    labs(
-     x = "Taille de la fratrie",
-     y = "Nombre d'années d'études",
+     x = "Niveau de diplôme",
+     y = "Salaire moyen (log)",
      title = "") +
    theme_minimum
-g_educ_famsize
+g_wage_educ_avg
 
 
 # wage_avg_grade <- data %>%
@@ -831,31 +860,40 @@ g_educ_famsize
 ```
 
 ---
-background-color: #fbe6ec
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
 
 # Solution 
 
-6) Calculer les estimateurs de $\beta_0$ et $\beta_1$ du modèle $\text{Nb Années études} = \beta_0 + \beta_1\text{Taille Fratrie} + \varepsilon$, à la main et directement via la fonction `lm`
+5) Calculer les estimateurs de $\beta_0$ et $\beta_1$ du modèle $\text{Wage} = \beta_0 + \beta_1 \text{Educ} + \varepsilon$, à la main et directement via la fonction `lm` en ne gardant uniquement le valeurs de `log_wage` positives et les valeurs d'`educ` non manquantes
 
 ```{r, echo=T, eval = T}
+
+df_clean = df %>% filter(log_wage > 0, !is.na(educ))
+
 # 1: Calcul à la main
-beta_1 = cov(df$family_size, df$education)/var(df$family_size)
+beta_1 = cov(df_clean$educ, df_clean$log_wage) / var(df_clean$educ, na.rm = TRUE)
 beta_1
-beta_0 = mean(df$education) - beta_1*mean(df$family_size)
+beta_0 = mean(df_clean$log_wage, na.rm = TRUE) - beta_1 * mean(df_clean$educ, na.rm = TRUE)
 beta_0
+
 # 2: Via lm
-summary(lm(education ~ family_size, data = df))$coefficients
+summary(lm(log_wage ~ educ, data = df_clean))$coefficients
 ```
 
 
 
 ---
-# Taille de fratrie et nombre d'années d'études
+# Salaire moyen et niveau de diplôme
+
+&nbsp;
 
 .middle[
-```{r, echo = F,fig.width = 8, fig.height = 5}
-plot_1 <- g_educ_famsize +
-    ylim(11, 12.7) +
+```{r, echo = F, fig.width = 12, fig.height = 6}
+plot_1 = g_wage_educ_avg +
+    #ylim(11, 12.7) +
     theme_minimum
 
 plot_1
@@ -863,15 +901,15 @@ plot_1
 ]
 
 ---
-# Taille de fratrie et nombre d'années d'études
+# Salaire moyen et niveau de diplôme
+
+&nbsp;
 
 .middle[
-```{r, echo = F,fig.width = 8, fig.height = 5}
-plot_2 <- g_educ_famsize +
-    ylim(11, 12.7) +
+```{r, echo = F, fig.width = 12, fig.height = 6} 
+plot_2 = g_wage_educ_avg +
     theme_minimum +
   geom_abline(intercept = beta_0, slope = beta_1, color = "#dd0747", size = 1, alpha = 0.9) +
-  #stat_smooth(data = educ_avg_famsize, method = "lm", se = FALSE, colour = "#dd0747") +
   theme_minimum
 plot_2
 ```
@@ -879,16 +917,16 @@ plot_2
 
 
 ---
-# Taille de fratrie et nombre d'années d'études
+# Salaire moyen et niveau de diplôme
 
 &nbsp;
 
-**Question**: Que se passe t-il quand on considère `family_size` comme une variable discrète et non continue?    
+**Question**: Que se passe t-il quand on considère `educ` comme une variable discrète et non continue?    
      
 --
 
 .center[
-*hint*: utiliser `as.factor(family_size)`
+*hint*: utiliser `as.factor(educ)`
 ]
 
 
@@ -897,24 +935,17 @@ plot_2
 
 &nbsp;
 
-**Question**: Est-ce que $\hat{\beta_1}$ représente l'**effet causal** de la taille de la fratrie sur le nombre d'années d'études?
+**Question**: Est-ce que $\hat{\beta_1}$ représente l'**effet causal** du niveau de diplôme sur le salaire?
 
---
 
-&nbsp;
-
-<span style="color:#dd0747"> **Black, Devereux and Salvanes (2005)** </span>: montrent qu'il existe un autre prédicteur de la performance scolaire, corrêlé à la taille de la fratrie       
-
---
-  
-
- .center[
-<span style="color:#dd0747"> le rang de naissance </span>
- ]
 
 
 ---
-background-color: #d7e2d8
+class: clearinverse
+background-color:   #d7e2d8
+
+&nbsp;
+
 # Recap: Régression linéaire simple
 
 **Data**: Données observationnelles
@@ -940,18 +971,25 @@ $$\hat{\beta_1} = \frac{Cov(x,y)}{\mathbb{V}(x)}$$
 
 
 ---
-count:false
-class: middle, center
-background-color: #dd0747
+count: false
+layout: false
+class: center, middle, inverse
 
-# <span style="color:#FAFAFA;">  2. Causalité </span>
+# <span style="color:#FAFAFA;">2. Causalité</span>
+
+
+
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.1. Corrélation *vs* Causalité</span>
 
 
 ---
 name: introcausality
-# 2. Causalité
-
-## 2.1. Corrélation *vs* Causalité
+# Exogeneité
 
 L'hypothèse d'exogeneité implique que l'estimateur des MCO est non biaisé
   - donc que $\hat{\beta}$ représente l'effet causal de $x$ sur $y$
@@ -966,10 +1004,16 @@ L'hypothèse d'exogeneité implique que l'estimateur des MCO est non biaisé
   - Problème: l'abilité, la motivation, ne sont pas observées
   - Dans ce cas, le paramètre $\beta$ n'estime pas l'effet *causal* de l'éducation sur le salaire, mais une *corrélation*
   
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">2.2. Potential Outcomes Framework</span>
+  
 
 ---
-# 2. Causalité
-## 2.2. Potential Outcomes Framework
+# Setup
 
 **Neyman, 1923** & **Rubin, 1974**: cadre conceptuel qui aide à penser la causalité. On s'intéresse à la relation entre deux variables:
 
@@ -986,8 +1030,7 @@ On cherche estimer l'**effet de $D_i$ sur $Y_i$**, par exemple:
 
 
 ---
-# 2. Causalité
-## 2.2. Potential Outcomes Framework
+# Outcomes potentiels
 
 Chaque individu $i$ a deux outcomes potentiels:
 - $Y_{1i}$ si $D_i = 1$, l'outcome en cas de traitement
@@ -1002,8 +1045,7 @@ L'espérance des $\delta_i$ donne l'effet **moyen** du traitement (**A**verage *
 
 
 ---
-# 2. Causalité
-## 2.2. Potential Outcomes Framework
+# Contrefactuel non observable
 
 &nbsp;
 
@@ -1023,8 +1065,7 @@ $\implies$ on observe **deux groupes**: le groupe des individus **traités** et 
 
 
 ---
-# 2. Causalité
-## 2.2. Potential Outcomes Framework
+# Différence de moyennes
 
 &nbsp;
 
@@ -1041,8 +1082,7 @@ $$\Delta = \mathbb{E}(Y_{1i} | D_i = 1) - \mathbb{E}(Y_{0i} | D_i = 0)$$
  
 ---
 name: potential
-# 2. Causalité
-## 2.2. Potential Outcomes Framework
+# Différence de moyennes = effet causal?
 
 &nbsp;
 
@@ -1055,7 +1095,7 @@ name: potential
 <span style="color:#dd0747">**Réponse: si le traitement n'est pas corrêlé à l'outcome**</span>
 
 Intuition: 
-- si le **le traitement est indépendant de l'outcome**, i.e. si le groupe de contrôle est comparable au groupe de traîtés, ou formellement si $(Y_{1i}, Y_{0i}) \perp D_i$,
+- si le **le traitement est indépendant de l'outcome**, i.e. si le groupe de contrôle est comparable au groupe de traités, ou formellement si $(Y_{1i}, Y_{0i}) \perp D_i$,
 - alors il n'y a pas de biais de sélection dans le traitement,
 - donc **la différence entre l'outcome moyen du groupe des individus traîtés et celui des individus non traîtés estime l'effet causal du traitement (ATE)**:
 $$\Delta = \mathbb{E}(Y_{1i} | D_i = 1) - \mathbb{E}(Y_{0i} | D_i = 0) = \text{ATE} \;\; \text{iff} \;\; (Y_{1i}, Y_{0i}) \perp D_i$$ 
@@ -1064,8 +1104,7 @@ $$\Delta = \mathbb{E}(Y_{1i} | D_i = 1) - \mathbb{E}(Y_{0i} | D_i = 0) = \text{A
 
 
 ---
-# 2. Causalité
-## 2.2. Potential Outcomes Framework
+# Sélection
 
 <span style="color:#dd0747">Problème </span>: $\mathbb{E}(Y_{0i} | D_i = 1) = \mathbb{E}(Y_{0i} | D_i = 0)$ (= absence de sélection) est une hypothèse forte. Souvent les groupes traités et non traîtés ne sont pas comparables (étudiants qui décident de faire un master sont peut-être plus motivés, les individus incarcérés sûrement plus dangereux, etc, **inobservable**).
 
@@ -1082,8 +1121,12 @@ Différents *types* de sélection:
   - ou l'inverse
 
 ---
-background-color: #f19bb5
-# Application 
+class: clearinverse
+background-color:  #f19bb5
+
+&nbsp;
+
+# Application
 
 `r countdown(minutes = 4, top = 0)`
 
@@ -1112,7 +1155,11 @@ Calculer:
   
 
 ---
-background-color: #fbe6ec
+class: clearinverse
+background-color:  #fbe6ec
+
+&nbsp;
+
 # Solution   
 
 ```{r, echo = T, include = T}
@@ -1121,7 +1168,10 @@ head(data.frame(Y0, Y1, D, Y))
 
   
 ---
-background-color: #fbe6ec
+class: clearinverse
+background-color:  #fbe6ec
+
+&nbsp;
 # Solution   
 
 ```{r, echo = T, include = T}
@@ -1139,21 +1189,25 @@ data.frame(
 
 
 
+---
+count: false
+layout: false
+class: center, middle, inverse
+
+# <span style="color:#FAFAFA;">3. Randomized Controlled Trials (RCTs)</span>
+
 
 
 ---
 count:false
-class: middle, center
-background-color: #dd0747
+class: middle, center,  clearinverse
+background-color:  #f8cdda
 
-# <span style="color:#FAFAFA;">  3. Randomized Controlled Trials (RCTs) </span>
-
+# <span style="color:#dd0747;">3.1. Suppression du biais de sélection</span>
 
 
 ---
-# 3. Randomized Controlled Trials (RCTs)
-
-## 3.1. Suppression du biais de sélection
+# Randomisation
 
 La **randomisation** permet d'éliminer le biais de sélection en allouant aléatoirement les individus au groupe de contrôle et au gorupe de traitement.
 
@@ -1167,9 +1221,15 @@ Les expériences aléatoires contrôlées, ou ***Randomized Controlled Trials (R
   
 
 ---
-# 3. Randomized Controlled Trials (RCTs)
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
 
-## 3.2. Exemple: le projet STAR
+# <span style="color:#dd0747;">3.2. Exemple: le projet STAR</span>
+
+
+---
+# STAR
 
 <span style="color:#dd0747">**Krueger, A. B.** </span> "Experimental estimates of education production functions.", QJE 1999   
 
@@ -1188,8 +1248,12 @@ Principaux éléments:
 
 
 ---
-background-color: #f19bb5
 name: star
+class: clearinverse
+background-color:  #f19bb5
+
+&nbsp;
+
 # Application: le projet STAR
 
 `r countdown(minutes = 5, top = 0)`
@@ -1207,7 +1271,11 @@ head(STAR)
 
 
 ---
-background-color: #f19bb5
+class: clearinverse
+background-color:  #f19bb5
+
+&nbsp;
+
 # Application: le projet STAR
 
 ### Intuition:
@@ -1222,7 +1290,11 @@ background-color: #f19bb5
 3) Estimer les paramètres du modèle : $Y_i = \beta_0 + \beta_1 \text{Small}_i + \beta_2 \text{RegularAide}_i + \varepsilon_i$ (Reproduction de la Table 5, Colonne 1 page 512)   
 
 ---
-background-color: #fbe6ec
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
+
 # Data Cleaning   
 
 *In each grade level the regular and regular/aide students were pooled together, and students were assigned percentile scores based on their raw test scores, ranging from 0 (lowest score) to 100 (highest score). A separate percentile distribution was generated for each subject test (e.g. _Math-STA_, _Reading-SAT_, _Word-SAT_, etc). For each test I then determined where in the distribution of the regular-class students every student in the small classes would fall, and students in the small classes were assigned these percentiles scores. Finally, to summarize overall achievement, the average of the _three_ SAT percentile rankings was calculated.*
@@ -1243,8 +1315,12 @@ STAR = STAR %>%
 ```
 
 ---
+class: clearinverse
 count: false
-background-color: #fbe6ec
+background-color:   #fbe6ec
+
+&nbsp;
+
 # Data Cleaning   
 
 *In each grade level the **regular and regular/aide students were pooled together**, and students were assigned percentile scores based on their raw test scores, ranging from 0 (lowest score) to 100 (highest score). A separate percentile distribution was generated for each subject test (e.g. _Math-STA_, _Reading-SAT_, _Word-SAT_, etc). For each test I then determined where in the distribution of the regular-class students every student in the small classes would fall, and students in the small classes were assigned these percentiles scores. Finally, to summarize overall achievement, the average of the _three_ SAT percentile rankings was calculated.*
@@ -1265,8 +1341,12 @@ STAR = STAR %>%
 ```
 
 ---
-count:false
-background-color: #fbe6ec
+class: clearinverse
+count: false
+background-color:   #fbe6ec
+
+&nbsp;
+
 # Data Cleaning   
 
 *In each grade level the regular and regular/aide students were pooled together, and students were assigned percentile scores based on their raw test scores, ranging from 0 (lowest score) to 100 (highest score). A **separate percentile distribution was generated for each subject test (e.g. _Math-STA_, _Reading-SAT_, _Word-SAT_, etc). For each test I then determined where in the distribution of the regular-class students every student in the small classes would fall**, and students in the small classes were assigned these percentiles scores. Finally, to summarize overall achievement, the average of the _three_ SAT percentile rankings was calculated.*
@@ -1287,8 +1367,11 @@ STAR = STAR %>%
 ```
 
 ---
-count:false
-background-color: #fbe6ec
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
+
 # Data Cleaning   
 
 *In each grade level the regular and regular/aide students were pooled together, and students were assigned percentile scores based on their raw test scores, ranging from 0 (lowest score) to 100 (highest score). A separate percentile distribution was generated for each subject test (e.g. _Math-STA_, _Reading-SAT_, _Word-SAT_, etc). For each test I then determined where in the distribution of the regular-class students every student in the small classes would fall, and **students in the small classes were assigned these percentiles scores**. Finally, to summarize overall achievement, the average of the _three_ SAT percentile rankings was calculated.*
@@ -1310,8 +1393,11 @@ STAR = STAR %>%
 
 
 ---
-count:false
-background-color: #fbe6ec
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
+
 # Data Cleaning   
 
 *In each grade level the regular and regular/aide students were pooled together, and students were assigned percentile scores based on their raw test scores, ranging from 0 (lowest score) to 100 (highest score). A separate percentile distribution was generated for each subject test (e.g. _Math-STA_, _Reading-SAT_, _Word-SAT_, etc). For each test I then determined where in the distribution of the regular-class students every student in the small classes would fall, and students in the small classes were assigned these percentiles scores. Finally, to **summarize overall achievement, the average of the _three_ SAT percentile rankings was calculated**.*
@@ -1332,7 +1418,11 @@ STAR = STAR %>%
 ```
 
 ---
-background-color: #fbe6ec
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
+
 # Solution   
 
 ### Intuition
@@ -1353,8 +1443,12 @@ background-color: #fbe6ec
   
   
 ---
-background-color: #fbe6ec
-# Solution   
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
+
+# Solution  
 
 2) Représenter graphiquement la densité de `avg_perc` pour le groupe *small* et le groupe *regular + regular-with-aide* (Reproduction de la Figure 1, Panel Kindergarten, page 509)
 
@@ -1388,7 +1482,11 @@ STAR %>%
   
     
 ---
-background-color: #fbe6ec
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
+
 # Solution   
 
 3) Estimer les paramètres du modèle : $Y_i = \beta_0 + \beta_1 \text{Small}_i + \beta_2 \text{RegularAide}_i + \varepsilon_i$ (Reproduction de la Table 5, Colonne 1 page 512)  
@@ -1402,10 +1500,17 @@ STAR = STAR %>%
 summary(lm(avg_perc ~ smallk + regularaidek, data = STAR)) # coeftest(lm(avg_perc ~ smallk + regularaidek, data = STAR), vcov = sandwich)
 ```
 
----
-# 3. Randomized Controlled Trials (RCTs)
 
-## 3.3. Limites
+---
+count:false
+class: middle, center,  clearinverse
+background-color:  #f8cdda
+
+# <span style="color:#dd0747;">3.3. Limites</span>
+
+
+---
+# Limites
 
 Bien qu'il s'agisse d'une stratégie empirique très ***clean***, les expériences aléatoires comportent des limites:
 - **Coût**:
@@ -1420,7 +1525,11 @@ Bien qu'il s'agisse d'une stratégie empirique très ***clean***, les expérienc
 
 
 ---
-background-color: #d7e2d8
+class: clearinverse
+background-color:  #d7e2d8
+
+&nbsp; 
+
 # Recap: Randomized Controlled Trial
 
 **Data**: Données expérimentales
@@ -1447,7 +1556,11 @@ $$Y_i = \alpha + \delta D_i + \varepsilon$$
 
 
 ---
+class: clearinverse
 background-color: #f19bb5
+
+&nbsp;
+
 # Application 
 
 `r countdown(minutes = 2, top = 0)`
@@ -1477,7 +1590,11 @@ Calculer:
   
 
 ---
-background-color: #fbe6ec
+class: clearinverse
+background-color:   #fbe6ec
+
+&nbsp;
+
 # Solution   
 
 ```{r, echo = T, include = T}
@@ -1511,11 +1628,11 @@ data.frame(
 
 
 ---
-count:false
-class: middle, center
-background-color: #dd0747
+count: false
+layout: false
+class: center, middle, inverse
 
-# <span style="color:#FAFAFA;">  Annexe </span>
+# <span style="color:#FAFAFA;">Annexe</span>
 
 
 ---
@@ -1555,7 +1672,7 @@ count:false
 
 .pull-left[
 
-```{R, scatter1 opur sample 2, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
+```{R, scatter1 opur sample 2, echo = F, fig.fullwidth = T, dev = "svg",  fig.width = 6, fig.height = 5}
 ggplot(data = df_simulation, aes(x = x, y = y)) +
 geom_abline(intercept = lm0$coefficients[1], slope = lm0$coefficients[2],color = "#dd0747", size = 1) +
 geom_point(color = "black", size = 3) +
@@ -1568,7 +1685,7 @@ theme_empty
 
 .pull-left[
 
-```{R, sample2 scatter, echo = F, fig.fullwidth = T, dev = "svg", fig.width = 6, fig.height = 5}
+```{R, sample2 scatter, echo = F, fig.fullwidth = T, dev = "svg",  fig.width = 6, fig.height = 5}
 ggplot(data = df_simulation, aes(x = x, y = y)) +
 geom_abline( intercept = lm0$coefficients[1], slope = lm0$coefficients[2], color = "#dd0747", size = 1, alpha = 0.3) +
 geom_point(aes(shape = s2), color = "black", size = 3) +
@@ -1639,9 +1756,9 @@ ggplot() +
 
 ```
 
-[Tiré du cours d'Edward Rubin](#https://raw.githack.com/edrubin/EC421S19/master/LectureNotes/02Review/02_review.html#1)
+[Tiré du cours d'Edward Rubin](#https://raw.githack.com/edrubin/EC421S19/master/LectureNotes/02Review/02_review.html#1)        
 
-
+[Back](#hypothesis)       
 ]
 
 --
@@ -1672,7 +1789,7 @@ count:false
 
 &nbsp;
 
-```{r representative, echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+```{r representative, echo = F, dev = "svg",fig.width = 12, fig.height = 6}
 
 ggplot(data = df_simulation, aes(x = x, y = y)) +
     geom_point(size = 3, color = "black", alpha = 0.9) +
@@ -1690,7 +1807,7 @@ count:false
 &nbsp;
 
 
-```{r non representative,  echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+```{r non representative,  echo = F, dev = "svg",fig.width = 12, fig.height = 6}
 selected_sample = df_simulation %>% filter(y > quantile(y, 0.75)) %>% mutate(selected = "Selected")
 df_simulation = df_simulation %>% mutate(selected = ifelse(x %in% selected_sample$x & y %in% selected_sample$y, "Selected", "not selected"))
 b0_selected = (lm(y ~ x, data = selected_sample))$coefficients[1]
@@ -1716,7 +1833,7 @@ count:false
 &nbsp;
 
 
-```{r non representative 2 lines,  echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+```{r non representative 2 lines,  echo = F, dev = "svg", fig.width = 12, fig.height = 6}
 selected_sample = df_simulation %>% filter(y > quantile(y, 0.75)) %>% mutate(selected = "Selected")
 df_simulation = df_simulation %>% mutate(selected = ifelse(x %in% selected_sample$x & y %in% selected_sample$y, "Selected", "not selected"))
 b0_selected = (lm(y ~ x, data = selected_sample))$coefficients[1]
@@ -1745,7 +1862,7 @@ name: outliers
 &nbsp;
 
 
-```{r no outliers, echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+```{r no outliers, echo = F, dev = "svg", fig.width = 12, fig.height = 6}
 ggplot(data = df_simulation, aes(x = x, y = y)) +
     geom_point(size = 3, color = "black", alpha = 0.9) +
     geom_abline(intercept = b0, slope = b1, color = "#dd0747", size = 1, alpha = 0.9) +
@@ -1762,7 +1879,7 @@ count:false
 
 &nbsp;
 
-```{r point outlier, echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+```{r point outlier, echo = F, dev = "svg",fig.width = 12, fig.height = 6}
 df_with_outlier <- rbind(df_simulation %>% select(x,y,selected), data.frame(x = 10, y = 40, selected = "Outlier"))
 b0_outliers = (lm(y ~ x, data = df_with_outlier))$coefficients[1]
 b1_outliers = (lm(y ~ x, data = df_with_outlier))$coefficients[2]
@@ -1782,7 +1899,7 @@ count:false
 
 &nbsp;
 
-```{r outliers, echo = F, echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+```{r outliers, echo = F, echo = F, dev = "svg", fig.width = 12, fig.height = 6}
 
 ggplot(data = df_with_outlier, aes(x = x, y = y)) +
   geom_point(size = 3, alpha = 0.8) +
@@ -1800,7 +1917,7 @@ count:false
 
 &nbsp;
 
-```{r outliers 2 lines, echo = F, echo = F, dev = "svg",fig.width = 9, fig.height = 4.5}
+```{r outliers 2 lines, echo = F, echo = F, dev = "svg", fig.width = 12, fig.height = 6}
 
 ggplot(data = df_with_outlier, aes(x = x, y = y)) +
   geom_point(size = 3, alpha = 0.8) +
