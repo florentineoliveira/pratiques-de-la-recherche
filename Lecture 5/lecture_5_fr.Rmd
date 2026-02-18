@@ -273,49 +273,29 @@ knitr::include_graphics("imgs/exogeneity.png")
 ---
 # Comment savoir si un instrument est bon ?
 
-&nbsp;
 
-.center[<span style="color:#dd0747">***Good instruments should feel weird***  `r emo::ji("disbelief")`</span>]
+.center[<span style="color:#dd0747">***Les bons instruments doivent paraître bizarre***  `r emo::ji("disbelief")`</span>]
 
-&nbsp;
 
 Les bons instruments peuvent sembler **contre-intuitifs**: ils créent un effet sur la variable endogène/instrument mais ne déterminent pas l'outcome.
   - un bon instrument doit susciter la confusion chez un auditeur non averti
   
-&nbsp;
 
 L’***exclusion restriction***, hypothèse clé mais **non testable**, est plus crédible lorsque l'instrument semble incongru 
   - il faut pouvoir défendre cette hypothèse avec une argumentation logique et théorique
-&nbsp;  
-  
+
+--
+
 Exemples : 
-  - composition de genre des deux premiers enfants comme instrument du numbre d'enfants et l’offre de travail des femmes
+  - composition de genre des deux aînés comme instrument du nombre d'enfants et de l'offre de travail des femmes
   - pluviométrie comme instrument pour le revenu sur la fréquence de conflits
-  - lotteries
-
-
-
-
-
----
-# Two-stage least squares (2SLS)
-
-&nbsp;  
-
-La méthode des variables instrumentales est souvent utilisée en deux étapes, en l'occurence lorsqu'il y a plusieurs instruments/variables endogènes:
-
-1. <span style="color:#33B8FF">**First stage**</span>: on régresse la variable endogène sur l'instrument et les contrôles, $D_i = \delta + \color{#27b072}{\gamma} Z_i + \xi_i$ et on garde la valeur prédite de la variable endogène $\hat{D}$
-2. <span style="color:#33B8FF">**Second stage**</span>: on régresse l'outcome sur la valeur prédite de la variable endogène $\hat{D}$ et les variables de contrôle. Cette régression ne conserve que la partie de l'instrument $Z$ qui est corrêlée avec la variable endogène $D$
-
-&nbsp;  
-
-L'estimateur 2SLS s'écrit:
-
-$$\color{#33B8FF}{\hat{\beta}^{2SLS} = \frac{\text{Estimateur de Reduced-Form}}{\text{Estimateur de First Stage}}} = \frac{\color{#eb8934}{\hat{\pi}}}{\color{#27b072}{\hat{\gamma}}} $$
+  - loteries
 
 
 ---
 # Forme réduite (*Reduced-Form*)
+
+&nbsp;
 
 Le modèle en <span style="color:#33B8FF">**reduced-form**</span>  s'écrit:
 
@@ -324,6 +304,38 @@ $$Y_i = \mu + \color{#eb8934}{\pi} \color{#9e5188}{Z_i} + \nu_i$$
 L'estimateur OLS de cette équation donne un estimateur causal de **l'effet de l'instrument** ( $\neq$ effet du traitement $D_i$) sur l'outcome.
 
 L'hypothèse d'identification est que l'instrument est bien exogène ( $Cov(\varepsilon_i, Z_i) = 0$ ) 
+
+
+
+
+
+---
+# Two-stage least squares (2SLS)
+
+--
+
+La méthode des variables instrumentales est souvent utilisée en deux étapes, en l’occurrence lorsqu'il y a plusieurs instruments/variables endogènes:
+
+--
+
+1. <span style="color:#33B8FF">**First stage**</span>: on régresse la variable endogène sur l'instrument et les contrôles, $D_i = \delta + \color{#27b072}{\gamma} Z_i + \xi_i$ et on garde la valeur prédite de la variable endogène $\hat{D}$. La première étape *purge* la variable endogène de sa partie corrélée avec l'erreur et ne conserve que la partie de $D$ qui est corrélée avec l'instrument $Z$.
+2. <span style="color:#33B8FF">**Second stage**</span>: on régresse l'outcome sur la valeur prédite de la variable endogène $\hat{D}$ et les variables de contrôle. Cette régression ne conserve donc que la partie de l'instrument $Z$ qui est corrélée avec la variable endogène $D$
+
+
+L'estimateur 2SLS s'écrit:
+
+$$\color{#33B8FF}{\hat{\beta}^{2SLS} = (D'P_ZD)^{-1}D'P_ZY = \frac{\text{Estimateur de Reduced-Form}}{\text{Estimateur de First Stage}}} = \frac{\color{#eb8934}{\hat{\pi}}}{\color{#27b072}{\hat{\gamma}}} $$
+
+avec $P_Z = Z(Z'Z)^{-1}Z'$ la matrice de projection de $Z$.
+
+--
+
+*NB: lorsque l'on a un seul instrument et une seule variable endogène, l'estimateur IV et 2SLS sont équivalents*
+
+--
+
+.center[`r emo::ji("rotating_light")` Toujours inclure les contrôles dans la *first stage* ET la *second stage* `r emo::ji("rotating_light")`]
+
 
 
 
@@ -375,7 +387,7 @@ L’estimation peut être réalisée en deux étapes manuelles:
 
 &nbsp;  
 
-## Option 2: Package `estimater`, fonction `iv_robust`
+## Option 2: Package `estimatr`, fonction `iv_robust`
 
 `iv_model <- iv_robust(Y ~ D + W | Z + W, data = data)`
 
@@ -387,7 +399,11 @@ L’estimation peut être réalisée en deux étapes manuelles:
 
 
 ---
+class: clearinverse
 background-color: #f19bb5
+
+&nbsp;
+
 # Application: Angrist and Krueger (1991)
 
 
@@ -416,11 +432,16 @@ background-color: #f19bb5
   
   
 ---
+class: clearinverse
 background-color: #f19bb5
+
+&nbsp;
+ 
 # Application: Angrist and Krueger (1991)
 
 ```{r, echo = T}
 library(estimatr)
+devtools::install_github("jrnold/masteringmetrics", subdir = "masteringmetrics")
 data("ak91", package = "masteringmetrics")
 
 ```
@@ -428,7 +449,11 @@ data("ak91", package = "masteringmetrics")
 
 
 ---
+class: clearinverse
 background-color: #f19bb5
+
+&nbsp;
+
 # Application: Angrist and Krueger (1991)
 
 
@@ -456,14 +481,17 @@ background-color: #f19bb5
 
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
+
 # Solution : Angrist and Krueger (1991)
 
 
 1) Expliquer pourquoi le trimestre de naissance est un bon instrument du nombre d'années d'études? 
   - quel est le mécanisme? l'instrument est-il valide?
-  
-&nbsp; 
+
 
 Mécanisme?
 
@@ -479,19 +507,24 @@ Instrument valide?
 --
 
   - Relevance: OK
-  - Exogeneité: indépendant de l'abilité (impossible que les élèves les plus abiles choisissent leur date de naissance)
+  - Exogeneité: a priori indépendant de l'abilité (peu probable que les élèves les plus habiles choisissent leur date de naissance)
+    - Arguments contre: la saisonnalité des naissance peut être corrélée à des facteurs socio-économiques (ex: les profs ont tendance à prévoir leurs enfants pour les vacances scolaires)
   - Excluabilité: n'a pas de raison d'affecter le salaire autrement que par l'effet sur l'éducation
 
 
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
+
 # Solution : Angrist and Krueger (1991)
 
 2) Représenter graphiquement le nombre d'années d'études et le salaire en fonction du trimestre de naissance. Que constatez-vous?
 
 
-```{r, include = T, echo = F,  dev = "svg", fig.width = 9, fig.height = 4.5}
+```{r, include = T, echo = T,  fig.show = 'hide'}
 
 ak91 %>%
     mutate(qob = as.numeric(as.character(qob)),
@@ -500,7 +533,38 @@ ak91 %>%
     group_by(qob, yob) %>%
     summarise(mean_w = mean(lnw), mean_educ = mean(s)) %>%
     mutate(q4 = (qob == 4)) %>% 
-    ggplot(aes(x = (as.numeric(yob) + (as.numeric(qob) - 1) / 4), y = mean_educ)) +
+    ggplot(aes(x = as.numeric(yob) + ((as.numeric(qob) - 1) / 4), y = mean_educ)) +
+    geom_line() +
+    geom_label(mapping = aes(label = qob, color = q4), size = 5) +  # Ajout de la taille pour les labels 
+    scale_x_continuous("Year of birth", breaks = 1930:1940) +
+    scale_y_continuous("Years of Education", breaks = seq(12.2, 13.2, by = 0.1),
+                       limits = c(12.2, 13.2)) +
+    scale_color_manual(values = c("FALSE" = "grey40", "TRUE" = "#dd0747")) +
+    theme_minimum
+```
+
+---
+count: false
+class: clearinverse
+background-color: #fbe6ec
+
+&nbsp;
+
+# Solution : Angrist and Krueger (1991)
+
+2) Représenter graphiquement le nombre d'années d'études et le salaire en fonction du trimestre de naissance. Que constatez-vous?
+
+
+```{r, include = T, echo = F,  dev = "svg", fig.width = 11, fig.height = 6}
+
+ak91 %>%
+    mutate(qob = as.numeric(as.character(qob)),
+           yob = as.numeric(as.character(yob))) %>% 
+    filter(yob %in% 1930:1940) %>% 
+    group_by(qob, yob) %>%
+    summarise(mean_w = mean(lnw), mean_educ = mean(s)) %>%
+    mutate(q4 = (qob == 4)) %>% 
+    ggplot(aes(x = as.numeric(yob) + ((as.numeric(qob) - 1) / 4), y = mean_educ)) +
     geom_line() +
     geom_label(mapping = aes(label = qob, color = q4), size = 5) +  # Ajout de la taille pour les labels 
     scale_x_continuous("Year of birth", breaks = 1930:1940) +
@@ -512,25 +576,30 @@ ak91 %>%
 
 ---
 count:false
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
+
 # Solution : Angrist and Krueger (1991)
 
 2) Représenter graphiquement le nombre d'années d'études et le salaire en fonction du trimestre de naissance. Que constatez-vous?
 
 
 
-```{r, include = T, echo = F,  dev = "svg", fig.width = 9, fig.height = 4.5}
+```{r, include = T, echo = F,  dev = "svg", fig.width = 11, fig.height = 6}
 
 ak91 %>%
     mutate(qob = as.numeric(as.character(qob)),
            yob = as.numeric(as.character(yob))) %>% 
     filter(yob %in% 1930:1940) %>% 
     group_by(qob, yob) %>%
-    summarise(mean_w = mean(lnw), mean_educ = mean(s)) %>%
+    summarise(mean_w = mean(lnw), 
+              mean_educ = mean(s)) %>%
     mutate(q4 = (qob == 4)) %>% 
-    ggplot(aes(x = (as.numeric(yob) + (as.numeric(qob) - 1) / 4), y = mean_w)) +
+    ggplot(aes(x = as.numeric(yob) + ((as.numeric(qob) - 1) / 4), y = mean_w)) +
     geom_line() +
-    geom_label(mapping = aes(label = qob, color = q4), size = 5) +  # Ajout de la taille pour les labels 
+    geom_label(mapping = aes(label = qob, color = q4), size = 5) +  
     scale_x_continuous("Year of birth", breaks = 1930:1940) +
     scale_y_continuous("Log weekly wage") +
     scale_color_manual(values = c("FALSE" = "grey40", "TRUE" = "#dd0747")) +
@@ -540,7 +609,11 @@ ak91 %>%
 
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
+
 # Solution : Angrist and Krueger (1991)
 
 3) Régressez le salaire sur le nombre d'années d'études. Interprétez
@@ -555,12 +628,17 @@ summary(ols)
 --
 
 .pull-right[
+- Dans un modèle *log-niveau*, $(e^{\hat{\beta}_{OLS}} -1) \times 100 \simeq \hat{\beta} _{OLS} \times 100$ lorsque $\hat{\beta}_{OLS}$ est petit (c'est le cas ici): une année d'études supplémentaire est associée à une augmentation de 7% du salaire hebdomadaire
 - Estimate OLS sûrement biaisé
-- Ability corrélée positivement à l'éducation et salaire $\implies$ *downward bias*
+  - Ability corrélée positivement à l'éducation et salaire $\implies$ *downward bias*
 ]
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
+
 # Solution : Angrist and Krueger (1991)
 
 4) Régressez le nombre d'années d'études sur la dummy Né au Q4. Interprétez
@@ -574,11 +652,15 @@ summary(fs)
 
 .pull-right[
 - FS statistiquement sognificative! $\implies$ **We have a first stage!!** 
-- F-stat > 10!
+- F-stat = 48 > 10!
 ]
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
+
 # Solution : Angrist and Krueger (1991)
 
 
@@ -590,7 +672,11 @@ summary(rf)
 ```
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
+
 # Solution : Angrist and Krueger (1991)
 
 6) Calculer l'estimateur 2SLS
@@ -606,7 +692,11 @@ summary(ss)
 ```
 
 ---
+class: clearinverse
 background-color: #fbe6ec
+
+&nbsp;
+
 # Solution : Angrist and Krueger (1991)
 
 6) Calculer l'estimateur 2SLS
@@ -623,73 +713,107 @@ summary(ss_b)
 ---
 # IV and RCT avec *imperfect compliance*
 
-## Example 2: Women in STEM
+### Exemple : Women in STEM
 
 On cherche (encore et toujours!) à connaître l'effet des études ( $D_i$ ) sur le salaire ( $Y_i$ )
-  - Plus précisément, on s'intéresse à l'effet d'aller en CPGE **STEM**
-
-Inspiré de <span style="color:#dd0747">**Breda, Grenet, Monnet et Van Effenterre (2023)**</span>
+  - Plus précisément, on s'intéresse à l'effet de poursuivre ses études supérieures dans une filière **STEM**
 
 **Motivation**: les filles sont sous-représentées dans les filières scientifiques alors même qu'elles sont douées en maths
   - Implications à LT sur le salaire 
-  - <span style="color:#dd0747">Problème: aller en CPGE n'est pas random </span>
+  - <span style="color:#dd0747">Problème: poursuivre en STEM n'est pas random </span>
 
-**Solution**: Intervention randomisée
-- interventions en classes tirées aléatoirement de femmes scientifiques (*Role Models*) pour déconstruire les stéréotypes de genre dans les sciences et pousser les filles à s’orienter dans les filières scientifiques
+**Solution**: Intervention randomisée de <span style="color:#dd0747">**Breda, Grenet, Monnet et Van Effenterre (2023)**</span>
+- Interventions en classes (tirées aléatoirement) de femmes scientifiques (*Role Models*) pour déconstruire les stéréotypes de genre dans les sciences et pousser les filles à s’orienter dans les filières scientifiques
 
 
 ---
 # IV and RCT avec *imperfect compliance*
 
-## Example 2: Women in STEM
+--
+
+### Exemple : Women in STEM
 
 
 $\implies$ **Notre instrument = assignation aléatoire à ce programme**
-  - corrélé avec le choix d'aller en CPGE (+3,5 pts ou +30% d'après Breda, Grenet, Monnet et Van Effenterre (2023))
-  - Hypothèse: n'affecte le salaire que via l'effet sur la probabilité d'aller en CPGE
+  - Les filles des classes sélectionnées aléatoirement alors que les filles classes non sélectionnées ne le seront pas
+  - Hypothèses: 
+    - Exclusivité: n'affecte le salaire que via l'effet sur la probabilité d'aller en CPGE 
+    - Exogénéité: par construction de la RCT, les classes sont tirées aléatoirement donc le traitement est exogène
+    - Relevance: les filles des classes ayant reçu la visite d'un rôle model sont plus probables de poursuivre en STEM (+3,5 pts ou +30% de s'orienter en CPGE scientifique d'après Breda, Grenet, Monnet et Van Effenterre (2023), aucun effet pour les garçons)
 
 --
 
-Si on estime le modèle en forme réduite, $\text{Salaire_i} = \alpha + \beta \text{Traîté}_i + W_i + \varepsilon_i$, où $D_i = 1$ si l'individu $i$ est assigné au programme, que représente $\beta$?
+Si on estime le modèle en forme réduite, $\text{Salaire}_i = \alpha + \beta \text{Traîté}_i + W_i + \varepsilon_i$, où $D_i = 1$ si l'individu $i$ est assigné au programme, que représente $\beta$?
 
 --
 
-$\beta$ représente la différence de salaire moyen des filles assignées au programme par rapport à celles qui n'ont pas bénéficié de l'intervention
-  - on dit que $\beta$ est l'**Intention To Treat (ITT)**
+$\beta$ représente la différence de salaire moyen des filles assignées au programme par rapport à celles qui n'ont pas bénéficié de l'intervention; on dit que $\beta$ est l'**Intention To Treat (ITT)**
 
 ---
 # IV and RCT avec *imperfect compliance*
 
-## Example 2: Women in STEM
+### Exemple : Women in STEM
 
 **Problème**: imperfect compliance
-- toutes les filles assignées à l'intervention ne vont pas aller en CPGE (= *never-takers*), donc l'effet est en quelques sortes dilué
-- certaines filles non assignées au traitement vont aller en CPGE (= *always-takers*)
-$\implies$ l'estimateur ne donne pas vraiment l'effet moyen de la CPGE sur le salaire puisque toutes les personnes traitées ne vont pas aller en CPGE
+- toutes les filles assignées à l'intervention ne vont pas poursuivre en STEM (= *never-takers*), donc l'effet est en quelques sortes dilué
+- certaines filles y seraient allées même en l'absence de traitement (= *always-takers*)
+
+$\implies$ comparer les assignées aux non-assignées capture l'effet de **l'intervention** sur le salaire, pas l'effet de **s'orienter en STEM**, car toutes les assignées ne s'orientent pas en STEM et d'autres se seraient orientés en STEM même en l'absence d'intervention
 
 --
 
-**Solution**: mesurer l'effet de la CPGE uniquement pour les filles qui ont changé d'avis grâce à l'intervention (=*Compliers*)
+**Solution**: mesurer l'effet de s'orienter en STEM uniquement pour les filles qui **ont changé d'avis grâce à l'intervention** (=*Compliers*)
   - $\beta$ est alors le Local Average Treatment Effect (LATE), où $LATE = \frac{\text{ITT}}{\text{Proportion de Compliers}}$
+
 
 ---
 # IV and RCT avec *imperfect compliance*
 
-## Example 2: Women in STEM
+### Exemple : Women in STEM
 
 Pour résumer:
 
 **Estimation de l'ITT (Intention-to-Treat)**
 
 On régresse le salaire sur l’assignation pour voir l’effet moyen de l’assignation sur le salaire (*Reduced-Form*):
+
 `itt_model <- lm(salaire ~ Assignation, data = data)`
+
+&nbsp;
 
 **Estimation du LATE (Local Average Treatment Effect)**
 
 On fait une estimation 2SLS:
 
-`iv_model <- iv_robust(salaire ~ CPGE | Assignation, data = data)`
+`iv_model <- iv_robust(salaire ~ STEM | Assignation, data = data)`
 
+
+---
+class: clearinverse
+background-color:  #d7e2d8
+
+## Recap: IV
+
+**Les quatre modèles**:
+- Modèle endogène: $Y_i = \alpha + \beta D_i + W_i + \varepsilon_i$
+- *First Stage*: $D_i = \alpha + \color{#27b072}{\gamma} \color{#9e5188}{Z_i} + W_i + \epsilon_i$
+- *Second Stage*: $Y_i = \alpha + \beta \color{#dd0747}{\hat{D}_i} + W_i + \varepsilon_i$
+- *Reduced Form*: $Y_i = \mu + \color{#eb8934}{\pi} \color{#9e5188}{Z_i} + W_i + \nu_i$
+
+**Estimateurs**:  $\color{#33B8FF}{\hat{\beta}^{IV} = (Z'D)^{-1}(Z'Y)}$ et $\color{#33B8FF}{\hat{\beta}^{2SLS} = (D'P_ZD)^{-1}D'P_ZY = } \frac{\color{#eb8934}{\hat{\pi}}}{\color{#27b072}{\hat{\gamma}}}$
+
+<span style="color:#9933FF">**Hypothèses d'identification:**</span>
+- <span style="color:#9933FF">**Relevance:** $\color{#9933FF}{Cov(D_i, Z_i) \neq 0}$: corrélation entre instrument et variable endogène est non nulle</span>
+  - <span style="color:#9933FF">Hypothèse testable! : $\color{#27b072}{\hat{\gamma}}$ significatif + F-stat > 10</span>
+- <span style="color:#9933FF">**Exclusivité:** $Z$ affecte $Y$ **uniquement via** $D$; **non testable**</span>
+- <span style="color:#9933FF">**Exogénéité:** $\color{#9933FF}{Cov(Z_i, \varepsilon_i) = 0}$; **non testable**</span>
+
+
+**Implémentation sur `R`**:
+- `iv_robust(Y ~ D + W | Z + W, data = data)`; package `estimatr` (SE robustes automatiques)
+- À la main: `lm(D ~ Z + W)` puis `lm(Y ~ D_hat + W)`
+
+.center[`r emo::ji("rotating_light")` Toujours inclure les contrôles dans la *first stage* ET la *second stage* `r emo::ji("rotating_light")`]
 
 
 ---
@@ -699,7 +823,6 @@ On fait une estimation 2SLS:
 [Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/07-instrumental_variables)    
 [Instrumental Variables, Edward Rubin](https://raw.githack.com/edrubin/EC525S19/master/NotesLecture/08IV/08IV.html#1)           
 [Instrumental Variables - Applications, Florian Oswald](https://raw.githack.com/edrubin/EC525S19/master/NotesLecture/08IV/08IV.html#1)        
-
 
 
 
