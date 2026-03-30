@@ -3,8 +3,8 @@
   <head>
     <title>Méthode des Doubles Différences (DiD)</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2025-04-11" />
+    <meta name="author" content="Florentine Oliveira-Roux" />
+    <meta name="date" content="2026-03-17" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
@@ -21,10 +21,10 @@ class: center, middle, inverse, title-slide
 ## Pratiques de la Recherche en Économie
 ]
 .author[
-### Florentine Oliveira
+### Florentine Oliveira-Roux
 ]
 .date[
-### 2025-04-11
+### 2026-03-17
 ]
 
 ---
@@ -39,11 +39,11 @@ layout: true
 
 &amp;nbsp;
 
-- Les méthodes abordées précédemment (régression OLS simple, variable instrumentale) concernaient des données en **coupe instantanée** (*cross-section*) ou des échantillons répétés dans le temps (*repeated cross-section*) sans suivi individuel
+Les méthodes abordées précédemment (régression OLS simple, variable instrumentale) concernaient des données en **coupe instantanée** (*cross-section*) ou des échantillons répétés dans le temps (*repeated cross-section*) sans suivi individuel
 
 &amp;nbsp;
 
-- Cette séance: données de panel   
+Cette séance: données de panel   
   - Effets fixes individus (très rapidement)   
   - Méthode des doubles différences   
 
@@ -51,29 +51,37 @@ layout: true
 ---
 # Données de Pannel et Effet Fixe Individu
 
+&amp;nbsp;
+
 Dans un jeu de données de panel, on observe:
 - de multiples observations `\(t\)` (année, trimestre, etc)
-- pour de multiples individus ( `\(i\)` )
+- pour de multiples individus `\(i\)` 
 
 Le modèle de régression devient alors, pour tout &lt;span style="color:#27b072"&gt;individu&lt;/span&gt; `\(\color{#27b072}{i}\)` et &lt;span style="color:#9e5188"&gt;période&lt;/span&gt; `\(\color{#9e5188}{t}\)`:
 
 `$$y_{\color{#27b072}{i} \color{#9e5188}{t}} = \alpha + \beta D_{\color{#27b072}{i} \color{#9e5188}{t}} + \varepsilon_{\color{#27b072}{i} \color{#9e5188}{t}}$$`
-### Effet fixe
+où:
+- `\(y_{it}\)` est l'outcome d'intérêt
+- `\(D_{it}\)` le traitement qui vaut 1 si l'individu `\(i\)` est traité, 0 sinon
+- `\(\varepsilon_{it}\)` le terme d'erreur
 
 
-En incluant un **effet fixe** dans notre modèle de régression, on contrôle par tous les facteurs individuels **constants au cours du temps**, à la fois observables et non-observables.
+---
+# Effet fixe
 
-  `\(\implies\)` on n'utilise plus la variation entre les unités d'observations, les `\(i\)` (*between*), mais la variation intra-individuelle (variation d'un même individu dans le temps, *within*).
+En incluant un **effet fixe individu** dans notre modèle de régression, on contrôle par tous les facteurs individuels **constants au cours du temps**, à la fois observables et &lt;span style="color:#dd0747"&gt;**non-observables**&lt;/span&gt;
+
+  `\(\implies\)` on utilise la variation intra-individuelle (variation pour un même individu dans le temps, *within*).
 
 Le modèle s'écrit:
 `$$y_{it} = \alpha + \beta D_{it} + \color{#dd0747}\alpha_{\color{#27b072}{i}} +  \varepsilon_{it}$$`
 
 ---
-# Données de Pannel et Effet Fixe Individu
+# Exemple: effet de la taille de la ville sur le salaire
 
 &amp;nbsp;
   
-Exemple: quel est l'effet de la taille de la ville sur le salaire (*urban wage premium*)? 
+Quel est l'effet de la taille de la ville sur le salaire (*urban wage premium*) ? 
 
 --
 
@@ -85,7 +93,7 @@ Pourquoi ne peut-on pas déduire l'effet de la taille de la ville en comparant l
 
 --
 
-**Solution**: Effet fixe individu! Cela veut dire que l'on exploite pour l'identification la variation au sein d'un individu, autrement dit uniquement sur les individus qui sont amenés à déménager (*movers*).
+**Solution**: Effet fixe individu! Cela veut dire que l'on exploite pour l'identification la variation de lieu de résidence individuelle, autrement dit uniquement sur les individus qui sont amenés à déménager (*movers*).
 
 --
 
@@ -97,25 +105,25 @@ Pourquoi ne peut-on pas déduire l'effet de la taille de la ville en comparant l
 
 &amp;nbsp;
 
-- Méthode des doubles-différences s'appuie sur des **expériences naturelles**, i.e. une politique ou un changement institutionnel qui induit un traitement pour un groupe donné à un moment précis
+Méthode des doubles-différences s'appuie sur des **expériences naturelles**, i.e. une politique ou un changement institutionnel qui induit un traitement pour un groupe donné à un moment précis
 
 &amp;nbsp;
 
-- Contrairement aux "vraies expériences" où les groupes de contrôle et de traitement sont constitués par assignation aléatoire, les groupes sont déterminées par le changement de politique particulier.
+Contrairement aux "vraies expériences" où les groupes de contrôle et de traitement sont constitués par assignation aléatoire, les groupes sont déterminées par le changement de politique particulier.
 
 &amp;nbsp;
 
-- Les données de panel et la méthode des DiD permettent de tenir compte de cette sélection sur des caractéristiques non-observables, du moment que ces **caractéristiques sont constantes dans le temps**
+Les données de panel et la méthode des DiD permettent de tenir compte de cette sélection sur des caractéristiques non-observables, à condition que ces &lt;span style="color:#dd0747"&gt;**caractéristiques soient constantes dans le temps**&lt;/span&gt;
 
 
 
 ---
-# 1. Intuition
+# Intuition
 
 &amp;nbsp;
 
 
-Si, avant la mise en place du traitement, le groupe d'individus traités et contrôles diffèrent, cela est probablement dû à des éléments non observés (biais de sélection)
+Si, avant la mise en place du traitement, le groupe d'individus traités et contrôles diffèrent, cela est probablement en partie dû à des éléments non observés (biais de sélection)
 
   `\(\implies\)` on utilise cette différence pré-traitement comme référence pour "corriger" le biais initial
 
@@ -130,7 +138,7 @@ On compare donc la différence entre les deux groupes (première différence), a
 &amp;nbsp;
 
   
-Cela suppose que l’**hypothèse de tendance parallèle** est valable: en l’absence de politique, l’écart entre les deux groupes serait resté constant dans le temps.
+Cela suppose que l’**hypothèse de tendance parallèle** est valable: en l’absence de politique (traitement), l’écart entre les deux groupes serait resté constant dans le temps.
 
 
 
@@ -141,22 +149,21 @@ Cela suppose que l’**hypothèse de tendance parallèle** est valable: en l’a
 Supposons qu'il y a:      
 - `\(t\)` périodes `\(\in \{1,T\}\)`   
 - un groupe d'individus `\(i \in [\![1;n]\!]\)` traités `\(D_i = 1\)`, et non traités `\(D_i = 0\)`   
-- les individus sont traités en `\(t=1\)`   
+- les individus sont traités en `\(g_i\)`   
 
 &amp;nbsp;
 
-Le modèle s'écrit: 
+Si `\(T=n=2\)`, le modèle s'écrit: 
 
 `$$Y_{it} = \alpha + \color{#dd0747}{\beta_{DiD}} (D_i \times Post_{t}) + \delta D_i + \eta Post_t + \varepsilon_{it}$$`
-Généralisation d'un modèle à plusieurs périodes et traitement (et traitement pouvant être staggered - *event-study*):
+Généralisation d'un modèle à plusieurs périodes:
 
-`$$Y_{it} = \alpha + \sum_{t=1}^T \color{#dd0747}{\beta^{TWFE}_t} D_{it}  + \gamma_i + \eta_t + \varepsilon_{it}$$`
+`$$Y_{it} = \color{#dd0747}{\beta^{TWFE}} D_{it} + \delta_i + \gamma_t +  \varepsilon_{it}$$`
+avec `\(D_{it} = \mathbb{1}\{t \ge g_i\}\)`
 
-
-NB: pour la généralisation: TWFE et discussions récentes autour des estimateurs DiD.
 
 ---
-# Hypothèse d'identification
+# Hypothèses d'identification
 
 &lt;span style="color:#9933FF"&gt; **Parallel trends**&lt;/span&gt; 
 - &lt;span style="color:#9933FF"&gt;En l'absence de traitement, l'outcome moyen des individus traités aurait évolué de la même manière que celui des individus non traités&lt;/span&gt; 
@@ -169,11 +176,76 @@ NB: pour la généralisation: TWFE et discussions récentes autour des estimateu
 - &lt;span style="color:#9933FF"&gt; Formellement,&lt;/span&gt;  `\(\color{#9933FF}{Y_{i1}(1) = Y_{i1}(0)}\)` 
 
 
+---
+# Event Study
+
+On peut aussi estimer un effet dynamique, par période relative à l'adoption du traitement:
+
+`$$Y_{it} = \sum_{k \neq -1} \color{#dd0747}{\beta_{k}} \mathbb{1}\{k = t - g_i \} + \delta_i + \gamma_t + \varepsilon_{it}$$`
+
+où `\(k = t - g_i\)` est le **temps relatif à l'adoption** (*time to treatment*)
+
+&amp;nbsp;
+
+Pour &lt;span style="color:#dd0747"&gt;**tester les tendances parallèles**&lt;/span&gt;, on vérifie que pur `\(k &lt; -1\)`, le traitement n'est pas encore actif `\(\hat{\beta}_k \approx 0\)`
+
+Les coefficients `\(\hat{\beta}_k\)` permettent d'&lt;span style="color:#dd0747"&gt;**estimer la dynamique de l'effet**&lt;/span&gt;: pour `\(k \geq 0\)`, `\(\hat{\beta}_k\)` capture l'effet du traitement `\(k\)` périodes après l'adoption
+
+NB: La période `\(k = -1\)` est normalisée à zéro par construction (catégorie de référence)
+
+
+**Implémentation sur `R`** : `feols(y ~ i(time_to_treat, ref = -1) | id + year, data = data)`
+
+---
+# Traitement à adoption différé et effets hétérogènes
+
+La littérature sur les DiD est très active ces dernières années et a notamment permis de montrer
+
+- La **décomposition de l’estimateur TWFE** en une moyenne pondérée des effets de traitement deux à deux (Goodman-Bacon, 2021)
+
+&amp;nbsp;
+
+--
+
+- Les problèmes liés à l'utilisation de l'estimateur TWFE lorsque l'adoption du traitement est différée et que les effets sont hétérogènes, et les **estimateurs permettant de corriger ces biais**
+  - de Chaisemartin and d'Hautefeuille (2020), package R `DIDmultiplegtDYN`
+  - Callaway and Sant'Anna (2021), package R `did`
+  - Sun and Abraham (2020), `sunab()` argument in `fixest`
+  - Borusyak, Jaravel and Spiess (2024), package R `didimputation`
+  
+&amp;nbsp;
+
+--
+
+- Les méthodes permettant de gérer des traitements dits *non-absorbing* 
+
 
 
 ---
+# Exemple: les collèges sans note
+
+&lt;img src="imgs/treatment_dates.png" alt="" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Exemple: les collèges sans note
+
+&lt;img src="imgs/balancing_plot.png" alt="" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+# Exemple: les collèges sans note
+
+&lt;img src="imgs/cs_final.png" alt="" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+class: clearinverse
 background-color: #f19bb5
-# Application: Card and Krueger (1994)
+
+&amp;nbsp;
+
+# Application 1: Card and Krueger (1994)
 
 
 **Question de Recherche**: quel est l'effet causal d'une augmentation du salaire minimum sur le taux d'emploi?
@@ -200,8 +272,12 @@ background-color: #f19bb5
 
 
 ---
+class: clearinverse
 background-color: #f19bb5
-# Application: Card and Krueger (1994)
+
+&amp;nbsp;
+
+# Application 1: Card and Krueger (1994)
 
 1) Importez les données sur `R`et stockez dans `df`. Créer les variables:
   - `fte_before` (équivalent temps-plein)  `= empft + nmgrs + (0.5*emppt)`  
@@ -217,10 +293,14 @@ background-color: #f19bb5
 5) Proposez un modèle économétrique qui estime l'effet du traitement.
 
 
-  
 
 ---
+exclude: true
+class: clearinverse
 background-color: #fbe6ec
+
+&amp;nbsp;
+
 # Solution : Card and Krueger (1994)
 
 1) Importez les données sur `R`et stockez dans `df`. Créer les variables:
@@ -236,9 +316,14 @@ df = readRDS("data/ck1994.rds") %&gt;%
          fte_after = empft2 + nmgrs2 + (0.5*emppt2),
          state = ifelse(state == 0, "Pennsylvanie", "New Jersey"))
 ```
-  
+
 ---
+exclude: true
+class: clearinverse
 background-color: #fbe6ec
+
+&amp;nbsp;
+
 # Solution : Card and Krueger (1994)
 
 2) **Pourquoi s'intéresser à l'industrie des fast-food**, et à quel effet s'attend-t-on?  
@@ -251,10 +336,14 @@ background-color: #fbe6ec
 
 - Marché très concurrentiel: les fast-foods présentent des caractéristiques homogènes en termes de produits et de processus, ce qui permet de réduire les variations non liées au salaire minimum et d'isoler plus clairement l'effet de la politique salariale.
 
-
 ---
+exclude: true
+class: clearinverse
 count:false
 background-color: #fbe6ec
+
+&amp;nbsp;
+
 # Solution : Card and Krueger (1994)
 
 2) Pourquoi s'intéresser à l'industrie des fast-food, et **à quel effet s'attend-t-on? ** 
@@ -270,12 +359,16 @@ background-color: #fbe6ec
 --
 
 Théoriquement, on s'attend à un effet négatif:
-- une hausse du coût de la main d’œuvre `\(\implies\)` 
-
+- une hausse du coût de la main d’oeuvre `\(\implies\)` 
 
 
 ---
+exclude: true
+class: clearinverse
 background-color: #fbe6ec
+
+&amp;nbsp;
+
 # Solution : Card and Krueger (1994)
 
 3) Calculer le nombre moyen d'employés en équivalent temps-plein par store dans chaque état, avant et après la réforme, et l'évolution de cette moyenne. Interpréter.
@@ -300,7 +393,12 @@ df %&gt;%
 ```
 
 ---
+exclude: true
+class: clearinverse
 background-color: #fbe6ec
+
+&amp;nbsp;
+
 # Solution : Card and Krueger (1994)
 
 4) Calculer la différence de changement d'heures entre New Jersey et Pennsylvanie. Interprétez.
@@ -315,8 +413,403 @@ background-color: #fbe6ec
 
 `$$FTE = \alpha + \beta \;\text{New Jersey}_{i} + \delta \; \text{Post April 1st 1992}_{t} + \gamma \;({\text{New Jersey}_i \;\times \; \text{Post April 1st 1992}_t }) + \varepsilon_{it}$$`
 
+
+
+
 ---
+class: clearinverse
+background-color: #f19bb5
+
+&amp;nbsp;
+
+# Application 2: Medicaid Expansion
+
+Exemple tiré du site interractif de reproduction des résultats de Difference-in-Differences Designs: A Practitioner's Guide, Baker, Callaway, Cunningham and Goodman-Bacon (JEL) [https://psantanna.com/JEL-DiD/markdown/R_Stata/Code_Appendix.html#introduction]
+
+--
+
+**Contexte** : l'Affordable Care Act (ACA) a permis aux états américains d'étendre leur programme Medicaid
+- L'adoption est **échelonnée** (*staggered*) : certains états adoptent en 2014, d'autres en 2015, 2016, etc
+- Les états non-adoptants servent de groupe contrôle
+
+**Outcome** : taux de mortalité brut pour les 20-64 ans (`crude_rate_20_64`)
+
+**Question de recherche** : l'expansion Medicaid a-t-elle réduit la mortalité ?
+
+
+---
+class: clearinverse
+background-color: #f19bb5
+
+&amp;nbsp;
+
+# Application 2: Medicaid Expansion
+
+**Partie 1 — Préparation des données**
+
+1) Importez les données (`county_mortality_data_cleaned.rds`) et stockez dans `data`. Créez les variables suivantes :
+   - `treat` : vaut 1 si l'état a adopté Medicaid avant 2019 ou en 2019, 0 sinon
+   - `treat_year` : année d'adoption de l'état, égal à 0 si jamais adoptant ou adoptant après 2019
+   - `time_to_treat` : nombre d'années par rapport à l'adoption ( `\(= t - g\)` ), égal à `\(-\infty\)` pour les non-adoptants
+   - `post` : vaut 1 si l'année de traitement est supérieure ou égale à 2014, 0 sinon
+
+2) Tracez l'évolution du taux de mortalité moyen au cours du temps selon le groupe de traitement. Que remarquez-vous ?
+  - *Hints: utiliser la variable `crude_rate_20_64` et les poids `set_wt`*
+
+---
+class: clearinverse
+background-color: #f19bb5
+
+&amp;nbsp;
+
+# Application 2: Medicaid Expansion
+
+**Partie 2 — DiD 2×2 de référence**
+
+3) Restreignez l'échantillon aux comtés des états adoptant en **2014** et des états **jamais adoptants**. Appelez ce sous-échantillon `data_2x2`.
+
+4) Sur `data_2x2`, calculez le taux de mortalité moyen par groupe (adoptants 2014 / non-adoptants) et par période (avant 2014 / après 2014). Calculez l'estimateur DiD 2×2 à la main puis par régression OLS avec `feols()`. Interprétez.
+
+
+&amp;nbsp;
+
+**Partie 3 — Estimation TWFE sur toutes les cohortes**
+
+5) Sur l'ensemble des données `data`, estimez le TWFE suivant avec `feols()`. Interprétez.
+
+6) Réalisez une **event-study** en estimant : `crude_rate_20_64 ~ i(time_to_treat, ref = -1) | county_code + year`
+   Représentez graphiquement les coefficients `\(\hat{\beta}_k\)` avec leurs intervalles de confiance à 95%.   
+   Que nous apprend ce graphique sur l'hypothèse de tendances parallèles ? Sur l'effet du traitement?
+
+
+---
+class: clearinverse
+background-color: #fbe6ec
+
+&amp;nbsp;
+
+# Solution: Medicaid Expansion
+
+1) Importez les données (`county_mortality_data_cleaned.rds`) et stockez dans `data`. Créez les variables suivantes :
+   - `treat` : vaut 1 si l'état a adopté Medicaid avant 2019 ou en 2019, 0 sinon
+   - `treat_year` : année d'adoption de l'état, égal à 0 si jamais adoptant ou adoptant après 2019
+   - `time_to_treat` : nombre d'années par rapport à l'adoption ( `\(= t - g\)` ), égal à `\(-\infty\)` pour les non-adoptants
+   - `post` : vaut 1 si l'année de traitement est supérieure ou égale à 2014, 0 sinon
+   
+
+``` r
+data = readRDS("data/county_mortality_data_cleaned.rds") %&gt;%
+  mutate(treat = ifelse(!is.na(yaca) &amp; yaca &lt;= 2019, 1, 0),
+         treat_year = ifelse(!is.na(yaca) &amp; yaca &lt;= 2019, yaca, 0),
+         time_to_treat = ifelse(treat == 1, year - treat_year, -Inf),
+         post = ifelse(year &gt;= 2014, 1, 0))
+```
+
+
+
+---
+count: false
+class: clearinverse
+background-color: #fbe6ec
+
+&amp;nbsp;
+
+# Solution: Medicaid Expansion
+
+1) Importez les données (`county_mortality_data_cleaned.rds`) et stockez dans `data`. Créez les variables suivantes :
+   - **`treat` : vaut 1 si l'état a adopté Medicaid avant 2019 ou en 2019, 0 sinon**
+   - `treat_year` : année d'adoption de l'état, égal à 0 si jamais adoptant ou adoptant après 2019
+   - `time_to_treat` : nombre d'années par rapport à l'adoption ( `\(= t - g\)` ), égal à `\(-\infty\)` pour les non-adoptants
+   - `post` : vaut 1 si l'année de traitement est supérieure ou égale à 2014, 0 sinon
+   
+
+``` r
+data = readRDS("data/county_mortality_data_cleaned.rds") %&gt;%
+* mutate(treat = ifelse(!is.na(yaca) &amp; yaca &lt;= 2019, 1, 0),
+         treat_year = ifelse(!is.na(yaca) &amp; yaca &lt;= 2019, yaca, 0),
+         time_to_treat = ifelse(treat == 1, year - treat_year, -Inf),
+         post = ifelse(year &gt;= 2014, 1, 0))
+```
+
+
+---
+count: false
+class: clearinverse
+background-color: #fbe6ec
+
+&amp;nbsp;
+
+# Solution: Medicaid Expansion
+
+1) Importez les données (`county_mortality_data_cleaned.rds`) et stockez dans `data`. Créez les variables suivantes :
+   - `treat` : vaut 1 si l'état a adopté Medicaid avant 2019 ou en 2019, 0 sinon
+   - **`treat_year` : année d'adoption de l'état, égal à 0 si jamais adoptant ou adoptant après 2019**
+   - `time_to_treat` : nombre d'années par rapport à l'adoption ( `\(= t - g\)` ), égal à `\(-\infty\)` pour les non-adoptants
+   - `post` : vaut 1 si l'année de traitement est supérieure ou égale à 2014, 0 sinon
+   
+
+``` r
+data = readRDS("data/county_mortality_data_cleaned.rds") %&gt;%
+  mutate(treat = ifelse(!is.na(yaca) &amp; yaca &lt;= 2019, 1, 0),
+*        treat_year = ifelse(!is.na(yaca) &amp; yaca &lt;= 2019, yaca, 0),
+         time_to_treat = ifelse(treat == 1, year - treat_year, -Inf),
+         post = ifelse(year &gt;= 2014, 1, 0))
+```
+
+
+---
+count: false
+class: clearinverse
+background-color: #fbe6ec
+
+&amp;nbsp;
+
+# Solution: Medicaid Expansion
+
+1) Importez les données (`county_mortality_data_cleaned.rds`) et stockez dans `data`. Créez les variables suivantes :
+   - `treat` : vaut 1 si l'état a adopté Medicaid avant 2019 ou en 2019, 0 sinon
+   - `treat_year` : année d'adoption de l'état, égal à 0 si jamais adoptant ou adoptant après 2019
+   - **`time_to_treat` : nombre d'années par rapport à l'adoption ( `\(= t - g\)` ), égal à `\(-\infty\)` pour les non-adoptants**
+   - `post` : vaut 1 si l'année de traitement est supérieure ou égale à 2014, 0 sinon
+   
+
+``` r
+data = readRDS("data/county_mortality_data_cleaned.rds") %&gt;%
+  mutate(treat = ifelse(!is.na(yaca) &amp; yaca &lt;= 2019, 1, 0),
+         treat_year = ifelse(!is.na(yaca) &amp; yaca &lt;= 2019, yaca, 0),
+*        time_to_treat = ifelse(treat == 1, year - treat_year, -Inf),
+         post = ifelse(year &gt;= 2014, 1, 0))
+```
+
+---
+count: false
+class: clearinverse
+background-color: #fbe6ec
+
+&amp;nbsp;
+
+# Solution: Medicaid Expansion
+
+1) Importez les données (`county_mortality_data_cleaned.rds`) et stockez dans `data`. Créez les variables suivantes :
+   - `treat` : vaut 1 si l'état a adopté Medicaid avant 2019 ou en 2019, 0 sinon
+   - `treat_year` : année d'adoption de l'état, égal à 0 si jamais adoptant ou adoptant après 2019
+   - `time_to_treat` : nombre d'années par rapport à l'adoption ( `\(= t - g\)` ), égal à `\(-\infty\)` pour les non-adoptants
+   - **`post` : vaut 1 si l'année de traitement est supérieure ou égale à 2014, 0 sinon**
+   
+
+``` r
+data = readRDS("data/county_mortality_data_cleaned.rds") %&gt;%
+  mutate(treat = ifelse(!is.na(yaca) &amp; yaca &lt;= 2019, 1, 0),
+         treat_year = ifelse(!is.na(yaca) &amp; yaca &lt;= 2019, yaca, 0),
+         time_to_treat = ifelse(treat == 1, year - treat_year, -Inf),
+*        post = ifelse(year &gt;= 2014, 1, 0))
+```
+
+---
+class: clearinverse
+background-color: #fbe6ec
+
+&amp;nbsp;
+
+# Solution: Medicaid Expansion
+
+2) Tracez l'évolution du taux de mortalité moyen au cours du temps selon le groupe de traitement. Que remarquez-vous ?
+  - *Hints: utiliser la variable `crude_rate_20_64` et les poids `set_wt`*
+
+
+
+``` r
+data %&gt;% 
+  mutate(treat_year = ifelse(treat_year == 0, "Counties non adoptants", as.character(treat_year))) %&gt;% 
+  group_by(treat_year, year) %&gt;% 
+  summarize(mortality = weighted.mean(crude_rate_20_64, set_wt)) %&gt;% 
+  ggplot(aes(x = year, y = mortality, group = as.factor(treat_year), color = as.factor(treat_year))) + 
+  geom_point(size = 2) + geom_line(linewidth = 1) + 
+  scale_color_manual(values = c("#7C7189", "#D04E59", "#BC8E7D", "#2F3D70", "#CABEE9")) + 
+  scale_x_continuous(breaks = 2009:2019) + 
+  labs(x = "", y = "Mortalité (20-64) \n pour 100,000 habitants") + 
+  theme(legend.position = 'bottom',
+        axis.title.y = element_text(hjust = 0.5, vjust = 0.5, angle = 360),
+        strip.text = element_text(size = 14),
+        panel.border = element_rect(color = "black", fill = NA, linewidth = 1),
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"),
+        plot.background = element_rect(fill = "#FAFAFA", color = "#FAFAFA"),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10)) 
+```
+
+
+---
+count: false
+class: clearinverse
+background-color: #fbe6ec
+
+&amp;nbsp;
+
+# Solution: Medicaid Expansion
+
+2) Tracez l'évolution du taux de mortalité moyen au cours du temps selon le groupe de traitement. Que remarquez-vous ?
+  - *Hints: utiliser la variable `crude_rate_20_64` et les poids `set_wt`*
+
+
+&lt;img src="lecture_6_fr_files/figure-html/unnamed-chunk-13-1.svg" alt="" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+
+
+---
+class: clearinverse
+background-color: #fbe6ec
+
+&amp;nbsp;
+
+# Solution: Medicaid Expansion
+
+3) Restreignez l'échantillon aux comtés des états adoptant en **2014** et des états **jamais adoptants**. Appelez ce sous-échantillon `data_2x2`.
+
+4) Sur `data_2x2`, calculez le taux de mortalité moyen par groupe (adoptants 2014 / non-adoptants) et par période (avant 2014 / après 2014). Calculez l'estimateur DiD 2×2 à la main puis par régression OLS avec `feols()`. Interprétez.
+
+
+
+``` r
+data_2x2 = data %&gt;% 
+  filter(treat_year %in% c(0, 2014)) 
+
+did = data_2x2 %&gt;% 
+  group_by(treat_year, post) %&gt;%
+  summarise(mortality = weighted.mean(crude_rate_20_64, set_wt)) %&gt;%
+  ungroup() 
+
+did_estimate = (did[did$treat_year == 2014 &amp; did$post == 1, "mortality"] -  did[did$treat_year == 2014 &amp; did$post == 0, "mortality"]) - 
+  (did[did$treat_year == 0 &amp; did$post == 1, "mortality"] - did[did$treat_year == 0 &amp; did$post == 0, "mortality"])
+
+did_estimate_ols = summary(feols(crude_rate_20_64 ~ treat*post, data = data_2x2, weights = ~set_wt))$coeftable["treat:post", "Estimate"]
+```
+
+---
+class: clearinverse
+background-color: #fbe6ec
+
+&amp;nbsp;
+
+# Solution: Medicaid Expansion
+
+5) Sur l'ensemble des données `data`, estimez le TWFE suivant avec `feols()`. Interprétez.
+
+
+``` r
+data$post_all = ifelse(data$treat == 1 &amp; data$year &gt;= data$treat_year, 1, 0)
+
+twfe = feols(crude_rate_20_64 ~ post_all | county_code + year, data = data, weights = ~ as.numeric(set_wt), cluster = ~ county_code)
+ 
+etable(twfe)
+```
+
+```
+##                             twfe
+## Dependent Var.: crude_rate_20_64
+##                                 
+## post_all         -0.9352 (2.177)
+## Fixed-Effects:  ----------------
+## county_code                  Yes
+## year                         Yes
+## _______________ ________________
+## S.E.: Clustered  by: county_code
+## Observations              28,644
+## R2                       0.93863
+## Within R2                6.52e-5
+## ---
+## Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+class: clearinverse
+background-color: #fbe6ec
+
+&amp;nbsp;
+
+# Solution: Medicaid Expansion
+
+6) Réalisez une **event-study** en estimant : `crude_rate_20_64 ~ i(time_to_treat, ref = -1) | county_code + year`
+   Représentez graphiquement les coefficients `\(\hat{\beta}_k\)` avec leurs intervalles de confiance à 95%.   
+   Que nous apprend ce graphique sur l'hypothèse de tendances parallèles ? Sur l'effet du traitement?
+
+
+``` r
+es = feols(crude_rate_20_64 ~ i(time_to_treat, treat, ref = -1) | county_code + year, data = data, weights = ~ set_wt, cluster = ~ county_code) 
+
+coefs_es = broom::tidy(es, conf.int = TRUE) %&gt;%
+    filter(str_detect(term, "time_to_treat")) %&gt;%
+    mutate(k = as.numeric(str_extract(term, "-?[0-9]+"))) %&gt;%
+    bind_rows(tibble(k = -1, estimate = 0, conf.low = 0, conf.high = 0)) %&gt;%
+    arrange(k)
+
+ggplot(coefs_es, aes(x = k, y = estimate)) +
+    geom_hline(yintercept = 0, linetype = "dashed", color = "gray50", linewidth = 0.8) +
+    geom_vline(xintercept = -0.5, linetype = "dotted", color = "gray50", linewidth = 0.8) +
+    geom_ribbon(aes(ymin = conf.low, ymax = conf.high),
+                fill = "#f8cdda", alpha = 0.6) +
+    geom_line(color = "#D04E59", linewidth = 1) +
+    geom_point(color = "#D04E59", size = 2.5) +
+    geom_point(data = filter(coefs_es, k == -1),
+               shape = 21, fill = "white", color = "#D04E59", size = 3) +
+    scale_x_continuous(breaks = seq(-10, 5, by = 1)) +
+    labs(
+        x = "Années par rapport à l'adoption (k)",
+        y = "Coefficient estimé\n(pour 100 000)"
+    ) +
+    theme_bw() +
+    theme(
+        text             = element_text(family = "Palatino"),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_line(color = "gray90"),
+        axis.title.y     = element_text(hjust = 0.5, vjust = 0.5)
+    )
+```
+
+&lt;img src="lecture_6_fr_files/figure-html/unnamed-chunk-16-1.svg" alt="" style="display: block; margin: auto;" /&gt;
+
+---
+class: clearinverse
+background-color: #fbe6ec
+
+&amp;nbsp;
+
+# Solution: Medicaid Expansion
+
+6) Réalisez une **event-study** en estimant : `crude_rate_20_64 ~ i(time_to_treat, ref = -1) | county_code + year`
+   Représentez graphiquement les coefficients `\(\hat{\beta}_k\)` avec leurs intervalles de confiance à 95%.   
+   Que nous apprend ce graphique sur l'hypothèse de tendances parallèles ? Sur l'effet du traitement?
+
+&lt;img src="lecture_6_fr_files/figure-html/unnamed-chunk-17-1.svg" alt="" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# VRAIS effets de l'expansion Medicaid sur la mortalité
+
+&amp;nbsp;
+
+Les estimations obtenues sont purement illustratives:
+- nos données agrégées au niveau comté diluent l'effet en incluant des populations non éligibles à Medicaid
+- elles couvrent une fenêtre post-traitement trop courte pour que les effets sur la mortalité se matérialisent
+
+--
+
+Miller, Johnson and Wherry (2021, QJE): *individuals in expansion states experienced a 0.132 percentage point decline in annual mortality, a 9.4% reduction over the sample mean, as a result of the Medicaid expansions. The effect is driven by a reduction in disease-related deaths and grows over time.*
+
+
+---
+# Miller et al. (2021, QJE)
+
+&lt;img src="imgs/miller_et_al.png" alt="" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+class: clearinverse
 background-color: #d7e2d8
+
+&amp;nbsp;
+
 # Recap: Méthode des Doubles Différences
 
 **Data**: Données de pannel 
@@ -325,25 +818,35 @@ background-color: #d7e2d8
 - &lt;span style="color:#9933FF"&gt; **Parallel Trends**: en l'absence du traitement, les groupes traités et contrôles auraient évolué de manière similaire ( `\(\color{#9933FF}{\mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 1 ]  =  \mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 0]}\)` ) &lt;/span&gt;
 - &lt;span style="color:#9933FF"&gt; **Absence d'anticipation**: le traitement n'a pas d'effet avant sa mise en place `\(\color{#9933FF}{Y_{i1}(1) = Y_{i1}(0)}\)` &lt;/span&gt;
 
-**Modèle simple à deux périodes / deux groupes** : pour tout individu `\(i\)` et période `\(t\)`,
-`$$Y_{it} = \alpha + \beta (D_i \times Post_t) + \delta D_i + \eta Post_t + \varepsilon_{it}$$`
-
-**Estimateur** : Différence des différences de moyennes :  
-  `\(\hat{\beta}_{DiD} = (\bar{Y}_{\text{traités, après}} - \bar{Y}_{\text{traités, avant}}) - (\bar{Y}_{\text{contrôles, après}} - \bar{Y}_{\text{contrôles, avant}})\)`
-
-
+**Modèle TWFE** : pour tout individu `\(i\)` et période `\(t\)`,
+`$$Y_{it} = \beta D_{it} + \delta_i + \gamma_t +  \varepsilon_{it}$$`
 **Implémentation sur `R`**:  package `fixest`
 - `feols(y ~ i(post, treat, ref = 0) | FE, data = data)`
-
+- de Chaisemartin and d'Hautefeuille (2020), package R `DIDmultiplegtDYN`
+- Callaway and Sant'Anna (2021), package R `did`
+- Sun and Abraham (2020), `sunab()` argument in `fixest`
+- Borusyak, Jaravel and Spiess (2024), package R `didimputation`
 
 ---
 # Sources
 
-[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/09-difference_in_differences)      
-[Panel Data, Peter Hull](https://uc6f961a8b1db5f4e6a9d3145f01.dl.dropboxusercontent.com/cd/0/inline2/ClZISGT1gPREZxePSa6rQfr-XAhfy0Q8IVCHeATVG8f2W87LH_HjVQZ_dM0m-IZ9tOQesZZMuJwVdafQDGh9Ansuh8sy_JAtUscYNcmz_K6gqdn1WQCVYCBYrXETYtIgusmcYXIPdYYXtnS2NW36vVV3Kgz-O2qNnMEcFxRu4cVRBJoSBlFCczRsbb-8eTi-UVe7BTIfIEp-vaXZbjtQXjDnDm3SBFQMLzb_Fr1aXUE2jQaw-q9wyf_2DCulyA4tis6lNLiYw83QfYn17idCJ7-1rN91csG9usORFbrG6fwVHqou2s0_uNN-VgACuyQMr5QcPecdP7Yym527bzCZgCuOk-u6n7GCQqkp5wlmQeJS4pZDZFfrbuxRcHI6L2ZPdxg/file#)        
-[Introduction to DiD with Multiple Time Periods, Callaway and Sant'Anna](https://bcallaway11.github.io/did/articles/multi-period-did.html)       
-[Differences-in-Differences, Florian Oswald, Gustave Kennedy, Pierre Villedieu et Mylène Feuillade](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter_did/chapter_did.html#1)
+Borusyak, Kirill, Xavier Jaravel, and Jann Spiess, “Revisiting Event Study Designs: Robust and Efficient Estimation,” Review of Economic Studies, 2024        
 
+de Chaisemartin, Clément and Xavier D’Haultfœuille, “Two-Way Fixed Effects Estimators with Heterogeneous Treatment Effects,” American Economic Review, 2020, 110 (9), 2964–2996.        
+
+Callaway, Brantly and Pedro H. C. Sant’Anna, “Difference-in-Differences with Multiple Time Periods,” Journal of Econometrics, 2021, 225 (2), 200–230.        
+
+[Causal inference: The Mixtape, Scott Cunningham](https://mixtape.scunning.com/09-difference_in_differences)      
+
+[Panel Data, Peter Hull](https://uc6f961a8b1db5f4e6a9d3145f01.dl.dropboxusercontent.com/cd/0/inline2/ClZISGT1gPREZxePSa6rQfr-XAhfy0Q8IVCHeATVG8f2W87LH_HjVQZ_dM0m-IZ9tOQesZZMuJwVdafQDGh9Ansuh8sy_JAtUscYNcmz_K6gqdn1WQCVYCBYrXETYtIgusmcYXIPdYYXtnS2NW36vVV3Kgz-O2qNnMEcFxRu4cVRBJoSBlFCczRsbb-8eTi-UVe7BTIfIEp-vaXZbjtQXjDnDm3SBFQMLzb_Fr1aXUE2jQaw-q9wyf_2DCulyA4tis6lNLiYw83QfYn17idCJ7-1rN91csG9usORFbrG6fwVHqou2s0_uNN-VgACuyQMr5QcPecdP7Yym527bzCZgCuOk-u6n7GCQqkp5wlmQeJS4pZDZFfrbuxRcHI6L2ZPdxg/file#)          
+
+[Introduction to DiD with Multiple Time Periods, Callaway and Sant'Anna](https://bcallaway11.github.io/did/articles/multi-period-did.html)       
+[Differences-in-Differences, Florian Oswald, Gustave Kennedy, Pierre Villedieu et Mylène Feuillade](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter_did/chapter_did.html#1)         
+
+[Interactive reproduction of Difference-in-Differences Designs: A Practitioner's Guide, by Andrew Baker, Brantly Callaway, Scott Cunningham, and Andrew Goodman-Bacon, Journal of Economic Literature](https://psantanna.com/JEL-DiD/markdown/R_Stata/Code_Appendix.html#introduction)          
+
+
+Sun, Liyan and Sarah Abraham, “Estimating Dynamic Treatment Effects in Event Studies with Heterogeneous Treatment Effects,” Journal of Econometrics, 2021, 225 (2).      
 
 
 
@@ -354,10 +857,10 @@ background-color: #d7e2d8
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false,
-"ratio": "16:9"
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false,
+  "ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

@@ -96,8 +96,17 @@ theme_empty = theme_bw() +
 
 layout: true
 
+
 ---
-# 1. Reminder: Canonical 2x2 case
+count: false
+layout: false
+class: center, middle, inverse
+
+# <span style="color:#FAFAFA;">1. Reminder: Canonical 2x2 case</span>
+
+
+---
+# Setting
 
 We consider the following setting:
 - two periods $t = 1,2$
@@ -110,13 +119,11 @@ We consider the following setting:
 
 
 ---
-# 1. Reminder: Canonical 2x2 case
-
-.center[<span style="color:#9933FF"> **Identifiying Assumptions**</span> ]
+# Identifying assumptions
 
 <span style="color:#9933FF"> **Parallel trends**</span> 
 - <span style="color:#9933FF"> The average outcome for the treated and control groups would have evolved in parallel if tratment had not occured. Said differently, parallel trends allow for selection into treatment as logn as it is the same in both periods.</span> 
-- <span style="color:#9933FF"> Formally,</span>  $\color{#9933FF}{\underbrace{\mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 1 ]}_{\text{Changement de Y(0) pour les traités}}  =  \underbrace{ \mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 0]}_{\text{Changement de Y(0) pour les contrôles}}}$ 
+- <span style="color:#9933FF"> Formally,</span>  $\color{#9933FF}{\underbrace{\mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 1 ]}_{\text{Changement de } Y(0) \text{ pour les traités}}  =  \underbrace{ \mathbb{E}[Y_{i2}(0) - Y_{i1}(0) | D_i = 0]}_{\text{Changement de } Y(0) \text{ pour les contrôles}}}$ 
 - <span style="color:#9933FF"> Or, equivalently,</span>  $\color{#9933FF}{\underbrace{\mathbb{E}[Y_{i2}(0) | D_i = 1 ] - \mathbb{E}[Y_{i2}(0) | D_i = 0 ]}_{\text{Selection bias in period 2}}  =  \underbrace{\mathbb{E}[Y_{i1}(0) | D_i = 1 ] - \mathbb{E}[Y_{i1}(0) | D_i = 0 ]}_{\text{Selection bias in period 1}}}$ 
 
 
@@ -126,7 +133,7 @@ We consider the following setting:
 
 
 ---
-# 1. Reminder: Canonical 2x2 case
+# ATT
 
 Under the parallel trend and no anticipation assumptions, the Average Treatment Effect on the Treated (ATT) is:
 
@@ -134,13 +141,32 @@ $$\hat{\beta}_{DiD} = \left( \overline{Y}_{t=2, D=1} - \overline{Y}_{t=1, D=1} \
 
 
 ---
-# 2. TWFE equivalence with DiD Estimator
+count: false
+layout: false
+class: center, middle, inverse
+
+# <span style="color:#FAFAFA;">2. Two-Way Fixed Effects</span>
+
+
+
+---
+# TWFE equivalence with DiD Estimator
 
 Although $\hat{\beta}_{DiD}$ can be computed by hand, another solution to consistently estimate it is through a Two-Way-Fixed-Effect (TWFE) regression specification:
 
-$$Y_{it} = \beta \left(\mathbb{1}\{1 = 2\} * D_{it} \right) + \alpha_i + \phi_t + \varepsilon_{it}$$
+$$Y_{it} = \beta \left(\mathbb{1}\{t = 2\} * D_{it} \right) + \alpha_i + \phi_t + \varepsilon_{it}$$
+
 ---
-# 3. Generalized model with staggered treatment
+count: false
+layout: false
+class: center, middle, inverse
+
+# <span style="color:#FAFAFA;">3. Staggered Treatment</span>
+
+
+
+---
+# Generalized model with staggered treatment
 
 Now consider that:
 - there ate $T$ periods indexed by $t=1,...,T$
@@ -155,11 +181,22 @@ Now consider that:
 
 
 
----
-# 4. Issue with TWFE in staggered treatment setting
-
-
 
 ---
-# 5. New estimators
+# Issue with TWFE in staggered treatment setting
+
+
+
+
+
+
+---
+count: false
+layout: false
+class: center, middle, inverse
+
+# <span style="color:#FAFAFA;">4. Recent Estimators</span>
+
+
+
 

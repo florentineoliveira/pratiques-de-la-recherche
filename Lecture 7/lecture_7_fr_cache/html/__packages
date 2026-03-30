@@ -15,3 +15,6 @@ xaringanthemer
 xaringanExtra
 sf
 masteringmetrics
+lubridate
+rdrobust
+kableExtra

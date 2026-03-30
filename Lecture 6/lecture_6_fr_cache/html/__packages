@@ -15,3 +15,5 @@ countdown
 xaringanthemer
 xaringanExtra
 sf
+lubridate
+fixest

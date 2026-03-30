@@ -4,7 +4,7 @@
     <title>Difference-in-Differences with Staggered Treatment</title>
     <meta charset="utf-8" />
     <meta name="author" content="Florentine Oliveira" />
-    <meta name="date" content="2025-03-19" />
+    <meta name="date" content="2026-02-19" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### Florentine Oliveira
 ]
 .date[
-### 2025-03-19
+### 2026-02-19
 ]
 
 ---
@@ -34,8 +34,17 @@ class: center, middle, inverse, title-slide
 
 layout: true
 
+
 ---
-# 1. Reminder: Canonical 2x2 case
+count: false
+layout: false
+class: center, middle, inverse
+
+# &lt;span style="color:#FAFAFA;"&gt;1. Reminder: Canonical 2x2 case&lt;/span&gt;
+
+
+---
+# Setting
 
 We consider the following setting:
 - two periods `\(t = 1,2\)`
@@ -48,7 +57,7 @@ We consider the following setting:
 
 
 ---
-# 1. Reminder: Canonical 2x2 case
+# Identifying assumptions
 
 .center[&lt;span style="color:#9933FF"&gt; **Identifiying Assumptions**&lt;/span&gt; ]
 
@@ -64,7 +73,7 @@ We consider the following setting:
 
 
 ---
-# 1. Reminder: Canonical 2x2 case
+# ATT
 
 Under the parallel trend and no anticipation assumptions, the Average Treatment Effect on the Treated (ATT) is:
 
@@ -72,13 +81,32 @@ Under the parallel trend and no anticipation assumptions, the Average Treatment 
 
 
 ---
-# 2. TWFE equivalence with DiD Estimator
+count: false
+layout: false
+class: center, middle, inverse
+
+# &lt;span style="color:#FAFAFA;"&gt;2. Two-Way Fixed Effects&lt;/span&gt;
+
+
+
+---
+# TWFE equivalence with DiD Estimator
 
 Although `\(\hat{\beta}_{DiD}\)` can be computed by hand, another solution to consistently estimate it is through a Two-Way-Fixed-Effect (TWFE) regression specification:
 
 `$$Y_{it} = \beta \left(\mathbb{1}\{1 = 2\} * D_{it} \right) + \alpha_i + \phi_t + \varepsilon_{it}$$`
+
 ---
-# 3. Generalized model with staggered treatment
+count: false
+layout: false
+class: center, middle, inverse
+
+# &lt;span style="color:#FAFAFA;"&gt;3. Staggered Treatment&lt;/span&gt;
+
+
+
+---
+# Generalized model with staggered treatment
 
 Now consider that:
 - there ate `\(T\)` periods indexed by `\(t=1,...,T\)`
@@ -93,22 +121,33 @@ Now consider that:
 
 
 
----
-# 4. Issue with TWFE in staggered treatment setting
-
-
 
 ---
-# 5. New estimators
+# Issue with TWFE in staggered treatment setting
+
+
+
+
+
+
+---
+count: false
+layout: false
+class: center, middle, inverse
+
+# &lt;span style="color:#FAFAFA;"&gt;4. Recent Estimators&lt;/span&gt;
+
+
+
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false,
-"ratio": "16:9"
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false,
+  "ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
