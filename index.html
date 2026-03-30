@@ -4,65 +4,439 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pratiques de la Recherche en Économie</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;600&display=swap"> <!-- test --->
-    <link rel="stylesheet" href="custom.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink: #1a1a2e;
+            --paper: #f7f4ef;
+            --accent: #dd0747;
+            --accent-light: #fce4ec;
+            --muted: #7a7060;
+            --rule: #d8d0c4;
+            --link: #dd0747;
+        }
+
+        html { font-size: 16px; }
+
+        body {
+            background-color: var(--paper);
+            color: var(--ink);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        /* ── Top strip ── */
+        .top-strip {
+            background: var(--ink);
+            color: var(--paper);
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 0.6rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .top-strip span { opacity: 0.55; }
+
+        /* ── Header ── */
+        header {
+            padding: 4.5rem 3rem 3rem;
+            border-bottom: 1px solid var(--rule);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-inner {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        .header-tag {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .header-tag::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+            color: #dd0747;
+            white-space: nowrap;
+        }
+
+        .header-meta {
+            text-align: right;
+        }
+        .instructor-label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--muted);
+            margin-bottom: 0.35rem;
+        }
+        .instructor-name {
+            font-family: 'DM Sans', sans-serif;
+            font-style: normal;
+            font-size: 1rem;
+            color: var(--ink);
+            margin-top: 0.5rem;
+        }
+
+        /* ── Main ── */
+        main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .section-header h2 {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 400;
+        }
+        .section-header::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--rule);
+        }
+
+        /* ── Lecture cards ── */
+        .lecture-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lecture-row {
+            display: grid;
+            grid-template-columns: 2.5rem 1fr auto;
+            gap: 1.2rem;
+            align-items: center;
+            padding: 1.35rem 0;
+            border-bottom: 1px solid var(--rule);
+            transition: background 0.2s;
+            position: relative;
+        }
+        .lecture-row:first-child { border-top: 1px solid var(--rule); }
+
+        .lecture-row:hover {
+            background: white;
+            margin: 0 -1.5rem;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        .lecture-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--rule);
+            font-weight: 700;
+            line-height: 1;
+            user-select: none;
+        }
+
+        .lecture-title {
+            font-size: 0.95rem;
+            font-weight: 400;
+            color: var(--ink);
+            line-height: 1.4;
+        }
+        .lecture-title strong {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.1rem;
+        }
+        .lecture-subtitle {
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .lecture-links {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.28rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            transition: all 0.18s;
+            white-space: nowrap;
+        }
+
+        .pill-slides {
+            background: var(--ink);
+            color: var(--paper);
+        }
+        .pill-slides:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .pill-pdf {
+            background: transparent;
+            color: var(--ink);
+            border: 1px solid var(--rule);
+        }
+        .pill-pdf:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .pill-data {
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid transparent;
+        }
+        .pill-data:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .pill-divider {
+            width: 1px;
+            height: 16px;
+            background: var(--rule);
+            display: inline-block;
+        }
+
+        /* Extra badge */
+        .extra-badge {
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            background: var(--accent);
+            color: white;
+            padding: 0.15rem 0.5rem;
+            border-radius: 3px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        /* ── Footer ── */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem 3rem;
+            border-top: 1px solid var(--rule);
+            max-width: 860px;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        footer p {
+            font-size: 0.72rem;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+        }
+
+        /* ── Decorative accent line ── */
+        .accent-bar {
+            width: 3px;
+            height: 60px;
+            background: var(--accent);
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        header { animation: fadeUp 0.5s ease both; }
+        .lecture-row:nth-child(1) { animation: fadeUp 0.4s 0.1s ease both; }
+        .lecture-row:nth-child(2) { animation: fadeUp 0.4s 0.15s ease both; }
+        .lecture-row:nth-child(3) { animation: fadeUp 0.4s 0.2s ease both; }
+        .lecture-row:nth-child(4) { animation: fadeUp 0.4s 0.25s ease both; }
+        .lecture-row:nth-child(5) { animation: fadeUp 0.4s 0.3s ease both; }
+        .lecture-row:nth-child(6) { animation: fadeUp 0.4s 0.35s ease both; }
+        .lecture-row:nth-child(7) { animation: fadeUp 0.4s 0.4s ease both; }
+        .lecture-row:nth-child(8) { animation: fadeUp 0.4s 0.45s ease both; }
+
+        @media (max-width: 600px) {
+            .header-inner { grid-template-columns: 1fr; }
+            .header-meta { text-align: left; }
+            main, header, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .lecture-row { grid-template-columns: 2rem 1fr; }
+            .lecture-links { grid-column: 1 / -1; justify-content: flex-start; padding-left: 3.2rem; }
+            .top-strip { padding: 0.6rem 1.5rem; }
+        }
+    </style>
 </head>
 <body>
+
+    <div class="top-strip">
+        <span>PSL — Paris Sciences et Lettres</span>
+        <span>CPES3 · 2025–2026</span>
+    </div>
+
     <header>
-        <h1>Pratiques de la Recherche en Économie</h1>
-        <h2>CPES3 - PSL</h2>
-        <h3>Florentine Oliveira-Roux</h3>
+        <div class="accent-bar"></div>
+        <div class="header-inner">
+            <h1>Pratiques de la Recherche en Économie</h1>
+            <p class="instructor-name">Florentine Oliveira-Roux</p>
+        </div>
     </header>
 
-    <section>
-        <table>
-            <tr>
-                <th>Lecture</th>
-                <th>Slides</th>
-                <th>Données</th>
-            </tr>
-            <tr>
-                <td>Lecture 1 : Refresher</td>
-                <td><a href="Lecture%201/lecture_1_fr.html">html</a> - <a href="Lecture%201/lecture_1_fr.pdf">pdf</a></td>
-                <td><a href="Lecture%201/data/lecture_1_data.zip">data</a></td>
-            </tr>
-            <tr>
-                <td>Lecture 2 : Latex et R Markdown</td>
-                <td> <a href="Lecture%202/lecture_2_fr.html">html</a> - <a href="Lecture%202/lecture_2_fr.pdf">pdf</a> </td>
-                <td><!--<a href="Lecture%202/data/lecture_2_data.zip">data</a>--></td>
-            </tr>
-            <tr>
-                <td>Lecture 3 : Régressions Linéaires et Causalité</td>
-                <td> <a href="Lecture%203/lecture_3_fr.html">html</a> - <a href="Lecture%203/lecture_3_fr.pdf">pdf</a> </td>
-                <td><!--<a href="Lecture%203/data/lecture_3_data.zip">data</a>--></td>
-            </tr>
-            <tr>
-                <td>Lecture 4 : Variables de Contrôle et Matching</td>
-                <td> <a href="Lecture%204/lecture_4_fr.html">html</a> - <a href="Lecture%204/lecture_4_fr.pdf">pdf</a> </td>
-                <td><!--<a href="data/lecture4_data.zip">data</a>--></td>
-            </tr>
+    <main>
+        <div class="section-header">
+            <h2>Programme des séances</h2>
+        </div>
 
-            <tr>
-                <td>Lecture 5 : Méthode des Variables Instrumentales (IV)</td>
-                <td> <a href="Lecture%205/lecture_5_fr.html">html</a> - <a href="Lecture%205/lecture_5_fr.pdf">pdf</a> </td>
-                <td><!--<a href="data/lecture4_data.zip">data</a>--></td>
-            </tr>
-            <tr>
-                <td>Lecture 6 : Méthode des Doubles-Différences (DiD)</td>
-                <td> <a href="Lecture%206/lecture_6_fr.html">html</a> - <a href="Lecture%206/lecture_6_fr.pdf">pdf</a></td>
-                <td> <a href="Lecture%206/data/ck1994.rds">data</a> <a href="Lecture%206/data/county_mortality_data_cleaned.rds">data2</a> </td>
-            </tr>
-            <tr>
-                <td>Lecture 7 : Regression Discontinuity Design (RDD)</td>
-                <td> <a href="Lecture%207/lecture_7_fr.html">html</a> - <a href="Lecture%207/lecture_7_fr.pdf">pdf</a></td>
-                <td><!--<a href="data/lecture4_data.zip">data</a>--></td>
-            </tr>
-            <tr>
-                <td>Extra: Triple Differences</td>
-                <td> <a href="Advanced/Triple_Difference.html">html</a> - <a href="Advanced/Triple_Difference.pdf">pdf</a></td>
-                <td><!--<a href="data/lecture4_data.zip">data</a>--></td>
-            </tr>
-        </table>
-    </section>
+        <div class="lecture-list">
+
+            <div class="lecture-row">
+                <span class="lecture-num">01</span>
+                <div class="lecture-title">
+                    <strong>Refresher</strong>
+                    <span class="lecture-subtitle">Rappels fondamentaux</span>
+                </div>
+                <div class="lecture-links">
+                    <a class="pill pill-slides" href="Lecture%201/lecture_1_fr.html">html</a>
+                    <a class="pill pill-pdf" href="Lecture%201/lecture_1_fr.pdf">pdf</a>
+                    <span class="pill-divider"></span>
+                    <a class="pill pill-data" href="Lecture%201/data/lecture_1_data.zip">données</a>
+                </div>
+            </div>
+
+            <div class="lecture-row">
+                <span class="lecture-num">02</span>
+                <div class="lecture-title">
+                    <strong>LaTeX et R Markdown</strong>
+                    <span class="lecture-subtitle">Outils de rédaction scientifique</span>
+                </div>
+                <div class="lecture-links">
+                    <a class="pill pill-slides" href="Lecture%202/lecture_2_fr.html">html</a>
+                    <a class="pill pill-pdf" href="Lecture%202/lecture_2_fr.pdf">pdf</a>
+                </div>
+            </div>
+
+            <div class="lecture-row">
+                <span class="lecture-num">03</span>
+                <div class="lecture-title">
+                    <strong>Régressions Linéaires et Causalité</strong>
+                    <span class="lecture-subtitle">Inférence causale, biais et identification</span>
+                </div>
+                <div class="lecture-links">
+                    <a class="pill pill-slides" href="Lecture%203/lecture_3_fr.html">html</a>
+                    <a class="pill pill-pdf" href="Lecture%203/lecture_3_fr.pdf">pdf</a>
+                </div>
+            </div>
+
+            <div class="lecture-row">
+                <span class="lecture-num">04</span>
+                <div class="lecture-title">
+                    <strong>Variables de Contrôle et Matching</strong>
+                    <span class="lecture-subtitle">Appariement et sélection sur observables</span>
+                </div>
+                <div class="lecture-links">
+                    <a class="pill pill-slides" href="Lecture%204/lecture_4_fr.html">html</a>
+                    <a class="pill pill-pdf" href="Lecture%204/lecture_4_fr.pdf">pdf</a>
+                </div>
+            </div>
+
+            <div class="lecture-row">
+                <span class="lecture-num">05</span>
+                <div class="lecture-title">
+                    <strong>Variables Instrumentales</strong>
+                    <span class="lecture-subtitle">Méthode IV — identification par instrument</span>
+                </div>
+                <div class="lecture-links">
+                    <a class="pill pill-slides" href="Lecture%205/lecture_5_fr.html">html</a>
+                    <a class="pill pill-pdf" href="Lecture%205/lecture_5_fr.pdf">pdf</a>
+                </div>
+            </div>
+
+            <div class="lecture-row">
+                <span class="lecture-num">06</span>
+                <div class="lecture-title">
+                    <strong>Doubles-Différences</strong>
+                    <span class="lecture-subtitle">Méthode DiD — tendances parallèles</span>
+                </div>
+                <div class="lecture-links">
+                    <a class="pill pill-slides" href="Lecture%206/lecture_6_fr.html">html</a>
+                    <a class="pill pill-pdf" href="Lecture%206/lecture_6_fr.pdf">pdf</a>
+                    <span class="pill-divider"></span>
+                    <a class="pill pill-data" href="Lecture%206/data/ck1994.rds">data</a>
+                    <a class="pill pill-data" href="Lecture%206/data/county_mortality_data_cleaned.rds.rds">data 2</a>
+                </div>
+            </div>
+
+            <div class="lecture-row">
+                <span class="lecture-num">07</span>
+                <div class="lecture-title">
+                    <strong>Regression Discontinuity Design</strong>
+                    <span class="lecture-subtitle">RDD — discontinuités de régression</span>
+                </div>
+                <div class="lecture-links">
+                    <a class="pill pill-slides" href="Lecture%207/lecture_7_fr.html">html</a>
+                    <a class="pill pill-pdf" href="Lecture%207/lecture_7_fr.pdf">pdf</a>
+                </div>
+            </div>
+
+            <div class="lecture-row">
+                <span class="lecture-num">✦</span>
+                <div class="lecture-title">
+                    <strong>Triple Differences <span class="extra-badge">Extra</span></strong>
+                    <span class="lecture-subtitle">Méthode avancée de triple différenciation</span>
+                </div>
+                <div class="lecture-links">
+                    <a class="pill pill-slides" href="Advanced/Triple_Difference.html">html</a>
+                    <a class="pill pill-pdf" href="Advanced/Triple_Difference.pdf">pdf</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>CPES3 · PSL · Pratiques de la Recherche en Économie</p>
+        <p>Florentine Oliveira-Roux</p>
+    </footer>
+
 </body>
 </html>
